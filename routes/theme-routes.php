@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome', ['title' => 'This is Title', 'breadcrumb' => 'This Breadcrumb']);
 });
@@ -25,7 +27,7 @@ foreach ($prefixRouters as $prefixRouter) {
          *       @Router -  Dashboard
          * ==============================
          */
-        
+
         Route::prefix('dashboard')->group(function () {
             Route::get('/analytics', function () {
                 return view('pages.dashboard.analytics', ['title' => 'CORK Admin - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -34,13 +36,13 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.dashboard.sales', ['title' => 'Sales Admin | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
             })->name('sales');
         });
-        
+
         /**
          * ==============================
          *        @Router -  Apps
          * ==============================
          */
-        
+
         Route::prefix('app')->group(function () {
             Route::get('/calendar', function () {
                 return view('pages.app.calendar', ['title' => 'Javascript Calendar | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -63,9 +65,9 @@ foreach ($prefixRouters as $prefixRouter) {
             Route::get('/todo-list', function () {
                 return view('pages.app.todolist', ['title' => 'Todo List | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
             })->name('todolist');
-        
+
             // Blog
-        
+
             Route::prefix('/blog')->group(function () {
                 Route::get('/create', function () {
                     return view('pages.app.blog.create', ['title' => 'Blog Create | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -83,7 +85,7 @@ foreach ($prefixRouters as $prefixRouter) {
                     return view('pages.app.blog.post', ['title' => 'Post Content | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('blog-post');
             });
-        
+
             // Ecommerce
             Route::prefix('/ecommerce')->group(function () {
                 Route::get('/add', function () {
@@ -102,9 +104,9 @@ foreach ($prefixRouters as $prefixRouter) {
                     return view('pages.app.ecommerce.shop', ['title' => 'Ecommerce Shop | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('ecommerce-shop');
             });
-        
+
             // Invoice
-        
+
             Route::prefix('/invoice')->group(function () {
                 Route::get('/add', function () {
                     return view('pages.app.invoice.add', ['title' => 'Invoice Add | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -120,16 +122,16 @@ foreach ($prefixRouters as $prefixRouter) {
                 })->name('invoice-preview');
             });
         });
-        
+
         /**
          * ==============================
          *    @Router -  Authentication
          * ==============================
          */
-        
+
         Route::prefix('authentication')->group(function () {
             // Boxed
-            
+
             Route::prefix('/boxed')->group(function () {
                 Route::get('/2-step-verification', function () {
                     return view('pages.authentication.boxed.2-step-verification', ['title' => '2 Step Verification Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -147,8 +149,8 @@ foreach ($prefixRouters as $prefixRouter) {
                     return view('pages.authentication.boxed.signup', ['title' => 'SignUp Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('signup');
             });
-            
-            
+
+
             // Cover
 
             Route::prefix('/cover')->group(function () {
@@ -168,15 +170,14 @@ foreach ($prefixRouters as $prefixRouter) {
                     return view('pages.authentication.cover.signup', ['title' => 'SignUp Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('signup');
             });
-            
         });
-        
+
         /**
          * ==============================
          *     @Router -  Components
          * ==============================
          */
-        
+
         Route::prefix('component')->group(function () {
             Route::get('/accordion', function () {
                 return view('pages.component.accordion', ['title' => 'Accordions | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -227,7 +228,7 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.component.timeline', ['title' => 'Timeline | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('timeline');
         });
-        
+
         /**
          * ==============================
          *     @Router -  Elements
@@ -286,13 +287,13 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.element.typography', ['title' => 'Typography | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('typography');
         });
-        
+
         /**
          * ==============================
          *        @Router -  Forms
          * ==============================
          */
-        
+
         Route::prefix('form')->group(function () {
             Route::get('/autocomplete', function () {
                 return view('pages.form.autocomplete', ['title' => 'AutoComplete | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -355,7 +356,7 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.form.wizard', ['title' => 'Wizards | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('wizard');
         });
-        
+
         /**
          * ==============================
          *       @Router -  Layouts
@@ -375,13 +376,13 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.layout.empty', ['title' => 'Empty | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
             })->name('empty');
         });
-        
+
         /**
          * ==============================
          *       @Router -  Pages
          * ==============================
          */
-        
+
         Route::prefix('page')->group(function () {
             Route::get('/contact-us', function () {
                 return view('pages.page.contact-us', ['title' => 'Contact Us | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -399,7 +400,7 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.page.maintanence', ['title' => 'Maintenence | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('maintenance');
         });
-        
+
         /**
          * ==============================
          *       @Router -  Table
@@ -408,8 +409,8 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('/table', function () {
             return view('pages.table.basic', ['title' => 'Bootstrap Tables | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
         })->name('table');
-        
-        
+
+
         /**
          * ======================================
          *          @Router -  Datatables
@@ -429,13 +430,13 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.table.datatable.striped-table', ['title' => 'DataTables Striped | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('striped-table');
         });
-        
+
         /**
          * ==============================
          *          @Router -  Users
          * ==============================
          */
-        
+
         Route::prefix('user')->group(function () {
             Route::get('/settings', function () {
                 return view('pages.user.account-settings', ['title' => 'User Profile | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -444,27 +445,27 @@ foreach ($prefixRouters as $prefixRouter) {
                 return view('pages.user.profile', ['title' => 'Account Settings | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('profile');
         });
-        
+
         /**
          * ==============================
          *        @Router -  Widgets
          * ==============================
          */
-        
+
         Route::get('/widgets', function () {
             return view('pages.widget.widgets', ['title' => 'Widgets | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
         })->name('widgets');
-        
+
         /**
          * ==============================
          *      @Router -  charts
          * ==============================
          */
-        
+
         Route::get('/charts', function () {
             return view('pages.charts', ['title' => 'Apex Chart | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
         })->name('charts');
-        
+
         /**
          * ==============================
          *       @Router -  Maps
@@ -473,7 +474,6 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('/maps', function () {
             return view('pages.map', ['title' => 'jVector Maps | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
         })->name('maps');
-
     });
 }
 
@@ -488,11 +488,11 @@ Route::prefix('rtl')->group(function () {
     $rtlPrefixRouters = [
         'modern-light-menu', 'modern-dark-menu', 'collapsible-menu', 'horizontal-light-menu', 'horizontal-dark-menu'
     ];
-    
+
     foreach ($rtlPrefixRouters as $rtlPrefixRouter) {
         Route::prefix($rtlPrefixRouter)->group(function () {
 
-        
+
             Route::get('/sss', function () {
                 return view('welcome', ['title' => 'this is ome ', 'breadcrumb' => 'This Breadcrumb']);
             });
@@ -502,7 +502,7 @@ Route::prefix('rtl')->group(function () {
              *       @Router -  Dashboard
              * ==============================
              */
-            
+
             Route::prefix('dashboard')->group(function () {
                 Route::get('/analytics', function () {
                     return view('pages-rtl.dashboard.analytics', ['title' => 'CORK Admin - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -511,13 +511,13 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.dashboard.sales', ['title' => 'Sales Admin | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('sales');
             });
-            
+
             /**
              * ==============================
              *        @Router -  Apps
              * ==============================
              */
-            
+
             Route::prefix('app')->group(function () {
                 Route::get('/calendar', function () {
                     return view('pages-rtl.app.calendar', ['title' => 'Javascript Calendar | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -540,9 +540,9 @@ Route::prefix('rtl')->group(function () {
                 Route::get('/todo-list', function () {
                     return view('pages-rtl.app.todolist', ['title' => 'Todo List | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('todolist');
-            
+
                 // Blog
-            
+
                 Route::prefix('/blog')->group(function () {
                     Route::get('/create', function () {
                         return view('pages-rtl.app.blog.create', ['title' => 'Blog Create | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -560,7 +560,7 @@ Route::prefix('rtl')->group(function () {
                         return view('pages-rtl.app.blog.post', ['title' => 'Post Content | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                     })->name('blog-post');
                 });
-            
+
                 // Ecommerce
                 Route::prefix('/ecommerce')->group(function () {
                     Route::get('/add', function () {
@@ -579,9 +579,9 @@ Route::prefix('rtl')->group(function () {
                         return view('pages-rtl.app.ecommerce.shop', ['title' => 'Ecommerce Shop | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                     })->name('ecommerce-shop');
                 });
-            
+
                 // Invoice
-            
+
                 Route::prefix('/invoice')->group(function () {
                     Route::get('/add', function () {
                         return view('pages-rtl.app.invoice.add', ['title' => 'Invoice Add | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -597,16 +597,16 @@ Route::prefix('rtl')->group(function () {
                     })->name('invoice-preview');
                 });
             });
-            
+
             /**
              * ==============================
              *    @Router -  Authentication
              * ==============================
              */
-            
+
             Route::prefix('authentication')->group(function () {
                 // Boxed
-                
+
                 Route::prefix('/boxed')->group(function () {
                     Route::get('/2-step-verification', function () {
                         return view('pages-rtl.authentication.boxed.2-step-verification', ['title' => '2 Step Verification Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
@@ -624,8 +624,8 @@ Route::prefix('rtl')->group(function () {
                         return view('pages-rtl.authentication.boxed.signup', ['title' => 'SignUp Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                     })->name('signup');
                 });
-                
-                
+
+
                 // Cover
 
                 Route::prefix('/cover')->group(function () {
@@ -645,15 +645,14 @@ Route::prefix('rtl')->group(function () {
                         return view('pages-rtl.authentication.cover.signup', ['title' => 'SignUp Cover | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                     })->name('signup');
                 });
-                
             });
-            
+
             /**
              * ==============================
              *     @Router -  Components
              * ==============================
              */
-            
+
             Route::prefix('component')->group(function () {
                 Route::get('/accordion', function () {
                     return view('pages-rtl.component.accordion', ['title' => 'Accordions | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -704,7 +703,7 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.component.timeline', ['title' => 'Timeline | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('timeline');
             });
-            
+
             /**
              * ==============================
              *     @Router -  Elements
@@ -763,13 +762,13 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.element.typography', ['title' => 'Typography | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('typography');
             });
-            
+
             /**
              * ==============================
              *        @Router -  Forms
              * ==============================
              */
-            
+
             Route::prefix('form')->group(function () {
                 Route::get('/autocomplete', function () {
                     return view('pages-rtl.form.autocomplete', ['title' => 'AutoComplete | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -832,7 +831,7 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.form.wizard', ['title' => 'Wizards | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('wizard');
             });
-            
+
             /**
              * ==============================
              *       @Router -  Layouts
@@ -852,13 +851,13 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.layout.empty', ['title' => 'Empty | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('empty');
             });
-            
+
             /**
              * ==============================
              *       @Router -  Pages
              * ==============================
              */
-            
+
             Route::prefix('page')->group(function () {
                 Route::get('/contact-us', function () {
                     return view('pages-rtl.page.contact-us', ['title' => 'Contact Us | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -876,7 +875,7 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.page.maintanence', ['title' => 'Maintenence | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('maintenance');
             });
-            
+
             /**
              * ==============================
              *       @Router -  Table
@@ -885,8 +884,8 @@ Route::prefix('rtl')->group(function () {
             Route::get('/table', function () {
                 return view('pages-rtl.table.basic', ['title' => 'Bootstrap Tables | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('table');
-            
-            
+
+
             /**
              * ======================================
              *          @Router -  Datatables
@@ -906,13 +905,13 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.table.datatable.striped-table', ['title' => 'DataTables Striped | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('striped-table');
             });
-            
+
             /**
              * ==============================
              *          @Router -  Users
              * ==============================
              */
-            
+
             Route::prefix('user')->group(function () {
                 Route::get('/settings', function () {
                     return view('pages-rtl.user.account-settings', ['title' => 'User Profile | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
@@ -921,27 +920,27 @@ Route::prefix('rtl')->group(function () {
                     return view('pages-rtl.user.profile', ['title' => 'Account Settings | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
                 })->name('profile');
             });
-            
+
             /**
              * ==============================
              *        @Router -  Widgets
              * ==============================
              */
-            
+
             Route::get('/widgets', function () {
                 return view('pages-rtl.widget.widgets', ['title' => 'Widgets | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('widgets');
-            
+
             /**
              * ==============================
              *      @Router -  charts
              * ==============================
              */
-            
+
             Route::get('/charts', function () {
                 return view('pages-rtl.charts', ['title' => 'Apex Chart | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('charts');
-            
+
             /**
              * ==============================
              *       @Router -  Maps
@@ -950,9 +949,6 @@ Route::prefix('rtl')->group(function () {
             Route::get('/maps', function () {
                 return view('pages-rtl.map', ['title' => 'jVector Maps | CORK - Multipurpose Bootstrap Dashboard Template ', 'breadcrumb' => 'This Breadcrumb']);
             })->name('maps');
-
-            
         });
     }
-    
 });

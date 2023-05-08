@@ -14,8 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 require_once 'theme-routes.php';
+require __DIR__ . '/auth.php';
 
-Route::get('/barebone', function () {
-    return view('barebone', ['title' => 'This is Title']);
-});
-
+Route::prefix('v1')->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/barebone', function () {
+            dd(auth());
+            return view('barebone', ['title' => 'This is Title']);
+        });
+    });
+})->middleware(['auth']);
