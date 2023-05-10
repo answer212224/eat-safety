@@ -31,7 +31,7 @@ class Task extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withPivot('is_completed')->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('is_completed');
     }
 
     public function taskUsers()

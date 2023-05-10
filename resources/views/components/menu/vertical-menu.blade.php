@@ -119,7 +119,7 @@
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('task-list') ? 'active' : '' }}">
-                        <a href="{{ route('task-list') }}"> 執行清單 </a>
+                        <a href="{{ route('task-list') }}"> 任務清單 </a>
                     </li>
                 </ul>
             </li>

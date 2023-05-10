@@ -8,6 +8,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -43,4 +44,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tasks(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class);
+    }
+
+    public function taskUsers()
+    {
+        return $this->hasMany(TaskUser::class);
+    }
 }
