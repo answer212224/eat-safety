@@ -19,6 +19,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/barebone', function () {
             return view('barebone', ['title' => 'This is Title']);
-        });
+        })->name('barebone');
+    });
+
+    Route::prefix('app')->group(function () {
+        Route::get('/task', function () {
+            return view('barebone', ['title' => 'This is Title']);
+        })->name('barebone');
     });
 });

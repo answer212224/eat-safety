@@ -16,7 +16,7 @@
         <div class="navbar-nav theme-brand flex-row  text-center">
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
-                    <a href="{{ getRouterValue() }}/dashboard/analytics">
+                    <a href="{{ route('analytics') }}">
                         <img src="{{ Vite::asset('resources/images/logo.svg') }}" class="navbar-logo logo-dark"
                             alt="logo">
                         <img src="{{ Vite::asset('resources/images/logo2.svg') }}" class="navbar-logo logo-light"
@@ -24,7 +24,7 @@
                     </a>
                 </div>
                 <div class="nav-item theme-text">
-                    <a href="{{ getRouterValue() }}/dashboard/analytics" class="nav-link"> CORK </a>
+                    <a href="{{ route('analytics') }}" class="nav-link"> CORK </a>
                 </div>
             </div>
             <div class="nav-item sidebar-toggle">
@@ -38,22 +38,22 @@
                 </div>
             </div>
         </div>
-        @if (!Request::is('collapsible-menu/*'))
-            <div class="profile-info">
-                <div class="user-info">
-                    <div class="profile-img">
-                        <img src="{{ Vite::asset('resources/images/profile-30.png') }}" alt="avatar">
-                    </div>
-                    <div class="profile-content">
-                        <h6 class="">Shaun Park</h6>
-                        <p class="">Project Leader</p>
-                    </div>
+
+        <div class="profile-info">
+            <div class="user-info">
+                <div class="profile-img">
+                    <img src="{{ Vite::asset('resources/images/profile-30.png') }}" alt="avatar">
+                </div>
+                <div class="profile-content">
+                    <h6 class="">{{ auth()->user()->name }}</h6>
+                    <p class="">{{ auth()->user()->email }}</p>
                 </div>
             </div>
-        @endif
+        </div>
+
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
-            <li class="menu {{ Request::is('*/dashboard/*') ? 'active' : '' }}">
+            <li class="menu {{ Request::is('*/dashboard') ? 'active' : '' }}">
                 <a href="#dashboard" data-bs-toggle="collapse"
                     aria-expanded="{{ Request::is('*/dashboard/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
@@ -76,11 +76,15 @@
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/dashboard/*') ? 'show' : '' }}"
                     id="dashboard" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('analytics') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/dashboard/analytics"> Analytics </a>
+                        <a href="{{ route('analytics') }}"> Analytics </a>
                     </li>
                     <li class="{{ Request::routeIs('sales') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/dashboard/sales"> Sales </a>
+                        <a href="{{ route('sales') }}"> Sales </a>
                     </li>
+                    <li class="{{ Request::routeIs('barebone') ? 'active' : '' }}">
+                        <a href="{{ route('barebone') }}"> Barebone </a>
+                    </li>
+
                 </ul>
             </li>
 
@@ -91,9 +95,47 @@
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg><span>APPLICATIONS</span></div>
             </li>
+            {{-- 稽核任務 --}}
+            <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
+                <a href="#invoice" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/app/invoice/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-edit">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        <span>稽核任務</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/invoice/*') ? 'show' : '' }}"
+                    id="invoice" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('invoice-list') ? 'active' : '' }}">
+                        <a href="{{ route('invoice-list') }}"> List </a>
+                    </li>
+                    <li class="{{ Request::routeIs('invoice-preview') ? 'active' : '' }}">
+                        <a href="{{ route('invoice-preview') }}"> Preview </a>
+                    </li>
+                    <li class="{{ Request::routeIs('invoice-add') ? 'active' : '' }}">
+                        <a href="{{ route('invoice-add') }}"> Add </a>
+                    </li>
+                    <li class="{{ Request::routeIs('invoice-edit') ? 'active' : '' }}">
+                        <a href="{{ route('invoice-edit') }}"> Edit </a>
+                    </li>
+                </ul>
+            </li>
+
 
             <li class="menu {{ Request::routeIs('calendar') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/calendar" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('calendar') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -110,7 +152,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('chat') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/chat" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('chat') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -123,7 +165,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('mailbox') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/mailbox" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('mailbox') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -138,7 +180,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('todolist') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/todo-list" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('todolist') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -152,7 +194,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('notes') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/notes" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('notes') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -169,7 +211,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('scrumboard') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/scrumboard" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('scrumboard') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -185,7 +227,7 @@
             </li>
 
             <li class="menu {{ Request::routeIs('contacts') ? 'active' : '' }}">
-                <a href="{{ getRouterValue() }}/app/contacts" aria-expanded="false" class="dropdown-toggle">
+                <a href="{{ route('contacts') }}" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -221,16 +263,16 @@
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/app/invoice/*') ? 'show' : '' }}"
                     id="invoice" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('invoice-list') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/app/invoice/list"> List </a>
+                        <a href="{{ route('invoice-list') }}"> List </a>
                     </li>
                     <li class="{{ Request::routeIs('invoice-preview') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/app/invoice/preview"> Preview </a>
+                        <a href="{{ route('invoice-preview') }}"> Preview </a>
                     </li>
                     <li class="{{ Request::routeIs('invoice-add') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/app/invoice/add"> Add </a>
+                        <a href="{{ route('invoice-add') }}"> Add </a>
                     </li>
                     <li class="{{ Request::routeIs('invoice-edit') ? 'active' : '' }}">
-                        <a href="{{ getRouterValue() }}/app/invoice/edit"> Edit </a>
+                        <a href="{{ route('invoice-edit') }}"> Edit </a>
                     </li>
                 </ul>
             </li>
@@ -853,9 +895,9 @@
             <li class="menu">
                 <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-list">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
                             <line x1="8" y1="6" x2="21" y2="6"></line>
                             <line x1="8" y1="12" x2="21" y2="12"></line>
                             <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -866,9 +908,9 @@
                         <span>Item Level</span>
                     </div>
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </div>
