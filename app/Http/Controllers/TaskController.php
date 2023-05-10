@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function list()
     {
-        return view('barebone', ['title' => 'This is Title']);
+        return view('backend.tasks.list', ['title' => 'Table one']);
     }
 }

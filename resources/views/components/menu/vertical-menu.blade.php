@@ -97,8 +97,8 @@
             </li>
             {{-- 稽核任務 --}}
             <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
-                <a href="#invoice" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/app/invoice/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                <a href="#task" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/app/task/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -116,19 +116,10 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/invoice/*') ? 'show' : '' }}"
-                    id="invoice" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('invoice-list') ? 'active' : '' }}">
-                        <a href="{{ route('invoice-list') }}"> List </a>
-                    </li>
-                    <li class="{{ Request::routeIs('invoice-preview') ? 'active' : '' }}">
-                        <a href="{{ route('invoice-preview') }}"> Preview </a>
-                    </li>
-                    <li class="{{ Request::routeIs('invoice-add') ? 'active' : '' }}">
-                        <a href="{{ route('invoice-add') }}"> Add </a>
-                    </li>
-                    <li class="{{ Request::routeIs('invoice-edit') ? 'active' : '' }}">
-                        <a href="{{ route('invoice-edit') }}"> Edit </a>
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
+                    id="task" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('task-list') ? 'active' : '' }}">
+                        <a href="{{ route('task-list') }}"> 執行清單 </a>
                     </li>
                 </ul>
             </li>
@@ -895,9 +886,9 @@
             <li class="menu">
                 <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-list">
                             <line x1="8" y1="6" x2="21" y2="6"></line>
                             <line x1="8" y1="12" x2="21" y2="12"></line>
                             <line x1="8" y1="18" x2="21" y2="18"></line>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,8 +24,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
     });
 
     Route::prefix('app')->group(function () {
-        Route::get('/task', function () {
-            return view('barebone', ['title' => 'This is Title']);
-        })->name('barebone');
+        Route::prefix('task')->group(function () {
+            Route::get('/list', [TaskController::class, 'list'])->name('task-list');
+        });
     });
 });
