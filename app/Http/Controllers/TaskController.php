@@ -22,4 +22,17 @@ class TaskController extends Controller
 
         return view('backend.tasks.edit', compact('title'));
     }
+
+    public function assign()
+    {
+        $title = '指派任務';
+
+        return view('backend.tasks.assign', compact('title'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        return response()->json($data);
+    }
 }
