@@ -278,17 +278,25 @@
                     })
                     myModal.hide()
 
-                    fetch('api/submit-form', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name: getTitleValue,
-                            email: setModalStartDateValue
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
 
-                        })
-                    })
+                    var raw = JSON.stringify({
+                        "restaurant_id": "1",
+                        "category": "S5"
+                    });
+
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: 'follow'
+                    };
+
+                    fetch("http://localhost:8000/api/submit-form?restaurant_id&category", requestOptions)
+                        .then(response => response.text())
+                        .then(result => console.log(result))
+                        .catch(error => console.log('error', error));
                 })
 
 
