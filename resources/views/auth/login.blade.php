@@ -38,16 +38,17 @@
 
                                         </div>
                                         <form action="{{ route('login') }}" method="post">
+                                            @csrf
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Email</label>
-                                                    <input type="email" class="form-control" name="email">
+                                                    <label class="form-label">UID</label>
+                                                    <input type="uid" class="form-control" name="uid">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="mb-4">
                                                     <label class="form-label">Password</label>
-                                                    <input type="text" class="form-control" name="password">
+                                                    <input type="password" class="form-control" name="password">
                                                 </div>
                                             </div>
                                             <div class="col-12">
