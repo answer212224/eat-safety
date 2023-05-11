@@ -27,7 +27,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         Route::prefix('task')->group(function () {
             Route::get('/assign', [TaskController::class, 'assign'])->name('task-assign');
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
-            Route::get('/edit', [TaskController::class, 'edit'])->name('task-edit');
+            Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
             Route::post('/store', [TaskController::class, 'store'])->name('task-store');
         });
     });

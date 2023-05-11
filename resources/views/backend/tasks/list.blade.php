@@ -215,7 +215,10 @@
                                                 </a>
 
                                                 <div class="dropdown-menu left" aria-labelledby="dropdownMenuLink-2">
-                                                    <a class="dropdown-item" href="{{ route('task-edit') }}">開始稽核</a>
+                                                    <a class="dropdown-item"
+                                                        href="
+                                                    {{ route('task-edit', ['task' => $task->id]) }}
+                                                    ">開始稽核</a>
                                                     <a class="important dropdown-item"
                                                         href="javascript:void(0);">主管核對</a>
 
