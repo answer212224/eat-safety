@@ -105,7 +105,8 @@
                 <div class="dropdown-menu position-absolute" aria-labelledby="notificationDropdown">
                     <div class="drodpown-title message">
                         <h6 class="d-flex justify-content-between"><span class="align-self-center">Messages</span>
-                            <span class="badge badge-primary">9 Unread</span></h6>
+                            <span class="badge badge-primary">9 Unread</span>
+                        </h6>
                     </div>
                     <div class="notification-scroll">
                         <div class="dropdown-item">
@@ -346,15 +347,20 @@
                         </a>
                     </div>
                     <div class="dropdown-item">
-                        <a href="auth-boxed-signin.html">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg> <span>Log Out</span>
-                        </a>
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button class="btn btn-outline-dark"><a href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-log-out">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg> <span>Log Out</span>
+                                </a>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </li>
