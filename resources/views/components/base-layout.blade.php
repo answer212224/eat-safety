@@ -28,6 +28,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}">
     @vite(['resources/scss/light/assets/main.scss', 'resources/scss/dark/assets/main.scss'])
+    @livewireStyles
 
     @if (
         !Request::routeIs('404') &&
@@ -165,6 +166,7 @@
             @vite(['resources/assets/js/scrollspyNav.js'])
         @endif
         @vite(['resources/layouts/modern-light-menu/app.js'])
+        @livewireScripts
         <!-- END GLOBAL MANDATORY STYLES -->
 
     @endif
