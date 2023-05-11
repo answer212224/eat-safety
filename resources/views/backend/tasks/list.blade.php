@@ -113,7 +113,7 @@
                         <div id="ct" class="todo-box-scroll">
                             @foreach ($tasks as $task)
                                 <div
-                                    class="todo-item all-list @if ($task->status) todo-task-done @endif">
+                                    class="todo-item all-list @if ($task->status == '已完成') todo-task-done @endif">
                                     <div class="todo-item-inner">
 
 

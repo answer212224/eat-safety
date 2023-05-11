@@ -128,7 +128,7 @@ class PermissionsDemoSeeder extends Seeder
 
         $user = \App\Models\User::factory()->create([
             'uid' => '001002',
-            'name' => '管理員1號',
+            'name' => '管理員2號',
         ]);
         $user->assignRole($admin);
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Restaurant;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -26,13 +28,34 @@ class TaskController extends Controller
     public function assign()
     {
         $title = '指派任務';
+        $users = User::all();
+        $restaurants = Restaurant::all();
 
-        return view('backend.tasks.assign', compact('title'));
+        $tasks = Task::all()->load('users');
+        $tasks->transform(function ($task) {
+            $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop;
+            $task->start = $task->task_date;
+            $task->user_ids = $task->users->pluck('id')->toArray();
+            return $task;
+        });
+
+
+        return view('backend.tasks.assign', compact('title', 'users', 'restaurants', 'tasks'));
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
-        return response()->json($data);
+
+        $task = Task::create([
+            'category' => $data['category'],
+            'restaurant_id' => $data['restaurant_id'],
+            'task_date' => $data['task_date'],
+        ]);
+
+
+        $task->users()->attach($data['users']);
+
+        return back();
     }
 }
