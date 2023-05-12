@@ -32,6 +32,15 @@ class RestaurantSeeder extends Seeder
         Restaurant::find(1)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
         Restaurant::find(1)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
 
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '中廚現炒砂鍋', 'chef' => '中廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '中廚烤鴨冷台', 'chef' => '中廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '中廚熟鍋內廚', 'chef' => '中廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '西廚義麵披薩', 'chef' => '西廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '西廚鐵板', 'chef' => '西廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '日廚生魚片壽司', 'chef' => '日廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
+        Restaurant::find(2)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
+
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '中廚', 'chef' => '中廚']);
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '西廚', 'chef' => '西廚義麵披薩']);
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '西廚', 'chef' => '西廚鐵板熱鍋']);
@@ -39,5 +48,41 @@ class RestaurantSeeder extends Seeder
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '日廚', 'chef' => '日廚烤炸']);
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '西點', 'chef' => '西點水果飲品']);
         Restaurant::find(3)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
+
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '中廚現炒砂鍋', 'chef' => '中廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '中廚烤鴨冷台', 'chef' => '中廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '中廚熟鍋內廚', 'chef' => '中廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '西廚義麵披薩', 'chef' => '西廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '西廚鐵板', 'chef' => '西廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '日廚生魚片壽司', 'chef' => '日廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
+        Restaurant::find(4)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
+
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '中廚現炒砂鍋', 'chef' => '中廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '中廚烤鴨冷台', 'chef' => '中廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '中廚熟鍋內廚', 'chef' => '中廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '西廚義麵披薩', 'chef' => '西廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '西廚鐵板', 'chef' => '西廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '日廚生魚片壽司', 'chef' => '日廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
+        Restaurant::find(5)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
+
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '中廚現炒砂鍋', 'chef' => '中廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '中廚烤鴨冷台', 'chef' => '中廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '中廚熟鍋內廚', 'chef' => '中廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '西廚義麵披薩', 'chef' => '西廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '西廚鐵板', 'chef' => '西廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '日廚生魚片壽司', 'chef' => '日廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
+        Restaurant::find(6)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
+
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '中廚現炒砂鍋', 'chef' => '中廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '中廚烤鴨冷台', 'chef' => '中廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '中廚熟鍋內廚', 'chef' => '中廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '西廚義麵披薩', 'chef' => '西廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '西廚鐵板', 'chef' => '西廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '日廚生魚片壽司', 'chef' => '日廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '日廚烤炸', 'chef' => '日廚']);
+        Restaurant::find(7)->restaurantWorkspaces()->create(['area' => '外場', 'chef' => '外場']);
     }
 }

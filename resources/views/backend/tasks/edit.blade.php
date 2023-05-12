@@ -58,14 +58,19 @@
                                         </button>
                                     </div>
                                 </div>
-                                <form action="" method="post">
+
+
+                                <form action="{{ route('task-defect-store', ['task' => $task->id]) }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
                                     <div class="bs-stepper-content">
                                         <div id="defaultStep-one" class="content" role="tabpanel">
 
+                                            {{-- 上傳圖片 --}}
                                             <div class="multiple-file-upload">
-                                                <input type="file" class="filepond file-upload-multiple"
-                                                    name="filepond" multiple data-allow-reorder="true"
-                                                    data-max-file-size="3MB" data-max-files="2">
+                                                <input type="file" class="file-upload-multiple" name="filepond[]"
+                                                    multiple data-allow-reorder="true" data-max-file-size="3MB"
+                                                    data-max-files="2">
                                             </div>
 
 
@@ -74,6 +79,7 @@
                                                 <a class="btn btn-secondary btn-nxt">Next</a>
                                             </div>
                                         </div>
+
                                         <div id="defaultStep-two" class="content" role="tabpanel">
 
                                             <div class="form-group mb-4">
@@ -126,32 +132,9 @@
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageTransform.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
 
-                {{-- <script src="{{ asset('plugins/filepond/custom-filepond.js') }}"></script> --}}
-                <script>
-                    /**
-                     * ====================
-                     * Multiple File Upload
-                     * ====================
-                     */
 
-                    // We want to preview images, so we register
-                    // the Image Preview plugin, We also register
-                    // exif orientation (to correct mobile image
-                    // orientation) and size validation, to prevent
-                    // large files from being added
-                    FilePond.registerPlugin(
-                        FilePondPluginImagePreview,
-                        FilePondPluginImageExifOrientation,
-                        FilePondPluginFileValidateSize,
-                        // FilePondPluginImageEdit
-                    );
+                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}"></script>
 
-                    // Select the file input and use
-                    // create() to turn it into a pond
-                    FilePond.create(
-                        document.querySelector('.file-upload-multiple')
-                    );
-                </script>
                 </x-slot>
                 <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

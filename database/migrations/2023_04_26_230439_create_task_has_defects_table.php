@@ -16,11 +16,8 @@ return new class extends Migration
             $table->foreignId('task_id');
             $table->foreignId('restaurant_workspace_id');
             $table->foreignId('defect_id');
-            $table->string('image_0');
-            $table->string('image_1')->nullable();
+            $table->json('images');
             $table->boolean('is_improved')->default(false);
-            $table->string('group')->nullable();
-            $table->string('title')->nullable();
             $table->timestamps();
         });
     }

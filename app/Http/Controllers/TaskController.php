@@ -14,7 +14,6 @@ class TaskController extends Controller
         $title = '任務清單';
         $tasks = auth()->user()->tasks->load('users')->sortByDesc('id');
 
-
         return view('backend.tasks.list', compact('title', 'tasks'));
     }
 
@@ -31,8 +30,8 @@ class TaskController extends Controller
         $title = '指派任務';
         $users = User::all();
         $restaurants = Restaurant::all();
-
         $tasks = Task::all()->load('users');
+
         $tasks->transform(function ($task) {
             $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop;
             $task->start = $task->task_date;

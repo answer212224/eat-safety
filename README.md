@@ -63,5 +63,5 @@ php artisan permission:assign-role-to-user role_name user_name
 ## Additional Documentation and Acknowledgments
 -   [cork]https://designreset.com/cork/documentation/laravel/index.html
 -   [laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
--   [laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
+-   [Sopamo/laravel-filepond](https://github.com/Sopamo/laravel-filepond)
 

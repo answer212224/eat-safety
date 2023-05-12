@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('restaurant_id');
             $table->string('category');
             $table->date('task_date');
-            $table->string('status')->default('未處理');
+            $table->enum('status', ['pending', 'processing', 'completed'])->default('pending');
             $table->string('inner_manager')->nullable();
             $table->string('outer_manager')->nullable();
             $table->integer('total')->default(100);
