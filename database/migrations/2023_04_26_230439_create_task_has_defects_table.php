@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('task_has_defects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
             $table->foreignId('task_id');
             $table->foreignId('restaurant_workspace_id');
             $table->foreignId('defect_id');

@@ -23,11 +23,22 @@ class DefectController extends Controller
         }
 
         $task->taskHasDefects()->create([
+            'user_id' => auth()->user()->id,
             'defect_id' => $request->defect_id,
             'restaurant_workspace_id' => $request->workspace,
             'images' => $path,
         ]);
 
         return back();
+    }
+
+    public function show(Task $task)
+    {
+        $task->load(['taskHasDefects.defect', 'taskHasDefects.user']);
+        // dd($task);
+        return view('backend.tasks.task-defect', [
+            'task' => $task,
+            'title' => '主管核對缺失'
+        ]);
     }
 }

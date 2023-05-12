@@ -39,6 +39,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
             // 稽核員儲存缺失
             Route::post('/{task}/defect', [DefectController::class, 'store'])->name('task-defect-store');
+            // 主管核對缺失
+            Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
         });
     });
 });

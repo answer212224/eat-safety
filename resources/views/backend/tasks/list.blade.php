@@ -220,7 +220,7 @@
                                                     {{ route('task-edit', ['task' => $task->id]) }}
                                                     ">開始稽核</a>
                                                     <a class="important dropdown-item"
-                                                        href="javascript:void(0);">主管核對</a>
+                                                        href="{{ route('task-defect-show', ['task' => $task->id]) }}">主管核對</a>
 
                                                 </div>
                                             </div>

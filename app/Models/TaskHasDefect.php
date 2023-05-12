@@ -15,6 +15,11 @@ class TaskHasDefect extends Model
         'images' => 'array',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function task()
     {
         return $this->belongsTo(Task::class);
