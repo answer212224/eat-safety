@@ -36,7 +36,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             // 任務清單
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 開始稽核
-            Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
+            Route::get('/{task}/create', [TaskController::class, 'create'])->name('task-create');
             // 稽核員儲存缺失
             Route::post('/{task}/defect', [DefectController::class, 'store'])->name('task-defect-store');
             // 主管核對缺失

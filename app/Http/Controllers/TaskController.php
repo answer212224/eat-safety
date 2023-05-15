@@ -17,12 +17,12 @@ class TaskController extends Controller
         return view('backend.tasks.list', compact('title', 'tasks'));
     }
 
-    public function edit(Task $task)
+    public function create(Task $task)
     {
 
         $title = '開始稽核';
 
-        return view('backend.tasks.edit', compact('title', 'task'));
+        return view('backend.tasks.create', compact('title', 'task'));
     }
 
     public function assign()
