@@ -3,17 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome', ['title' => 'This is Title', 'breadcrumb' => 'This Breadcrumb']);
+    return redirect()->route('login');
 });
-
-/**
- * =======================
- *      LTR ROUTERS
- * =======================
- */
-
-
-
 
 Route::get('/sss', function () {
     return view('welcome', ['title' => 'this is ome ', 'breadcrumb' => 'This Breadcrumb']);
