@@ -46,7 +46,7 @@
                 </div>
                 <div class="profile-content">
                     <h6 class="">{{ auth()->user()->name }}</h6>
-                    <p class="">{{ auth()->user()->email }}</p>
+                    <p class="">{{ auth()->user()->uid }}</p>
                 </div>
             </div>
         </div>
