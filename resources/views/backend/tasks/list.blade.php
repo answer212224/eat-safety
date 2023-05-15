@@ -216,13 +216,8 @@
 
                                                 <div class="dropdown-menu left" aria-labelledby="dropdownMenuLink-2">
                                                     <a class="dropdown-item"
-                                                        href="
-                                                    {{ route('task-create', ['task' => $task->id]) }}
-                                                    ">開始稽核</a>
-                                                    <a class="dropdown-item"
-                                                        href="
-                                                    {{ route('task-create', ['task' => $task->id]) }}
-                                                    ">編輯稽核</a>
+                                                        href="{{ route('task-create', ['task' => $task->id]) }}">開始稽核</a>
+
                                                     <a class="important dropdown-item"
                                                         href="{{ route('task-defect-show', ['task' => $task->id]) }}">主管核對</a>
 

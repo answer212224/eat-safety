@@ -120,7 +120,10 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('task-list') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('task-list') || Request::routeIs('task-create') || Request::routeIs('task-defect-show')
+                            ? 'active'
+                            : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核清單 </a>
                     </li>
                 </ul>

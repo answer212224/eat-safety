@@ -15,6 +15,7 @@
             @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
             @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
+            @vite(['resources/scss/dark/assets/forms/switches.scss'])
 
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
@@ -23,7 +24,7 @@
             <!-- CONTENT HERE -->
 
             <div class="row layout-top-spacing" id="cancel-row">
-                <div id="wizard_Default" class="col-lg-12">
+                <div id="wizard_Default" class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
                             <div class="row">
@@ -117,10 +118,14 @@
                         </div>
                     </div>
                 </div>
+
+                <livewire:switch-task-user :task="$task" />
+
             </div>
 
             <!--  BEGIN CUSTOM SCRIPTS FILE  -->
             <x-slot:footerFiles>
+
                 <script src="{{ asset('plugins/stepper/bsStepper.min.js') }}"></script>
                 <script src="{{ asset('plugins/stepper/custom-bsStepper.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/filepond.min.js') }}"></script>
