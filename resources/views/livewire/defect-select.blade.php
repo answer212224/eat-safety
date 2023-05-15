@@ -2,6 +2,7 @@
 
     <label for="group">缺失群組</label>
     <select class="form-select" wire:model="group">
+        <option value="">請選擇...</option>
         @foreach ($distinctGroups as $distinctGroup)
             <option value={{ $distinctGroup->group }}>{{ $distinctGroup->group }}</option>
         @endforeach
@@ -9,6 +10,7 @@
 
     <label for="title">缺失標題</label>
     <select class="form-select" wire:model="title">
+        <option value="">請選擇...</option>
         @foreach ($distinByGroupsTitles as $distinctTitle)
             <option value={{ $distinctTitle->title }}>{{ $distinctTitle->title }}</option>
         @endforeach

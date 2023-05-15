@@ -28,7 +28,7 @@
 
 
                     <div class="card-body px-0 pb-0">
-                        <h5 class="card-title mb-3">{{ $taskHasDefect->defect->category }}</h5>
+                        <h5 class="card-title mb-3">{{ $taskHasDefect->defect->group }}</h5>
                         <h6>{{ $taskHasDefect->defect->title }}</h6>
                         <p>{{ $taskHasDefect->defect->description }}</p>
                         <div class="media mt-4 mb-0 pt-1">

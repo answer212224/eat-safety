@@ -7,16 +7,9 @@ use Livewire\Component;
 
 class DefectSelect extends Component
 {
-    public $group;
-    public $title;
-    public $description;
-
-    public function mount()
-    {
-        $this->group = Defect::getDistinctGroups()->first()->group;
-        $this->title = Defect::getDistinctTitlesByGroup($this->group)->first()->title;
-        $this->description = Defect::getDescriptionWhereByGroupAndTitle($this->group, $this->title)->first()->description;
-    }
+    public $group = '';
+    public $title = '';
+    public $description = '';
 
     public function render()
     {
