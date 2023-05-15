@@ -273,7 +273,7 @@
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar-container">
                         <div class="avatar avatar-sm avatar-indicators avatar-online">
-                            <img alt="avatar" src="{{ Vite::asset('resources/images/profile-30.png') }}"
+                            <img alt="avatar" src="{{ Vite::asset('resources/images/delete-user-15.jpeg') }}"
                                 class="rounded-circle">
                         </div>
                     </div>

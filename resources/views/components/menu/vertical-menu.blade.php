@@ -17,14 +17,14 @@
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
                     <a href="{{ route('analytics') }}">
-                        <img src="{{ Vite::asset('resources/images/logo.svg') }}" class="navbar-logo logo-dark"
+                        <img src="{{ Vite::asset('resources/images/logoWithText.png') }}" class="navbar-logo logo-dark"
                             alt="logo">
-                        <img src="{{ Vite::asset('resources/images/logo2.svg') }}" class="navbar-logo logo-light"
+                        <img src="{{ Vite::asset('resources/images/logoWithText.png') }}" class="navbar-logo logo-light"
                             alt="logo">
                     </a>
                 </div>
                 <div class="nav-item theme-text">
-                    <a href="{{ route('analytics') }}" class="nav-link"> CORK </a>
+                    <a href="{{ route('analytics') }}" class="nav-link">食安平台 </a>
                 </div>
             </div>
             <div class="nav-item sidebar-toggle">
@@ -42,7 +42,7 @@
         <div class="profile-info">
             <div class="user-info">
                 <div class="profile-img">
-                    <img src="{{ Vite::asset('resources/images/profile-30.png') }}" alt="avatar">
+                    <img src="{{ Vite::asset('resources/images/delete-user-15.jpeg') }}" alt="avatar">
                 </div>
                 <div class="profile-content">
                     <h6 class="">{{ auth()->user()->name }}</h6>
