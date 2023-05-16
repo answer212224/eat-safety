@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class DefectController extends Controller
 {
@@ -34,8 +33,16 @@ class DefectController extends Controller
 
     public function show(Task $task)
     {
-        $task->load(['taskHasDefects.defect', 'taskHasDefects.user']);
-        // dd($task);
+
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user']);
+        $isComplete = $task->taskUsers->pluck('is_completed');
+        $isComplete = $isComplete->every(function ($value, $key) {
+            return $value == 1;
+        });
+        if (!$isComplete) {
+            alert()->warning('請確認', '尚有稽核員未完成稽核，請等待完成後再進行下一步');
+            return back();
+        }
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'title' => '主管核對缺失'

@@ -19,7 +19,6 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <div class="row layout-top-spacing">
-
         <!-- CONTENT HERE -->
 
         <div class="col-xl-12 col-lg-12 col-md-12">
@@ -76,18 +75,7 @@
                                                 </path>
                                             </svg> 已完成 <span class="todo-badge badge"></span></a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link list-actions" id="todo-task-important" data-toggle="pill"
-                                            href="#pills-important" role="tab" aria-selected="false"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-star">
-                                                <polygon
-                                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                </polygon>
-                                            </svg> 執行中 <span class="todo-badge badge"></span></a>
-                                    </li>
+
 
                                 </ul>
                             </div>
@@ -113,7 +101,7 @@
                         <div id="ct" class="todo-box-scroll">
                             @foreach ($tasks as $task)
                                 <div
-                                    class="todo-item all-list @if ($task->status == '已完成') todo-task-done @endif">
+                                    class="todo-item all-list @if ($task->status == 'completed') todo-task-done @endif">
                                     <div class="todo-item-inner">
 
 
@@ -132,8 +120,9 @@
 
                                         <div class="priority-dropdown custom-dropdown-icon">
                                             <div class="dropdown p-dropdown">
-                                                <a class="dropdown-toggle warning" href="#" role="button"
-                                                    id="dropdownMenuLink-1" data-bs-toggle="dropdown"
+                                                <a class="dropdown-toggle @if ($task->status == 'pending') danger @elseif($task->status == 'processing') warning @else primary @endif
+                                                    href="#"
+                                                    role="button" id="dropdownMenuLink-1" data-bs-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="true">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                         height="24" viewBox="0 0 24 24" fill="none"
@@ -163,7 +152,7 @@
                                                                 y2="12"></line>
                                                             <line x1="12" y1="16" x2="12"
                                                                 y2="16"></line>
-                                                        </svg> High</a>
+                                                        </svg> 待稽核</a>
                                                     <a class="dropdown-item warning" href="javascript:void(0);"><svg
                                                             xmlns="http://www.w3.org/2000/svg" width="24"
                                                             height="24" viewBox="0 0 24 24" fill="none"
@@ -177,7 +166,7 @@
                                                                 y2="12"></line>
                                                             <line x1="12" y1="16" x2="12"
                                                                 y2="16"></line>
-                                                        </svg> Middle</a>
+                                                        </svg> 稽核中</a>
                                                     <a class="dropdown-item primary" href="javascript:void(0);"><svg
                                                             xmlns="http://www.w3.org/2000/svg" width="24"
                                                             height="24" viewBox="0 0 24 24" fill="none"
@@ -191,7 +180,7 @@
                                                                 y2="12"></line>
                                                             <line x1="12" y1="16" x2="12"
                                                                 y2="16"></line>
-                                                        </svg> Low</a>
+                                                        </svg> 稽核完</a>
                                                 </div>
                                             </div>
                                         </div>

@@ -55,6 +55,7 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 </head>
 
+
 <body @class([
     // 'layout-dark' => $isDark,
     'layout-boxed' => $isBoxed,
@@ -103,7 +104,7 @@
             <x-navbar.style-vertical-menu classes="{{ $isBoxed ? 'container-xxl' : '' }}" />
             <!--  END NAVBAR  -->
         @endif
-
+        @include('sweetalert::alert')
         <!--  BEGIN MAIN CONTAINER  -->
         <div class="main-container " id="container">
 
