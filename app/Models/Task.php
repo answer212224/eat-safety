@@ -12,6 +12,7 @@ class Task extends Model
 {
     use HasFactory;
 
+    // 中文解釋：這個屬性是用來設定哪些欄位不可以被批量賦值
     protected $guarded = [];
 
     public function restaurant(): BelongsTo
@@ -22,11 +23,6 @@ class Task extends Model
     public function taskHasDefects()
     {
         return $this->hasMany(TaskHasDefect::class);
-    }
-
-    public function restaurantWorkSpaces(): HasManyThrough
-    {
-        return $this->hasManyThrough(RestaurantWorkspace::class, Restaurant::class);
     }
 
     public function users(): BelongsToMany

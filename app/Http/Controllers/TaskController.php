@@ -12,7 +12,13 @@ class TaskController extends Controller
     public function list()
     {
         $title = '任務清單';
-        $tasks = auth()->user()->tasks->load('users')->sortByDesc('id');
+        // 中文解釋：如果 auth()->user()->tasks 不是空的，就執行 load('users')，否則就給空陣列
+        $tasks = optional(auth()->user()->tasks)->load('users');
+        if (!empty($tasks)) {
+            $tasks = $tasks->sortByDesc('id');
+        } else {
+            $tasks = [];
+        }
 
         return view('backend.tasks.list', compact('title', 'tasks'));
     }
