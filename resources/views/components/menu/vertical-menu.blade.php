@@ -125,14 +125,12 @@
                             : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核清單 </a>
                     </li>
-                </ul>
-
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
-                    id="task" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
                         <a href="{{ route('task-assign') }}"> 指派稽核 </a>
                     </li>
                 </ul>
+
+
 
 
             </li>
@@ -172,15 +170,10 @@
                     <li class="{{ Request::routeIs('meal-index') ? 'active' : '' }}">
                         <a href="{{ route('meal-index') }}"> 餐點採樣資料 </a>
                     </li>
-                </ul>
-
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/*/*') ? 'show' : '' }}"
-                    id="data" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">
                         <a href="{{ route('project-index') }}"> 專案資料 </a>
                     </li>
                 </ul>
-
             </li>
         </ul>
 
