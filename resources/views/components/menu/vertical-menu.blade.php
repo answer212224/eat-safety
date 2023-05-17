@@ -88,19 +88,18 @@
                 </ul>
             </li>
 
+            {{-- APP --}}
             <li class="menu menu-heading">
                 <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="feather feather-minus">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg><span>APPLICATIONS</span></div>
+                    </svg><span>APP</span></div>
             </li>
 
-
-            {{-- 稽核任務 --}}
-            <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
+            <li class="menu {{ Request::is('*/app/*/*') ? 'active' : '' }}">
                 <a href="#task" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/app/task/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    aria-expanded="{{ Request::is('*/app/*/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -118,7 +117,7 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
                     <li
                         class="{{ Request::routeIs('task-list') || Request::routeIs('task-create') || Request::routeIs('task-defect-show')
@@ -128,7 +127,7 @@
                     </li>
                 </ul>
 
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
                         <a href="{{ route('task-assign') }}"> 指派稽核 </a>
@@ -138,8 +137,51 @@
 
             </li>
 
+            {{-- DATA --}}
+            <li class="menu menu-heading">
+                <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg><span>DATA</span></div>
+            </li>
 
+            <li class="menu {{ Request::is('*/data/*/*') ? 'active' : '' }}">
+                <a href="#data" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/data/*/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-layers">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span>資料</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/*/*') ? 'show' : '' }}"
+                    id="data" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('meal-index') ? 'active' : '' }}">
+                        <a href="{{ route('meal-index') }}"> 餐點採樣資料 </a>
+                    </li>
+                </ul>
 
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/*/*') ? 'show' : '' }}"
+                    id="data" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">
+                        <a href="{{ route('project-index') }}"> 專案資料 </a>
+                    </li>
+                </ul>
+
+            </li>
         </ul>
 
     </nav>

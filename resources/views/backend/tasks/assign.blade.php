@@ -46,9 +46,8 @@
                             <div class="col-md-12">
                                 <div class="">
                                     <label class="form-label">選擇稽核員</label>
-                                    <select id="select-users" name="users[]" multiple placeholder="Select a Usurs..."
-                                        autocomplete="off">
-                                        <option value="">Select a users...</option>
+                                    <select id="select-users" name="users[]" multiple placeholder="選擇稽核員..."
+                                        autocomplete="off" required>
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endforeach
@@ -59,9 +58,8 @@
                             <div class="col-md-12">
                                 <div class="">
                                     <label class="form-label">選擇分店代號</label>
-                                    <select id="select-sid" name="restaurant_id" placeholder="Select a person..."
+                                    <select id="select-sid" name="restaurant_id" placeholder="選擇分店代號..."
                                         autocomplete="off">
-                                        <option value="">Select a restaurand...</option>
                                         @foreach ($restaurants as $restaurant)
                                             <option value="{{ $restaurant->id }}">
                                                 {{ $restaurant->sid }} {{ $restaurant->brand }} {{ $restaurant->shop }}
@@ -92,7 +90,7 @@
                                 <div class="d-flex mt-4">
                                     <div class="n-chk">
                                         <div class="form-check form-check-primary form-check-inline">
-                                            <input class="form-check-input" type="radio" name="category"
+                                            <input class="form-check-input" type="radio" name="category" checked
                                                 value="食安及5S" id="rwork">
                                             <label class="form-check-label" for="rwork">食安及5S</label>
                                         </div>
@@ -107,6 +105,23 @@
 
                                 </div>
 
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-check form-check-secondary form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="meal"
+                                        id="form-check-secondary">
+                                    <label class="form-check-label" for="form-check-secondary">
+                                        餐點採樣
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-success form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="form-check-success"
+                                        name="project">
+                                    <label class="form-check-label" for="form-check-success">
+                                        專案執行
+                                    </label>
+                                </div>
                             </div>
                         </div>
 

@@ -30,6 +30,11 @@ class Task extends Model
         return $this->belongsToMany(User::class)->withPivot('is_completed');
     }
 
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class)->withPivot('is_impoved');
+    }
+
     public function taskUsers()
     {
         return $this->hasMany(TaskUser::class);

@@ -54,14 +54,16 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
+
         $task = Task::create([
             'category' => $data['category'],
             'restaurant_id' => $data['restaurant_id'],
             'task_date' => $data['task_date'],
         ]);
 
-
         $task->users()->attach($data['users']);
+        $task->projects()->attach($data['projects']);
+
 
         return back();
     }

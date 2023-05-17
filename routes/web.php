@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DefectController;
+use App\Http\Controllers\MealController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Models\Task;
 use Illuminate\Support\Facades\Route;
@@ -43,8 +45,21 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
         });
     });
+
+    Route::prefix('data')->group(function () {
+        Route::prefix('meals')->group(function () {
+            // 餐點採樣資料
+            Route::get('/list', [MealController::class, 'index'])->name('meal-index');
+        });
+
+        Route::prefix('projects')->group(function () {
+            // 專案執行資料
+            Route::get('/list', [ProjectController::class, 'index'])->name('project-index');
+        });
+    });
 });
 
 Route::get('/test', function () {
-    return view('test');
+
+    return view('test', ['title' => 'This is Title']);
 });

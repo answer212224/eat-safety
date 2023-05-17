@@ -8,16 +8,15 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('task_has_defects', function (Blueprint $table) {
+        Schema::create('task_project', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('task_id');
-            $table->foreignId('restaurant_workspace_id');
-            $table->foreignId('defect_id');
-            $table->json('images');
+            $table->foreignId('task_id')->constrained()->onDelete('cascade');
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->boolean('is_impoved')->default(false);
             $table->timestamps();
         });
@@ -25,9 +24,11 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('task_has_defects');
+        Schema::dropIfExists('task_project');
     }
 };
