@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->string('effective_date');
+            $table->date('effective_date');
             $table->string('sid');
             $table->string('brand');
             $table->string('shop')->nullable();

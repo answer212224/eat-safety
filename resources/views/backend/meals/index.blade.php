@@ -21,14 +21,28 @@
                         <li class="breadcrumb-item"><a href="#">資料</a></li>
                         <li class="breadcrumb-item active" aria-current="page">餐點採樣資料</li>
                     </ol>
+
                 </nav>
             </div>
             <!-- /BREADCRUMB -->
+
+            <div class="row">
+                <form action="{{ route('meal-import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="inputGroupFile04"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
+                        <button class="btn btn-outline-secondary" type="submit"
+                            id="inputGroupFileAddon04">Upload</button>
+                    </div>
+                </form>
+            </div>
 
             <div class="row layout-top-spacing">
 
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-8">
+
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
@@ -42,6 +56,7 @@
                                     <th>qno</th>
                                     <th>name</th>
                                     <th>note</th>
+                                    <th>item</th>
                                     <th>items</th>
                                 </tr>
                             </thead>
@@ -58,6 +73,7 @@
                                         <td>{{ $meal->qno }}</td>
                                         <td>{{ $meal->name }}</td>
                                         <td>{{ $meal->note }}</td>
+                                        <td>{{ $meal->item }}</td>
                                         <td>{{ $meal->items }}</td>
                                     </tr>
                                 @endforeach
@@ -89,7 +105,7 @@
                         },
                         "stripeClasses": [],
                         "lengthMenu": [7, 10, 20, 50],
-                        "pageLength": 10
+                        "pageLength": 10,
                     });
                 </script>
                 </x-slot>

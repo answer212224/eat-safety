@@ -14,7 +14,7 @@ class MealSeeder extends Seeder
     public function run(): void
     {
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'EAT',
             'brand' => '饗食',
             'shop' => '',
@@ -29,7 +29,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'EAT',
             'brand' => '饗食',
             'shop' => '',
@@ -44,7 +44,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'EAT',
             'brand' => '饗食',
             'shop' => '',
@@ -59,7 +59,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'EAT002',
             'brand' => '饗食',
             'shop' => '新光',
@@ -74,7 +74,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'EAT005',
             'brand' => '饗食',
             'shop' => '京站',
@@ -89,7 +89,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'GUO',
             'brand' => '果然匯',
             'shop' => '',
@@ -104,7 +104,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'GUO001',
             'brand' => '果然匯',
             'shop' => '明曜',
@@ -119,7 +119,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'GUO006',
             'brand' => '果然匯',
             'shop' => '天母',
@@ -134,7 +134,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'IPD',
             'brand' => '饗饗',
             'shop' => '',
@@ -149,7 +149,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'IPD',
             'brand' => '饗饗',
             'shop' => '',
@@ -164,7 +164,7 @@ class MealSeeder extends Seeder
         ]);
 
         Meal::create([
-            'effective_date' => '2021-05',
+            'effective_date' => today()->subMonth(),
             'sid' => 'IPD002',
             'brand' => '饗饗',
             'shop' => '新莊',

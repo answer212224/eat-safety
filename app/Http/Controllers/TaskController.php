@@ -40,11 +40,13 @@ class TaskController extends Controller
         $tasks = Task::all()->load('users');
 
         $tasks->transform(function ($task) {
-            $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop;
+            $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop . ' - ' .
+                $task->users->pluck('name')->implode('、');
             $task->start = $task->task_date;
-            $task->user_ids = $task->users->pluck('id')->toArray();
+
             return $task;
         });
+
 
 
         return view('backend.tasks.assign', compact('title', 'users', 'restaurants', 'tasks'));
@@ -62,7 +64,7 @@ class TaskController extends Controller
         ]);
 
         $task->users()->attach($data['users']);
-        $task->projects()->attach($data['projects']);
+        // $task->projects()->attach($data['projects']);
 
 
         return back();

@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Meal extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m');
+    }
 }
