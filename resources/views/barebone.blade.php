@@ -14,9 +14,6 @@
 
     <div class="row layout-top-spacing">
 
-        @dump(asset($taskHasDefect->images[0]))
-        image: <img src="{{ asset('storage/' . $taskHasDefect->images[0]) }}" alt="">
-        image: <img src="{{ asset('storage/' . $taskHasDefect->images[1]) }}" alt="">
 
     </div>
 

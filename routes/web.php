@@ -23,9 +23,8 @@ require_once 'theme-routes.php';
 Route::prefix('v1')->middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/barebone', function () {
-            $task = Task::find(1)->load('taskHasDefects.defect');
-            $taskHasDefect = $task->taskHasDefects[0];
-            return view('barebone', ['title' => 'This is Title', 'taskHasDefect' => $taskHasDefect]);
+
+            return view('barebone', ['title' => 'This is Title']);
         })->name('barebone');
     });
 
@@ -50,6 +49,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         Route::prefix('meals')->group(function () {
             // 餐點採樣資料
             Route::get('/list', [MealController::class, 'index'])->name('meal-index');
+            Route::post('/import', [MealController::class, 'import'])->name('meal-import');
         });
 
         Route::prefix('projects')->group(function () {
