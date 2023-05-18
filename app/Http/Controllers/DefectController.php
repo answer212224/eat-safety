@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Task;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TaskHasDefect;
 
 class DefectController extends Controller
 {
@@ -15,9 +17,13 @@ class DefectController extends Controller
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
         if (isset($request->filepond[0])) {
-            array_push($path, $filepond->getPathFromServerId($request->filepond[0]));
+            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            array_push($path, $filePath0);
             if (isset($request->filepond[1])) {
-                array_push($path, $filepond->getPathFromServerId($request->filepond[1]));
+                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                array_push($path, $filePath1);
             }
         }
 
@@ -55,6 +61,14 @@ class DefectController extends Controller
             'task' => $task,
             'defectsGroup' => $defectsGroup,
             'title' => '主管核對缺失'
+        ]);
+    }
+
+    public function edit(TaskHasDefect $taskHasDefect)
+    {
+        return view('backend.tasks.defects.edit', [
+            'taskHasDefect' => $taskHasDefect,
+            'title' => '編輯缺失'
         ]);
     }
 }

@@ -1,64 +1,85 @@
 /**
  * ===================================
- *    Blog Description Editor 
+ *    Blog Description Editor
  * ===================================
-*/
-var quill = new Quill('#blog-description', {
+ */
+var quill = new Quill("#blog-description", {
     modules: {
         toolbar: [
-        [{ header: [1, 2, false] }],
-        ['bold', 'italic', 'underline'],
-        ['image', 'code-block']
-        ]
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
+            ["image", "code-block"],
+        ],
     },
-    placeholder: 'Write product description...',
-    theme: 'snow'  // or 'bubble'
+    placeholder: "Write product description...",
+    theme: "snow", // or 'bubble'
 });
-
 
 /**
  * ====================
- *      File Pond 
+ *      File Pond
  * ====================
-*/
+ */
 
 // We want to preview images, so we register
-// the Image Preview plugin, We also register 
+// the Image Preview plugin, We also register
 // exif orientation (to correct mobile image
 // orientation) and size validation, to prevent
 // large files from being added
 FilePond.registerPlugin(
     FilePondPluginImagePreview,
     FilePondPluginImageExifOrientation,
-    FilePondPluginFileValidateSize,
+    FilePondPluginFileValidateSize
     // FilePondPluginImageEdit
 );
 
-// Select the file input and use 
+// Select the file input and use
 // create() to turn it into a pond
-window.ecommerce = FilePond.create(document.querySelector('.file-upload-multiple'));
-// ecommerce.addFiles('../src/assets/img/product-1.jpg');
+window.ecommerce = FilePond.create(
+    document.querySelector(".file-upload-multiple")
+);
+// ecommerce.addFiles("../src/assets/img/product-1.jpg");
 
 /**
  * =====================
- *      Blog Tags 
+ *      Blog Tags
  * =====================
-*/
+ */
 // The DOM element you wish to replace with Tagify
-var input = document.querySelector('.blog-tags');
+var input = document.querySelector(".blog-tags");
 
 // initialize Tagify on the above input node reference
-new Tagify(input)
+new Tagify(input);
 
+FilePond.setOptions({
+    server: {
+        url: "/filepond/api",
+        process: "/process",
+        revert: "/process",
+        patch: "?patch=",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+        },
+    },
+});
 
 /**
  * =======================
- *      Blog Category 
+ *      Blog Category
  * =======================
-*/
-var input = document.querySelector('input[name=category]');
+ */
+var input = document.querySelector("input[name=category]");
 
 new Tagify(input, {
-    whitelist: ["Themeforest","Admin","Dashboard","Laravel","Sale","Vue","React","Cork Admin"],
-    userInput: false
-})
+    whitelist: [
+        "Themeforest",
+        "Admin",
+        "Dashboard",
+        "Laravel",
+        "Sale",
+        "Vue",
+        "React",
+        "Cork Admin",
+    ],
+    userInput: false,
+});
