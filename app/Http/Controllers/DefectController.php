@@ -21,6 +21,10 @@ class DefectController extends Controller
             }
         }
 
+        $task->update([
+            'status' => 'processing',
+        ]);
+
         $task->taskHasDefects()->create([
             'user_id' => auth()->user()->id,
             'defect_id' => $request->defect_id,
@@ -35,6 +39,7 @@ class DefectController extends Controller
     {
 
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user']);
+
         $isComplete = $task->taskUsers->pluck('is_completed');
         $isComplete = $isComplete->every(function ($value, $key) {
             return $value == 1;
@@ -43,8 +48,12 @@ class DefectController extends Controller
             alert()->warning('請確認', '尚有稽核員未完成稽核，請等待完成後再進行下一步');
             return back();
         }
+
+        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+
         return view('backend.tasks.task-defect', [
             'task' => $task,
+            'defectsGroup' => $defectsGroup,
             'title' => '主管核對缺失'
         ]);
     }
