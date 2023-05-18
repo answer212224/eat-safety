@@ -71,4 +71,9 @@ class DefectController extends Controller
             'title' => '編輯缺失'
         ]);
     }
+
+    public function update(TaskHasDefect $taskHasDefect, Request $request)
+    {
+        dd($request->all());
+    }
 }
