@@ -16,4 +16,9 @@ class Meal extends Model
     {
         return $date->format('Y-m');
     }
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 }
