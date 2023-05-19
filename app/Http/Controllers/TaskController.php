@@ -35,8 +35,6 @@ class TaskController extends Controller
     public function assign()
     {
         $title = '指派任務';
-        $users = User::all();
-        $restaurants = Restaurant::all();
         $tasks = Task::all()->load('users');
 
         $tasks->transform(function ($task) {
@@ -47,7 +45,7 @@ class TaskController extends Controller
             return $task;
         });
 
-        return view('backend.tasks.assign', compact('title', 'users', 'restaurants', 'tasks'));
+        return view('backend.tasks.assign', compact('title', 'tasks'));
     }
 
     public function store(Request $request)
