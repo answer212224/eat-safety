@@ -44,6 +44,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{taskHasDefect}/defect/edit', [DefectController::class, 'edit'])->name('task-defect-edit');
             // 稽核員編輯缺失
             Route::post('/{taskHasDefect}/defect/update', [DefectController::class, 'update'])->name('task-defect-update');
+            // 稽核員刪除缺失
+            Route::post('/{taskHasDefect}/defect/delete', [DefectController::class, 'delete'])->name('task-defect-delete');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
         });

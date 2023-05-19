@@ -65,7 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
-                                    <button class="btn btn-success w-100">Update Post</button>
+                                    <button class="btn btn-success w-100">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -74,6 +74,20 @@
 
                 </div>
             </form>
+
+            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+                <div class="widget-content widget-content-area blog-create-section">
+                    <div class="row">
+                        <form action="{{ route('task-defect-delete', ['taskHasDefect' => $taskHasDefect]) }}"
+                            method="post">
+                            @csrf
+                            <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
+                                <button class="btn btn-danger w-100">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!--  BEGIN CUSTOM SCRIPTS FILE  -->
             <x-slot:footerFiles>
                 <script src="{{ asset('plugins/editors/quill/quill.js') }}"></script>

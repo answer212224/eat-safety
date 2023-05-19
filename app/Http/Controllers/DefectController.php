@@ -68,6 +68,16 @@ class DefectController extends Controller
 
     public function edit(TaskHasDefect $taskHasDefect)
     {
+        if ($taskHasDefect->task->status == 'completed') {
+            alert()->warning('請確認', '此任務已完成，無法編輯');
+            return back();
+        }
+
+        if ($taskHasDefect->user_id != auth()->user()->id) {
+            alert()->warning('請確認', '您不是此任務的稽核員，無法編輯');
+            return back();
+        }
+
         return view('backend.tasks.defects.edit', [
             'taskHasDefect' => $taskHasDefect,
             'title' => '編輯缺失'
@@ -99,5 +109,12 @@ class DefectController extends Controller
 
         alert()->success('成功', '缺失已更新');
         return back();
+    }
+
+    public function delete(TaskHasDefect $taskHasDefect)
+    {
+        $taskHasDefect->delete();
+        alert()->success('成功', '缺失已刪除');
+        return redirect()->route('task-defect-show', $taskHasDefect->task_id);
     }
 }
