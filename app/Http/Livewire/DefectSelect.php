@@ -15,9 +15,11 @@ class DefectSelect extends Component
 
     public function mount()
     {
-        $this->group = $this->taskHasDefect->defect->group;
-        $this->title = $this->taskHasDefect->defect->title;
-        $this->description = $this->taskHasDefect->defect->description;
+        if (isset($this->taskHasDefect)) {
+            $this->group = $this->taskHasDefect->defect->group;
+            $this->title = $this->taskHasDefect->defect->title;
+            $this->description = $this->taskHasDefect->defect->description;
+        }
     }
 
     public function render()

@@ -38,6 +38,8 @@ class DefectController extends Controller
             'images' => $path,
         ]);
 
+        alert()->success('成功', '缺失已新增');
+
         return back();
     }
 
