@@ -119,14 +119,16 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
+
+                    <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
+                        <a href="{{ route('task-assign') }}"> 指派稽核 </a>
+                    </li>
+
                     <li
                         class="{{ Request::routeIs('task-list') || Request::routeIs('task-create') || Request::routeIs('task-defect-show')
                             ? 'active'
                             : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核清單 </a>
-                    </li>
-                    <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
-                        <a href="{{ route('task-assign') }}"> 指派稽核 </a>
                     </li>
                 </ul>
 
