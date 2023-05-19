@@ -73,11 +73,6 @@ class DefectController extends Controller
             return back();
         }
 
-        if ($taskHasDefect->user_id != auth()->user()->id) {
-            alert()->warning('請確認', '您不是此任務的稽核員，無法編輯');
-            return back();
-        }
-
         return view('backend.tasks.defects.edit', [
             'taskHasDefect' => $taskHasDefect,
             'title' => '編輯缺失'
