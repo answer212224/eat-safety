@@ -74,6 +74,28 @@ class DefectController extends Controller
 
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
-        dd($request->all());
+        $path = [];
+        // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
+        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+
+        if (isset($request->filepond[0])) {
+            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            array_push($path, $filePath0);
+            if (isset($request->filepond[1])) {
+                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                array_push($path, $filePath1);
+            }
+        }
+
+        $taskHasDefect->update([
+            'defect_id' => $request->defect_id,
+            'restaurant_workspace_id' => $request->workspace,
+            'images' => $path,
+        ]);
+
+        alert()->success('成功', '缺失已更新');
+        return back();
     }
 }
