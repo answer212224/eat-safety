@@ -62,16 +62,17 @@
                         @csrf
                         <div class="form-group mb-4">
                             <label for="formGroupExampleInput">外場主管</label>
-                            <input type="text" name="inner_manager" class="form-control" id="formGroupExampleInput"
-                                placeholder="主管姓名" required>
+                            <input type="text" name="inner_manager" class="form-control"
+                                value="{{ $task->inner_manager }}" id="formGroupExampleInput" placeholder="主管姓名"
+                                required>
                         </div>
                         <div class="form-group mb-4">
                             <label for="formGroupExampleInput2">內場主管</label>
-                            <input type="text" name="outer_manager" class="form-control" id="formGroupExampleInput2"
-                                placeholder="主管姓名" required>
+                            <input type="text" name="outer_manager" value="{{ $task->outer_manager }}"
+                                class="form-control" id="formGroupExampleInput2" placeholder="主管姓名" required>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100">提交</button>
+                        <button type="submit" class="btn btn-success w-100">核對完成</button>
 
                     </form>
                 </div>
