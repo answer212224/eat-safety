@@ -184,7 +184,7 @@ return [
     |
     */
 
-    'timer_progress_bar' => env('SWEET_ALERT_TIMER_PROGRESS_BAR', false),
+    'timer_progress_bar' => env('SWEET_ALERT_TIMER_PROGRESS_BAR', true),
 
     /*
     |--------------------------------------------------------------------------

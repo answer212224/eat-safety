@@ -67,4 +67,17 @@ class TaskController extends Controller
 
         return back();
     }
+
+    public function sign(Task $task, Request $request)
+    {
+        $task->update([
+            'outer_manager' => $request->outer_manager,
+            'inner_manager' => $request->inner_manager,
+            'status' => 'completed',
+        ]);
+
+        alert()->success('核對完畢', '簽名成功');
+
+        return redirect()->route('task-list');
+    }
 }

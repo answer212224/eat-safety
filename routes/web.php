@@ -48,6 +48,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::post('/{taskHasDefect}/defect/delete', [DefectController::class, 'delete'])->name('task-defect-delete');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
+            // 主管核對簽名
+            Route::post('{task}/sign', [TaskController::class, 'sign'])->name('task-sign');
         });
     });
 
