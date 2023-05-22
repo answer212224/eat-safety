@@ -15,6 +15,9 @@
         @vite(['resources/scss/dark/assets/components/modal.scss'])
 
 
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
+        @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
+        @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -40,8 +43,51 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="row">
 
-                        <livewire:assign-select />
+                            <div class="col-md-12">
+                                <div class="d-flex">
+                                    <div class="n-chk">
+                                        <div class="form-check form-check-primary form-check-inline">
+                                            <input class="form-check-input" type="radio" name="category" checked
+                                                value="食安及5S" id="rwork">
+                                            <label class="form-check-label" for="rwork">食安及5S</label>
+                                        </div>
+                                    </div>
+                                    <div class="n-chk">
+                                        <div class="form-check form-check-warning form-check-inline">
+                                            <input class="form-check-input" type="radio" name="category"
+                                                value="清潔檢查" id="rtravel">
+                                            <label class="form-check-label" for="rtravel">清潔檢查</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="">
+                                    <label class="form-label">選擇稽核員</label>
+                                    <select class="form-control" name="users[]" multiple placeholder="選擇稽核員..."
+                                        autocomplete="off" required id="select-users">
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <livewire:meal-select />
+
+                            <div class="col-md-12 d-none">
+                                <div class="">
+                                    <label class="form-label">Enter End Date</label>
+                                    <input id="event-end-date" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -60,6 +106,7 @@
     <x-slot:footerFiles>
         <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>
         <script src="{{ asset('plugins/uuid/uuid4.min.js') }}"></script>
+        <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -199,9 +246,6 @@
                 // Add Event
                 getModalAddBtnEl.addEventListener('click', function() {
 
-
-
-
                     var getUsersValue = getModalUsersEl;
                     var setModalStartDateValue = getModalStartDateEl.value;
                     var setModalEndDateValue = getModalEndDateEl.value;
@@ -210,7 +254,6 @@
 
                     calendar.addEvent({
                         id: uuidv4(),
-
                         start: setModalStartDateValue,
                         end: setModalEndDateValue,
                         allDay: true,
@@ -255,6 +298,12 @@
                         getModalIfCheckedRadioBtnEl.checked = false;
                     }
                 })
+            });
+        </script>
+
+        <script>
+            new TomSelect("#select-users", {
+                maxItems: 2
             });
         </script>
 

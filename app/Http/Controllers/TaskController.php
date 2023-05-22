@@ -36,6 +36,8 @@ class TaskController extends Controller
     {
         $title = '指派任務';
         $tasks = Task::all()->load('users');
+        $users = User::all();
+        $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
             $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop;
@@ -45,14 +47,12 @@ class TaskController extends Controller
             return $task;
         });
 
-        return view('backend.tasks.assign', compact('title', 'tasks'));
+        return view('backend.tasks.assign', compact('title', 'tasks', 'users', 'restaurants'));
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
-
-
         $task = Task::create([
             'category' => $data['category'],
             'restaurant_id' => $data['restaurant_id'],
@@ -60,7 +60,13 @@ class TaskController extends Controller
         ]);
 
         $task->users()->attach($data['users']);
-        // $task->projects()->attach($data['projects']);
+
+        if (!empty($data['defaltMeals'])) {
+            $task->meals()->attach($data['defaltMeals']);
+        }
+        if (!empty($data['optionMeals'])) {
+            $task->meals()->attach($data['optionMeals']);
+        }
 
 
         return back();

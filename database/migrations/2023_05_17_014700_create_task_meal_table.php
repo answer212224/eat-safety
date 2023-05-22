@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('task_meal', function (Blueprint $table) {
+        Schema::create('meal_task', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('meal_id')->constrained()->onDelete('cascade');
             $table->boolean('is_impoved')->default(false);
+            $table->boolean('is_taken')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_meal');
+        Schema::dropIfExists('meal_task');
     }
 };
