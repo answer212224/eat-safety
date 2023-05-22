@@ -17,6 +17,7 @@
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
             @vite(['resources/scss/dark/assets/forms/switches.scss'])
 
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -71,6 +72,7 @@
                                             <div class="multiple-file-upload">
                                                 <input type="file" class="file-upload-multiple" name="filepond[]"
                                                     multiple data-allow-reorder="true" data-max-file-size="3MB"
+                                                    accept="image/png, image/jpeg, image/gif, image/jpg"
                                                     data-max-files="2">
                                             </div>
 
