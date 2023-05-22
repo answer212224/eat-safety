@@ -32,6 +32,29 @@ class TaskController extends Controller
         return view('backend.tasks.create', compact('title', 'task'));
     }
 
+    public function mealCheck(Task $task)
+    {
+        $title = '開始採樣';
+
+        return view('backend.tasks.meals.check', compact('title', 'task'));
+    }
+
+    public function mealCheckSubmit(Request $request, Task $task)
+    {
+        $data = $request->all();
+        $task->meals()->update([
+            'is_taken' => false,
+        ]);
+        foreach ($data['meal_tasks'] as $mealId => $meal) {
+            $task->meals()->updateExistingPivot($mealId, [
+                'is_taken' => true,
+            ]);
+        }
+
+        return redirect()->route('task-list');
+    }
+
+
     public function assign()
     {
         $title = '指派任務';

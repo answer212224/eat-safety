@@ -46,6 +46,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::post('/{taskHasDefect}/defect/update', [DefectController::class, 'update'])->name('task-defect-update');
             // 稽核員刪除缺失
             Route::post('/{taskHasDefect}/defect/delete', [DefectController::class, 'delete'])->name('task-defect-delete');
+            // 開始採樣
+            Route::get('/{task}/meal/check', [TaskController::class, 'mealCheck'])->name('task-meal-check');
+            // 開始採樣
+            Route::post('{task}/meal/check', [TaskController::class, 'mealCheckSubmit'])->name('task-meal-submit');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
             // 主管核對簽名

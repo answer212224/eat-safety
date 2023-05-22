@@ -114,6 +114,14 @@
                                                         {{ $user->name }}
                                                     @endforeach
                                                 </p>
+                                                <p>額外任務:
+                                                    @if ($task->meals->isEmpty())
+                                                        無
+                                                    @else
+                                                        採樣任務
+                                                    @endif
+                                                </p>
+
                                             </h5>
 
                                         </div>
@@ -206,7 +214,10 @@
                                                 <div class="dropdown-menu left" aria-labelledby="dropdownMenuLink-2">
                                                     <a class="dropdown-item"
                                                         href="{{ route('task-create', ['task' => $task->id]) }}">開始稽核</a>
-
+                                                    @if ($task->meals->isNotEmpty())
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('task-meal-check', ['task' => $task->id]) }}">開始採樣</a>
+                                                    @endif
                                                     <a class="important dropdown-item"
                                                         href="{{ route('task-defect-show', ['task' => $task->id]) }}">主管核對</a>
 
