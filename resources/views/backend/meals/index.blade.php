@@ -30,10 +30,10 @@
                 <form action="{{ route('meal-import') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="input-group">
-                        <input type="file" class="form-control" id="inputGroupFile04"
+                        <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
                             aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
-                        <button class="btn btn-outline-secondary" type="submit"
-                            id="inputGroupFileAddon04">Upload</button>
+                        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04"
+                            acc>Upload</button>
                     </div>
                 </form>
             </div>
