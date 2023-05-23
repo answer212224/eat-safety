@@ -121,6 +121,8 @@
                                                         採樣任務
                                                     @elseif($task->projects->isNotEmpty())
                                                         專案任務
+                                                    @else
+                                                        無
                                                     @endif
                                                 </p>
 
