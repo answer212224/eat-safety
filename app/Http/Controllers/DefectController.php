@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Task;
+use App\Models\Defect;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
 
 class DefectController extends Controller
 {
+    public function index()
+    {
+        return view('backend.defects.index', [
+            'title' => '缺失資料',
+            'defects' => Defect::all(),
+        ]);
+    }
     public function store(Task $task, Request $request)
     {
         $path = [];

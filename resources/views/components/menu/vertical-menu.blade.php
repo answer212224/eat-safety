@@ -125,7 +125,11 @@
                     </li>
 
                     <li
-                        class="{{ Request::routeIs('task-list') || Request::routeIs('task-create') || Request::routeIs('task-defect-show')
+                        class="{{ Request::routeIs('task-list') ||
+                        Request::routeIs('task-create') ||
+                        Request::routeIs('task-defect-show') ||
+                        Request::routeIs('task-meal-check') ||
+                        Request::routeIs('task-project-check')
                             ? 'active'
                             : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核清單 </a>
@@ -174,6 +178,9 @@
                     </li>
                     <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">
                         <a href="{{ route('project-index') }}"> 專案資料 </a>
+                    </li>
+                    <li class="{{ Request::routeIs('defect-index') ? 'active' : '' }}">
+                        <a href="{{ route('defect-index') }}"> 缺失資料 </a>
                     </li>
                 </ul>
             </li>

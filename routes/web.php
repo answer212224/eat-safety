@@ -72,6 +72,11 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             // 專案執行資料
             Route::get('/list', [ProjectController::class, 'index'])->name('project-index');
         });
+
+        Route::prefix('defects')->group(function () {
+            // 缺失資料
+            Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
+        });
     });
 });
 
