@@ -39,6 +39,14 @@ class TaskController extends Controller
         return view('backend.tasks.meals.check', compact('title', 'task'));
     }
 
+    public function projectCheck(Task $task)
+    {
+        $title = '開始專案';
+
+        return view('backend.tasks.projects.check', compact('title', 'task'));
+    }
+
+
     public function mealCheckSubmit(Request $request, Task $task)
     {
         $data = $request->all();
@@ -50,6 +58,26 @@ class TaskController extends Controller
                 'is_taken' => true,
             ]);
         }
+
+        alert()->success('採樣完畢', '採樣成功');
+
+        return redirect()->route('task-list');
+    }
+
+    public function projectCheckSubmit(Request $request, Task $task)
+    {
+        $data = $request->all();
+
+        $task->projects()->update([
+            'is_impoved' => false,
+        ]);
+        foreach ($data['project_tasks'] as $projectId => $project) {
+            $task->projects()->updateExistingPivot($projectId, [
+                'is_impoved' => true,
+            ]);
+        }
+
+        alert()->success('專案完畢', '專案成功');
 
         return redirect()->route('task-list');
     }

@@ -115,10 +115,12 @@
                                                     @endforeach
                                                 </p>
                                                 <p>額外任務:
-                                                    @if ($task->meals->isEmpty())
-                                                        無
-                                                    @else
+                                                    @if ($task->meals->isNotEmpty() && $task->projects->isNotEmpty())
+                                                        採樣任務、專案任務
+                                                    @elseif($task->meals->isNotEmpty())
                                                         採樣任務
+                                                    @elseif($task->projects->isNotEmpty())
+                                                        專案任務
                                                     @endif
                                                 </p>
 
@@ -217,6 +219,10 @@
                                                     @if ($task->meals->isNotEmpty())
                                                         <a class="dropdown-item"
                                                             href="{{ route('task-meal-check', ['task' => $task->id]) }}">開始採樣</a>
+                                                    @endif
+                                                    @if ($task->projects->isNotEmpty())
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('task-project-check', ['task' => $task->id]) }}">開始專案</a>
                                                     @endif
                                                     <a class="important dropdown-item"
                                                         href="{{ route('task-defect-show', ['task' => $task->id]) }}">主管核對</a>

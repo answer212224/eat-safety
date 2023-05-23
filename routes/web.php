@@ -50,6 +50,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/meal/check', [TaskController::class, 'mealCheck'])->name('task-meal-check');
             // 開始採樣
             Route::post('{task}/meal/check', [TaskController::class, 'mealCheckSubmit'])->name('task-meal-submit');
+            // 開始專案
+            Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
+            // 開始專案
+            Route::post('{task}/project/check', [TaskController::class, 'projectCheckSubmit'])->name('task-project-submit');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
             // 主管核對簽名
