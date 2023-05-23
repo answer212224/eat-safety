@@ -46,6 +46,7 @@
                                         <td>{{ $defect->title }}</td>
                                         <td>{{ $defect->category }}</td>
                                         <td>{{ $defect->description }}</td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
