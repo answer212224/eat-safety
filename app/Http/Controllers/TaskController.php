@@ -76,6 +76,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $task = Task::create([
             'category' => $data['category'],
             'restaurant_id' => $data['restaurant_id'],
@@ -89,6 +90,10 @@ class TaskController extends Controller
         }
         if (!empty($data['optionMeals'])) {
             $task->meals()->attach($data['optionMeals']);
+        }
+
+        if (!empty($data['projects'])) {
+            $task->projects()->attach($data['projects']);
         }
 
 

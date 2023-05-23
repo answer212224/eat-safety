@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire;
 
+use Carbon\Carbon;
 use App\Models\Meal;
+use App\Models\Project;
 use Livewire\Component;
 use App\Models\Restaurant;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class MealSelect extends Component
 {
     public $hasMeal = false;
+    public $hasProject = false;
     public $restaurant;
     public $start;
 
@@ -32,6 +34,7 @@ class MealSelect extends Component
             'restaurants' => Restaurant::all(),
             'defaltMeals' => $defaltMeals ?? [],
             'optionMeals' => $optionMeals ?? [],
+            'projects' => Project::all(),
         ]);
     }
 }
