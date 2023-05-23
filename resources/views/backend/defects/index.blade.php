@@ -9,9 +9,7 @@
             <!--  BEGIN CUSTOM STYLE FILE  -->
             <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
-            @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
-            @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
 
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
