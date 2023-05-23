@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             DefectSeeder::class,
             TaskSeeder::class,
             MealSeeder::class,
+            ProjectSeeder::class,
         ]);
     }
 }
