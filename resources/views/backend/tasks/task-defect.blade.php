@@ -11,7 +11,15 @@
     </x-slot:headerFiles>
 
 
-
+    <div class="page-meta">
+        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
+                <li class="breadcrumb-item active" aria-current="page">主管核對</li>
+            </ol>
+        </nav>
+    </div>
 
     <div class="row layout-top-spacing">
 
