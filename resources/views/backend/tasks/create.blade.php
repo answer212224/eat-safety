@@ -15,6 +15,7 @@
             @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
             @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
+            @vite(['resources/scss/light/assets/forms/switches.scss'])
             @vite(['resources/scss/dark/assets/forms/switches.scss'])
 
 

@@ -97,11 +97,24 @@ class TaskController extends Controller
 
     public function sign(Task $task, Request $request)
     {
+        $task = $task->load('meals');
+
+        $isMealAllTaken = $task->meals->every(function ($value, $key) {
+            return $value->pivot->is_taken == 1;
+        });
+
+        if (!$isMealAllTaken) {
+            alert()->warning('請確認', '尚有餐點未採樣，請等待完成後再進行下一步');
+            return back();
+        }
+
         $task->update([
             'outer_manager' => $request->outer_manager,
             'inner_manager' => $request->inner_manager,
             'status' => 'completed',
         ]);
+
+
 
         alert()->success('核對完畢', '簽名成功');
 
