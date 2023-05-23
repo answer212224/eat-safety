@@ -9,7 +9,10 @@
             <!--  BEGIN CUSTOM STYLE FILE  -->
             <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
+            @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+            @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -18,8 +21,8 @@
             <div class="page-meta">
                 <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Datatables</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Basic</li>
+                        <li class="breadcrumb-item"><a href="#">資料</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">專案資料</li>
                     </ol>
                 </nav>
             </div>
@@ -34,6 +37,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,7 +45,6 @@
                                     <tr>
                                         <td>{{ $project->name }}</td>
                                         <td>{{ $project->description }}</td>
-                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
