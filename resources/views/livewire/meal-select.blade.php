@@ -1,7 +1,7 @@
 <div>
 
     <div class="col-md-12">
-        <div class="">
+        <div class="form-group mt-3">
             <label class="form-label">選擇分店代號</label>
             <select wire:model='restaurant' class="form-control" name="restaurant_id" placeholder="選擇分店代號..."
                 autocomplete="off" id="select-sid" required>
@@ -16,8 +16,11 @@
     </div>
 
     <div class="col-md-12">
-        <label class="form-label">稽核日期</label>
-        <input id="event-start-date" wire:model='start' name="task_date" type="date" class="form-control" required>
+        <div class="form-group mt-3">
+            <label class="form-label">稽核日期</label>
+            <input id="event-start-date" wire:model='start' name="task_date" type="date" class="form-control"
+                required>
+        </div>
     </div>
 
     <div class="row my-3">

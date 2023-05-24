@@ -39,7 +39,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">指派稽核</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <div class="">
+                                <div class="form-group mt-3">
                                     <label class="form-label">選擇稽核員</label>
                                     <select class="form-control" name="users[]" multiple placeholder="選擇稽核員..."
                                         autocomplete="off" required id="select-users">
@@ -95,7 +95,7 @@
                         <button type="button" class="btn btn-success btn-update-event"
                             data-fc-event-public-id="">Update
                             changes</button>
-                        <button type="submit" class="btn btn-primary btn-add-event">Add Event</button>
+                        <button type="submit" class="btn btn-primary btn-add-event">新增稽核</button>
                     </div>
                 </div>
             </form>
@@ -211,12 +211,13 @@
                     headerToolbar: calendarHeaderToolbar,
                     events: calendarEventsList,
                     select: calendarSelect,
+                    locale: "zh-tw",
                     unselect: function() {
                         console.log('unselected')
                     },
                     customButtons: {
                         addEventButton: {
-                            text: 'Add Event',
+                            text: '新增稽核',
                             click: calendarAddEvent
                         }
                     },
