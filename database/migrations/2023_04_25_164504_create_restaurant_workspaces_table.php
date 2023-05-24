@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('restaurant_workspaces', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('restaurant_id');
+            $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
             $table->string('area');
             $table->string('chef');
             $table->timestamps();

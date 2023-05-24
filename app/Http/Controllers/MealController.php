@@ -41,8 +41,13 @@ class MealController extends Controller
             return back();
         }
 
-        Excel::import(new MealsImport, request()->file('excel'));
-        Alert::success('Success', 'Import Success');
-        return back();
+        try {
+            Excel::import(new MealsImport, request()->file('excel'));
+            Alert::success('Success', 'Import Success');
+            return back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return back();
+        }
     }
 }

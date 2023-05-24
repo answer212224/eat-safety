@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Meal;
+use App\Models\Task;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -14,6 +15,7 @@ class MealsImport implements ToCollection
      */
     public function collection(Collection $collection)
     {
+
         $collection->shift();
         $collection = $collection->reject(function ($item) {
             return $item[0] == null;
@@ -35,8 +37,14 @@ class MealsImport implements ToCollection
             ];
         });
 
-        Meal::whereMonth('effective_date', $collection[0]['effective_date'])->delete();
+        $tasks = Task::whereYear('task_date', $collection[0]['effective_date'])
+            ->whereMonth('task_date', $collection[0]['effective_date'])->first();
 
+        if (!empty($tasks)) {
+            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的稽核任務，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的餐點採樣資料");
+        }
+
+        Meal::whereMonth('effective_date', $collection[0]['effective_date'])->delete();
 
         foreach ($collection as $item) {
             $meal = new \App\Models\Meal();
