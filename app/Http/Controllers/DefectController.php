@@ -115,7 +115,7 @@ class DefectController extends Controller
         ]);
 
         alert()->success('成功', '缺失已更新');
-        return back();
+        return redirect()->route('task-defect-show', $taskHasDefect->task_id);
     }
 
     public function delete(TaskHasDefect $taskHasDefect)
