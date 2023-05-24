@@ -3,6 +3,7 @@
 use App\Http\Controllers\DefectController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaskController;
 use App\Models\Task;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +77,13 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         Route::prefix('defects')->group(function () {
             // 缺失資料
             Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
+        });
+
+        Route::prefix('restaurant')->group(function () {
+            // 門市資料
+            Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
+            // 門市工作區站
+            Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
         });
     });
 });

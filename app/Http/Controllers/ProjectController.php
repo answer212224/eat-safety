@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $title = '專案列表';
+        $title = '專案資料';
         $projects = Project::all();
         return view('backend.projects.index', compact('title', 'projects'));
     }
