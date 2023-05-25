@@ -35,6 +35,11 @@ class DefectController extends Controller
             }
         }
 
+        if (empty($request->filepond) || empty($request->workspace) || empty($request->defect_id)) {
+            alert()->warning('請確認', '請填寫完整資料');
+            return back();
+        }
+
         $task->update([
             'status' => 'processing',
         ]);
