@@ -163,8 +163,13 @@ class TaskController extends Controller
         return redirect()->route('task-list');
     }
 
-    public function deleteConfirm(Request $request, Task $task)
+    public function deleteConfirm(Task $task)
     {
+        if ($task->status == 'completed' || $task->status == 'processing') {
+            alert()->warning('無法刪除', '已經完成和正在進行的任務無法刪除');
+            return back();
+        }
+
         $title = '確認刪除?';
         $text = "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除";
 
