@@ -37,6 +37,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::post('/assign', [TaskController::class, 'store'])->name('task-store');
             // 稽核任務編輯
             Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
+            // 稽核任務刪除確認
+            Route::get('{task}/delete', [TaskController::class, 'deleteConfirm'])->name('task-delete-confirm');
+            // 稽核任務刪除
+            Route::delete('{task}/delete', [TaskController::class, 'delete'])->name('task-delete');
             // 任務清單
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 開始稽核

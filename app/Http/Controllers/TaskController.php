@@ -162,4 +162,23 @@ class TaskController extends Controller
 
         return redirect()->route('task-list');
     }
+
+    public function deleteConfirm(Request $request, Task $task)
+    {
+        $title = '確認刪除?';
+        $text = "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除";
+
+        confirmDelete($title, $text);
+
+        return back();
+    }
+
+    public function delete(Task $task)
+    {
+        $task->delete();
+
+        alert()->success('刪除成功', '刪除任務成功');
+
+        return redirect()->route('task-assign');
+    }
 }

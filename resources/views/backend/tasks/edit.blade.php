@@ -228,17 +228,18 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
+
                         <div class="row">
-
-                            <div class="btn btn-danger">刪除</div>
-
+                            <a href="{{ route('task-delete-confirm', ['task' => $task]) }}" class="btn btn-danger"
+                                data-confirm-delete="true">Delete</a>
                         </div>
-
                     </div>
+
+
                 </div>
             </div>
-
         </div>
+
 
         <!--  BEGIN CUSTOM SCRIPTS FILE  -->
         <x-slot:footerFiles>
