@@ -27,10 +27,11 @@
     <div class="row layout-top-spacing layout-spacing" id="cancel-row">
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="calendar-container">
-                <div class="calendar"></div>
+                <div class="calendar" id="calendar"></div>
             </div>
         </div>
     </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -80,21 +81,12 @@
 
                             <livewire:meal-select />
 
-                            <div class="col-md-12 d-none">
-                                <div class="">
-                                    <label class="form-label">Enter End Date</label>
-                                    <input id="event-end-date" type="text" class="form-control">
-                                </div>
-                            </div>
                         </div>
 
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success btn-update-event"
-                            data-fc-event-public-id="">Update
-                            changes</button>
                         <button type="submit" class="btn btn-primary btn-add-event">新增稽核</button>
                     </div>
                 </div>
@@ -105,118 +97,29 @@
     <!-- BEGIN CUSTOM SCRIPTS FILE -->
     <x-slot:footerFiles>
         <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>
-        <script src="{{ asset('plugins/uuid/uuid4.min.js') }}"></script>
         <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
-                // Date variable
-                var newDate = new Date();
-
-                /**
-                 *
-                 * @getDynamicMonth() fn. is used to validate 2 digit number and act accordingly
-                 *
-                 */
-                function getDynamicMonth() {
-                    getMonthValue = newDate.getMonth();
-                    _getUpdatedMonthValue = getMonthValue + 1;
-                    if (_getUpdatedMonthValue < 10) {
-                        return `0${_getUpdatedMonthValue}`;
-                    } else {
-                        return `${_getUpdatedMonthValue}`;
-                    }
-                }
-
-                // Modal Elements
-                var getModalTitleEl = document.querySelector('#event-title');
-                var getModalUsersEl = document.querySelector('#select-users');
-                var getModalStartDateEl = document.querySelector('#event-start-date');
-                var getModalEndDateEl = document.querySelector('#event-end-date');
-                var getModalAddBtnEl = document.querySelector('.btn-add-event');
-                var getModalUpdateBtnEl = document.querySelector('.btn-update-event');
                 var calendarsEvents = {
-                    Work: 'primary',
-                    Personal: 'success',
-                    Important: 'danger',
-                    Travel: 'warning',
-                }
-
-                // Calendar Elements and options
-                var calendarEl = document.querySelector('.calendar');
-                var checkWidowWidth = function() {
-                    if (window.innerWidth <= 1199) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-
-                var calendarHeaderToolbar = {
-                    left: 'prev next addEventButton',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                }
-                var calendarEventsList = @json($tasks)
-
-                // Calendar Select fn.
-                var calendarSelect = function(info) {
-                    getModalAddBtnEl.style.display = 'block';
-                    getModalUpdateBtnEl.style.display = 'none';
-                    myModal.show()
-                    getModalStartDateEl.value = info.startStr;
-                    getModalEndDateEl.value = info.endStr;
+                    completed: 'success',
+                    processing: 'warning',
+                    pending: 'primary',
                 }
 
                 // Calendar AddEvent fn.
                 var calendarAddEvent = function() {
-                    var currentDate = new Date();
-                    var dd = String(currentDate.getDate()).padStart(2, '0');
-                    var mm = String(currentDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-                    var yyyy = currentDate.getFullYear();
-                    var combineDate = `${yyyy}-${mm}-${dd}T00:00:00`;
-                    getModalAddBtnEl.style.display = 'block';
-                    getModalUpdateBtnEl.style.display = 'none';
                     myModal.show();
-                    getModalStartDateEl.value = combineDate;
                 }
 
-                // Calendar eventClick fn.
-                var calendarEventClick = function(info) {
-                    var eventObj = info.event;
-
-                    if (eventObj.url) {
-                        window.open(eventObj.url);
-
-                        info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
-                    } else {
-                        var getModalEventId = eventObj._def.publicId;
-                        var getModalEventLevel = eventObj._def.extendedProps['calendar'];
-
-                        getModalUpdateBtnEl.setAttribute('data-fc-event-public-id', getModalEventId)
-                        getModalAddBtnEl.style.display = 'none';
-                        getModalUpdateBtnEl.style.display = 'block';
-                        myModal.show();
-                    }
-                }
-
-
-                // Activate Calender
                 var calendar = new FullCalendar.Calendar(calendarEl, {
-                    selectable: true,
-                    height: checkWidowWidth() ? 900 : 1052,
-                    initialView: checkWidowWidth() ? 'listWeek' : 'dayGridMonth',
-                    initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}-07`,
-                    headerToolbar: calendarHeaderToolbar,
-                    events: calendarEventsList,
-                    select: calendarSelect,
-                    locale: "zh-tw",
-                    unselect: function() {
-                        console.log('unselected')
-                    },
+                    initialView: 'dayGridMonth',
+                    locale: 'zh-tw',
                     customButtons: {
-                        addEventButton: {
+                        myCustomButton: {
                             text: '新增稽核',
                             click: calendarAddEvent
                         }
@@ -224,81 +127,23 @@
                     eventClassNames: function({
                         event: calendarEvent
                     }) {
-                        const getColorValue = calendarsEvents[calendarEvent._def.extendedProps.calendar];
+                        const getColorValue = calendarsEvents[calendarEvent._def.extendedProps.status];
                         return [
                             // Background Color
                             'event-fc-color fc-bg-' + getColorValue
                         ];
                     },
-
-                    eventClick: calendarEventClick,
-                    windowResize: function(arg) {
-                        if (checkWidowWidth()) {
-                            calendar.changeView('listWeek');
-                            calendar.setOption('height', 900);
-                        } else {
-                            calendar.changeView('dayGridMonth');
-                            calendar.setOption('height', 1052);
-                        }
-                    }
+                    headerToolbar: {
+                        center: 'myCustomButton',
+                    },
+                    events: @json($tasks),
 
                 });
 
-                // Add Event
-                getModalAddBtnEl.addEventListener('click', function() {
-
-                    var getUsersValue = getModalUsersEl;
-                    var setModalStartDateValue = getModalStartDateEl.value;
-                    var setModalEndDateValue = getModalEndDateEl.value;
-                    var getModalCheckedRadioBtnValue = (getModalCheckedRadioBtnEl !== null) ?
-                        getModalCheckedRadioBtnEl.value : '';
-
-                    calendar.addEvent({
-                        id: uuidv4(),
-                        start: setModalStartDateValue,
-                        end: setModalEndDateValue,
-                        allDay: true,
-                        extendedProps: {
-                            calendar: getModalCheckedRadioBtnValue
-                        }
-                    })
-                    myModal.hide()
-                })
 
 
 
-                // Update Event
-                getModalUpdateBtnEl.addEventListener('click', function() {
-                    var getPublicID = this.dataset.fcEventPublicId;
-                    var getTitleUpdatedValue = getModalTitleEl.value;
-                    var getEvent = calendar.getEventById(getPublicID);
-                    var getModalUpdatedCheckedRadioBtnEl = document.querySelector(
-                        'input[name="event-level"]:checked');
-
-                    var getModalUpdatedCheckedRadioBtnValue = (getModalUpdatedCheckedRadioBtnEl !== null) ?
-                        getModalUpdatedCheckedRadioBtnEl.value : '';
-
-                    getEvent.setProp('title', getTitleUpdatedValue);
-                    getEvent.setExtendedProp('calendar', getModalUpdatedCheckedRadioBtnValue);
-                    myModal.hide()
-                })
-
-                // Calendar Renderation
                 calendar.render();
-
-                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'))
-                var modalToggle = document.querySelector('.fc-addEventButton-button ')
-
-                document.getElementById('exampleModal').addEventListener('hidden.bs.modal', function(event) {
-                    getModalTitleEl.value = '';
-                    getModalStartDateEl.value = '';
-                    getModalEndDateEl.value = '';
-                    var getModalIfCheckedRadioBtnEl = document.querySelector(
-                        'input[name="event-level"]:checked');
-                    if (getModalIfCheckedRadioBtnEl !== null) {
-                        getModalIfCheckedRadioBtnEl.checked = false;
-                    }
-                })
             });
         </script>
 

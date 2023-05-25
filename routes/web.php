@@ -35,6 +35,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/assign', [TaskController::class, 'assign'])->name('task-assign');
             // 指派稽核任務
             Route::post('/assign', [TaskController::class, 'store'])->name('task-store');
+            // 稽核任務編輯
+            Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
             // 任務清單
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 開始稽核

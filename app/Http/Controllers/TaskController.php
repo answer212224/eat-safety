@@ -91,9 +91,10 @@ class TaskController extends Controller
         $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
-            $task->title = $task->category . ' - ' . $task->restaurant->brand . ' - ' . $task->restaurant->shop;
+            $task->title = $task->category . '-' . $task->restaurant->brand . $task->restaurant->shop;
             $task->start = $task->task_date;
             $task->users = $task->users->pluck('name', 'id')->toArray();
+            $task->url = route('task-edit', $task->id);
 
             return $task;
         });
@@ -126,6 +127,14 @@ class TaskController extends Controller
 
 
         return back();
+    }
+
+    public function edit(Task $task)
+    {
+        $title = '編輯任務';
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
+        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup'));
     }
 
     public function sign(Task $task, Request $request)
