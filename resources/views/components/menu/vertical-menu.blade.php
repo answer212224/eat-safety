@@ -121,11 +121,15 @@
                     id="permission" data-bs-parent="#accordionExample">
 
                     <li class="">
-                        <a href=""> 權限 </a>
+                        <a href=""> 角色 </a>
                     </li>
 
                     <li class="">
                         <a href=""> 權限 </a>
+                    </li>
+
+                    <li class="">
+                        <a href=""> 同仁 </a>
                     </li>
                 </ul>
 
