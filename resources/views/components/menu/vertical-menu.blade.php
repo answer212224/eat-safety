@@ -158,7 +158,7 @@
                     id="task" data-bs-parent="#accordionExample">
 
                     <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
-                        <a href="{{ route('task-assign') }}"> 指派稽核 </a>
+                        <a href="{{ route('task-assign') }}"> 稽核行事曆 </a>
                     </li>
 
                     <li
@@ -169,7 +169,7 @@
                         Request::routeIs('task-project-check')
                             ? 'active'
                             : '' }}">
-                        <a href="{{ route('task-list') }}"> 稽核清單 </a>
+                        <a href="{{ route('task-list') }}"> 稽核任務列表 </a>
                     </li>
                 </ul>
 

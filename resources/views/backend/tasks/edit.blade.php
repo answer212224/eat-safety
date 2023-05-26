@@ -36,7 +36,10 @@
 
                 <a href="#Defect" class="nav-link">稽核缺失</a>
 
-                <a href="#Action" class="nav-link">操作</a>
+                @can('delete-task')
+                    <a href="#Action" class="nav-link">操作</a>
+                @endcan
+
             </div>
         </div>
 
@@ -217,27 +220,28 @@
                     </div>
                 </div>
             </div>
-
-            <div id="Action" class="col-lg-12 layout-spacing mt-4">
-                <div class="statbox widget box box-shadow">
-                    <div class="widget-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>操作</h4>
+            @can('delete-task')
+                <div id="Action" class="col-lg-12 layout-spacing mt-4">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>操作</h4>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="widget-content widget-content-area">
 
-                        <div class="row">
-                            <a href="{{ route('task-delete-confirm', ['task' => $task]) }}" class="btn btn-danger"
-                                data-confirm-delete="true">Delete</a>
+                        <div class="widget-content widget-content-area">
+                            <div class="row">
+                                <a href="{{ route('task-delete-confirm', ['task' => $task]) }}" class="btn btn-danger"
+                                    data-confirm-delete="true">Delete</a>
+                            </div>
                         </div>
+
+
                     </div>
-
-
                 </div>
-            </div>
+            @endcan
         </div>
 
 
