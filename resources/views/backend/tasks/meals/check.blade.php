@@ -7,7 +7,8 @@
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <x-slot:headerFiles>
         <!--  BEGIN CUSTOM STYLE FILE  -->
-
+        @vite(['resources/scss/light/assets/components/list-group.scss'])
+        @vite(['resources/scss/dark/assets/components/list-group.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -26,27 +27,21 @@
     <div class="row layout-top-spacing">
     </div>
 
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">採樣列表</h5>
+                    <p>需帶回有</p>
 
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">採樣列表</h5>
-            <p>需帶有</p>
-            <form action="{{ route('task-meal-submit', ['task' => $task]) }}" method="post">
-                @csrf
-                <div class="list-group">
-                    @foreach ($task->meals as $meal)
-                        <label class="list-group-item">
-                            <input class="form-check-input me-1" @if ($meal->pivot->is_taken == 1) checked @endif
-                                type="checkbox" name="meal_tasks[{{ $meal->id }}]">
-                            {{ $meal->name }}
-                        </label>
-                    @endforeach
+                    <livewire:meal-list-check :task="$task">
+
                 </div>
-
-                <button class="btn btn-success">submit</button>
-            </form>
+            </div>
         </div>
+
     </div>
+
 
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->

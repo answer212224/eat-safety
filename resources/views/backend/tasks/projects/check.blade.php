@@ -7,7 +7,8 @@
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <x-slot:headerFiles>
         <!--  BEGIN CUSTOM STYLE FILE  -->
-
+        @vite(['resources/scss/light/assets/components/list-group.scss'])
+        @vite(['resources/scss/dark/assets/components/list-group.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -24,24 +25,15 @@
 
     <div class="row layout-top-spacing">
     </div>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">專案列表</h5>
-            <p>需檢查項目有</p>
-            <form action="{{ route('task-project-submit', ['task' => $task]) }}" method="post">
-                @csrf
-                <div class="list-group">
-                    @foreach ($task->projects as $project)
-                        <label class="list-group-item">
-                            <input class="form-check-input me-1" @if ($project->pivot->is_taken == 1) checked @endif
-                                type="checkbox" name="project_tasks[{{ $project->id }}]">
-                            {{ $project->description }}
-                        </label>
-                    @endforeach
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">專案列表</h5>
+                    <p>需檢查項目有</p>
+                    <livewire:project-list-check :task="$task">
                 </div>
-
-                <button class="btn btn-success">submit</button>
-            </form>
+            </div>
         </div>
     </div>
 
