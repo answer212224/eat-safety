@@ -133,12 +133,7 @@
                         <a href=""> 同仁 </a>
                     </li>
                 </ul>
-
-
-
-
             </li>
-
             <li class="menu {{ Request::is('*/app/task') ? 'active' : '' }}">
                 <a href="#task" data-bs-toggle="collapse"
                     aria-expanded="{{ Request::is('*/app/*/*') ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -192,9 +187,9 @@
                     </svg><span>DATA</span></div>
             </li>
 
-            <li class="menu {{ Request::is('*/data/*/*') ? 'active' : '' }}">
+            <li class="menu {{ Request::is('*/data/*') ? 'active' : '' }}">
                 <a href="#data" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/data/*/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    aria-expanded="{{ Request::is('*/data/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -213,8 +208,8 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/task/*') ? 'show' : '' }}"
-                    id="data" data-bs-parent="#accordionExample">
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/*') ? 'show' : '' }}" id="data"
+                    data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('meal-index') ? 'active' : '' }}">
                         <a href="{{ route('meal-index') }}"> 餐點採樣資料 </a>
                     </li>
