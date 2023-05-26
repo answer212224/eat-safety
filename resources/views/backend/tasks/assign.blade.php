@@ -133,9 +133,13 @@
                             'event-fc-color fc-bg-' + getColorValue
                         ];
                     },
+
                     headerToolbar: {
-                        center: 'myCustomButton',
+                        @can('create-task')
+                            center: 'myCustomButton'
+                        @endcan
                     },
+
                     events: @json($tasks),
 
                 });

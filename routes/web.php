@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\DefectController;
-use App\Http\Controllers\MealController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\TaskController;
 use App\Models\Task;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MealController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DefectController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,11 +86,17 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
         });
 
-        Route::prefix('restaurant')->group(function () {
+        Route::prefix('restaurants')->group(function () {
             // 門市資料
             Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
             // 門市工作區站
             Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
+        });
+
+        Route::prefix('users')->group(function () {
+            // 門市資料
+            Route::get('/list', [UserController::class, 'index'])->name('user-index');
+            // 門市工作區站
         });
     });
 });
