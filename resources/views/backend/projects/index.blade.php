@@ -17,17 +17,28 @@
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">專案資料</li>
-                    </ol>
-                </nav>
+                <div class="row justify-content-between">
+                    <div class="col-8 align-self-center">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">專案資料</li>
+                            </ol>
+
+
+                        </nav>
+                    </div>
+                    <div class="col-4 align-self-center text-end">
+                        <a href="http://" class="btn btn-sm btn-rounded btn-success">add</a>
+                    </div>
+
+                </div>
+
 
 
             </div>
             <!-- /BREADCRUMB -->
-            <a href="" class="btn btn-inline">新增</a>
+
             <div class="row layout-top-spacing">
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-8">
@@ -85,6 +96,7 @@
                             "sSearchPlaceholder": "Search...",
                             "sLengthMenu": "Results :  _MENU_",
                         },
+
                         "stripeClasses": [],
                         "lengthMenu": [7, 10, 20, 50],
                         "pageLength": 10,

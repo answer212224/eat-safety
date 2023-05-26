@@ -86,7 +86,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                        <button type="reset" class="btn" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary btn-add-event">新增稽核</button>
                     </div>
                 </div>
