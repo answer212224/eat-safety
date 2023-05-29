@@ -8,6 +8,7 @@ use App\Http\Controllers\DefectController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         Route::prefix('permission')->group(function () {
             // 角色權限
             Route::get('/', [PermissionController::class, 'index'])->name('permission-index');
+            // 角色新增
+            Route::post('/role', [RoleController::class, 'store'])->name('role-store');
+            // 角色刪除
+            Route::post('/role/{role}/destory', [RoleController::class, 'destory'])->name('role-destory');
+            // 權限新增
+            Route::post('/permission', [PermissionController::class, 'store'])->name('permission-store');
         });
     });
 

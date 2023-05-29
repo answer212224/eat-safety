@@ -18,4 +18,11 @@ class PermissionController extends Controller
             'permissions' => $permissions,
         ]);
     }
+
+    public function store(Request $request)
+    {
+        Permission::create(['name' => $request->permission_name]);
+        alert()->success('新增成功', '新增權限成功');
+        return back();
+    }
 }
