@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\Task;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DefectController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RestaurantController;
 
 /*
@@ -66,6 +66,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
             // 主管核對簽名
             Route::post('{task}/sign', [TaskController::class, 'sign'])->name('task-sign');
+        });
+        Route::prefix('permission')->group(function () {
+            // 角色權限
+            Route::get('/', [PermissionController::class, 'index'])->name('permission-index');
         });
     });
 

@@ -118,19 +118,15 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/permission/*') ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/permission') ? 'show' : '' }}"
                     id="permission" data-bs-parent="#accordionExample">
 
-                    <li class="">
-                        <a href=""> 角色 </a>
+                    <li class="{{ Request::routeIs('permission-index') ? 'active' : '' }}">
+                        <a href="{{ route('permission-index') }}"> 角色權限 </a>
                     </li>
 
                     <li class="">
-                        <a href=""> 權限 </a>
-                    </li>
-
-                    <li class="">
-                        <a href=""> 同仁 </a>
+                        <a href="{{ route('permission-index') }}"> 同仁權限 </a>
                     </li>
                 </ul>
             </li>
