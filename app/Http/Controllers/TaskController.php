@@ -106,6 +106,15 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
+        foreach ($data['users'] as $userId) {
+            $user = User::find($userId);
+            $tasks = $user->tasks()->where('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->get();
+            if ($tasks->isNotEmpty()) {
+                alert()->warning('無法新增', $user->name . '已經有相同日期和相同店家的任務');
+                return back();
+            }
+        }
+
         $task = Task::create([
             'category' => $data['category'],
             'restaurant_id' => $data['restaurant_id'],
