@@ -153,7 +153,8 @@
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
 
-                    <li class="{{ Request::routeIs('task-assign') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('task-assign') || Request::routeIs('task-edit') ? 'active' : '' }}">
                         <a href="{{ route('task-assign') }}"> 稽核行事曆 </a>
                     </li>
 
@@ -162,7 +163,8 @@
                         Request::routeIs('task-create') ||
                         Request::routeIs('task-defect-show') ||
                         Request::routeIs('task-meal-check') ||
-                        Request::routeIs('task-project-check')
+                        Request::routeIs('task-project-check') ||
+                        Request::routeIs('task-defect-edit')
                             ? 'active'
                             : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核任務列表 </a>
