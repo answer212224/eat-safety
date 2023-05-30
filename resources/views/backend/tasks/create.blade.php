@@ -15,10 +15,6 @@
             @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
             @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
-            @vite(['resources/scss/light/assets/forms/switches.scss'])
-            @vite(['resources/scss/dark/assets/forms/switches.scss'])
-
-
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -91,8 +87,8 @@
 
 
                                             <div class="button-action mt-5 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3" disabled>Prev</a>
-                                                <a class="btn btn-secondary btn-nxt">Next</a>
+                                                <a class="btn btn-secondary btn-prev me-3" disabled>上一步</a>
+                                                <a class="btn btn-secondary btn-nxt">下一步</a>
                                             </div>
                                         </div>
 
@@ -110,8 +106,8 @@
 
 
                                             <div class="button-action mt-5 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3">Prev</a>
-                                                <a class="btn btn-secondary btn-nxt">Next</a>
+                                                <a class="btn btn-secondary btn-prev me-3">上一步</a>
+                                                <a class="btn btn-secondary btn-nxt">下一步</a>
                                             </div>
                                         </div>
                                         <div id="defaultStep-three" class="content" role="tabpanel">
@@ -120,8 +116,8 @@
 
 
                                             <div class="button-action mt-3 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3">Prev</a>
-                                                <button class="btn btn-success me-3">Submit</button>
+                                                <a class="btn btn-secondary btn-prev me-3">上一步</a>
+                                                <button class="btn btn-success me-3">提交</button>
                                             </div>
 
                                         </div>
@@ -134,7 +130,7 @@
                     </div>
                 </div>
 
-                <livewire:switch-task-user :task="$task" />
+
 
             </div>
 

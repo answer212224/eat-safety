@@ -11,6 +11,8 @@
             @vite(['resources/scss/light/assets/apps/notes.scss'])
             @vite(['resources/scss/dark/assets/components/modal.scss'])
             @vite(['resources/scss/dark/assets/apps/notes.scss'])
+            @vite(['resources/scss/light/assets/forms/switches.scss'])
+            @vite(['resources/scss/dark/assets/forms/switches.scss'])
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -55,7 +57,7 @@
                                                             <path
                                                                 d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
                                                             </path>
-                                                        </svg> All Notes</a>
+                                                        </svg> 所有任務 </a>
                                                 </li>
 
                                             </ul>
@@ -71,7 +73,7 @@
                                                     </path>
                                                     <line x1="7" y1="7" x2="7" y2="7">
                                                     </line>
-                                                </svg> Tags</p>
+                                                </svg> 標籤</p>
 
                                             <ul class="nav nav-pills d-block group-list" id="pills-tab" role="tablist">
                                                 <li class="nav-item">
@@ -101,12 +103,11 @@
 
                                             <div class="note-inner-content">
                                                 <div class="note-content">
+                                                    <livewire:switch-task-user :task="$task" />
+
                                                     <p class="note-title">
-                                                        {{ $task->category }}
-                                                    </p>
+                                                        {{ $task->category }} </p>
                                                     <hr />
-
-
 
                                                     <div class="note-description-content">
                                                         <p class="note-description">
