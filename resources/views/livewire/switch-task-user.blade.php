@@ -50,7 +50,10 @@
 
                 <div class="dropdown-menu right" aria-labelledby="elementDrodpown"
                     style="will-change: transform; position: absolute; transform: translate3d(105px, 0, 0px); top: 0px; left: 0px;">
-                    <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
+                    @if ($task->status != 'completed')
+                        <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
+                    @endif
+
                     @if ($task->meals->count() > 0)
                         <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
                             餐點採樣</a>

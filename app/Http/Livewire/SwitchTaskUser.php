@@ -16,6 +16,11 @@ class SwitchTaskUser extends Component
 
     public function toggleIsCompleted()
     {
+        if ($this->task->status == 'completed') {
+            alert()->error('錯誤', '此任務已完成，無法修改狀態');
+            return redirect()->route('task-list');
+        }
+
         if ($this->isCompleted && $this->task->taskUsers->where('is_completed', 0)->count() == 1) {
             $this->task->update(['status' => 'pending approval']);
         } elseif ($this->isCompleted) {
@@ -23,7 +28,6 @@ class SwitchTaskUser extends Component
         } else {
             $this->task->update(['status' => 'pending']);
         }
-
 
         $this->task->taskUsers->where('user_id', auth()->user()->id)->first()->update(['is_completed' => $this->isCompleted]);
     }
