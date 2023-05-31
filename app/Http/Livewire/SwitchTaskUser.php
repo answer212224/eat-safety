@@ -16,11 +16,14 @@ class SwitchTaskUser extends Component
 
     public function toggleIsCompleted()
     {
-        if ($this->isCompleted) {
+        if ($this->isCompleted && $this->task->taskUsers->where('is_completed', 0)->count() == 1) {
+            $this->task->update(['status' => 'pending approval']);
+        } elseif ($this->isCompleted) {
             $this->task->update(['status' => 'processing']);
         } else {
             $this->task->update(['status' => 'pending']);
         }
+
 
         $this->task->taskUsers->where('user_id', auth()->user()->id)->first()->update(['is_completed' => $this->isCompleted]);
     }
