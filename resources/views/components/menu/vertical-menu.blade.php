@@ -75,15 +75,7 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/dashboard/*') ? 'show' : '' }}"
                     id="dashboard" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('analytics') ? 'active' : '' }}">
-                        <a href="{{ route('analytics') }}"> Analytics </a>
-                    </li>
-                    <li class="{{ Request::routeIs('sales') ? 'active' : '' }}">
-                        <a href="{{ route('sales') }}"> Sales </a>
-                    </li>
-                    <li class="{{ Request::routeIs('barebone') ? 'active' : '' }}">
-                        <a href="{{ route('barebone') }}"> Barebone </a>
-                    </li>
+
 
                 </ul>
             </li>
