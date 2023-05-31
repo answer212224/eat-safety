@@ -108,6 +108,7 @@
                     completed: 'success',
                     processing: 'warning',
                     pending: 'primary',
+                    pending_approval: 'danger',
                 }
 
                 // Calendar AddEvent fn.

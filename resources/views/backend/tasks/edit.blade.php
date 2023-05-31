@@ -47,19 +47,7 @@
             <div id="Task" class="col-lg-12 layout-spacing">
                 <div class="statbox widget box box-shadow">
                     <div class="widget-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>稽核任務
-                                    @if ($task->status == 'completed')
-                                        <span class="badge badge-light-success mb-2 me-1">已完成</span>
-                                    @elseif($task->status == 'processing')
-                                        <span class="badge badge-light-warning mb-2 me-1">稽核中</span>
-                                    @elseif($task->status == 'pending')
-                                        <span class="badge badge-light-primary mb-2 me-1">待稽核</span>
-                                    @endif
-                                </h4>
-                            </div>
-                        </div>
+                        <livewire:task-status-change :task="$task">
                     </div>
                     <div class="widget-content widget-content-area">
                         <div class="row">
@@ -69,7 +57,7 @@
                                     <div class="d-flex">
                                         <div class="n-chk">
                                             <div class="form-check form-check-primary form-check-inline">
-                                                <input class="form-check-input" type="radio" name="category"
+                                                <input class="form-check-input" type="radio" name="category" disabled
                                                     @if ($task->category == '食安及5S') checked @endif value="食安及5S"
                                                     id="rwork">
                                                 <label class="form-check-label" for="rwork">食安及5S</label>
@@ -77,7 +65,7 @@
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-warning form-check-inline">
-                                                <input class="form-check-input" type="radio" name="category"
+                                                <input class="form-check-input" type="radio" name="category" disabled
                                                     @if ($task->category == '清潔檢查') checked @endif value="清潔檢查"
                                                     id="rtravel">
                                                 <label class="form-check-label" for="rtravel">清潔檢查</label>
@@ -90,7 +78,7 @@
                                 <div class="form-group mt-3">
                                     <label class="form-label">選擇稽核員</label>
                                     <select class="form-control" name="users[]" multiple autocomplete="off" required
-                                        id="select-users">
+                                        id="select-users" disabled>
                                         @foreach ($task->users as $user)
                                             <option value="{{ $user->id }}" selected>{{ $user->name }}
                                             </option>
@@ -102,7 +90,7 @@
                                 <div class="form-group mt-3">
                                     <label class="form-label">選擇分店代號</label>
                                     <select class="form-control" name="restaurant_id" placeholder="選擇分店代號..."
-                                        autocomplete="off" id="select-sid" required>
+                                        autocomplete="off" id="select-sid" required disabled>
                                         <option value="{{ $task->restaurant->id }}" selected>
                                             {{ $task->restaurant->sid }} {{ $task->restaurant->brand }}
                                             {{ $task->restaurant->shop }}
@@ -113,17 +101,19 @@
                                 <div class="form-group mt-3">
                                     <label class="form-label">稽核日期</label>
                                     <input id="event-start-date" name="task_date" type="date" class="form-control"
-                                        value="{{ $task->task_date }}">
+                                        disabled value="{{ $task->task_date }}">
                                 </div>
 
                                 <div class="form-group mt-3">
                                     <label class="form-label">外場主管</label>
-                                    <input type="text" value="{{ $task->outer_manager }}" class="form-control">
+                                    <input type="text" value="{{ $task->outer_manager }}" class="form-control"
+                                        disabled>
                                 </div>
 
                                 <div class="form-group mt-3">
                                     <label class="form-label">內場主管</label>
-                                    <input type="text" value="{{ $task->inner_manager }}" class="form-control">
+                                    <input type="text" value="{{ $task->inner_manager }}" class="form-control"
+                                        disabled>
                                 </div>
                             </div>
 
@@ -131,7 +121,8 @@
 
                                 <div class="form-group mt-3">
                                     <label class="form-label">採樣</label>
-                                    <select multiple class="form-control" name='defaltMeals[]' id="select-meals">
+                                    <select multiple class="form-control" name='defaltMeals[]' id="select-meals"
+                                        disabled>
                                         @foreach ($task->meals as $meal)
                                             <option value="{{ $meal->id }}" selected>{{ $meal->name }}
                                             </option>
@@ -141,7 +132,8 @@
 
                                 <div class="form-group mt-3">
                                     <label class="form-label">專案</label>
-                                    <select multiple class="form-control" name='defaltMeals[]' id="select-projects">
+                                    <select multiple class="form-control" name='defaltMeals[]' id="select-projects"
+                                        disabled>
                                         @foreach ($task->projects as $project)
                                             <option value="{{ $project->id }}" selected>{{ $project->description }}
                                             </option>

@@ -22,7 +22,7 @@ class SwitchTaskUser extends Component
         }
 
         if ($this->isCompleted && $this->task->taskUsers->where('is_completed', 0)->count() == 1) {
-            $this->task->update(['status' => 'pending approval']);
+            $this->task->update(['status' => 'pending_approval']);
         } elseif ($this->isCompleted) {
             $this->task->update(['status' => 'processing']);
         } else {

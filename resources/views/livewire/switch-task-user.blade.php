@@ -1,6 +1,6 @@
 <div
     class="note-item all-notes @if ($task->status == 'completed') note-personal
-    @elseif ($task->status == 'pending approval') note-important
+    @elseif ($task->status == 'pending_approval') note-important
 @elseif ($task->status == 'processing') note-work @else note-social @endif">
 
     <div class="note-inner-content">
@@ -72,8 +72,8 @@
         <div class="note-footer">
             @if ($task->status == 'completed')
                 <span class="badge badge-light-success">已完成</span>
-            @elseif($task->status == 'pending approval')
-                <span class="badge badge-light-primary">待核對</span>
+            @elseif($task->status == 'pending_approval')
+                <span class="badge badge-light-danger">待核對</span>
             @elseif($task->status == 'processing')
                 <span class="badge badge-light-warning">稽核中</span>
             @else
