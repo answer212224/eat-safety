@@ -81,6 +81,10 @@
                                                         id="note-personal">已完成</a>
                                                 </li>
                                                 <li class="nav-item">
+                                                    <a class="nav-link list-actions g-dot-danger"
+                                                        id="note-important">待核對</a>
+                                                </li>
+                                                <li class="nav-item">
                                                     <a class="nav-link list-actions g-dot-warning"
                                                         id="note-work">稽核中</a>
                                                 </li>

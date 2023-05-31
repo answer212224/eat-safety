@@ -1,5 +1,6 @@
 <div
     class="note-item all-notes @if ($task->status == 'completed') note-personal
+    @elseif ($task->status == 'pending approval') note-important
 @elseif ($task->status == 'processing') note-work @else note-social @endif">
 
     <div class="note-inner-content">
