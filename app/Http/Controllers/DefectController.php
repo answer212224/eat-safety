@@ -72,7 +72,26 @@ class DefectController extends Controller
     public function show(Task $task)
     {
 
-        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
+
+        $isMealAllTaken = $task->meals->every(function ($value, $key) {
+            return $value->pivot->is_taken == 1;
+        });
+
+        if (!$isMealAllTaken) {
+            alert()->warning('請確認', '尚有餐點未採樣，請等待完成後再進行下一步');
+            return back();
+        }
+
+        $isProjectAllChecked = $task->projects->every(function ($value, $key) {
+
+            return $value->pivot->is_checked == 1;
+        });
+
+        if (!$isProjectAllChecked) {
+            alert()->warning('請確認', '尚有專案未檢查，請等待完成後再進行下一步');
+            return back();
+        }
 
         $isComplete = $task->taskUsers->pluck('is_completed');
         $isComplete = $isComplete->every(function ($value, $key) {

@@ -10,11 +10,11 @@ class ProjectListCheck extends Component
     public $task;
     public $project;
 
-    public function change(Project $project, $isImpoved)
+    public function change(Project $project, $isChecked)
     {
 
         $this->task->projects()->updateExistingPivot($project->id, [
-            'is_impoved' => !$isImpoved,
+            'is_checked' => !$isChecked,
         ]);
     }
 

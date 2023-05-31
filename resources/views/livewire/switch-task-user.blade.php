@@ -17,10 +17,10 @@
 
             <div class="note-description-content">
                 <p class="note-description">
-                    {{ $task->meals->pluck('name')->implode('、') }}
+                    採樣 {{ $task->meals->count() }} 項: {{ $task->meals->pluck('name')->implode('、') }}
                 </p>
                 <p class="note-description">
-                    {{ $task->projects->pluck('name')->implode('、') }}
+                    專案 {{ $task->projects->count() }} 項: {{ $task->projects->pluck('description')->implode('、') }}
                 </p>
             </div>
             <hr />

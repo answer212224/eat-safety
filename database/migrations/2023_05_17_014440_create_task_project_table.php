@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_impoved')->default(false);
+            $table->boolean('is_improved')->default(false);
+            $table->boolean('is_checked')->default(false);
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

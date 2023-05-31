@@ -33,12 +33,12 @@ class Task extends Model
 
     public function meals(): BelongsToMany
     {
-        return $this->belongsToMany(Meal::class)->withPivot(['is_impoved', 'is_taken']);
+        return $this->belongsToMany(Meal::class)->withPivot(['is_improved', 'is_taken']);
     }
 
     public function projects(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class)->withPivot('is_impoved');
+        return $this->belongsToMany(Project::class)->withPivot('is_improved', 'is_checked', 'note');
     }
 
     public function taskUsers()
