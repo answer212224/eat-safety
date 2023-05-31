@@ -18,6 +18,12 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
         @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
         @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
+
+        @vite(['resources/scss/light/assets/components/accordions.scss'])
+        @vite(['resources/scss/dark/assets/components/accordions.scss'])
+
+        @vite(['resources/scss/light/assets/components/list-group.scss'])
+        @vite(['resources/scss/dark/assets/components/list-group.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->

@@ -80,7 +80,7 @@
                                             {{-- 上傳圖片 --}}
                                             <div class="multiple-file-upload">
                                                 <input type="file" class="file-upload-multiple" name="filepond[]"
-                                                    multiple data-allow-reorder="true" data-max-file-size="3MB"
+                                                    multiple data-allow-reorder="true" data-max-file-size="4MB"
                                                     accept="image/png, image/jpeg, image/gif, image/jpg"
                                                     data-max-files="2">
                                             </div>

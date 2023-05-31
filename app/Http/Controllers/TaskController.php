@@ -106,6 +106,7 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
+
         foreach ($data['users'] as $userId) {
             $user = User::find($userId);
 
@@ -136,6 +137,7 @@ class TaskController extends Controller
         if (!empty($data['defaltMeals'])) {
             $task->meals()->attach($data['defaltMeals']);
         }
+
         if (!empty($data['optionMeals'])) {
             $task->meals()->attach($data['optionMeals']);
         }

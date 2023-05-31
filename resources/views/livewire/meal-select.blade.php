@@ -26,51 +26,54 @@
     <div class="row my-3">
         <div class="col-md-12">
             <div class="form-check form-switch form-check-inline">
-                <input wire:model='hasMeal' class="form-check-input" type="checkbox" role="switch"
+                <input wire:model='hasMeal' class="form-check-input" type="checkbox" role="switch" name="hasMeal"
                     id="flexSwitchCheckDefault">
                 <label class="form-check-label" for="flexSwitchCheckDefault">採樣</label>
             </div>
         </div>
+        {{-- 採樣checkbox --}}
         @if ($hasMeal)
-            <div class="col-6">
-                <label class="form-label">品牌必要採樣</label>
-                <select multiple class="form-control" name='defaltMeals[]'>
-                    @foreach ($defaltMeals as $defaltMeal)
-                        <option value="{{ $defaltMeal->id }}" selected>{{ $defaltMeal->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
-        @if ($hasMeal)
-            <div class="col-6">
-                <label class="form-label">分店特定採樣</label>
-                <select multiple class="form-control" name='optionMeals[]'>
+            <div class="list-group">
+                @foreach ($defaltMeals as $defaltMeal)
+                    <label class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="{{ $defaltMeal->id }}" checked
+                            disabled>
+                        {{ $defaltMeal->name }}
+                        <input class="form-check-input me-1" type="checkbox" name="defaltMeals[]"
+                            value="{{ $defaltMeal->id }}" checked hidden>
+                        {{ $defaltMeal->name }}
+                    </label>
+                @endforeach
+
+                <div class="list-group">
                     @foreach ($optionMeals as $optionMeal)
-                        <option value="{{ $optionMeal->id }}">{{ $optionMeal->name }}</option>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" name="optionMeals[]"
+                                value="{{ $optionMeal->id }}">
+                            {{ $optionMeal->name }}
+                        </label>
                     @endforeach
-                </select>
-            </div>
+                </div>
         @endif
+        {{-- 採樣checkbox end --}}
     </div>
-
-
     <div class="row my-3">
         <div class="col-md-12">
             <div class="form-check form-switch form-check-inline form-switch-warning">
-                <input wire:model='hasProject' class="form-check-input" type="checkbox" role="switch"
+                <input wire:model='hasProject' class="form-check-input" type="checkbox" role="switch" name="hasProject"
                     id="flexSwitchCheckDefault">
                 <label class="form-check-label" for="flexSwitchCheckDefault">專案</label>
             </div>
         </div>
         @if ($hasProject)
-            <div class="col-12">
-                <label class="form-label">專案執行列表</label>
-                <select multiple class="form-control" name='projects[]'>
-                    @foreach ($projects as $project)
-                        <option value="{{ $project->id }}">{{ $project->description }}</option>
-                    @endforeach
-                </select>
+            <div class="list-group">
+                @foreach ($projects as $project)
+                    <label class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="{{ $project->id }}"
+                            name="projects[]">
+                        {{ $project->description }}
+                    </label>
+                @endforeach
             </div>
         @endif
 
