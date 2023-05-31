@@ -40,18 +40,31 @@ class DefectController extends Controller
             return back();
         }
 
-        $task->update([
-            'status' => 'processing',
-        ]);
 
-        $task->taskHasDefects()->create([
-            'user_id' => auth()->user()->id,
-            'defect_id' => $request->defect_id,
-            'restaurant_workspace_id' => $request->workspace,
-            'images' => $path,
-        ]);
+        if ($task->taskHasDefects()->where('restaurant_workspace_id', $request->workspace)->where('defect_id', $request->defect_id)->exists()) {
+            $task->update([
+                'status' => 'processing',
+            ]);
+            $task->taskHasDefects()->create([
+                'user_id' => auth()->user()->id,
+                'defect_id' => $request->defect_id,
+                'restaurant_workspace_id' => $request->workspace,
+                'images' => $path,
+            ]);
+            alert()->success('請注意', '同樣站台有同樣缺失，缺失已新增');
+        } else {
+            $task->update([
+                'status' => 'processing',
+            ]);
 
-        alert()->success('成功', '缺失已新增');
+            $task->taskHasDefects()->create([
+                'user_id' => auth()->user()->id,
+                'defect_id' => $request->defect_id,
+                'restaurant_workspace_id' => $request->workspace,
+                'images' => $path,
+            ]);
+            alert()->success('成功', '缺失已新增');
+        }
 
         return back();
     }
@@ -65,9 +78,6 @@ class DefectController extends Controller
         $isComplete = $isComplete->every(function ($value, $key) {
             return $value == 1;
         });
-
-
-
 
         if (!$isComplete) {
             alert()->warning('請確認', '尚有稽核員未完成稽核，請等待完成後再進行下一步');
