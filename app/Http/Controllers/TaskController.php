@@ -26,7 +26,10 @@ class TaskController extends Controller
 
     public function create(Task $task)
     {
-
+        if ($task->taskUsers->where('user_id', auth()->user()->id)->first()->is_completed) {
+            alert()->error('錯誤', '您已經完成該稽核，請取消完成稽核狀態後再開始稽核');
+            return back();
+        }
         $title = '開始稽核';
 
         return view('backend.tasks.create', compact('title', 'task'));
@@ -116,13 +119,8 @@ class TaskController extends Controller
             }
         }
 
-        if (Task::where('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->exists()) {
-            alert()->warning('無法新增', '已經有相同日期和相同店家的任務');
-            return back();
-        }
-
         if (Task::where('task_date', $data['task_date'])->where('category', $data['category'])->where('restaurant_id', $data['restaurant_id'])->exists()) {
-            alert()->warning('無法新增', '已經有相同日期和相同類別相同店家的任務');
+            alert()->warning('無法新增', '已有相同日期和相同類別相同店家的任務');
             return back();
         }
 

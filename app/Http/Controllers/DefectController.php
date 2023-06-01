@@ -163,6 +163,11 @@ class DefectController extends Controller
     {
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
 
+        if ($task->taskUsers->where('user_id', auth()->user()->id)->first()->is_completed) {
+            alert()->error('錯誤', '您已經完成該稽核，請取消完成稽核狀態後再開始稽核');
+            return back();
+        }
+
         $defectsGroup = $task->taskHasDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
 
         return view('backend.tasks.task-defect', [
