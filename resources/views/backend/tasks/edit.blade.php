@@ -225,8 +225,8 @@
 
                         <div class="widget-content widget-content-area">
                             <div class="row">
-                                <a href="{{ route('task-delete-confirm', ['task' => $task]) }}" class="btn btn-danger"
-                                    data-confirm-delete="true">Delete</a>
+                                <a href="{{ route('task-delete', ['task' => $task]) }}" class="btn btn-danger"
+                                    data-confirm-delete="true">刪除</a>
                             </div>
                         </div>
 
