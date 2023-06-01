@@ -121,6 +121,8 @@
 
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
+
+
                     locale: 'zh-tw',
                     customButtons: {
                         myCustomButton: {
@@ -128,6 +130,7 @@
                             click: calendarAddEvent
                         }
                     },
+
                     eventClassNames: function({
                         event: calendarEvent
                     }) {
@@ -138,11 +141,22 @@
                         ];
                     },
 
-                    headerToolbar: {
-                        @can('create-task')
-                            center: 'myCustomButton'
-                        @endcan
-                    },
+                    @can('create-task')
+                        headerToolbar: {
+                            left: 'prev next myCustomButton',
+                            center: 'title',
+                            right: 'dayGridMonth,listWeek'
+                        },
+                    @endcan
+
+                    @cannot('create-task')
+                        headerToolbar: {
+                            left: 'prev next',
+                            center: 'title',
+                            right: 'dayGridMonth,listWeek'
+                        },
+                    @endcannot
+
 
                     events: @json($tasks),
 
