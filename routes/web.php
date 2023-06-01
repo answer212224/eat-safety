@@ -39,10 +39,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::post('/assign', [TaskController::class, 'store'])->name('task-store');
             // 稽核任務編輯
             Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('task-edit');
-            // 稽核任務刪除確認
-            Route::get('{task}/delete', [TaskController::class, 'deleteConfirm'])->name('task-delete-confirm');
             // 稽核任務刪除
-            Route::delete('{task}/delete', [TaskController::class, 'delete'])->name('task-delete');
+            Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('task-delete');
             // 任務清單
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 開始稽核
@@ -76,9 +74,11 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             // 角色新增
             Route::post('/role', [RoleController::class, 'store'])->name('role-store');
             // 角色刪除
-            Route::post('/role/{role}/destory', [RoleController::class, 'destory'])->name('role-destory');
+            Route::delete('{role}/role/destory', [RoleController::class, 'destory'])->name('role-destroy');
             // 權限新增
             Route::post('/permission', [PermissionController::class, 'store'])->name('permission-store');
+            // 權限刪除
+            Route::delete('{permission}/permission/destory', [PermissionController::class, 'destory'])->name('permission-destroy');
         });
     });
 

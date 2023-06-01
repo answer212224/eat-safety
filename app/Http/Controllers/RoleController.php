@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
     public function store(Request $request)
     {
-        $role = Role::create(['name' => $request->role_name]);
+        Role::create(['name' => $request->role_name]);
         alert()->success('新增成功', '新增角色成功');
         return back();
     }

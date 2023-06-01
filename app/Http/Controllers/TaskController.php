@@ -153,7 +153,10 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $title = '編輯任務';
-        // $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
+
+        confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
+
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
         return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup'));
     }
@@ -171,23 +174,12 @@ class TaskController extends Controller
         return redirect()->route('task-list');
     }
 
-    public function deleteConfirm(Task $task)
+    public function destroy(Task $task)
     {
-        if ($task->status == 'completed' || $task->status == 'processing') {
-            alert()->warning('無法刪除', '已經完成和正在進行的任務無法刪除');
+        if ($task->status == 'completed' || $task->status == 'processing' || $task->status == 'pending_approval') {
+            alert()->warning('無法刪除', '已經開始執行的任務無法刪除');
             return back();
         }
-
-        $title = '確認刪除?';
-        $text = "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除";
-
-        confirmDelete($title, $text);
-
-        return back();
-    }
-
-    public function delete(Task $task)
-    {
         $task->delete();
 
         alert()->success('刪除成功', '刪除任務成功');
