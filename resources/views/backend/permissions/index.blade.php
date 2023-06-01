@@ -8,6 +8,10 @@
         <!--  BEGIN CUSTOM STYLE FILE  -->
         @vite(['resources/scss/light/assets/components/modal.scss'])
         @vite(['resources/scss/dark/assets/components/modal.scss'])
+
+        @vite(['resources/scss/light/assets/components/font-icons.scss'])
+        @vite(['resources/scss/dark/assets/components/font-icons.scss'])
+
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -52,14 +56,10 @@
                                     <span class="badge badge-light-secondary">{{ $permission->name }}</span>
                                 @endforeach
                             </td>
-                            <td class="text-end"><a href="{{ route('role-destory', ['role' => $role]) }}"
-                                    class="btn btn-sm btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                                        <path
-                                            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                                    </svg>
-                                </a>
+                            <td class="text-end">
+                                <a href="{{ route('role-destroy', ['role' => $role]) }}" class="btn btn-danger btn-sm"
+                                    data-confirm-delete="true">Delete</a>
+
                             </td>
                         </tr>
                     @endforeach
@@ -98,7 +98,10 @@
                         <tr>
                             <td>{{ $permission->name }}</td>
                             <td>{{ $permission->guard_name }}</td>
-                            <td class="text-end">delete</td>
+                            <td class="text-end">
+                                <a href="{{ route('permission-destroy', ['permission' => $permission]) }}"
+                                    class="btn btn-danger btn-sm" data-confirm-delete="true">Delete</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -207,7 +210,11 @@
     </form>
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+        <script src="{{ asset('plugins/font-icons/feather/feather.min.js') }}"></script>
 
+        <script>
+            feather.replace();
+        </script>
     </x-slot:footerFiles>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>
