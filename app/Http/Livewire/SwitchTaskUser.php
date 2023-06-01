@@ -26,7 +26,7 @@ class SwitchTaskUser extends Component
         } elseif ($this->isCompleted) {
             $this->task->update(['status' => 'processing']);
         } else {
-            $this->task->update(['status' => 'pending']);
+            $this->task->update(['status' => 'processing']);
         }
 
         $this->task->taskUsers->where('user_id', auth()->user()->id)->first()->update(['is_completed' => $this->isCompleted]);

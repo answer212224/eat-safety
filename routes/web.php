@@ -63,6 +63,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
             // 開始專案
             Route::post('{task}/project/check', [TaskController::class, 'projectCheckSubmit'])->name('task-project-submit');
+            // 查看此任務自己稽核的缺失
+            Route::get('{task}/defect/owner', [DefectController::class, 'owner'])->name('task-defect-owner');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
             // 主管核對簽名

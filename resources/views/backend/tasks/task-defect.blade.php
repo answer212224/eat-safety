@@ -16,7 +16,11 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
                 <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
-                <li class="breadcrumb-item active" aria-current="page">主管核對</li>
+                @if (Request::routeIs('task-defect-show'))
+                    <li class="breadcrumb-item active" aria-current="page">主管核對</li>
+                @else
+                    <li class="breadcrumb-item active" aria-current="page">查看缺失</li>
+                @endif
             </ol>
         </nav>
     </div>
@@ -61,31 +65,61 @@
                     @endforeach
                 </div>
             @endforeach
+            @if (Request::routeIs('task-defect-show'))
+                <div class="widget-content widget-content-area blog-create-section mt-4">
+
+                    <h5 class="mb-4">採樣 {{ $task->meals->count() }} 項: </h5>
+
+                    <div class="row mb-4">
+                        <div class="col-xxl-12 mb-4">
+                            <p class="">
+                                {{ $task->meals->pluck('name')->implode('、') }}
+                            </p>
+                        </div>
+
+                    </div>
+                    <hr />
+                    <h5 class="mb-4">專案 {{ $task->projects->count() }} 項: </h5>
+
+                    <div class="row mb-4">
+                        <div class="col-xxl-12">
+                            <p class="">
+                                {{ $task->projects->pluck('description')->implode('。') }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            @endif
+
         </div>
 
-        <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
-            <div class="widget-content widget-content-area blog-create-section">
-                <div class="row">
-                    <form action="{{ route('task-sign', ['task' => $task]) }}" method="post">
-                        @csrf
-                        <div class="form-group mb-4">
-                            <label for="formGroupExampleInput">外場主管</label>
-                            <input type="text" name="inner_manager" class="form-control"
-                                value="{{ $task->inner_manager }}" id="formGroupExampleInput" placeholder="主管姓名"
-                                required>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="formGroupExampleInput2">內場主管</label>
-                            <input type="text" name="outer_manager" value="{{ $task->outer_manager }}"
-                                class="form-control" id="formGroupExampleInput2" placeholder="主管姓名" required>
-                        </div>
+        @if (Request::routeIs('task-defect-show'))
+            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+                <div class="widget-content widget-content-area blog-create-section">
+                    <div class="row">
+                        <form action="{{ route('task-sign', ['task' => $task]) }}" method="post">
+                            @csrf
+                            <div class="form-group mb-4">
+                                <label for="formGroupExampleInput">外場主管</label>
+                                <input type="text" name="inner_manager" class="form-control"
+                                    value="{{ $task->inner_manager }}" id="formGroupExampleInput" placeholder="主管姓名"
+                                    required>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="formGroupExampleInput2">內場主管</label>
+                                <input type="text" name="outer_manager" value="{{ $task->outer_manager }}"
+                                    class="form-control" id="formGroupExampleInput2" placeholder="主管姓名" required>
+                            </div>
 
-                        <button type="submit" class="btn btn-success w-100">核對完成</button>
+                            <button type="submit" class="btn btn-success w-100">核對完成</button>
 
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
     </div>
 

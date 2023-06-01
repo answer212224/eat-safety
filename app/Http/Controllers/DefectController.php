@@ -51,7 +51,8 @@ class DefectController extends Controller
                 'restaurant_workspace_id' => $request->workspace,
                 'images' => $path,
             ]);
-            alert()->success('請注意', '同樣站台有同樣缺失，缺失已新增');
+            alert()->warning('請注意', '同樣站台有同樣缺失，缺失已新增');
+            return redirect()->route('task-defect-owner', $task->id);
         } else {
             $task->update([
                 'status' => 'processing',
@@ -64,9 +65,8 @@ class DefectController extends Controller
                 'images' => $path,
             ]);
             alert()->success('成功', '缺失已新增');
+            return back();
         }
-
-        return back();
     }
 
     public function show(Task $task)
@@ -156,6 +156,19 @@ class DefectController extends Controller
     {
         $taskHasDefect->delete();
         alert()->success('成功', '缺失已刪除');
-        return redirect()->route('task-defect-show', $taskHasDefect->task_id);
+        return redirect()->route('task-list');
+    }
+
+    public function owner(Task $task)
+    {
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
+
+        $defectsGroup = $task->taskHasDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
+
+        return view('backend.tasks.task-defect', [
+            'task' => $task,
+            'defectsGroup' => $defectsGroup,
+            'title' => '查看自己缺失'
+        ]);
     }
 }

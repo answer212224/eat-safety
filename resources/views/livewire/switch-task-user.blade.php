@@ -20,7 +20,7 @@
                     採樣 {{ $task->meals->count() }} 項: {{ $task->meals->pluck('name')->implode('、') }}
                 </p>
                 <p class="note-description">
-                    專案 {{ $task->projects->count() }} 項: {{ $task->projects->pluck('description')->implode('、') }}
+                    專案 {{ $task->projects->count() }} 項: {{ $task->projects->pluck('description')->implode('。') }}
                 </p>
             </div>
             <hr />
@@ -52,15 +52,17 @@
                     style="will-change: transform; position: absolute; transform: translate3d(105px, 0, 0px); top: 0px; left: 0px;">
                     @if ($task->status != 'completed')
                         <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
-                    @endif
 
-                    @if ($task->meals->count() > 0)
-                        <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
-                            餐點採樣</a>
-                    @endif
-                    @if ($task->projects->count() > 0)
-                        <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
-                            專案執行</a>
+                        <a class="dropdown-item" href="{{ route('task-defect-owner', ['task' => $task]) }}">查看缺失</a>
+
+                        @if ($task->meals->count() > 0)
+                            <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
+                                餐點採樣</a>
+                        @endif
+                        @if ($task->projects->count() > 0)
+                            <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
+                                專案執行</a>
+                        @endif
                     @endif
                     <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                         主管核對</a>
