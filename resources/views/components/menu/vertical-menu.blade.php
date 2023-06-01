@@ -16,7 +16,7 @@
         <div class="navbar-nav theme-brand flex-row  text-center">
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
-                    <a href="{{ route('analytics') }}">
+                    <a href="{{ route('task-list') }}">
                         <img src="{{ Vite::asset('resources/images/logoWithText.png') }}" class="navbar-logo logo-dark"
                             alt="logo">
                         <img src="{{ Vite::asset('resources/images/logoWithText.png') }}" class="navbar-logo logo-light"
@@ -24,7 +24,7 @@
                     </a>
                 </div>
                 <div class="nav-item theme-text">
-                    <a href="{{ route('analytics') }}" class="nav-link">食安平台 </a>
+                    <a href="{{ route('task-list') }}" class="nav-link">食安平台 </a>
                 </div>
             </div>
             <div class="nav-item sidebar-toggle">
@@ -53,7 +53,8 @@
 
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
-            <li class="menu {{ Request::is('*/dashboard') ? 'active' : '' }}">
+            {{-- Dashboard --}}
+            {{-- <li class="menu {{ Request::is('*/dashboard') ? 'active' : '' }}">
                 <a href="#dashboard" data-bs-toggle="collapse"
                     aria-expanded="{{ Request::is('*/dashboard/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
@@ -63,7 +64,7 @@
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
                         </svg>
-                        <span>Dashboard</span>
+                        <span>儀表板</span>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -78,7 +79,7 @@
 
 
                 </ul>
-            </li>
+            </li> --}}
 
             {{-- APP --}}
             <li class="menu menu-heading">
