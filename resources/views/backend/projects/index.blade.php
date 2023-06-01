@@ -45,9 +45,9 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Action</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
+                                    <th class="text-center">動作</th>
+                                    <th>名稱</th>
+                                    <th>細項</th>
 
                                 </tr>
                             </thead>

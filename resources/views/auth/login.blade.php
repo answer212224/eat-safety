@@ -33,47 +33,48 @@
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
 
-                                            <h2>Sign In</h2>
-                                            <p>Enter your email and password to login</p>
+                                            <h2>登入</h2>
+
+                                            <p>請提供您的員工編號和密碼以進行登入</p>
 
                                         </div>
                                         <form action="{{ route('login') }}" method="post">
                                             @csrf
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">UID</label>
+                                                    <label class="form-label">員工編號</label>
                                                     <input type="uid" class="form-control" name="uid">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="mb-4">
-                                                    <label class="form-label">Password</label>
+                                                    <label class="form-label">密碼</label>
                                                     <input type="password" class="form-control" name="password">
                                                 </div>
                                             </div>
-                                            <div class="col-12">
+                                            {{-- <div class="col-12">
                                                 <div class="mb-3">
                                                     <div class="form-check form-check-primary form-check-inline">
                                                         <input class="form-check-input me-3" type="checkbox"
                                                             id="form-check-default">
                                                         <label class="form-check-label" for="form-check-default">
-                                                            Remember me
+                                                            記住我
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             @csrf
                                             <div class="col-12">
                                                 <div class="mb-4">
-                                                    <button class="btn btn-secondary w-100">SIGN IN</button>
+                                                    <button class="btn btn-secondary w-100">登入</button>
                                                 </div>
                                             </div>
                                         </form>
                                         <div class="col-12">
                                             <div class="text-center">
-                                                <p class="mb-0">Dont't have an account ? <a href="javascript:void(0);"
-                                                        class="text-warning">Sign Up</a></p>
+                                                <p class="mb-0">還沒有帳號嗎？ <a href="javascript:void(0);"
+                                                        class="text-warning">立即註冊！</a></p>
                                             </div>
                                         </div>
 

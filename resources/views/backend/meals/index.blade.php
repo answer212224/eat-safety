@@ -46,18 +46,18 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>effective_date</th>
-                                    <th>sid</th>
-                                    <th>brand</th>
-                                    <th>shop</th>
-                                    <th>category</th>
-                                    <th>chef</th>
-                                    <th>workspace</th>
-                                    <th>qno</th>
-                                    <th>name</th>
-                                    <th>note</th>
-                                    <th>item</th>
-                                    <th>items</th>
+                                    <th>月份</th>
+                                    <th>品牌店代碼</th>
+                                    <th>品牌</th>
+                                    <th>店別</th>
+                                    <th>類別</th>
+                                    <th>廚別</th>
+                                    <th>區站</th>
+                                    <th>編號</th>
+                                    <th>名稱</th>
+                                    <th>備註</th>
+                                    <th>檢項</th>
+                                    <th>檢驗項目</th>
                                 </tr>
                             </thead>
                             <tbody>

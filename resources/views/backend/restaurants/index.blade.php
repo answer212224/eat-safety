@@ -34,12 +34,12 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>sid</th>
-                                    <th>brand</th>
-                                    <th>shop</th>
-                                    <th>address</th>
-                                    <th>location</th>
-                                    <th>workspace</th>
+                                    <th>品牌店代碼</th>
+                                    <th>品牌</th>
+                                    <th>店別</th>
+                                    <th>地址</th>
+                                    <th>區域</th>
+                                    <th>工作區</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,8 +51,8 @@
                                         <td>{{ $restaurant->address }}</td>
                                         <td>{{ $restaurant->location }}</td>
                                         <td><a href="{{ route('restaurant-workspace', ['restaurant' => $restaurant]) }}"
-                                                class="btn btn-secondary _effect--ripple waves-effect waves-light">
-                                                工作站</a></td>
+                                                class="btn btn-sm btn-secondary _effect--ripple waves-effect waves-light">
+                                                工作區</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -33,11 +33,11 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>uid</th>
-                                    <th>name</th>
-                                    <th>email</th>
-                                    <th>department</th>
-                                    <th>role</th>
+                                    <th>員工編號</th>
+                                    <th>姓名</th>
+                                    <th>電子信箱</th>
+                                    <th>部門</th>
+                                    <th>角色</th>
                                 </tr>
                             </thead>
 

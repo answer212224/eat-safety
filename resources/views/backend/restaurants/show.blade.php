@@ -35,8 +35,8 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>area</th>
-                                    <th>chef</th>
+                                    <th>廚別</th>
+                                    <th>區站</th>
                                 </tr>
                             </thead>
                             <tbody>

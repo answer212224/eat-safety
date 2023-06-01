@@ -33,10 +33,10 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>group</th>
-                                    <th>title</th>
-                                    <th>category</th>
-                                    <th>description</th>
+                                    <th>群組</th>
+                                    <th>標題</th>
+                                    <th>類別(扣分依據)</th>
+                                    <th>細項</th>
                                 </tr>
                             </thead>
                             <tbody>
