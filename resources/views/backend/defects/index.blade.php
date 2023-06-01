@@ -44,7 +44,10 @@
                                     <tr>
                                         <td>{{ $defect->group }}</td>
                                         <td>{{ $defect->title }}</td>
-                                        <td>{{ $defect->category }}</td>
+                                        <td>
+                                            <span class="badge badge-dark bs-tooltip"
+                                                title="{{ config("score.$defect->category") }}">{{ $defect->category }}</span>
+                                        </td>
                                         <td>{{ $defect->description }}</td>
                                     </tr>
                                 @endforeach

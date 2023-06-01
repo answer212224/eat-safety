@@ -19,9 +19,6 @@
         @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
         @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
 
-        @vite(['resources/scss/light/assets/components/accordions.scss'])
-        @vite(['resources/scss/dark/assets/components/accordions.scss'])
-
         @vite(['resources/scss/light/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
         <!--  END CUSTOM STYLE FILE  -->

@@ -105,6 +105,11 @@
                                 </div>
 
                                 <div class="form-group mt-3">
+                                    <label class="form-label">分數</label>
+                                    <input type="text" value="{{ $task->total }}" class="form-control" disabled>
+                                </div>
+
+                                <div class="form-group mt-3">
                                     <label class="form-label">外場主管</label>
                                     <input type="text" value="{{ $task->outer_manager }}" class="form-control"
                                         disabled>
