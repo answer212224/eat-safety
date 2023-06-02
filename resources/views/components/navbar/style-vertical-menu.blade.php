@@ -30,7 +30,7 @@
             </svg>
             <form class="form-inline search-full form-inline search" role="search">
                 <div class="search-bar">
-                    <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="Search...">
+                    <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="feather feather-x search-close">
@@ -39,7 +39,7 @@
                     </svg>
                 </div>
             </form>
-            <span class="badge badge-secondary">Ctrl + /</span>
+            <span class="badge badge-secondary"></span>
         </div>
 
         <ul class="navbar-item flex-row ms-lg-auto ms-0">
