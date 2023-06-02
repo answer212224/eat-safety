@@ -25,25 +25,37 @@
 
     <div class="row layout-top-spacing">
     </div>
-    <div class="row">
-        <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">專案列表</h5>
-                    <p>需檢查項目有</p>
-                    <livewire:project-list-check :task="$task">
+    <form action="{{ route('task-project-submit', ['task' => $task]) }}" method="post">
+        @csrf
+        <div class="row">
+            <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">專案列表</h5>
+                        <p>需檢查項目有</p>
+                        <div class="list-group">
+                            @foreach ($task->projects as $project)
+                                <label class="list-group-item">
+                                    <input name="projects[]" value="{{ $project->id }}" class="form-check-input"
+                                        type="checkbox" @if ($project->pivot->is_checked) checked @endif>
+                                    {{ $project->description }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-success w-100 mb-3">提交</button>
+                        <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->

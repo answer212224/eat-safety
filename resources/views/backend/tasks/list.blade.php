@@ -13,6 +13,7 @@
             @vite(['resources/scss/dark/assets/apps/notes.scss'])
             @vite(['resources/scss/light/assets/forms/switches.scss'])
             @vite(['resources/scss/dark/assets/forms/switches.scss'])
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->

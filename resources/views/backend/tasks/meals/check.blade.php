@@ -26,32 +26,43 @@
 
     <div class="row layout-top-spacing">
     </div>
+    <form action="{{ route('task-meal-submit', ['task' => $task]) }}" method="post">
+        @csrf
+        <div class="row">
+            <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">採樣列表</h5>
+                        <p>需帶回有</p>
 
-    <div class="row">
-        <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">採樣列表</h5>
-                    <p>需帶回有</p>
+                        <div class="list-group">
+                            @foreach ($task->meals as $meal)
+                                <label class="list-group-item">
+                                    <input name="meals[]" value="{{ $meal->id }}" class="form-check-input"
+                                        type="checkbox" @if ($meal->pivot->is_taken) checked @endif>
+                                    {{ $meal->name }}
+                                </label>
+                            @endforeach
+                        </div>
 
-                    <livewire:meal-list-check :task="$task">
 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-success w-100 mb-3">提交</button>
+                        <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                    </div>
                 </div>
             </div>
+
         </div>
+    </form>
+    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+    <x-slot:footerFiles>
 
-
-
-        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
-        <x-slot:footerFiles>
-
-        </x-slot:footerFiles>
-        <!--  END CUSTOM SCRIPTS FILE  -->
+    </x-slot:footerFiles>
+    <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

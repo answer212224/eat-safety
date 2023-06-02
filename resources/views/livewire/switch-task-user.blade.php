@@ -5,14 +5,20 @@
 
     <div class="note-inner-content">
         <div class="note-content">
-            <div class="switch form-switch-custom switch-inline form-switch-primary">
+
+            <div class="switch form-switch-custom switch-inline form-switch-primary justify-content-between">
+                <label class="switch-label" for="showPublicly">是否已完成稽核</label>
                 <input wire:model='isCompleted' class="switch-input" type="checkbox" role="switch" id="showPublicly"
                     @if ($isCompleted) checked @endif wire:click="toggleIsCompleted">
-                <label class="switch-label" for="showPublicly">是否已完成稽核</label>
+
+
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="note-title">
+                    {{ $task->category }} </p>
+                <div wire:loading.inline-flex class="spinner-grow text-warning align-self-center"></div>
             </div>
 
-            <p class="note-title">
-                {{ $task->category }} </p>
             <hr />
 
             <div class="note-description-content">
@@ -71,7 +77,7 @@
 
 
         </div>
-        <div class="note-footer" wire:poll.10s.keep-alive>
+        <div class="note-footer">
             @if ($task->status == 'completed')
                 <span class="badge badge-light-success">已完成</span>
             @elseif($task->status == 'pending_approval')

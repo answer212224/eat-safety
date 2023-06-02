@@ -42,6 +42,8 @@ class TaskController extends Controller
         return view('backend.tasks.meals.check', compact('title', 'task'));
     }
 
+
+
     public function projectCheck(Task $task)
     {
         $title = '開始專案';
@@ -52,19 +54,30 @@ class TaskController extends Controller
 
     public function mealCheckSubmit(Request $request, Task $task)
     {
+
         $data = $request->all();
+
         $task->meals()->update([
             'is_taken' => false,
         ]);
-        foreach ($data['meal_tasks'] as $mealId => $meal) {
-            $task->meals()->updateExistingPivot($mealId, [
+
+        if (!empty($data['meals'])) {
+            $task->meals()->updateExistingPivot($data['meals'], [
                 'is_taken' => true,
             ]);
         }
 
-        alert()->success('採樣完畢', '採樣成功');
+        if ($task->meals()->where('is_taken', false)->exists()) {
+            $num = $task->meals()->where('is_taken', false)->count();
+            alert()->warning('尚未完成', '尚有' . $num . '個餐點未完成');
+        } else {
+            alert()->success('採樣完畢', '採樣成功');
+            $task->update([
+                'status' => 'completed',
+            ]);
+        }
 
-        return redirect()->route('task-list');
+        return back();
     }
 
     public function projectCheckSubmit(Request $request, Task $task)
@@ -72,17 +85,26 @@ class TaskController extends Controller
         $data = $request->all();
 
         $task->projects()->update([
-            'is_impoved' => false,
+            'is_checked' => false,
         ]);
-        foreach ($data['project_tasks'] as $projectId => $project) {
-            $task->projects()->updateExistingPivot($projectId, [
-                'is_impoved' => true,
+
+        if (!empty($data['projects'])) {
+            $task->projects()->updateExistingPivot($data['projects'], [
+                'is_checked' => true,
             ]);
         }
 
-        alert()->success('專案完畢', '專案成功');
+        if ($task->projects()->where('is_checked', false)->exists()) {
+            $num = $task->projects()->where('is_checked', false)->count();
+            alert()->warning('尚未完成', '尚有' . $num . '個專案未完成');
+        } else {
+            alert()->success('專案完畢', '專案成功');
+            $task->update([
+                'status' => 'completed',
+            ]);
+        }
 
-        return redirect()->route('task-list');
+        return back();
     }
 
 
