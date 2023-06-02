@@ -189,11 +189,6 @@
                             stepperDefault.previous();
                         })
                     });
-
-                    submitBtn.addEventListener('click', function() {
-                        alert(inputSelect.value)
-                        return
-                    })
                 </script>
 
                 </x-slot>
