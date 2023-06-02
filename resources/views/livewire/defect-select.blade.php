@@ -17,7 +17,7 @@
     </select>
 
     <label for="description">缺失細項</label>
-    <select class="form-select" wire:model="description" name="defect_id">
+    <select class="form-select" wire:model="description" name="defect_id" id="inputSelect">
 
         @foreach ($defects as $defect)
             <option value={{ $defect->id }}>{{ $defect->description }}</option>

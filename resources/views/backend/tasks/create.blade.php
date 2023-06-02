@@ -15,6 +15,7 @@
             @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
             @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -83,7 +84,7 @@
                                                 <input type="file" class="file-upload-multiple" name="filepond[]"
                                                     multiple data-allow-reorder="true" data-max-file-size="4MB"
                                                     accept="image/png, image/jpeg, image/gif, image/jpg"
-                                                    data-max-files="2">
+                                                    data-max-files="2" id="inputImg">
                                             </div>
 
 
@@ -97,7 +98,7 @@
 
                                             <div class="form-group mb-4">
                                                 <label for="workspace">工作區</label>
-                                                <select class="form-select" name="workspace" id="">
+                                                <select class="form-select" name="workspace" id="inputWorkspace">
                                                     @foreach ($task->restaurant->restaurantWorkspaces as $restaurantWorkspace)
                                                         <option value="{{ $restaurantWorkspace->id }}">
                                                             {{ $restaurantWorkspace->area }}</option>
@@ -118,7 +119,7 @@
 
                                             <div class="button-action mt-3 text-center">
                                                 <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                                <button class="btn btn-success me-3">提交</button>
+                                                <button class="btn btn-success me-3" id="submitBtn">提交</button>
                                             </div>
 
                                         </div>
@@ -145,7 +146,7 @@
             <x-slot:footerFiles>
 
                 <script src="{{ asset('plugins/stepper/bsStepper.min.js') }}"></script>
-                <script src="{{ asset('plugins/stepper/custom-bsStepper.min.js') }}"></script>
+
                 <script src="{{ asset('plugins/filepond/filepond.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/FilePondPluginFileValidateType.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageExifOrientation.min.js') }}"></script>
@@ -154,9 +155,46 @@
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageResize.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageTransform.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
-
-
                 <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230602"></script>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    var stepperWizardDefault = document.querySelector('.stepper-form-one');
+                    var stepperDefault = new Stepper(stepperWizardDefault, {
+                        animation: true
+                    })
+                    var stepperNextButtonDefault = stepperWizardDefault.querySelectorAll('.btn-nxt');
+                    var stepperPrevButtonDefault = stepperWizardDefault.querySelectorAll('.btn-prev');
+                    var inputImg = document.getElementById('inputImg');
+                    var inputSelect = document.getElementById('inputSelect');
+                    var submitBtn = document.getElementById('submitBtn');
+
+                    stepperNextButtonDefault.forEach(element => {
+                        element.addEventListener('click', function() {
+                            var imgLength = inputImg.querySelectorAll('input').length;
+                            if (imgLength < 2) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '請至少上傳一張照片',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                return;
+                            }
+                            stepperDefault.next();
+                        })
+                    });
+
+                    stepperPrevButtonDefault.forEach(element => {
+                        element.addEventListener('click', function() {
+                            stepperDefault.previous();
+                        })
+                    });
+
+                    submitBtn.addEventListener('click', function() {
+                        alert(inputSelect.value)
+                        return
+                    })
+                </script>
 
                 </x-slot>
                 <!--  END CUSTOM SCRIPTS FILE  -->
