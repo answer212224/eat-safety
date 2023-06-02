@@ -28,7 +28,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">採樣列表</h5>
@@ -39,14 +39,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                </div>
+            </div>
+        </div>
 
-    </div>
 
 
+        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+        <x-slot:footerFiles>
 
-    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
-    <x-slot:footerFiles>
-
-    </x-slot:footerFiles>
-    <!--  END CUSTOM SCRIPTS FILE  -->
+        </x-slot:footerFiles>
+        <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

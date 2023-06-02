@@ -120,7 +120,13 @@
                 </div>
             </div>
         @endif
-
+        <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                </div>
+            </div>
+        </div>
     </div>
 
 

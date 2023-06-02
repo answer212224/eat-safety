@@ -34,7 +34,7 @@
             <!-- CONTENT HERE -->
 
             <div class="row layout-top-spacing" id="cancel-row">
-                <div id="wizard_Default" class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+                <div id="wizard_Default" class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
                             <div class="row">
@@ -131,7 +131,13 @@
                     </div>
                 </div>
 
-
+                <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
