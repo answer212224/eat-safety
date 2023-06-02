@@ -71,7 +71,7 @@
 
 
         </div>
-        <div class="note-footer">
+        <div class="note-footer" wire:poll.10s.keep-alive>
             @if ($task->status == 'completed')
                 <span class="badge badge-light-success">已完成</span>
             @elseif($task->status == 'pending_approval')
