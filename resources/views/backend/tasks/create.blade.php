@@ -79,6 +79,7 @@
 
                                             {{-- 上傳圖片 --}}
                                             <div class="multiple-file-upload">
+                                                <label for="filepond">上傳照片</label>
                                                 <input type="file" class="file-upload-multiple" name="filepond[]"
                                                     multiple data-allow-reorder="true" data-max-file-size="4MB"
                                                     accept="image/png, image/jpeg, image/gif, image/jpg"
@@ -149,7 +150,7 @@
                 <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
 
 
-                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}"></script>
+                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230602"></script>
 
                 </x-slot>
                 <!--  END CUSTOM SCRIPTS FILE  -->

@@ -7,9 +7,13 @@
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <x-slot:headerFiles>
             <!--  BEGIN CUSTOM STYLE FILE  -->
+
+            <link rel="stylesheet" href="{{ asset('plugins/tagify/tagify.css') }}">
+
             <link rel="stylesheet" href="{{ asset('plugins/filepond/filepond.min.css') }}">
             <link rel="stylesheet" href="{{ asset('plugins/filepond/FilePondPluginImagePreview.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('plugins/tagify/tagify.css') }}">
+            @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
+            @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
 
             @vite(['resources/scss/light/assets/forms/switches.scss'])
             @vite(['resources/scss/light/plugins/editors/quill/quill.snow.scss'])
@@ -99,13 +103,14 @@
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageResize.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageTransform.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
+
+
                 <script src="{{ asset('plugins/tagify/tagify.min.js') }}"></script>
-
-                @vite(['resources/assets/js/apps/blog-create.js'])
-
+                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230602"></script>
                 <script type="module">
+
                     @foreach ($taskHasDefect->images as $image)
-                             ecommerce.addFiles('{{ asset('storage/' . $image) }}');
+                        multifiles.addFiles('{{ asset('storage/' . $image) }}');
                     @endforeach
 
 

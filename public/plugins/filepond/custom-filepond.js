@@ -52,7 +52,10 @@ FilePond.registerPlugin(
 // Select the file input and use
 // create() to turn it into a pond
 window.multifiles = FilePond.create(
-    document.querySelector(".file-upload-multiple")
+    document.querySelector(".file-upload-multiple"),
+    {
+        labelIdle: `<span class="no-image-placeholder"><i class="flaticon-cloud-upload"></i></span><p class="drag-para">拖曳檔案或<span class="filepond--label-action" tabindex="0">點擊此處上傳</span></p>`,
+    }
 );
 
 FilePond.setOptions({
