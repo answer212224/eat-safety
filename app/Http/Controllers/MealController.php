@@ -27,17 +27,12 @@ class MealController extends Controller
     {
 
         if ($request->file('excel') == null) {
-            Alert::error('Error', 'File is not correct');
+            Alert::error('錯誤', '請選擇檔案');
             return back();
         }
 
         if ($request->file('excel')->getClientOriginalExtension() != 'xlsx') {
-            Alert::error('Error', 'Only xlsx file is allowed');
-            return back();
-        }
-
-        if ($request->file('excel')->getSize() > 1000000) {
-            Alert::error('Error', 'File size is too large');
+            Alert::error('錯誤', '檔案格式錯誤');
             return back();
         }
 
