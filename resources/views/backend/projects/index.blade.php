@@ -24,12 +24,10 @@
                                 <li class="breadcrumb-item"><a href="#">資料</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">專案資料</li>
                             </ol>
-
-
                         </nav>
                     </div>
                     <div class="col-4 align-self-center text-end">
-                        <a href="http://" class="btn btn-sm btn-rounded btn-success">add</a>
+                        <a href="http://" class="btn btn-sm btn-rounded btn-success">新增</a>
                     </div>
 
                 </div>

@@ -10,6 +10,8 @@
             <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+            @vite(['resources/scss/light/assets/components/modal.scss'])
+            @vite(['resources/scss/dark/assets/components/modal.scss'])
 
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
@@ -17,14 +19,28 @@
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            {{ $restaurant->brand }}{{ $restaurant->shop }}工作站</li>
-                    </ol>
-                </nav>
+                <div class="row justify-content-between">
+                    <div class="col-8 align-self-center">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    {{ $restaurant->brand }}{{ $restaurant->shop }}工作站</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-4 align-self-center text-end">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                <path
+                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
             <!-- /BREADCRUMB -->
 
@@ -42,8 +58,8 @@
                             <tbody>
                                 @foreach ($restaurant->restaurantWorkspaces as $workspaces)
                                     <tr>
-                                        <td>{{ $workspaces->area }}</td>
                                         <td>{{ $workspaces->chef }}</td>
+                                        <td>{{ $workspaces->area }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -52,6 +68,68 @@
                 </div>
 
             </div>
+
+            <!-- Modal -->
+            <form action="{{ route('restaurant-workspace-store', ['restaurant' => $restaurant]) }}" method="post">
+                @csrf
+                <div class="modal fade inputForm-modal" id="addModal" tabindex="-1" role="dialog"
+                    aria-labelledby="addModal" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+                        <div class="modal-content">
+
+                            <div class="modal-header" id="addModal">
+                                <h5 class="modal-title">新增區站</b></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-x">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="mt-0">
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z" />
+                                                </svg>
+                                            </span>
+                                            <input type="text" class="form-control" placeholder="廚別" required
+                                                aria-label="role" name="chef">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z" />
+                                                </svg>
+                                            </span>
+                                            <input type="text" class="form-control" placeholder="區站"
+                                                aria-label="role" name="area" required>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">取消</a>
+                                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect"
+                                    data-bs-dismiss="modal">新增</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
 
             <!--  BEGIN CUSTOM SCRIPTS FILE  -->
             <x-slot:footerFiles>

@@ -68,4 +68,12 @@ class RestaurantController extends Controller
             'restaurant' => $restaurant,
         ]);
     }
+
+    public function workspaceStore(Request $request, Restaurant $restaurant)
+    {
+
+        $restaurant->restaurantWorkspaces()->create($request->all());
+        alert()->success('新增成功', '新增工作區成功');
+        return back();
+    }
 }

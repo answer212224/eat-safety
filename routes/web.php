@@ -104,6 +104,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
             // 門市工作區站
             Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
+            // 新增門市工作區站
+            Route::post('/{restaurant}/workspace', [RestaurantController::class, 'workspaceStore'])->name('restaurant-workspace-store');
         });
 
         Route::prefix('users')->group(function () {
