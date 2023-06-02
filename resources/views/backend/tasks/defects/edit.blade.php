@@ -65,7 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
-                                    <button class="btn btn-success w-100">Update</button>
+                                    <button class="btn btn-success w-100">更新</button>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             method="post">
                             @csrf
                             <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
-                                <button class="btn btn-danger w-100">Delete</button>
+                                <button class="btn btn-danger w-100">刪除</button>
                             </div>
                         </form>
                     </div>

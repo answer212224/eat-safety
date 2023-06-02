@@ -127,6 +127,10 @@ class DefectController extends Controller
 
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
+        if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
+            alert()->warning('請確認', '請填寫完整資料');
+            return back();
+        }
         $path = [];
         // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
@@ -149,7 +153,7 @@ class DefectController extends Controller
         ]);
 
         alert()->success('成功', '缺失已更新');
-        return redirect()->route('task-defect-show', $taskHasDefect->task_id);
+        return back();
     }
 
     public function delete(TaskHasDefect $taskHasDefect)
