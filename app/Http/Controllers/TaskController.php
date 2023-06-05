@@ -105,7 +105,14 @@ class TaskController extends Controller
     public function assign()
     {
         $title = '指派任務';
-        $tasks = Task::all()->load('users');
+
+        if (auth()->user()->role == 'admin' || auth()->user()->role == 'super-admin') {
+            $tasks = Task::all()->load('users');
+        } else {
+            $tasks = Task::whereHas('users', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })->get()->load('users');
+        }
         $users = User::all();
         $restaurants = Restaurant::all();
 
