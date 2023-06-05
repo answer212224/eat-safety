@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('meal_id')->constrained()->onDelete('cascade');
             $table->boolean('is_improved')->default(false);
             $table->boolean('is_taken')->default(false);
+            $table->string('memo')->nullable();
             $table->timestamps();
         });
     }

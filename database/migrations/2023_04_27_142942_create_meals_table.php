@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('note')->nullable();
             $table->string('item');
             $table->string('items');
-            $table->string('memo')->nullable();
             $table->timestamps();
         });
     }
