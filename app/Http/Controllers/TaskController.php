@@ -183,6 +183,11 @@ class TaskController extends Controller
 
     public function sign(Task $task, Request $request)
     {
+        if ($task->status == 'completed') {
+            alert()->warning('無法簽名', '任務已經完成');
+            return back();
+        }
+
         $task->update([
             'outer_manager' => $request->outer_manager,
             'inner_manager' => $request->inner_manager,
