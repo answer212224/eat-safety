@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('defects', function (Blueprint $table) {
             $table->id();
+            $table->date('effective_date');
             $table->string('group');
             $table->string('title');
             $table->string('category');
