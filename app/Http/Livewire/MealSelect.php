@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Meal;
+use App\Models\User;
 use App\Models\Project;
 use Livewire\Component;
 use App\Models\Restaurant;
@@ -15,6 +16,7 @@ class MealSelect extends Component
     public $hasProject = false;
     public $restaurant;
     public $start;
+    public $category = "食安及5S";
 
 
 
@@ -29,8 +31,8 @@ class MealSelect extends Component
             $defaltMeals = Meal::whereYear('effective_date', $start->format('Y'))->whereMonth('effective_date', $start->format('m'))->where('sid',  Str::substr($restaurant->sid, 0, 3))->get();
         }
 
-
         return view('livewire.meal-select', [
+            'users' => User::all(),
             'restaurants' => Restaurant::all(),
             'defaltMeals' => $defaltMeals ?? [],
             'optionMeals' => $optionMeals ?? [],

@@ -167,11 +167,12 @@
             @vite(['resources/assets/js/scrollspyNav.js'])
         @endif
         @vite(['resources/layouts/modern-light-menu/app.js'])
-        @livewireScripts
+
         <!-- END GLOBAL MANDATORY STYLES -->
 
     @endif
-
+    @livewireScripts
+    @stack('scripts')
     {{ $footerFiles }}
 </body>
 

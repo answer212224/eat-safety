@@ -71,6 +71,14 @@
                                                 <label class="form-check-label" for="rtravel">清潔檢查</label>
                                             </div>
                                         </div>
+                                        <div class="n-chk">
+                                            <div class="form-check form-check-success form-check-inline">
+                                                <input class="form-check-input" type="radio" name="category" disabled
+                                                    @if ($task->category == '餐點採樣') checked @endif value="餐點採樣"
+                                                    id="rtravel">
+                                                <label class="form-check-label" for="rtravel">餐點採樣</label>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
