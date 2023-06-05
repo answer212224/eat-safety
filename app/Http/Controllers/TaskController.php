@@ -72,9 +72,6 @@ class TaskController extends Controller
             alert()->warning('尚未完成', '尚有' . $num . '個餐點未完成');
         } else {
             alert()->success('採樣完畢', '採樣成功');
-            $task->update([
-                'status' => 'completed',
-            ]);
         }
 
         return back();
@@ -99,9 +96,6 @@ class TaskController extends Controller
             alert()->warning('尚未完成', '尚有' . $num . '個專案未完成');
         } else {
             alert()->success('專案完畢', '專案成功');
-            $task->update([
-                'status' => 'completed',
-            ]);
         }
 
         return back();
