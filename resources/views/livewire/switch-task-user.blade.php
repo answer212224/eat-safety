@@ -39,41 +39,44 @@
 
         </div>
         <div class="note-action">
-            <div class="dropdown d-inline-block">
-                <a class="dropdown-toggle" href="#" role="button" id="elementDrodpown" data-bs-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-more-vertical">
-                        <circle cx="12" cy="12" r="1">
-                        </circle>
-                        <circle cx="12" cy="5" r="1">
-                        </circle>
-                        <circle cx="12" cy="19" r="1">
-                        </circle>
-                    </svg>
-                </a>
+            <div class="tags-selector btn-group">
+                <div class="dropdown-toggle">
+                    <a class="dropdown-toggle" href="#" role="button" id="elementDrodpown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-more-vertical">
+                            <circle cx="12" cy="12" r="1">
+                            </circle>
+                            <circle cx="12" cy="5" r="1">
+                            </circle>
+                            <circle cx="12" cy="19" r="1">
+                            </circle>
+                        </svg>
+                    </a>
 
-                <div class="dropdown-menu right" aria-labelledby="elementDrodpown"
-                    style="will-change: transform; position: absolute; transform: translate3d(105px, 0, 0px); top: 0px; left: 0px;">
-                    @if ($task->status != 'completed')
-                        <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
+                    <div class="dropdown-menu dropdown-menu-right d-icon-menu " aria-labelledby="elementDrodpown">
+                        @if ($task->status != 'completed')
+                            <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
 
-                        <a class="dropdown-item" href="{{ route('task-defect-owner', ['task' => $task]) }}">查看缺失</a>
+                            <a class="dropdown-item"
+                                href="{{ route('task-defect-owner', ['task' => $task]) }}">查看缺失</a>
 
-                        @if ($task->meals->count() > 0)
-                            <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
-                                餐點採樣</a>
+                            @if ($task->meals->count() > 0)
+                                <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
+                                    餐點採樣</a>
+                            @endif
+                            @if ($task->projects->count() > 0)
+                                <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
+                                    專案執行</a>
+                            @endif
                         @endif
-                        @if ($task->projects->count() > 0)
-                            <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
-                                專案執行</a>
-                        @endif
-                    @endif
-                    <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
-                        主管核對</a>
+                        <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
+                            主管核對</a>
+                    </div>
                 </div>
             </div>
+
 
 
         </div>
