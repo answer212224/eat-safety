@@ -46,7 +46,7 @@
                                     <th class="text-center">動作</th>
                                     <th>名稱</th>
                                     <th>細項</th>
-
+                                    <th>顯示</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,6 +66,10 @@
                                         </td>
                                         <td>{{ $project->name }}</td>
                                         <td>{{ $project->description }}</td>
+
+                                        <td>
+                                            <livewire:switch-project-status :project="$project" />
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

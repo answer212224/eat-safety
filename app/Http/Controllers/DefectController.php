@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Defect;
 use Illuminate\Support\Str;
@@ -13,9 +14,14 @@ class DefectController extends Controller
 {
     public function index()
     {
+        $defects = Defect::get()->transform(function ($item) {
+            $item->effective_date = Carbon::create($item->effective_date)->format('Y-m');
+
+            return $item;
+        });
         return view('backend.defects.index', [
             'title' => '缺失資料',
-            'defects' => Defect::all(),
+            'defects' => $defects,
         ]);
     }
     public function store(Task $task, Request $request)

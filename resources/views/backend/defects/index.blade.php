@@ -33,6 +33,7 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>生效日期</th>
                                     <th>群組</th>
                                     <th>標題</th>
                                     <th>類別(扣分依據)</th>
@@ -42,6 +43,7 @@
                             <tbody>
                                 @foreach ($defects as $defect)
                                     <tr>
+                                        <td>{{ $defect->effective_date }}</td>
                                         <td>{{ $defect->group }}</td>
                                         <td>{{ $defect->title }}</td>
                                         <td>

@@ -36,7 +36,7 @@ class MealSelect extends Component
             'restaurants' => Restaurant::all(),
             'defaltMeals' => $defaltMeals ?? [],
             'optionMeals' => $optionMeals ?? [],
-            'projects' => Project::all(),
+            'projects' => Project::where('status', true)->get(),
         ]);
     }
 }
