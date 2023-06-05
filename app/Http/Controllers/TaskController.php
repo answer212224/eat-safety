@@ -106,7 +106,7 @@ class TaskController extends Controller
     {
         $title = '指派任務';
 
-        if (auth()->user()->role == 'admin' || auth()->user()->role == 'super-admin') {
+        if (auth()->user()->can('view-all-task')) {
             $tasks = Task::all()->load('users');
         } else {
             $tasks = Task::whereHas('users', function ($query) {

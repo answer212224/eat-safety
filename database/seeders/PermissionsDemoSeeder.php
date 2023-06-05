@@ -28,6 +28,7 @@ class PermissionsDemoSeeder extends Seeder
 
 
         // Task Model
+        Permission::create(['name' => 'view-all-task']);
         Permission::create(['name' => 'create-task']);
         Permission::create(['name' => 'delete-task']);
 
@@ -45,6 +46,7 @@ class PermissionsDemoSeeder extends Seeder
         $admin->givePermissionTo([
             'create-task',
             'delete-task',
+            'view-all-task'
         ]);
 
         // Create Auditor Role
