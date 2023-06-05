@@ -57,11 +57,12 @@
 
                     <div class="dropdown-menu dropdown-menu-right d-icon-menu " aria-labelledby="elementDrodpown">
                         @if ($task->status != 'completed')
-                            <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
+                            @if (!$task->category == '餐點採樣')
+                                <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
 
-                            <a class="dropdown-item"
-                                href="{{ route('task-defect-owner', ['task' => $task]) }}">查看缺失</a>
-
+                                <a class="dropdown-item"
+                                    href="{{ route('task-defect-owner', ['task' => $task]) }}">查看缺失</a>
+                            @endif
                             @if ($task->meals->count() > 0)
                                 <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
                                     餐點採樣</a>
