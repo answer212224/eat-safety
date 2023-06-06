@@ -10,23 +10,34 @@
             <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+            @vite(['resources/scss/light/assets/components/modal.scss'])
+            @vite(['resources/scss/dark/assets/components/modal.scss'])
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">餐點採樣資料</li>
-                    </ol>
+                <div class="row justify-content-between mb-3">
+                    <div class="col-8 align-self-center">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">餐點採樣資料</li>
+                            </ol>
 
-                </nav>
+                        </nav>
+                    </div>
+                    <div class="col-4 align-self-center text-end">
+                        <button class="btn btn-sm btn-rounded btn-success"data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">新增</button>
+                    </div>
+
+                </div>
             </div>
             <!-- /BREADCRUMB -->
 
-            <div class="row">
+            <div class="row mb-3">
                 <form action="{{ route('meal-import') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="input-group">
@@ -38,51 +49,170 @@
                 </form>
             </div>
 
-            <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <div class="widget-content widget-content-area br-8">
 
-                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                    <div class="widget-content widget-content-area br-8">
-
-                        <table id="zero-config" class="table dt-table-hover" style="width:100%">
-                            <thead>
+                    <table id="zero-config" class="table dt-table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>品牌店代碼</th>
+                                <th>品牌</th>
+                                <th>店別</th>
+                                <th>類別</th>
+                                <th>廚別</th>
+                                <th>區站</th>
+                                <th>編號</th>
+                                <th>名稱</th>
+                                <th>備註</th>
+                                <th>檢項</th>
+                                <th>檢驗項目</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($meals as $meal)
                                 <tr>
-                                    <th>月份</th>
-                                    <th>品牌店代碼</th>
-                                    <th>品牌</th>
-                                    <th>店別</th>
-                                    <th>類別</th>
-                                    <th>廚別</th>
-                                    <th>區站</th>
-                                    <th>編號</th>
-                                    <th>名稱</th>
-                                    <th>備註</th>
-                                    <th>檢項</th>
-                                    <th>檢驗項目</th>
+                                    <td>{{ $meal->effective_date }}</td>
+                                    <td>{{ $meal->sid }}</td>
+                                    <td>{{ $meal->brand }}</td>
+                                    <td>{{ $meal->shop }}</td>
+                                    <td>{{ $meal->category }}</td>
+                                    <td>{{ $meal->chef }}</td>
+                                    <td>{{ $meal->workspace }}</td>
+                                    <td>{{ $meal->qno }}</td>
+                                    <td>{{ $meal->name }}</td>
+                                    <td>{{ $meal->note }}</td>
+                                    <td>{{ $meal->item }}</td>
+                                    <td>{{ $meal->items }}</td>
+                                    <td> <a class="badge badge-light-primary text-start me-2 action-edit"
+                                            href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" class="feather feather-edit-3">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
+                                                </path>
+                                            </svg></a>
+                                        <a class="btn btn-light-danger btn-sm" data-confirm-delete="true"
+                                            href="{{ route('meal-destroy', ['meal' => $meal]) }}"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-trash">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path
+                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                </path>
+                                            </svg></a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($meals as $meal)
-                                    <tr>
-                                        <td>{{ $meal->effective_date }}</td>
-                                        <td>{{ $meal->sid }}</td>
-                                        <td>{{ $meal->brand }}</td>
-                                        <td>{{ $meal->shop }}</td>
-                                        <td>{{ $meal->category }}</td>
-                                        <td>{{ $meal->chef }}</td>
-                                        <td>{{ $meal->workspace }}</td>
-                                        <td>{{ $meal->qno }}</td>
-                                        <td>{{ $meal->name }}</td>
-                                        <td>{{ $meal->note }}</td>
-                                        <td>{{ $meal->item }}</td>
-                                        <td>{{ $meal->items }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="{{ route('meal-store') }}" method="post">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">新增採樣</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">月份</span>
+                                    <input type="date" class="form-control" placeholder="Username"
+                                        name="effective_date" aria-label="Username" required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">品牌店代碼</span>
+                                    <input type="text" class="form-control" placeholder="EAT001" name="sid"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">品牌</span>
+                                    <input type="text" class="form-control" placeholder="饗食" name="brand"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">店別</span>
+                                    <input type="text" class="form-control" placeholder="新光" name="shop"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">類別</span>
+                                    <input type="text" class="form-control" placeholder="食材" name="category"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">廚別</span>
+                                    <input type="text" class="form-control" placeholder="日廚" name="chef"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">區站</span>
+                                    <input type="text" class="form-control" placeholder="內廚房" name="workspace"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">編號</span>
+                                    <input type="text" class="form-control" placeholder="1" name="qno"
+                                        required>
+                                </div>
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">名稱</span>
+                                    <input type="text" class="form-control" placeholder="和風花枝" name="name"
+                                        required>
+                                </div>
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">備註</span>
+                                    <input type="text" class="form-control" placeholder="4月不合格" name="note">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">檢項</span>
+                                    <input type="text" class="form-control" placeholder="E" name="item"
+                                        required>
+                                </div>
+
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">檢驗項目</span>
+                                    <input type="text" class="form-control" placeholder="大腸桿菌、金黃" name="items"
+                                        required>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-bs-dismiss="modal"
+                                    aria-label="Close">關閉</button>
+                                <button type="submit" class="btn btn-primary btn-add-event">新增稽核</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
 
             <!--  BEGIN CUSTOM SCRIPTS FILE  -->
             <x-slot:footerFiles>
@@ -103,9 +233,11 @@
                             "sSearchPlaceholder": "Search...",
                             "sLengthMenu": "Results :  _MENU_",
                         },
+
                         "stripeClasses": [],
                         "lengthMenu": [7, 10, 20, 50],
                         "pageLength": 10,
+
                     });
                 </script>
                 </x-slot>

@@ -88,6 +88,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         Route::prefix('meals')->group(function () {
             // 餐點採樣資料
             Route::get('/list', [MealController::class, 'index'])->name('meal-index');
+            // 新增餐點採樣資料
+            Route::post('/', [MealController::class, 'store'])->name('meal-store');
+            // 刪除餐點採樣資料
+            Route::delete('{meal}/destory', [MealController::class, 'destroy'])->name('meal-destroy');
+
+            // excel 匯入餐點採樣資料
             Route::post('/import', [MealController::class, 'import'])->name('meal-import');
         });
 
