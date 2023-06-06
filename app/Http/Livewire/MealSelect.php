@@ -22,6 +22,9 @@ class MealSelect extends Component
 
     public function render()
     {
+        if ($this->category == "餐點採樣") {
+            $this->hasMeal = true;
+        }
         $restaurant = Restaurant::find($this->restaurant);
         $start =  Carbon::create($this->start);
 

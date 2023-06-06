@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Meal;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Restaurant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 
@@ -57,14 +60,24 @@ class TaskController extends Controller
 
         $data = $request->all();
 
+
         $task->meals()->update([
             'is_taken' => false,
         ]);
 
-        if (!empty($data['meals'])) {
-            $task->meals()->updateExistingPivot($data['meals'], [
+
+        if (!empty($data['is_takens'])) {
+            $task->meals()->updateExistingPivot($data['is_takens'], [
                 'is_taken' => true,
             ]);
+        }
+
+        if (!empty($data['memos'])) {
+            foreach ($data['memos'] as $meal_id => $memo) {
+                $task->meals()->updateExistingPivot($meal_id, [
+                    'memo' => $memo,
+                ]);
+            }
         }
 
         if ($task->meals()->where('is_taken', false)->exists()) {
@@ -178,8 +191,37 @@ class TaskController extends Controller
         confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
 
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
+
+        $taskDate = Carbon::create($task->task_date);
+        $brandSid = Str::substr($task->restaurant->sid, 0, 3);
+
+
+        $optionMeals = Meal::whereYear('effective_date', $taskDate)
+            ->whereMonth('effective_date', $taskDate)
+            ->where('sid', $task->restaurant->sid)
+            ->get();
+
+        $defaltMeals = Meal::whereYear('effective_date', $taskDate)
+            ->whereMonth('effective_date', $taskDate)
+            ->where('sid', $brandSid)
+            ->get();
+
+        $meals = $defaltMeals->merge($optionMeals);
+
+
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
-        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup'));
+        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals'));
+    }
+
+    public function update(Task $task, Request $request)
+    {
+        $meals = $request->input('meals');
+
+        $task->meals()->sync($meals);
+
+        alert()->success('更新成功', '更新採樣成功');
+
+        return back();
     }
 
     public function sign(Task $task, Request $request)

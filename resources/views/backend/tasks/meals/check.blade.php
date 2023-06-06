@@ -28,28 +28,43 @@
     </div>
     <form action="{{ route('task-meal-submit', ['task' => $task]) }}" method="post">
         @csrf
+
+
         <div class="row">
-            <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">採樣列表</h5>
-                        <p>需帶回有</p>
+            @foreach ($task->meals as $meal)
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
 
-                        <div class="list-group">
-                            @foreach ($task->meals as $meal)
-                                <label class="list-group-item">
-                                    <input name="meals[]" value="{{ $meal->id }}" class="form-check-input"
-                                        type="checkbox" @if ($meal->pivot->is_taken) checked @endif>
-                                    {{ $meal->name }}
-                                </label>
-                            @endforeach
+                            <h5 class="card-title">名稱: {{ $meal->name }}</h5>
+
+
+
+
+                            <h6 class="card-subtitle mb-2 text-muted">編號: {{ $meal->qno }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">區站: {{ $meal->workspace }}</h6>
+                            <div class="card-text">
+                                <div class="form-check form-switch form-check-inline">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="is_takens[]"
+                                        value="{{ $meal->id }}" id="flexSwitchCheckDefault"
+                                        @if ($meal->pivot->is_taken) checked @endif>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">是否有採樣，若無請填寫原因</label>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">#</span>
+                                <input type="text" class="form-control" name="memos[{{ $meal->id }}]"
+                                    placeholder="請填寫原因" aria-label="Username" value="{{ $meal->pivot->memo }}">
+                            </div>
                         </div>
-
-
+                        <div class="card-footer">
+                            <h6 class="card-subtitle mb-2 text-muted">備註: {{ $meal->note }}</h6>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
+            @endforeach
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <button type="submit" class="btn btn-success w-100 mb-3">提交</button>

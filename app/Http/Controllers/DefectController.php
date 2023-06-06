@@ -81,11 +81,11 @@ class DefectController extends Controller
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
 
         $isMealAllTaken = $task->meals->every(function ($value, $key) {
-            return $value->pivot->is_taken == 1;
+            return $value->pivot->is_taken == 1 || $value->pivot->memo != null;
         });
 
         if (!$isMealAllTaken) {
-            alert()->warning('請確認', '尚有餐點未採樣，請等待完成後再進行下一步');
+            alert()->warning('請確認', '尚有餐點未採樣，請說明原因後再進行下一步');
             return back();
         }
 

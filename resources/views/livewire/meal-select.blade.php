@@ -65,10 +65,11 @@
         <div class="col-md-12">
             <div class="form-check form-switch form-check-inline">
                 <input wire:model='hasMeal' class="form-check-input" type="checkbox" role="switch" name="hasMeal"
-                    id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">採樣</label>
+                    id="switchMeal">
+                <label class="form-check-label" for="switchMeal">採樣</label>
             </div>
         </div>
+
         {{-- 採樣checkbox --}}
         @if ($hasMeal)
             <div class="list-group">
@@ -88,7 +89,6 @@
                     </label>
                 @endforeach
             </div>
-
         @endif
         {{-- 採樣checkbox end --}}
     </div>

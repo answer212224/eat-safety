@@ -57,7 +57,7 @@
 
                     <div class="dropdown-menu dropdown-menu-right d-icon-menu " aria-labelledby="elementDrodpown">
                         @if ($task->status != 'completed')
-                            @if (!$task->category == '餐點採樣')
+                            @if ($task->category != '餐點採樣')
                                 <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">開始稽核</a>
 
                                 <a class="dropdown-item"
