@@ -13,4 +13,13 @@ class ProjectController extends Controller
         $projects = Project::all();
         return view('backend.projects.index', compact('title', 'projects'));
     }
+
+    public function store(Request $request)
+    {
+        Project::create($request->all());
+
+        alert()->success('成功', '專案新增成功');
+
+        return back();
+    }
 }

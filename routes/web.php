@@ -89,7 +89,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
 
             Route::prefix('meals')->group(function () {
                 // 餐點採樣資料
-                Route::get('/list', [MealController::class, 'index'])->name('meal-index');
+                Route::get('/', [MealController::class, 'index'])->name('meal-index');
                 // 新增餐點採樣資料
                 Route::post('/', [MealController::class, 'store'])->name('meal-store');
                 // 刪除餐點採樣資料
@@ -104,12 +104,16 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
 
             Route::prefix('projects')->group(function () {
                 // 專案執行資料
-                Route::get('/list', [ProjectController::class, 'index'])->name('project-index');
+                Route::get('/', [ProjectController::class, 'index'])->name('project-index');
+                // 新增專案執行資料
+                Route::post('/', [ProjectController::class, 'store'])->name('project-store');
+                // 刪除專案執行資料
+                Route::delete('/{project}/destory', [ProjectController::class, 'destroy'])->name('project-destroy');
             });
 
             Route::prefix('defects')->group(function () {
                 // 缺失資料
-                Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
+                Route::get('/', [DefectController::class, 'index'])->name('defect-index');
             });
 
             Route::prefix('restaurants')->group(function () {

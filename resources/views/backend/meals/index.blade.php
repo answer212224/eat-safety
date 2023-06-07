@@ -30,7 +30,7 @@
                     </div>
                     @can('create-meal')
                         <div class="col-4 align-self-center text-end">
-                            <button class="btn btn-sm btn-rounded btn-success"data-bs-toggle="modal"
+                            <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">新增</button>
                         </div>
                     @endcan
@@ -194,7 +194,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn" data-bs-dismiss="modal"
                                     aria-label="Close">關閉</button>
-                                <button type="submit" class="btn btn-primary btn-add-event">新增稽核</button>
+                                <button type="submit" class="btn btn-primary btn-add-event">新增採樣</button>
                             </div>
                         </div>
                     </form>

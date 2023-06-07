@@ -204,7 +204,7 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/data/table/*') ? 'show' : '' }}"
                     id="table" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('meal-index') ? 'active' : '' }}">
+                    <li class="{{ Request::routeIs('meal-index') || Request::routeIs('meal-edit') ? 'active' : '' }}">
                         <a href="{{ route('meal-index') }}"> 餐點採樣資料 </a>
                     </li>
                     <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">

@@ -11,6 +11,9 @@
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
 
+            @vite(['resources/scss/light/assets/components/modal.scss'])
+            @vite(['resources/scss/dark/assets/components/modal.scss'])
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -27,7 +30,8 @@
                         </nav>
                     </div>
                     <div class="col-4 align-self-center text-end">
-                        <a href="http://" class="btn btn-sm btn-rounded btn-success">新增</a>
+                        <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">新增</button>
                     </div>
 
                 </div>
@@ -43,32 +47,26 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center">動作</th>
                                     <th>名稱</th>
                                     <th>細項</th>
                                     <th>顯示</th>
+                                    <th>動作</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="" data-original-title="Edit"
-                                                data-bs-original-title="Edit" aria-label="Edit"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-edit-2 p-1 br-8 mb-1">
-                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
-                                                    </path>
-                                                </svg></a>
-                                        </td>
+
                                         <td>{{ $project->name }}</td>
                                         <td>{{ $project->description }}</td>
-
                                         <td>
                                             <livewire:switch-project-status :project="$project" />
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('meal-edit', $project->id) }}"
+                                                class="badge badge-light-primary">編輯</a>
+                                            <a href="{{ route('meal-destroy', $project->id) }}"
+                                                class="badge badge-light-danger">刪除</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -77,6 +75,46 @@
                     </div>
                 </div>
 
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="{{ route('project-store') }}" method="post">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">新增專案</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">名稱*</span>
+                                    <input type="text" class="form-control" placeholder="環境衛生" name="name"
+                                        required>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">細項*</span>
+                                    <input type="text" class="form-control" placeholder="排水孔未封堵" name="description"
+                                        required>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-bs-dismiss="modal"
+                                    aria-label="Close">關閉</button>
+                                <button type="submit" class="btn btn-primary btn-add-event">新增專案</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!--  BEGIN CUSTOM SCRIPTS FILE  -->
