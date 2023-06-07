@@ -30,7 +30,30 @@ class PermissionsDemoSeeder extends Seeder
         // Task Model
         Permission::create(['name' => 'view-all-task']);
         Permission::create(['name' => 'create-task']);
+        Permission::create(['name' => 'update-task']);
         Permission::create(['name' => 'delete-task']);
+
+        Permission::create(['name' => 'create-meal']);
+        Permission::create(['name' => 'update-meal']);
+        Permission::create(['name' => 'delete-meal']);
+
+        Permission::create(['name' => 'create-project']);
+        Permission::create(['name' => 'update-project']);
+        Permission::create(['name' => 'delete-project']);
+
+        Permission::create(['name' => 'create-defect']);
+        Permission::create(['name' => 'update-defect']);
+        Permission::create(['name' => 'delete-defect']);
+
+        Permission::create(['name' => 'create-restaurant']);
+        Permission::create(['name' => 'update-restaurant']);
+        Permission::create(['name' => 'delete-restaurant']);
+
+        Permission::create(['name' => 'create-user']);
+        Permission::create(['name' => 'update-user']);
+        Permission::create(['name' => 'delete-user']);
+
+        Permission::create(['name' => 'import-data']);
 
         // Defect Model
 
@@ -46,7 +69,23 @@ class PermissionsDemoSeeder extends Seeder
         $admin->givePermissionTo([
             'create-task',
             'delete-task',
-            'view-all-task'
+            'view-all-task',
+            'create-meal',
+            'update-meal',
+            'delete-meal',
+            'create-project',
+            'update-project',
+            'delete-project',
+            'create-defect',
+            'update-defect',
+            'delete-defect',
+            'create-restaurant',
+            'update-restaurant',
+            'delete-restaurant',
+            'create-user',
+            'update-user',
+            'delete-user',
+            'import-data',
         ]);
 
         // Create Auditor Role

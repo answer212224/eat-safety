@@ -179,18 +179,20 @@
                     </svg><span>DATA</span></div>
             </li>
 
-            <li class="menu {{ Request::is('*/data/*') ? 'active' : '' }}">
-                <a href="#data" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/data/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+            {{-- 表格 --}}
+            <li class="menu {{ Request::is('*/data/table/*') ? 'active' : '' }}">
+                <a href="#table" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/data/table/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-layers">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
+                            stroke-linejoin="round" class="feather feather-layout">
+                            <rect x="3" y="3" width="18" height="18" rx="2"
+                                ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
                         </svg>
-                        <span>資料</span>
+                        <span>表格</span>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -200,8 +202,8 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/*') ? 'show' : '' }}" id="data"
-                    data-bs-parent="#accordionExample">
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/table/*') ? 'show' : '' }}"
+                    id="table" data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('meal-index') ? 'active' : '' }}">
                         <a href="{{ route('meal-index') }}"> 餐點採樣資料 </a>
                     </li>
@@ -217,6 +219,36 @@
                     <li class="{{ Request::routeIs('user-index') ? 'active' : '' }}">
                         <a href="{{ route('user-index') }}"> 同仁資料 </a>
                     </li>
+                </ul>
+            </li>
+
+            {{-- 圖表 --}}
+            <li class="menu {{ Request::is('*/data/chart/*') ? 'active' : '' }}">
+                <a href="#chart" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/data/chart/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-pie-chart">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                        </svg>
+                        <span>圖表</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/chart/*') ? 'show' : '' }}"
+                    id="chart" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('meal-chart') ? 'active' : '' }}">
+                        <a href="{{ route('meal-chart') }}"> 餐點採樣圖表 </a>
+                    </li>
+
                 </ul>
             </li>
         </ul>

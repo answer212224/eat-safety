@@ -85,41 +85,53 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
     });
 
     Route::prefix('data')->group(function () {
-        Route::prefix('meals')->group(function () {
-            // 餐點採樣資料
-            Route::get('/list', [MealController::class, 'index'])->name('meal-index');
-            // 新增餐點採樣資料
-            Route::post('/', [MealController::class, 'store'])->name('meal-store');
-            // 刪除餐點採樣資料
-            Route::delete('{meal}/destory', [MealController::class, 'destroy'])->name('meal-destroy');
+        Route::prefix('table')->group(function () {
 
-            // excel 匯入餐點採樣資料
-            Route::post('/import', [MealController::class, 'import'])->name('meal-import');
+            Route::prefix('meals')->group(function () {
+                // 餐點採樣資料
+                Route::get('/list', [MealController::class, 'index'])->name('meal-index');
+                // 新增餐點採樣資料
+                Route::post('/', [MealController::class, 'store'])->name('meal-store');
+                // 刪除餐點採樣資料
+                Route::delete('/{meal}/destory', [MealController::class, 'destroy'])->name('meal-destroy');
+                // 編輯餐點採樣資料
+                Route::get('{meal}/edit', [MealController::class, 'edit'])->name('meal-edit');
+                // 更新餐點採樣資料
+                Route::put('/{meal}', [MealController::class, 'update'])->name('meal-update');
+                // excel 匯入餐點採樣資料
+                Route::post('/import', [MealController::class, 'import'])->name('meal-import');
+            });
+
+            Route::prefix('projects')->group(function () {
+                // 專案執行資料
+                Route::get('/list', [ProjectController::class, 'index'])->name('project-index');
+            });
+
+            Route::prefix('defects')->group(function () {
+                // 缺失資料
+                Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
+            });
+
+            Route::prefix('restaurants')->group(function () {
+                // 門市資料
+                Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
+                // 門市工作區站
+                Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
+                // 新增門市工作區站
+                Route::post('/{restaurant}/workspace', [RestaurantController::class, 'workspaceStore'])->name('restaurant-workspace-store');
+            });
+
+            Route::prefix('users')->group(function () {
+                // 使用者資料
+                Route::get('/list', [UserController::class, 'index'])->name('user-index');
+            });
         });
+        Route::prefix('chart')->group(function () {
 
-        Route::prefix('projects')->group(function () {
-            // 專案執行資料
-            Route::get('/list', [ProjectController::class, 'index'])->name('project-index');
-        });
-
-        Route::prefix('defects')->group(function () {
-            // 缺失資料
-            Route::get('/list', [DefectController::class, 'index'])->name('defect-index');
-        });
-
-        Route::prefix('restaurants')->group(function () {
-            // 門市資料
-            Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
-            // 門市工作區站
-            Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
-            // 新增門市工作區站
-            Route::post('/{restaurant}/workspace', [RestaurantController::class, 'workspaceStore'])->name('restaurant-workspace-store');
-        });
-
-        Route::prefix('users')->group(function () {
-            // 門市資料
-            Route::get('/list', [UserController::class, 'index'])->name('user-index');
-            // 門市工作區站
+            Route::prefix('meals')->group(function () {
+                // 餐點採樣圖表
+                Route::get('/list', [MealController::class, 'index'])->name('meal-chart');
+            });
         });
     });
 });

@@ -28,26 +28,29 @@
 
                         </nav>
                     </div>
-                    <div class="col-4 align-self-center text-end">
-                        <button class="btn btn-sm btn-rounded btn-success"data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">新增</button>
-                    </div>
-
+                    @can('create-meal')
+                        <div class="col-4 align-self-center text-end">
+                            <button class="btn btn-sm btn-rounded btn-success"data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">新增</button>
+                        </div>
+                    @endcan
                 </div>
             </div>
             <!-- /BREADCRUMB -->
+            @can('import-data')
+                <div class="row mb-3">
+                    <form action="{{ route('meal-import') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
+                            <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04"
+                                acc>文件上傳</button>
+                        </div>
+                    </form>
+                </div>
+            @endcan
 
-            <div class="row mb-3">
-                <form action="{{ route('meal-import') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="input-group">
-                        <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
-                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
-                        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04"
-                            acc>文件上傳</button>
-                    </div>
-                </form>
-            </div>
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
@@ -67,7 +70,9 @@
                                 <th>備註</th>
                                 <th>檢項</th>
                                 <th>檢驗項目</th>
-                                <th></th>
+                                @can('update-meal')
+                                    <th>動作</th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -85,27 +90,13 @@
                                     <td>{{ $meal->note }}</td>
                                     <td>{{ $meal->item }}</td>
                                     <td>{{ $meal->items }}</td>
-                                    <td> <a class="badge badge-light-primary text-start me-2 action-edit"
-                                            href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg"
-                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" class="feather feather-edit-3">
-                                                <path d="M12 20h9"></path>
-                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
-                                                </path>
-                                            </svg></a>
-                                        <a class="btn btn-light-danger btn-sm" data-confirm-delete="true"
-                                            href="{{ route('meal-destroy', ['meal' => $meal]) }}"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-trash">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path
-                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                </path>
-                                            </svg></a>
-                                    </td>
+                                    @can('update-meal')
+                                        <td> <a class="badge badge-light-primary"
+                                                href="{{ route('meal-edit', ['meal' => $meal]) }}">編輯</a>
+                                            <a class="badge badge-light-danger" data-confirm-delete="true"
+                                                href="{{ route('meal-destroy', ['meal' => $meal]) }}">刪除</a>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
@@ -127,56 +118,53 @@
                             </div>
                             <div class="modal-body">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">月份</span>
-                                    <input type="date" class="form-control" placeholder="Username"
-                                        name="effective_date" aria-label="Username" required>
+                                    <span class="input-group-text">月份*</span>
+                                    <input type="date" class="form-control" name="effective_date"
+                                        aria-label="Username" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">品牌店代碼</span>
+                                    <span class="input-group-text">品牌店代碼*</span>
                                     <input type="text" class="form-control" placeholder="EAT001" name="sid"
                                         required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">品牌</span>
-                                    <input type="text" class="form-control" placeholder="饗食" name="brand"
-                                        required>
+                                    <span class="input-group-text">品牌*</span>
+                                    <input type="text" class="form-control" placeholder="饗食" name="brand" required>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">店別</span>
-                                    <input type="text" class="form-control" placeholder="新光" name="shop"
-                                        required>
+                                    <input type="text" class="form-control" placeholder="新光" name="shop">
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">類別</span>
+                                    <span class="input-group-text">類別*</span>
                                     <input type="text" class="form-control" placeholder="食材" name="category"
                                         required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">廚別</span>
-                                    <input type="text" class="form-control" placeholder="日廚" name="chef"
-                                        required>
+                                    <span class="input-group-text">廚別*</span>
+                                    <input type="text" class="form-control" placeholder="日廚" name="chef" required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">區站</span>
+                                    <span class="input-group-text">區站*</span>
                                     <input type="text" class="form-control" placeholder="內廚房" name="workspace"
                                         required>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">編號</span>
+                                    <span class="input-group-text">編號*</span>
                                     <input type="text" class="form-control" placeholder="1" name="qno"
                                         required>
                                 </div>
 
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">名稱</span>
+                                    <span class="input-group-text">名稱*</span>
                                     <input type="text" class="form-control" placeholder="和風花枝" name="name"
                                         required>
                                 </div>
@@ -188,7 +176,7 @@
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">檢項</span>
+                                    <span class="input-group-text">檢項*</span>
                                     <input type="text" class="form-control" placeholder="E" name="item"
                                         required>
                                 </div>
@@ -196,7 +184,7 @@
 
 
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text">檢驗項目</span>
+                                    <span class="input-group-text">檢驗項目*</span>
                                     <input type="text" class="form-control" placeholder="大腸桿菌、金黃" name="items"
                                         required>
                                 </div>

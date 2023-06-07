@@ -118,10 +118,11 @@ class TaskController extends Controller
     public function assign()
     {
         $title = '指派任務';
-
+        // 如果有 view-all-task 的權限，就可以看到所有的任務
         if (auth()->user()->can('view-all-task')) {
             $tasks = Task::all()->load('users');
         } else {
+            // 否則就只能看到自己的任務
             $tasks = Task::whereHas('users', function ($query) {
                 $query->where('user_id', auth()->user()->id);
             })->get()->load('users');
