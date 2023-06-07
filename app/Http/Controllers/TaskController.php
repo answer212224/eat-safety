@@ -211,6 +211,11 @@ class TaskController extends Controller
 
     public function update(Task $task, Request $request)
     {
+        if ($task->status == 'completed') {
+            alert()->warning('無法更新', '任務已經完成');
+            return back();
+        }
+
         $meals = $request->input('meals');
 
         $task->meals()->sync($meals);
