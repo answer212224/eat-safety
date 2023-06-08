@@ -56,7 +56,7 @@
     <div class="col-md-12">
         <div class="form-group mt-3">
             <label class="form-label">稽核日期</label>
-            <input id="event-start-date" wire:model='start' name="task_date" type="date" class="form-control"
+            <input id="event-start-date" wire:model='start' name="task_date" type="datetime-local" class="form-control"
                 required>
         </div>
     </div>

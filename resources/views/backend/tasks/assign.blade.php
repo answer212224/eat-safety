@@ -71,10 +71,9 @@
                 var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
                 var calendarsEvents = {
-                    completed: 'success',
-                    processing: 'warning',
-                    pending: 'primary',
-                    pending_approval: 'danger',
+                    "食安及5S": 'primary',
+                    "清潔檢查": 'warning',
+                    "餐點採樣": 'success'
                 }
 
                 // Calendar AddEvent fn.
@@ -97,7 +96,7 @@
                     eventClassNames: function({
                         event: calendarEvent
                     }) {
-                        const getColorValue = calendarsEvents[calendarEvent._def.extendedProps.status];
+                        const getColorValue = calendarsEvents[calendarEvent._def.extendedProps.category];
                         return [
                             // Background Color
                             'event-fc-color fc-bg-' + getColorValue

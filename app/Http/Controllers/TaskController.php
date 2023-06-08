@@ -131,9 +131,10 @@ class TaskController extends Controller
         $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
-            $task->title = $task->category . '-' . $task->restaurant->brand . $task->restaurant->shop;
+
+            $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $task->status;
             $task->start = $task->task_date;
-            $task->users = $task->users->pluck('name', 'id')->toArray();
+            // $task->users = $task->users->pluck('name', 'id')->toArray();
             $task->url = route('task-edit', $task->id);
 
             return $task;

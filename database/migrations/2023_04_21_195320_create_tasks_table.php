@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('restaurant_id');
             $table->string('category');
-            $table->date('task_date');
+            $table->timestamp('task_date');
             $table->enum('status', ['pending', 'processing', 'pending_approval', 'completed'])->default('pending');
             $table->string('inner_manager')->nullable();
             $table->string('outer_manager')->nullable();
