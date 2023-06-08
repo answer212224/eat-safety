@@ -186,6 +186,7 @@ class TaskController extends Controller
 
         confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
 
+        // 這邊要先 load 關聯，不然會有 N+1 問題
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
 
         $taskDate = Carbon::create($task->task_date);
@@ -204,23 +205,23 @@ class TaskController extends Controller
 
         $meals = $defaltMeals->merge($optionMeals);
 
-
+        // 這邊要用 groupBy，因為同一個區站會有多個缺陷
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
         return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals'));
     }
 
     public function update(Task $task, Request $request)
     {
-        if ($task->status == 'completed') {
-            alert()->warning('無法更新', '任務已經完成');
-            return back();
-        }
-
+        // 更新任務的餐點
         $meals = $request->input('meals');
 
+        // 如果沒有選擇餐點，就不更新
         $task->meals()->sync($meals);
+        $task->update([
+            'status' => $request->status,
+        ]);
 
-        alert()->success('更新成功', '更新採樣成功');
+        alert()->success('更新成功', '更新任務成功');
 
         return back();
     }

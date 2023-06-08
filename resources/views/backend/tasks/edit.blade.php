@@ -49,7 +49,46 @@
                 <div id="Task" class="col-lg-12 layout-spacing">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
-                            <livewire:task-status-change :task="$task">
+                            <div class="row">
+                                <h4>稽核任務狀態
+                                </h4>
+                                <div class='w-100'>
+                                    <div class="form-check form-check-secondary form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status" value="pending"
+                                            id="form-check-radio-pending"
+                                            @if ($task->status == 'pending') checked @endif>
+                                        <label class="form-check-label" for="form-check-radio-pending">
+                                            未稽核
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-warning form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status"
+                                            id="form-check-radio-processing" value="processing"
+                                            @if ($task->status == 'processing') checked @endif>
+                                        <label class="form-check-label" for="form-check-radio-processing">
+                                            稽核中
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-danger form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status"
+                                            id="form-check-radio-pending_approval" value="pending_approval"
+                                            @if ($task->status == 'pending_approval') checked @endif>
+                                        <label class="form-check-label" for="form-check-radio-pending_approval">
+                                            待核對
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-success form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status"
+                                            id="form-check-radio-completed" value="completed"
+                                            @if ($task->status == 'completed') checked @endif>
+                                        <label class="form-check-label" for="form-check-radio-completed">
+                                            已完成
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                         <div class="widget-content widget-content-area">
 
@@ -90,8 +129,8 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">選擇稽核員</label>
-                                        <select class="form-control" name="users[]" multiple autocomplete="off" required
-                                            id="select-users" disabled>
+                                        <select class="form-control" name="users[]" multiple autocomplete="off"
+                                            required id="select-users" disabled>
                                             @foreach ($task->users as $user)
                                                 <option value="{{ $user->id }}" selected>{{ $user->name }}
                                                 </option>
@@ -125,8 +164,8 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">外場主管</label>
-                                        <input type="text" value="{{ $task->outer_manager }}" class="form-control"
-                                            disabled>
+                                        <input type="text" value="{{ $task->outer_manager }}"
+                                            class="form-control" disabled>
                                     </div>
 
                                     <div class="form-group mt-3">

@@ -20,7 +20,7 @@ class MealController extends Controller
 
         confirmDelete('確定刪除', "您確定要刪除嗎？\n\n刪除後將無法復原！");
 
-        // 中文解釋：這裡的 meals 是一個集合，所以可以使用 transform() 來改變集合裡面的每一個元素
+        // 這裡的 meals 是一個集合，所以可以使用 transform() 來改變集合裡面的每一個元素
         $meals = Meal::get()->transform(function ($item) {
             $item->effective_date = Carbon::create($item->effective_date)->format('Y-m');
 

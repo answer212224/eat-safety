@@ -14,9 +14,9 @@ class DefectController extends Controller
 {
     public function index()
     {
+        // 這裡的 defects 是一個集合，所以可以使用 transform() 來改變集合裡面的每一個元素
         $defects = Defect::get()->transform(function ($item) {
             $item->effective_date = Carbon::create($item->effective_date)->format('Y-m');
-
             return $item;
         });
         return view('backend.defects.index', [
@@ -27,7 +27,7 @@ class DefectController extends Controller
     public function store(Task $task, Request $request)
     {
         $path = [];
-        // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
+
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
         if (isset($request->filepond[0])) {
@@ -77,9 +77,9 @@ class DefectController extends Controller
 
     public function show(Task $task)
     {
-
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
 
+        // 檢查是否有餐點未採樣，如未採樣則判斷是否有原因
         $isMealAllTaken = $task->meals->every(function ($value, $key) {
             return $value->pivot->is_taken == 1 || $value->pivot->memo != null;
         });
@@ -90,7 +90,6 @@ class DefectController extends Controller
         }
 
         $isProjectAllChecked = $task->projects->every(function ($value, $key) {
-
             return $value->pivot->is_checked == 1;
         });
 
