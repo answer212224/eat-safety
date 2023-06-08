@@ -72,9 +72,13 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         });
         Route::prefix('permission')->group(function () {
             // 角色權限
-            Route::get('/', [PermissionController::class, 'index'])->name('permission-index');
+            Route::get('/list', [PermissionController::class, 'index'])->name('permission-index');
             // 角色新增
             Route::post('/role', [RoleController::class, 'store'])->name('role-store');
+            // 角色編輯
+            Route::get('{role}/role/edit', [RoleController::class, 'edit'])->name('role-edit');
+            // 角色權限更新
+            Route::put('{role}/role', [RoleController::class, 'updatePermissions'])->name('role-updatePermissions');
             // 角色刪除
             Route::delete('{role}/role/destory', [RoleController::class, 'destory'])->name('role-destroy');
             // 權限新增

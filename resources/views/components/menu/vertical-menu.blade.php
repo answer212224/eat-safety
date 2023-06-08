@@ -90,7 +90,7 @@
                     </svg><span>APP</span></div>
             </li>
             @can('permission-controll')
-                <li class="menu {{ Request::is('*/app/permission') ? 'active' : '' }}">
+                <li class="menu {{ Request::is('*/app/permission/*') ? 'active' : '' }}">
                     <a href="#permission" data-bs-toggle="collapse"
                         aria-expanded="{{ Request::is('*/app/permission/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                         <div class="">
@@ -111,22 +111,21 @@
                             </svg>
                         </div>
                     </a>
-                    <ul class="collapse submenu list-unstyled {{ Request::is('*/app/permission') ? 'show' : '' }}"
+                    <ul class="collapse submenu list-unstyled {{ Request::is('*/app/permission/*') ? 'show' : '' }}"
                         id="permission" data-bs-parent="#accordionExample">
 
-                        <li class="{{ Request::routeIs('permission-index') ? 'active' : '' }}">
+                        <li
+                            class="{{ Request::routeIs('permission-index') || Request::routeIs('role-edit') ? 'active' : '' }}">
                             <a href="{{ route('permission-index') }}"> 角色權限 </a>
                         </li>
 
-                        <li class="">
-                            <a href="{{ route('permission-index') }}"> 同仁權限 </a>
-                        </li>
+
                     </ul>
                 </li>
             @endcan
-            <li class="menu {{ Request::is('*/app/task') ? 'active' : '' }}">
+            <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
                 <a href="#task" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/app/*/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                    aria-expanded="{{ Request::is('*/app/task/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -144,7 +143,7 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/*/*') ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
                     id="task" data-bs-parent="#accordionExample">
 
                     <li
@@ -170,7 +169,6 @@
 
             </li>
 
-            {{-- DATA --}}
             <li class="menu menu-heading">
                 <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
