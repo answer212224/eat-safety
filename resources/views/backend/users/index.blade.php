@@ -38,6 +38,9 @@
                                     <th>電子信箱</th>
                                     <th>部門</th>
                                     <th>角色</th>
+                                    @can('update-user')
+                                        <th>操作</th>
+                                    @endcan
                                 </tr>
                             </thead>
 
@@ -51,6 +54,12 @@
                                         <td><span class="badge badge-dark bs-tooltip"
                                                 title="{{ $user->getPermissionsViaRoles()->pluck('name')->implode('、') }}">{{ $user->getRoleNames()->implode('、') }}</span>
                                         </td>
+                                        @can('update-user')
+                                            <td>
+                                                <a href="{{ route('user-edit', ['user' => $user]) }}"
+                                                    class="badge badge-light-primary">編輯</a>
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

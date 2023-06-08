@@ -132,6 +132,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::prefix('users')->group(function () {
                 // 使用者資料
                 Route::get('/list', [UserController::class, 'index'])->name('user-index');
+                Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user-edit');
+                Route::put('/{user}', [UserController::class, 'update'])->name('user-update');
             });
         });
         Route::prefix('chart')->group(function () {

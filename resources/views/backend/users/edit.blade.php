@@ -27,7 +27,7 @@
             </ol>
         </nav>
     </div>
-    <form action="{{ route('role-updatePermissions', ['role' => $role]) }}" method="post">
+    <form action="{{ route('user-update', ['user' => $user]) }}" method="post">
         @method('PUT')
         @csrf
         <div class="row layout-top-spacing">
@@ -37,13 +37,35 @@
 
                         <div class="row">
                             <div class="col-6">
-                                <select id="select-state" name="permissions[]" multiple placeholder="選擇權限..."
-                                    autocomplete="off">
-                                    <option value="">選擇權限...</option>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">員工編號</span>
+                                    <input type="text" class="form-control" value="{{ $user->uid }}"
+                                        name="uid">
 
-                                    @foreach ($permissions as $permission)
-                                        <option @if ($role->permissions->contains($permission)) selected @endif
-                                            value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">姓名</span>
+                                    <input type="text" class="form-control" value="{{ $user->name }}"
+                                        name="name">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">電子郵箱</span>
+                                    <input type="text" class="form-control" value="{{ $user->email }}"
+                                        name="email">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">部門</span>
+                                    <input type="text" class="form-control" value="{{ $user->department }}"
+                                        name="department">
+                                </div>
+                                <select id="select-state" name="role[]" multiple placeholder="選擇角色..."
+                                    autocomplete="off">
+                                    <option value="">選擇角色...</option>
+                                    @foreach ($roles as $role)
+                                        <option @if ($user->roles->contains($role)) selected @endif
+                                            value="{{ $role->id }}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -58,7 +80,7 @@
                 <div class="statbox widget box box-shadow">
                     <div class="widget-content widget-content-area">
                         <button type="submit" class="btn btn-outline-success w-100 mb-3">更新</button>
-                        <a class="btn btn-outline-dark w-100" href="{{ route('permission-index') }}">上一頁</a>
+                        <a class="btn btn-outline-dark w-100" href="{{ route('user-index') }}">上一頁</a>
                     </div>
                 </div>
             </div>
@@ -71,7 +93,7 @@
         <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
         <script>
             new TomSelect("#select-state", {
-
+                maxItems: 2
             });
         </script>
     </x-slot:footerFiles>
