@@ -107,25 +107,21 @@
                         headerToolbar: {
                             left: 'prev next myCustomButton',
                             center: 'title',
-                            right: 'dayGridMonth,listWeek'
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                         },
                     @endcan
 
-                    @cannot('create-task')
-                        headerToolbar: {
-                            left: 'prev next',
-                            center: 'title',
-                            right: 'dayGridMonth,listWeek'
-                        },
-                    @endcannot
-
+                    buttonText: {
+                        today: '今天',
+                        month: '月',
+                        week: '週',
+                        day: '日',
+                        list: '列表'
+                    },
 
                     events: @json($tasks),
 
                 });
-
-
-
 
                 calendar.render();
             });

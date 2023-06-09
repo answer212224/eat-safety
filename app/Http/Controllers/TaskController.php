@@ -131,8 +131,16 @@ class TaskController extends Controller
         $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
-
-            $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $task->status;
+            if ($task->status == 'processing') {
+                $status = '未稽核';
+            } elseif ($task->status == 'pedding') {
+                $status = '稽核中';
+            } elseif ($task->status == 'pending_approval') {
+                $status = '待核對';
+            } else {
+                $status = '已完成';
+            }
+            $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $status;
             $task->start = $task->task_date;
             // $task->users = $task->users->pluck('name', 'id')->toArray();
             $task->url = route('task-edit', $task->id);
