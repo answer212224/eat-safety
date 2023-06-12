@@ -37,10 +37,16 @@ class MealsImport implements ToCollection
             ];
         });
 
-        $tasks = Task::whereYear('task_date', $collection[0]['effective_date'])
-            ->whereMonth('task_date', $collection[0]['effective_date'])->first();
 
-        if (!empty($tasks)) {
+
+        $taskHasMeals =  Task::whereHas('meals', function ($query) use ($collection) {
+            $query->whereYear('effective_date', $collection[0]['effective_date'])
+                ->whereMonth('effective_date', $collection[0]['effective_date']);
+        })->get();
+
+
+
+        if ($taskHasMeals->count() > 0) {
             throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的稽核任務，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的餐點採樣資料");
         }
 
