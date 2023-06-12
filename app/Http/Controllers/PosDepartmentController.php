@@ -19,7 +19,7 @@ class PosDepartmentController extends Controller
 
 
         foreach ($restaurants as $restaurant) {
-            $this->update($restaurant);
+            self::update($restaurant);
         }
 
         alert()->success('成功', '更新門市資料成功');
@@ -27,7 +27,7 @@ class PosDepartmentController extends Controller
         return back();
     }
 
-    public function update(Restaurant $restaurant)
+    public static function update(Restaurant $restaurant)
     {
         $category = EatogetherCategory::getWorkspaceTypeByBrand($restaurant)->first();
 
@@ -64,5 +64,21 @@ class PosDepartmentController extends Controller
                 ['area' => $workspace['area']]
             );
         }
+    }
+
+    public static function sync()
+    {
+        $posDepartments = PosDepartment::getRestaurants()->toArray();
+
+        Restaurant::upsert($posDepartments, ['sid'], ['brand', 'brand_code', 'shop', 'location', 'status']);
+
+        $restaurants = Restaurant::get();
+
+
+        foreach ($restaurants as $restaurant) {
+            self::update($restaurant);
+        }
+
+        Log::info('更新門市資料成功');
     }
 }
