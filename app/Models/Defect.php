@@ -17,9 +17,9 @@ class Defect extends Model
         return $this->hasMany(TaskHasDefect::class);
     }
 
-    public static function getDistinctGroups(Carbon $latestDefect): object
+    public static function getDistinctGroups(Carbon $latestDefect)
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->distinct()->get();
+        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->select('group')->distinct()->get();
     }
 
     public static function getDistinctTitlesByGroup($group, Carbon $latestDefect)

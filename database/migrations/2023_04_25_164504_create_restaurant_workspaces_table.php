@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
             $table->string('area');
-            $table->string('chef');
+            $table->string('category_value');
             $table->timestamps();
         });
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DefectController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PosDepartmentController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RoleController;
 
@@ -43,7 +44,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::put('/{task}', [TaskController::class, 'update'])->name('task-update');
             // 稽核任務刪除
             Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('task-delete');
-            // 任務清單
+            // 稽核任務列表
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 開始稽核
             Route::get('/{task}/create', [TaskController::class, 'create'])->name('task-create');
@@ -125,8 +126,6 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
                 // 門市工作區站
                 Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
-                // 新增門市工作區站
-                Route::post('/{restaurant}/workspace', [RestaurantController::class, 'workspaceStore'])->name('restaurant-workspace-store');
             });
 
             Route::prefix('users')->group(function () {
@@ -146,7 +145,9 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/test', function () {
-
-    return view('test', ['title' => 'This is Title']);
+Route::prefix('pos')->group(function () {
+    // 門市資料upsert
+    Route::put('/restaurant', [PosDepartmentController::class, 'upsert'])->name('pos-restaurant-upsert');
+    // 指定門市的工作區站更新
+    Route::put('/restaurant/{restaurant}/workspace', [PosDepartmentController::class, 'update'])->name('pos-restaurant-workspace-update');
 });

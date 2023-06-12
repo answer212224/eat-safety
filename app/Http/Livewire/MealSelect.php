@@ -31,12 +31,12 @@ class MealSelect extends Component
         if ($restaurant) {
 
             $optionMeals = Meal::whereYear('effective_date', $start->format('Y'))->whereMonth('effective_date', $start->format('m'))->where('sid',  $restaurant->sid)->get();
-            $defaltMeals = Meal::whereYear('effective_date', $start->format('Y'))->whereMonth('effective_date', $start->format('m'))->where('sid',  Str::substr($restaurant->sid, 0, 3))->get();
+            $defaltMeals = Meal::whereYear('effective_date', $start->format('Y'))->whereMonth('effective_date', $start->format('m'))->where('sid',  $restaurant->brand_code)->get();
         }
 
         return view('livewire.meal-select', [
             'users' => User::all(),
-            'restaurants' => Restaurant::all(),
+            'restaurants' => Restaurant::where('status', true)->get(),
             'defaltMeals' => $defaltMeals ?? [],
             'optionMeals' => $optionMeals ?? [],
             'projects' => Project::where('status', true)->get(),

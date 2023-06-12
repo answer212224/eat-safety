@@ -72,8 +72,10 @@
 
                     <div class="row mb-4">
                         <div class="col-xxl-12 mb-4">
-                            <p class="">
-                                {{ $task->meals->pluck('name')->implode('、') }}
+                            <p>
+                                @foreach ($task->meals as $meal)
+                                    {{ $meal->name }}#{{ $meal->pivot->memo }}。
+                                @endforeach
                             </p>
                         </div>
 

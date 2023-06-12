@@ -22,17 +22,6 @@ class RestaurantController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-        ]);
-
-        Restaurant::create($request->all());
-
-        return redirect()->route('restaurant-index');
-    }
 
     public function edit(Restaurant $restaurant)
     {

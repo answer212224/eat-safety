@@ -1,5 +1,4 @@
 <x-base-layout :scrollspy="false">
-
     <x-slot:pageTitle>
         {{ $title }}
         </x-slot>
@@ -17,13 +16,33 @@
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">門市資料</li>
+                <div class="row">
+                    <div class="col-lg-9 col-6">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
 
-                    </ol>
-                </nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">門市資料</li>
+
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+
+                        <div class="col text-end">
+                            <form action="{{ route('pos-restaurant-upsert') }}" method="post">
+                                @csrf
+                                @method('put')
+                                <button class="btn btn-sm btn-rounded btn-success">更新</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
             </div>
             <!-- /BREADCRUMB -->
 
@@ -37,9 +56,11 @@
                                     <th>品牌店代碼</th>
                                     <th>品牌</th>
                                     <th>店別</th>
-                                    <th>地址</th>
                                     <th>區域</th>
-                                    <th>工作區</th>
+                                    <th>地址</th>
+                                    <th>狀態</th>
+                                    <th>區站</th>
+                                    <th class="text-end">更新時間</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,11 +69,21 @@
                                         <td>{{ $restaurant->sid }}</td>
                                         <td>{{ $restaurant->brand }}</td>
                                         <td>{{ $restaurant->shop }}</td>
-                                        <td>{{ $restaurant->address }}</td>
                                         <td>{{ $restaurant->location }}</td>
+                                        <td>{{ $restaurant->address }}</td>
+                                        <td>
+                                            @if ($restaurant->status)
+                                                <span class="badge badge-success">啟用</span>
+                                            @else
+                                                <span class="badge badge-danger">停用</span>
+                                            @endif
+                                        </td>
                                         <td><a href="{{ route('restaurant-workspace', ['restaurant' => $restaurant]) }}"
-                                                class="btn btn-sm btn-secondary _effect--ripple waves-effect waves-light">
-                                                工作區</a></td>
+                                                class="badge badge-dark">
+                                                區站
+                                            </a>
+                                        </td>
+                                        <td class="text-end">{{ $restaurant->updated_at }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

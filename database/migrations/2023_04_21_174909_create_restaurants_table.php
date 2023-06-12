@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
-            $table->string('sid')->nullable();
+            // pos_department.department_ch_id
+            $table->string('sid')->unique();
+            // pos_department.department_type_name
             $table->string('brand')->nullable();
+            // pos_department.department_type_code
+            $table->string('brand_code')->nullable();
+            // pos_department.survey_name
             $table->string('shop')->nullable();
+            // null
             $table->string('address')->nullable();
+            // pos_department.area
             $table->string('location')->nullable();
+            // pos_department.status
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

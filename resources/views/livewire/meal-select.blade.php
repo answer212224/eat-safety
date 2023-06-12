@@ -127,6 +127,13 @@
                 maxItems: 2
             });
 
+            new TomSelect("#select-sid", {
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+
         });
     </script>
 @endpush

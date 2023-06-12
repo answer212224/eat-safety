@@ -23,7 +23,10 @@
 
             <div class="note-description-content">
                 <p class="note-description">
-                    採樣 {{ $task->meals->count() }} 項: {{ $task->meals->pluck('name')->implode('、') }}
+                    採樣 {{ $task->meals->count() }} 項:
+                    @foreach ($task->meals as $meal)
+                        {{ $meal->name }}#{{ $meal->pivot->memo }}。
+                    @endforeach
                 </p>
                 <p class="note-description">
                     專案 {{ $task->projects->count() }} 項: {{ $task->projects->pluck('description')->implode('。') }}
