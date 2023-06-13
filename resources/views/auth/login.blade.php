@@ -44,12 +44,18 @@
                                                 <div class="mb-3">
                                                     <label class="form-label">員工編號</label>
                                                     <input type="uid" class="form-control" name="uid">
+                                                    @error('uid')
+                                                        <div class="text-danger my-1">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="mb-4">
                                                     <label class="form-label">密碼</label>
                                                     <input type="password" class="form-control" name="password">
+                                                    @error('password')
+                                                        <div class="text-danger my-1">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             {{-- <div class="col-12">
@@ -71,12 +77,12 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class="col-12">
+                                        {{-- <div class="col-12">
                                             <div class="text-center">
                                                 <p class="mb-0">還沒有帳號嗎？ <a href="javascript:void(0);"
                                                         class="text-warning">立即註冊！</a></p>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
 

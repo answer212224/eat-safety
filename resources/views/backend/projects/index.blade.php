@@ -49,8 +49,13 @@
                                 <tr>
                                     <th>名稱</th>
                                     <th>細項</th>
-                                    <th>顯示</th>
-                                    <th>動作</th>
+                                    @role('auditor')
+                                        <th>狀態</th>
+                                    @endrole
+                                    @can('update-project')
+                                        <th>狀態</th>
+                                        <th class="text-end">動作</th>
+                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,15 +64,26 @@
 
                                         <td>{{ $project->name }}</td>
                                         <td>{{ $project->description }}</td>
-                                        <td>
-                                            <livewire:switch-project-status :project="$project" />
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('meal-edit', $project->id) }}"
-                                                class="badge badge-light-primary">編輯</a>
-                                            <a href="{{ route('meal-destroy', $project->id) }}"
-                                                class="badge badge-light-danger">刪除</a>
-                                        </td>
+                                        @role('auditor')
+                                            <td>
+                                                @if ($project->status)
+                                                    <span class="badge badge-success">啟用</span>
+                                                @else
+                                                    <span class="badge badge-danger">停用</span>
+                                                @endif
+                                            </td>
+                                        @endrole
+                                        @can('update-project')
+                                            <td>
+                                                <livewire:switch-project-status :project="$project" />
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('meal-edit', $project->id) }}"
+                                                    class="badge badge-light-primary">編輯</a>
+                                                <a href="{{ route('meal-destroy', $project->id) }}"
+                                                    class="badge badge-light-danger">刪除</a>
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

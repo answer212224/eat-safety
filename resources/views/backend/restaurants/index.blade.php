@@ -35,7 +35,9 @@
                                 @csrf
                                 @method('put')
                                 <span>AM 06:00 自動更新</span>
-                                <button class="btn btn-sm btn-rounded btn-success">更新</button>
+                                @can('update-restaurant')
+                                    <button class="btn btn-sm btn-rounded btn-success">更新</button>
+                                @endcan
                             </form>
                         </div>
 
