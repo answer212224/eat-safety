@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="mb-4">
-                                                    <label class="form-label">密碼</label>
+                                                    <label class="form-label">密碼(預設身份證字號)</label>
                                                     <input type="password" class="form-control" name="password">
                                                     @error('password')
                                                         <div class="text-danger my-1">{{ $message }}</div>
