@@ -35,7 +35,7 @@ class MealSelect extends Component
         }
 
         return view('livewire.meal-select', [
-            'users' => User::all(),
+            'users' => User::permission('execute-task')->get(),
             'restaurants' => Restaurant::where('status', true)->get(),
             'defaltMeals' => $defaltMeals ?? [],
             'optionMeals' => $optionMeals ?? [],

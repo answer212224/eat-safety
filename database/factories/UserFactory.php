@@ -19,9 +19,9 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => 'liam.li@eatogether.com.tw',
             'email_verified_at' => now(),
-            'password' => '$2y$10$qVTnHtd4Q8ttyhCNv380q.39F4oor89W70m7U7CAImvWpJ6HSaXLi', // 123
+            'password' => '$2y$10$houKLSd9q/k9capEnbWw/.M60DzMV2Nic0lZOIot4XN6AsWEyvDOu', // vu;31up
             'remember_token' => Str::random(10),
         ];
     }

@@ -17,12 +17,34 @@
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">缺失資料</li>
-                    </ol>
-                </nav>
+                <div class="row">
+                    <div class="col-lg-9 col-6">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">同仁資料</li>
+
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+
+                        <div class="col text-end">
+                            <form action="{{ route('pos-user-upsert') }}" method="post">
+                                @csrf
+                                @method('put')
+                                <span>AM 06:30 自動更新</span>
+                                <button class="btn btn-sm btn-rounded btn-success">更新</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
             </div>
             <!-- /BREADCRUMB -->
 
@@ -38,6 +60,8 @@
                                     <th>電子信箱</th>
                                     <th>部門</th>
                                     <th>角色</th>
+                                    <th>狀態</th>
+                                    <th>更新時間</th>
                                     @can('update-user')
                                         <th>操作</th>
                                     @endcan
@@ -54,6 +78,38 @@
                                         <td><span class="badge badge-dark bs-tooltip"
                                                 title="{{ $user->getPermissionsViaRoles()->pluck('name')->implode('、') }}">{{ $user->getRoleNames()->implode('、') }}</span>
                                         </td>
+                                        <td>
+                                            @switch($user->status)
+                                                @case(0)
+                                                    <span class="badge badge-danger">試用</span>
+                                                @break
+
+                                                @case(1)
+                                                    <span class="badge badge-success">正式</span>
+                                                @break
+
+                                                @case(2)
+                                                    <span class="badge badge-warning">離職</span>
+                                                @break
+
+                                                @case(3)
+                                                    <span class="badge badge-info">約聘</span>
+                                                @break
+
+                                                @case(4)
+                                                    <span class="badge badge-primary">留職</span>
+                                                @break
+
+                                                @case(5)
+                                                    <span class="badge badge-secondary">未</span>
+                                                @break
+
+                                                @case(8)
+                                                    <span class="badge badge-light-primary">永不</span>
+                                                @break
+                                            @endswitch
+                                        </td>
+                                        <td>{{ $user->updated_at }}</td>
                                         @can('update-user')
                                             <td>
                                                 <a href="{{ route('user-edit', ['user' => $user]) }}"

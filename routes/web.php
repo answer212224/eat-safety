@@ -150,4 +150,6 @@ Route::prefix('pos')->group(function () {
     Route::put('/restaurant', [PosDepartmentController::class, 'upsert'])->name('pos-restaurant-upsert');
     // 指定門市的工作區站更新
     Route::put('/restaurant/{restaurant}/workspace', [PosDepartmentController::class, 'update'])->name('pos-restaurant-workspace-update');
+    // 同仁資料upsert
+    Route::put('/user', [UserController::class, 'upsert'])->name('pos-user-upsert');
 });

@@ -32,6 +32,7 @@ class PermissionsDemoSeeder extends Seeder
         Permission::create(['name' => 'create-task']);
         Permission::create(['name' => 'update-task']);
         Permission::create(['name' => 'delete-task']);
+        Permission::create(['name' => 'execute-task']);
 
         Permission::create(['name' => 'create-meal']);
         Permission::create(['name' => 'update-meal']);
@@ -90,49 +91,53 @@ class PermissionsDemoSeeder extends Seeder
 
         // Create Auditor Role
         $auditor = Role::create(['name' => 'auditor']);
-        $auditor->givePermissionTo([]);
+        $auditor->givePermissionTo([
+            'execute-task'
+        ]);
 
 
         // Create Users and Assign Roles
-        $user = \App\Models\User::factory()->create([
-            'uid' => '001001001',
-            'name' => '稽核員1號',
-            'department' => '食安部',
-        ]);
-        $user->assignRole($auditor);
+        // $user = \App\Models\User::factory()->create([
+        //     'uid' => '001001001',
+        //     'name' => '稽核員1號',
+        //     'department' => '食安部',
+        // ]);
+        // $user->assignRole($auditor);
 
-        $user = \App\Models\User::factory()->create([
-            'uid' => '001001002',
-            'name' => '稽核員2號',
-            'department' => '食安部',
-        ]);
-        $user->assignRole($auditor);
+        // $user = \App\Models\User::factory()->create([
+        //     'uid' => '001001002',
+        //     'name' => '稽核員2號',
+        //     'department' => '食安部',
+        // ]);
+        // $user->assignRole($auditor);
 
-        $user = \App\Models\User::factory()->create([
-            'uid' => '001001003',
-            'name' => '稽核員3號',
-            'department' => '食安部',
-        ]);
-        $user->assignRole($auditor);
+        // $user = \App\Models\User::factory()->create([
+        //     'uid' => '001001003',
+        //     'name' => '稽核員3號',
+        //     'department' => '食安部',
+        // ]);
+        // $user->assignRole($auditor);
 
-        $user = \App\Models\User::factory()->create([
-            'uid' => '001001',
-            'name' => '管理員1號',
-            'department' => '食安部',
-        ]);
-        $user->assignRole($admin);
+        // $user = \App\Models\User::factory()->create([
+        //     'uid' => '001001',
+        //     'name' => '管理員1號',
+        //     'department' => '食安部',
+        // ]);
+        // $user->assignRole($admin);
 
-        $user = \App\Models\User::factory()->create([
-            'uid' => '001002',
-            'name' => '管理員2號',
-            'department' => '食安部',
-        ]);
-        $user->assignRole($admin);
+        // $user = \App\Models\User::factory()->create([
+        //     'uid' => '001002',
+        //     'name' => '管理員2號',
+        //     'department' => '食安部',
+        // ]);
+        // $user->assignRole($admin);
 
         $user = \App\Models\User::factory()->create([
             'uid' => '001',
-            'name' => '超級管理員',
-            'department' => '管理部',
+            'name' => '開發人員',
+            'department' => '資管部',
+            'department_serial' => '001',
+            'status' => 1
         ]);
         $user->assignRole($superAdmin);
     }
