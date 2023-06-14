@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\ClearDefectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\TaskController;
@@ -118,9 +119,15 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             });
 
             Route::prefix('defects')->group(function () {
-                // 缺失資料
+                // 食安缺失資料
                 Route::get('/', [DefectController::class, 'index'])->name('defect-index');
                 Route::post('/import', [DefectController::class, 'import'])->name('defect-import');
+            });
+
+            Route::prefix('clear-defects')->group(function () {
+                // 清檢缺失資料
+                Route::get('/', [ClearDefectController::class, 'index'])->name('clear-defect-index');
+                Route::post('/import', [ClearDefectController::class, 'import'])->name('clear-defect-import');
             });
 
             Route::prefix('restaurants')->group(function () {

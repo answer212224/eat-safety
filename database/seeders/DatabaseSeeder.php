@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         // WithoutModelEvents::class;
         $this->call([
             PermissionsDemoSeeder::class,
-            // DefectSeeder::class,
+            DefectSeeder::class,
             // MealSeeder::class,
             ProjectSeeder::class,
         ]);

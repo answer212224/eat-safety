@@ -29,6 +29,6 @@ class Defect extends Model
 
     public static function getDescriptionWhereByGroupAndTitle($group, $title, Carbon $latestDefect)
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('group', $group)->where('title', $title)->get();
+        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('group', $group)->where('title', $title)->orWhere('group', '待確認')->get();
     }
 }

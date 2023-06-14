@@ -211,6 +211,9 @@
                     <li class="{{ Request::routeIs('defect-index') ? 'active' : '' }}">
                         <a href="{{ route('defect-index') }}"> 食安缺失資料 </a>
                     </li>
+                    <li class="{{ Request::routeIs('clear-defect-index') ? 'active' : '' }}">
+                        <a href="{{ route('clear-defect-index') }}"> 清檢缺失資料 </a>
+                    </li>
                     <li
                         class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') ? 'active' : '' }}">
                         <a href="{{ route('restaurant-index') }}"> 門市資料 </a>

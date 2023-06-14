@@ -36,6 +36,11 @@ class Task extends Model
         return $this->belongsToMany(Meal::class)->withPivot(['is_improved', 'is_taken', 'memo']);
     }
 
+    public function claerDefects(): BelongsToMany
+    {
+        return $this->belongsToMany(ClearDefect::class)->withPivot(['is_improved', 'is_taken', 'memo']);
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class)->withPivot('is_improved', 'is_checked', 'note');
