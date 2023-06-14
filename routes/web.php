@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\TaskController;
@@ -138,9 +139,9 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
         });
         Route::prefix('chart')->group(function () {
 
-            Route::prefix('meals')->group(function () {
+            Route::prefix('demo')->group(function () {
                 // 餐點採樣圖表
-                Route::get('/list', [MealController::class, 'index'])->name('meal-chart');
+                Route::get('/', [ChartController::class, 'index'])->name('chart-demo');
             });
         });
     });

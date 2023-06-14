@@ -211,7 +211,8 @@
                     <li class="{{ Request::routeIs('defect-index') ? 'active' : '' }}">
                         <a href="{{ route('defect-index') }}"> 食安缺失資料 </a>
                     </li>
-                    <li class="{{ Request::routeIs('restaurant-index') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') ? 'active' : '' }}">
                         <a href="{{ route('restaurant-index') }}"> 門市資料 </a>
                     </li>
                     <li class="{{ Request::routeIs('user-index') ? 'active' : '' }}">
@@ -243,8 +244,8 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{ Request::is('*/data/chart/*') ? 'show' : '' }}"
                     id="chart" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('meal-chart') ? 'active' : '' }}">
-                        <a href="{{ route('meal-chart') }}"> 餐點採樣圖表 </a>
+                    <li class="{{ Request::routeIs('chart-demo') ? 'active' : '' }}">
+                        <a href="{{ route('chart-demo') }}"> 圖表DEMO </a>
                     </li>
 
                 </ul>
