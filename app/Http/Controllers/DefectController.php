@@ -70,6 +70,8 @@ class DefectController extends Controller
                 'defect_id' => $request->defect_id,
                 'restaurant_workspace_id' => $request->workspace,
                 'images' => $path,
+                'is_ignore' => $request->is_ignore ? 1 : 0,
+                'memo' => $request->memo,
             ]);
             alert()->success('成功', '缺失已新增');
             return back();

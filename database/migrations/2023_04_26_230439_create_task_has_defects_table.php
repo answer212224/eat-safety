@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('restaurant_workspace_id');
             $table->foreignId('defect_id');
             $table->json('images');
+            $table->string('memo')->nullable();
+            $table->boolean('is_ignore')->default(false);
             $table->boolean('is_impoved')->default(false);
             $table->timestamps();
         });
