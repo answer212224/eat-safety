@@ -17,27 +17,55 @@
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
-                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">資料</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">缺失資料</li>
-                    </ol>
-                </nav>
+                <div class="row justify-content-between mb-3">
+                    <div class="col-8 align-self-center">
+                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">資料</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">食安缺失資料</li>
+                            </ol>
+
+                        </nav>
+                    </div>
+                    @can('create-defect')
+                        <div class="col-4 align-self-center text-end">
+                            <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">新增</button>
+                        </div>
+                    @endcan
+                </div>
             </div>
             <!-- /BREADCRUMB -->
 
-            <div class="row layout-top-spacing">
+            @can('import-data')
+                <div class="row mb-3">
+                    <form action="{{ route('defect-import') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
+                            <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04"
+                                acc>文件上傳</button>
+                        </div>
+                    </form>
+                </div>
+            @endcan
 
+
+            <div class="row layout-top-spacing">
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-8">
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>生效日期</th>
-                                    <th>群組</th>
-                                    <th>標題</th>
-                                    <th>類別(扣分依據)</th>
-                                    <th>細項</th>
+                                    <th>啟用月份</th>
+                                    <th>缺失分類</th>
+                                    <th>子項目</th>
+                                    <th>缺失類別</th>
+                                    <th>扣分</th>
+                                    <th>稽核標準</th>
+                                    <th>報告呈現說明</th>
+                                    <th class="text-end">更新時間</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,11 +74,16 @@
                                         <td>{{ $defect->effective_date }}</td>
                                         <td>{{ $defect->group }}</td>
                                         <td>{{ $defect->title }}</td>
+                                        <td>{{ $defect->category }}</td>
+                                        <td>{{ $defect->deduct_point }}</td>
                                         <td>
-                                            <span class="badge badge-dark bs-tooltip"
-                                                title="{{ config("score.$defect->category") }}">{{ $defect->category }}</span>
+                                            {{ $defect->description }}
                                         </td>
-                                        <td>{{ $defect->description }}</td>
+                                        <td>
+                                            {{ $defect->report_description }}
+                                        </td>
+                                        <td class="text-end">{{ $defect->updated_at }}</td>
+                                        {{-- <td>{{ $defect->report_description }}</td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -79,9 +112,11 @@
                             "sSearchPlaceholder": "Search...",
                             "sLengthMenu": "Results :  _MENU_",
                         },
+
                         "stripeClasses": [],
                         "lengthMenu": [7, 10, 20, 50],
-                        "pageLength": 10
+                        "pageLength": 10,
+
                     });
                 </script>
                 </x-slot>

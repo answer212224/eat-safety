@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Imports\DefectsImport;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Defect;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DefectController extends Controller
 {
@@ -132,9 +133,10 @@ class DefectController extends Controller
 
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
+        // dd($request->all());
         if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
             alert()->warning('請確認', '請填寫完整資料');
-            return back();
+            return redirect();
         }
         $path = [];
         // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
@@ -184,5 +186,27 @@ class DefectController extends Controller
             'defectsGroup' => $defectsGroup,
             'title' => '查看自己缺失'
         ]);
+    }
+
+    public function import(Request $request)
+    {
+        if ($request->file('excel') == null) {
+            alert()->error('錯誤', '請選擇檔案');
+            return back();
+        }
+
+        if ($request->file('excel')->getClientOriginalExtension() != 'xlsx') {
+            alert()->error('錯誤', '檔案格式錯誤');
+            return back();
+        }
+
+        try {
+            Excel::import(new DefectsImport, request()->file('excel'));
+            alert()->success('成功', '餐點採樣匯入成功');
+            return back();
+        } catch (\Exception $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        }
     }
 }

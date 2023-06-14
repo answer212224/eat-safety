@@ -209,7 +209,7 @@
                         <a href="{{ route('project-index') }}"> 專案資料 </a>
                     </li>
                     <li class="{{ Request::routeIs('defect-index') ? 'active' : '' }}">
-                        <a href="{{ route('defect-index') }}"> 缺失資料 </a>
+                        <a href="{{ route('defect-index') }}"> 食安缺失資料 </a>
                     </li>
                     <li class="{{ Request::routeIs('restaurant-index') ? 'active' : '' }}">
                         <a href="{{ route('restaurant-index') }}"> 門市資料 </a>

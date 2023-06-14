@@ -18,7 +18,7 @@ class DefectSelect extends Component
         if (isset($this->taskHasDefect)) {
             $this->group = $this->taskHasDefect->defect->group;
             $this->title = $this->taskHasDefect->defect->title;
-            $this->description = $this->taskHasDefect->defect->description;
+            $this->description = $this->taskHasDefect->defect->id;
         }
     }
 

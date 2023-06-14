@@ -20,7 +20,14 @@
     <select class="form-select" wire:model="description" name="defect_id" id="inputSelect">
 
         @foreach ($defects as $defect)
-            <option value={{ $defect->id }}>{{ $defect->description }}</option>
+            @if ($description == $defect->description)
+                <option value="{{ $defect->id }}" selected>{{ $defect->description }}</option>
+            @else
+                <option value="{{ $defect->id }}">{{ $defect->description }}</option>
+            @endif
         @endforeach
     </select>
+
+
+
 </div>

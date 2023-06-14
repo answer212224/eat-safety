@@ -46,15 +46,17 @@
 
                             <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
                                 <div class="card-body px-0 pb-0">
-                                    <h5 class="card-title mb-3">{{ $taskHasDefect->defect->group }}</h5>
-                                    <h6>{{ $taskHasDefect->defect->title }}</h6>
-                                    <p>{{ $taskHasDefect->defect->description }}</p>
+                                    <h5 class="card-title mb-3">缺失分類 : {{ $taskHasDefect->defect->group }}</h5>
+                                    <h6>子項目 : {{ $taskHasDefect->defect->title }}</h6>
+                                    <p>稽核標準 : {{ $taskHasDefect->defect->description }}</p>
+                                    <p>報告呈現說明 : {{ $taskHasDefect->defect->report_description }}</p>
+                                    <p class="media-heading mb-1">扣分 : {{ $taskHasDefect->defect->deduct_point }}</p>
                                     <div class="media mt-4 mb-0 pt-1">
                                         {{-- <img src="" class="card-media-image me-3" alt=""> --}}
                                         <div class="media-body">
-                                            <h4 class="media-heading mb-1">{{ $taskHasDefect->user->name }}</h4>
-                                            <p class="media-text">{{ $taskHasDefect->created_at }}</p>
 
+                                            <p class="media-heading mb-1">同仁 : {{ $taskHasDefect->user->name }}</p>
+                                            <p class="media-text">時間 : {{ $taskHasDefect->updated_at }}</p>
                                         </div>
                                     </div>
                                 </div>

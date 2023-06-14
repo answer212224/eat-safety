@@ -119,6 +119,7 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::prefix('defects')->group(function () {
                 // 缺失資料
                 Route::get('/', [DefectController::class, 'index'])->name('defect-index');
+                Route::post('/import', [DefectController::class, 'import'])->name('defect-import');
             });
 
             Route::prefix('restaurants')->group(function () {

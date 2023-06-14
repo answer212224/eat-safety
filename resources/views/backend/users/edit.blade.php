@@ -40,25 +40,21 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">員工編號</span>
                                     <input type="text" class="form-control" value="{{ $user->uid }}"
-                                        name="uid">
+                                        name="uid" disabled>
 
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">姓名</span>
                                     <input type="text" class="form-control" value="{{ $user->name }}"
-                                        name="name">
+                                        name="name" disabled>
                                 </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">電子郵箱</span>
-                                    <input type="text" class="form-control" value="{{ $user->email }}"
-                                        name="email">
-                                </div>
+
                             </div>
                             <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">部門</span>
                                     <input type="text" class="form-control" value="{{ $user->department }}"
-                                        name="department">
+                                        name="department" disabled>
                                 </div>
                                 <select id="select-state" name="role[]" multiple placeholder="選擇角色..."
                                     autocomplete="off">
@@ -70,7 +66,13 @@
                                 </select>
                             </div>
 
-
+                            <div class="col-12">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">電子郵箱</span>
+                                    <input type="text" class="form-control" value="{{ $user->email }}"
+                                        name="email" disabled>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
