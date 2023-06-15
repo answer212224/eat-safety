@@ -16,6 +16,28 @@
             @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
             <link rel="stylesheet" href="{{ asset('plugins/stepper/bsStepper.min.css') }}">
 
+            <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
+            @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
+            @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
+
+            <link rel="stylesheet" type="text/css"
+                href="{{ asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}">
+            @vite(['resources/scss/light/plugins/bootstrap-touchspin/custom-jquery.bootstrap-touchspin.min.scss'])
+            @vite(['resources/scss/dark/plugins/bootstrap-touchspin/custom-jquery.bootstrap-touchspin.min.scss'])
+            <style>
+                input[type="number"]::-webkit-inner-spin-button,
+                input[type="number"]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+
+                /* 隱藏输入框默认样式 */
+                input[type="number"] {
+                    -moz-appearance: textfield;
+                    /* Firefox */
+                }
+            </style>
+
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
             <!-- END GLOBAL MANDATORY STYLES -->
@@ -26,7 +48,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
                         <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">開始稽核</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ $task->category }}</li>
                     </ol>
                 </nav>
             </div>
@@ -71,60 +93,69 @@
                                     </div>
                                 </div>
 
+                                @if ($task->category == '清潔檢查')
+                                    <form action="{{ route('task-clear-defect-store', ['task' => $task->id]) }}"
+                                        method="post" enctype="multipart/form-data">
+                                    @else
+                                        <form action="{{ route('task-defect-store', ['task' => $task->id]) }}"
+                                            method="post" enctype="multipart/form-data">
+                                @endif
 
-                                <form action="{{ route('task-defect-store', ['task' => $task->id]) }}" method="post"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="bs-stepper-content">
-                                        <div id="defaultStep-one" class="content" role="tabpanel">
+                                @csrf
+                                <div class="bs-stepper-content">
+                                    <div id="defaultStep-one" class="content" role="tabpanel">
 
-                                            {{-- 上傳圖片 --}}
-                                            <div class="multiple-file-upload">
-                                                <label for="filepond">上傳照片</label>
-                                                <input type="file" class="file-upload-multiple" name="filepond[]"
-                                                    multiple data-allow-reorder="true" data-max-file-size="4MB"
-                                                    accept="image/png, image/jpeg, image/gif, image/jpg"
-                                                    data-max-files="2" id="inputImg">
-                                            </div>
-
-
-                                            <div class="button-action mt-5 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3" disabled>上一步</a>
-                                                <a class="btn btn-secondary btn-nxt">下一步</a>
-                                            </div>
+                                        {{-- 上傳圖片 --}}
+                                        <div class="multiple-file-upload">
+                                            <label for="filepond">上傳照片</label>
+                                            <input type="file" class="file-upload-multiple" name="filepond[]"
+                                                multiple data-allow-reorder="true" data-max-file-size="4MB"
+                                                accept="image/png, image/jpeg, image/gif, image/jpg" data-max-files="2"
+                                                id="inputImg">
                                         </div>
 
-                                        <div id="defaultStep-two" class="content" role="tabpanel">
 
-                                            <div class="form-group mb-4">
-                                                <label for="workspace">工作區</label>
-                                                <select class="form-select" name="workspace" id="inputWorkspace">
-                                                    @foreach ($task->restaurant->restaurantWorkspaces as $restaurantWorkspace)
-                                                        <option value="{{ $restaurantWorkspace->id }}">
-                                                            {{ $restaurantWorkspace->area }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-
-                                            <div class="button-action mt-5 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                                <a class="btn btn-secondary btn-nxt">下一步</a>
-                                            </div>
+                                        <div class="button-action mt-5 text-center">
+                                            <a class="btn btn-secondary btn-prev me-3" disabled>上一步</a>
+                                            <a class="btn btn-secondary btn-nxt">下一步</a>
                                         </div>
-                                        <div id="defaultStep-three" class="content" role="tabpanel">
+                                    </div>
 
-                                            <livewire:defect-select />
+                                    <div id="defaultStep-two" class="content" role="tabpanel">
+
+                                        <div class="form-group mb-4">
+                                            <label for="workspace">工作區</label>
+                                            <select class="form-select" name="workspace" id="inputWorkspace">
+                                                @foreach ($task->restaurant->restaurantWorkspaces as $restaurantWorkspace)
+                                                    <option value="{{ $restaurantWorkspace->id }}">
+                                                        {{ $restaurantWorkspace->area }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
 
-                                            <div class="button-action mt-3 text-center">
-                                                <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                                <button class="btn btn-success me-3" id="submitBtn">提交</button>
-                                            </div>
+                                        <div class="button-action mt-5 text-center">
+                                            <a class="btn btn-secondary btn-prev me-3">上一步</a>
+                                            <a class="btn btn-secondary btn-nxt">下一步</a>
+                                        </div>
+                                    </div>
+                                    <div id="defaultStep-three" class="content" role="tabpanel">
+                                        @if ($task->category == '清潔檢查')
+                                            <livewire:cleaning-select :task="$task" />
+                                        @else
+                                            <livewire:defect-select :task="$task" />
+                                        @endif
 
+
+
+                                        <div class="button-action mt-3 text-center">
+                                            <a class="btn btn-secondary btn-prev me-3">上一步</a>
+                                            <button class="btn btn-success me-3" id="submitBtn">提交</button>
                                         </div>
 
                                     </div>
+
+                                </div>
                                 </form>
                             </div>
 

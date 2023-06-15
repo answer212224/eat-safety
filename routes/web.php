@@ -48,10 +48,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('task-delete');
             // 稽核任務列表
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
-            // 開始稽核
+            // 食安稽核或清檢稽核
             Route::get('/{task}/create', [TaskController::class, 'create'])->name('task-create');
-            // 稽核員儲存缺失
+            // 稽核員食安稽核儲存缺失
             Route::post('/{task}/defect', [DefectController::class, 'store'])->name('task-defect-store');
+            // 稽核員清檢稽核儲存缺失
+            Route::post('/{task}/clear-defect', [DefectController::class, 'clearStore'])->name('task-clear-defect-store');
             // 稽核員編輯缺失
             Route::get('/{taskHasDefect}/defect/edit', [DefectController::class, 'edit'])->name('task-defect-edit');
             // 稽核員編輯缺失
@@ -66,8 +68,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
             // 開始專案
             Route::post('{task}/project/check', [TaskController::class, 'projectCheckSubmit'])->name('task-project-submit');
-            // 查看此任務自己稽核的缺失
+            // 查看此任務自己食安稽核缺失
             Route::get('{task}/defect/owner', [DefectController::class, 'owner'])->name('task-defect-owner');
+            // 查看此任務自己清檢稽核缺失
+            Route::get('{task}/clear-defect/owner', [DefectController::class, 'clearOwner'])->name('task-clear-defect-owner');
             // 主管核對缺失
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
             // 主管核對簽名

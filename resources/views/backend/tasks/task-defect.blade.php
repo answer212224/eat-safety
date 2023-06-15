@@ -15,11 +15,11 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
-                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核任務列表</a></li>
                 @if (Request::routeIs('task-defect-show'))
                     <li class="breadcrumb-item active" aria-current="page">主管核對</li>
                 @else
-                    <li class="breadcrumb-item active" aria-current="page">查看缺失</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
                 @endif
             </ol>
         </nav>
@@ -40,28 +40,48 @@
                     @foreach ($defects as $taskHasDefect)
                         <div class="card style-2 mb-4">
                             @foreach ($taskHasDefect->images as $image)
-                                <a href="{{ asset('storage/' . $image) }}"><img src="{{ asset('storage/' . $image) }}"
-                                        class="card-img-top my-1" alt="..."></a>
+                                <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1" alt="...">
                             @endforeach
+                            // TODO: 還沒做編輯
+                            @if ($task->category == '清潔檢查')
+                                <a href="">
+                                    <div class="card-body px-0 pb-0">
 
-                            <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
-                                <div class="card-body px-0 pb-0">
-                                    <h5 class="card-title mb-3">缺失分類 : {{ $taskHasDefect->defect->group }}</h5>
-                                    <h6>子項目 : {{ $taskHasDefect->defect->title }}</h6>
-                                    <p>稽核標準 : {{ $taskHasDefect->defect->description }}</p>
-                                    <p>報告呈現說明 : {{ $taskHasDefect->defect->report_description }}</p>
-                                    <p class="media-heading mb-1">扣分 : {{ $taskHasDefect->defect->deduct_point }}</p>
-                                    <div class="media mt-4 mb-0 pt-1">
-                                        {{-- <img src="" class="card-media-image me-3" alt=""> --}}
-                                        <div class="media-body">
+                                        <p>主項目 : {{ $taskHasDefect->clearDefect->main_item }}</p>
+                                        <p>次項目 : {{ $taskHasDefect->clearDefect->sub_item }}</p>
+                                        <p>缺失說明 : {{ collect($taskHasDefect->description)->implode('、') }}</p>
+                                        <p>數量 : {{ $taskHasDefect->amount }}</p>
+                                        <p>忽略扣分 : {{ $taskHasDefect->is_ignore ? '是' : '否' }}</p>
+                                        <p>備註 : {{ $taskHasDefect->memo }}</p>
 
-                                            <p class="media-heading mb-1">同仁 : {{ $taskHasDefect->user->name }}</p>
-                                            <p class="media-text">時間 : {{ $taskHasDefect->updated_at }}</p>
+                                        <div class="media mt-4 mb-0 pt-1">
+                                            <div class="media-body">
+                                                <p class="media-heading mb-1">同仁 : {{ $taskHasDefect->user->name }}</p>
+                                                <p class="media-text">時間 : {{ $taskHasDefect->updated_at }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-
+                                </a>
+                            @else
+                                <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                    <div class="card-body px-0 pb-0">
+                                        <p>缺失分類 : {{ $taskHasDefect->defect->group }}</p>
+                                        <p>子項目 : {{ $taskHasDefect->defect->title }}</p>
+                                        <p>稽核標準 : {{ $taskHasDefect->defect->description }}</p>
+                                        <p>報告呈現說明 : {{ $taskHasDefect->defect->report_description }}</p>
+                                        <p class="media-heading mb-1">扣分 : {{ $taskHasDefect->defect->deduct_point }}
+                                        </p>
+                                        <p>忽略扣分 : {{ $taskHasDefect->is_ignore ? '是' : '否' }}</p>
+                                        <p>備註 : {{ $taskHasDefect->memo }}</p>
+                                        <div class="media mt-4 mb-0 pt-1">
+                                            <div class="media-body">
+                                                <p class="media-heading mb-1">同仁 : {{ $taskHasDefect->user->name }}</p>
+                                                <p class="media-text">時間 : {{ $taskHasDefect->updated_at }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endif
 
                         </div>
                     @endforeach

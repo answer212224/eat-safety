@@ -43,7 +43,7 @@
     <div class="form-check form-check-danger form-check-inline">
         <input class="form-check-input" type="checkbox" id="form-check-danger" name="is_ignore">
         <label class="form-check-label" for="form-check-danger">
-            是否忽略扣分
+            忽略扣分
         </label>
     </div>
 

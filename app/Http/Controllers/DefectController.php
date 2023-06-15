@@ -78,6 +78,47 @@ class DefectController extends Controller
         }
     }
 
+    public function clearStore(Task $task, Request $request)
+    {
+        $path = [];
+
+        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+
+        if (isset($request->filepond[0])) {
+            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            array_push($path, $filePath0);
+            if (isset($request->filepond[1])) {
+                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                array_push($path, $filePath1);
+            }
+        }
+
+        if (empty($request->filepond) || empty($request->workspace) || empty($request->clear_defect_id)) {
+            alert()->warning('請確認', '請填寫完整資料');
+            return back();
+        }
+
+
+        $task->update([
+            'status' => 'processing',
+        ]);
+
+        $task->taskHasClearDefects()->create([
+            'user_id' => auth()->user()->id,
+            'clear_defect_id' => $request->clear_defect_id,
+            'restaurant_workspace_id' => $request->workspace,
+            'images' => $path,
+            'description' => $request->description,
+            'is_ignore' => $request->is_ignore ? 1 : 0,
+            'amount' => $request->demo3_21,
+            'memo' => $request->memo,
+        ]);
+        alert()->success('成功', '缺失已新增');
+        return back();
+    }
+
     public function show(Task $task)
     {
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
@@ -186,9 +227,29 @@ class DefectController extends Controller
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'defectsGroup' => $defectsGroup,
-            'title' => '查看自己缺失'
+            'title' => '查看食安缺失'
         ]);
     }
+
+    public function clearOwner(Task $task)
+    {
+
+        if ($task->taskUsers->where('user_id', auth()->user()->id)->first()->is_completed) {
+            alert()->error('錯誤', '您已經完成該稽核，請取消完成稽核狀態後再開始稽核');
+            return back();
+        }
+
+        $defectsGroup = $task->taskHasClearDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
+
+
+
+        return view('backend.tasks.task-defect', [
+            'task' => $task,
+            'defectsGroup' => $defectsGroup,
+            'title' => '查看清檢缺失'
+        ]);
+    }
+
 
     public function import(Request $request)
     {

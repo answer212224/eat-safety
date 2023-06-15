@@ -26,6 +26,11 @@ class Task extends Model
         return $this->hasMany(TaskHasDefect::class);
     }
 
+    public function taskHasClearDefects()
+    {
+        return $this->hasMany(TaskHasClearDefect::class);
+    }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('is_completed');

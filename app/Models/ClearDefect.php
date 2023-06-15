@@ -9,9 +9,15 @@ class ClearDefect extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'effective_date',
-        'main_item',
-        'sub_item',
-    ];
+    protected $guarded = [];
+
+    public static function getDistinctMainItems($latestDefect)
+    {
+        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->distinct()->get(['main_item']);
+    }
+
+    public static function getsubItemsByMainItem($mainItem, $latestDefect)
+    {
+        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('main_item', $mainItem)->get();
+    }
 }

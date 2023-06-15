@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsDemoSeeder::class,
             DefectSeeder::class,
+            ClearDefectSeeder::class,
             // MealSeeder::class,
             ProjectSeeder::class,
         ]);

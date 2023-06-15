@@ -39,7 +39,7 @@
     </div>
 
     <div class="col-md-12">
-        <div class="form-group mt-3">
+        <div class="form-group mt-3" wire:ignore>
             <label class="form-label">選擇分店代號</label>
             <select class="form-control" wire:model='restaurant' name="restaurant_id" placeholder="選擇分店代號..."
                 autocomplete="off" id="select-sid" required>
