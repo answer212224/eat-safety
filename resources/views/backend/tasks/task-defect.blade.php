@@ -42,7 +42,7 @@
                             @foreach ($taskHasDefect->images as $image)
                                 <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1" alt="...">
                             @endforeach
-                            // TODO: 還沒做編輯
+                            // TODO: 還沒做清檢編輯
                             @if ($task->category == '清潔檢查')
                                 <a href="">
                                     <div class="card-body px-0 pb-0">

@@ -36,12 +36,14 @@
 
     <div class="form-group my-3">
         <label for="description">備註</label>
-        <input type="text" class="form-control" name="memo" aria-label="Username" value="">
+        <input type="text" class="form-control" name="memo" aria-label="Username"
+            @if ($taskHasDefect) value="{{ $taskHasDefect->memo }}" @endif>
     </div>
 
 
     <div class="form-check form-check-danger form-check-inline">
-        <input class="form-check-input" type="checkbox" id="form-check-danger" name="is_ignore">
+        <input class="form-check-input" type="checkbox" id="form-check-danger" name="is_ignore"
+            @if ($taskHasDefect && $taskHasDefect->is_ignore) checked @endif>
         <label class="form-check-label" for="form-check-danger">
             忽略扣分
         </label>
