@@ -131,13 +131,13 @@ class TaskController extends Controller
         $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
-            if ($task->status == 'processing') {
+            if ($task->status == 'pending') {
                 $status = '未稽核';
-            } elseif ($task->status == 'pedding') {
+            } elseif ($task->status == 'processing') {
                 $status = '稽核中';
             } elseif ($task->status == 'pending_approval') {
                 $status = '待核對';
-            } else {
+            } elseif ($task->status == 'completed') {
                 $status = '已完成';
             }
             $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $status;
