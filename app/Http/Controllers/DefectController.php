@@ -157,9 +157,50 @@ class DefectController extends Controller
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'defectsGroup' => $defectsGroup,
-            'title' => '主管核對缺失'
+            'title' => '主管食安核對缺失'
         ]);
     }
+
+    public function clearShow(Task $task)
+    {
+        // 檢查是否有餐點未採樣，如未採樣則判斷是否有原因
+        $isMealAllTaken = $task->meals->every(function ($value, $key) {
+            return $value->pivot->is_taken == 1 || $value->pivot->memo != null;
+        });
+
+        if (!$isMealAllTaken) {
+            alert()->warning('請確認', '尚有餐點未採樣，請說明原因後再進行下一步');
+            return back();
+        }
+
+        $isProjectAllChecked = $task->projects->every(function ($value, $key) {
+            return $value->pivot->is_checked == 1;
+        });
+
+        if (!$isProjectAllChecked) {
+            alert()->warning('請確認', '尚有專案未檢查，請等待完成後再進行下一步');
+            return back();
+        }
+
+        $isComplete = $task->taskUsers->pluck('is_completed');
+        $isComplete = $isComplete->every(function ($value, $key) {
+            return $value == 1;
+        });
+
+        if (!$isComplete) {
+            alert()->warning('請確認', '尚有稽核員未完成稽核，請等待完成後再進行下一步');
+            return back();
+        }
+
+        $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
+
+        return view('backend.tasks.task-defect', [
+            'task' => $task,
+            'defectsGroup' => $defectsGroup,
+            'title' => '主管清檢核對缺失'
+        ]);
+    }
+
 
     public function edit(TaskHasDefect $taskHasDefect)
     {

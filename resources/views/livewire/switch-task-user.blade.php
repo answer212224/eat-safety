@@ -81,8 +81,17 @@
                                     專案執行</a>
                             @endif
                         @endif
-                        <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
-                            主管核對</a>
+                        @if ($task->category == '食安及5S')
+                            <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
+                                主管食安核對</a>
+                        @elseif($task->category == '清潔檢查')
+                            <a class="dropdown-item" href="{{ route('task-clear-defect-show', ['task' => $task]) }}">
+                                主管清檢核對</a>
+                        @elseif($task->category == '餐點採樣')
+                            <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
+                                餐點採樣核對</a>
+                        @endif
+
                     </div>
                 </div>
             </div>

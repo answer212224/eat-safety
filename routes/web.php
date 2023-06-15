@@ -68,12 +68,14 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
             // 開始專案
             Route::post('{task}/project/check', [TaskController::class, 'projectCheckSubmit'])->name('task-project-submit');
-            // 查看此任務自己食安稽核缺失
+            // 查看此任務自己食安稽核缺失 使用同一個view 回傳不同的資料
             Route::get('{task}/defect/owner', [DefectController::class, 'owner'])->name('task-defect-owner');
-            // 查看此任務自己清檢稽核缺失
+            // 查看此任務自己清檢稽核缺失 使用同一個view 回傳不同的資料
             Route::get('{task}/clear-defect/owner', [DefectController::class, 'clearOwner'])->name('task-clear-defect-owner');
-            // 主管核對缺失
+            // 主管食安核對缺失 使用同一個view 回傳不同的資料
             Route::get('{task}/defect', [DefectController::class, 'show'])->name('task-defect-show');
+            // 主管清檢核對缺失 使用同一個view 回傳不同的資料
+            Route::get('{task}/clear-defect', [DefectController::class, 'clearShow'])->name('task-clear-defect-show');
             // 主管核對簽名
             Route::post('{task}/sign', [TaskController::class, 'sign'])->name('task-sign');
         });

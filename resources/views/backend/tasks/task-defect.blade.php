@@ -87,7 +87,7 @@
                     @endforeach
                 </div>
             @endforeach
-            @if (Request::routeIs('task-defect-show'))
+            @if (Request::routeIs('task-defect-show') || Request::routeIs('task-clear-defect-show'))
                 <div class="widget-content widget-content-area blog-create-section mt-4">
 
                     <h5 class="mb-4">採樣 {{ $task->meals->count() }} 項: </h5>
@@ -119,7 +119,7 @@
 
         </div>
 
-        @if (Request::routeIs('task-defect-show'))
+        @if (Request::routeIs('task-defect-show') || Request::routeIs('task-clear-defect-show'))
             <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
                 <div class="widget-content widget-content-area blog-create-section">
                     <div class="row">
@@ -127,13 +127,14 @@
                             @csrf
                             <div class="form-group mb-4">
                                 <label for="formGroupExampleInput">外場主管</label>
-                                <input type="text" name="inner_manager" class="form-control"
-                                    value="{{ $task->inner_manager }}" id="formGroupExampleInput" placeholder="主管姓名"
+                                <input type="text" name="outer_manager" class="form-control"
+                                    value="{{ $task->outer_manager }}" id="formGroupExampleInput" placeholder="主管姓名"
                                     required>
                             </div>
+
                             <div class="form-group mb-4">
                                 <label for="formGroupExampleInput2">內場主管</label>
-                                <input type="text" name="outer_manager" value="{{ $task->outer_manager }}"
+                                <input type="text" name="inner_manager" value="{{ $task->inner_manager }}"
                                     class="form-control" id="formGroupExampleInput2" placeholder="主管姓名" required>
                             </div>
 
