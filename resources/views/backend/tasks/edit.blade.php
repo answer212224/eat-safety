@@ -24,7 +24,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
                     <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-assign') }}">指派稽核</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">稽核詳細</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
                 </ol>
             </nav>
         </div>
@@ -152,7 +152,7 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">稽核日期</label>
-                                        <input id="event-start-date" name="task_date" type="date"
+                                        <input id="event-start-date" name="task_date" type="datetime-local"
                                             class="form-control" disabled value="{{ $task->task_date }}">
                                     </div>
 
