@@ -86,14 +86,12 @@
 
 
                     locale: 'zh-tw',
-                    @can('create-task')
-                        customButtons: {
-                            myCustomButton: {
-                                text: '新增稽核',
-                                click: calendarAddEvent
-                            }
-                        },
-                    @endcan
+                    customButtons: {
+                        myCustomButton: {
+                            text: '新增稽核',
+                            click: calendarAddEvent
+                        }
+                    },
 
                     eventClassNames: function({
                         event: calendarEvent
@@ -105,13 +103,13 @@
                         ];
                     },
 
-
-                    headerToolbar: {
-                        left: 'prev next myCustomButton',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                    },
-
+                    @can('create-task')
+                        headerToolbar: {
+                            left: 'prev next myCustomButton',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                        },
+                    @endcan
 
                     buttonText: {
                         today: '今天',
