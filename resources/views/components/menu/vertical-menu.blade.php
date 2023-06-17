@@ -228,7 +228,7 @@
             </li>
 
             {{-- 圖表 --}}
-            <li class="menu {{ Request::is('*/data/chart/*') ? 'active' : '' }}">
+            {{-- <li class="menu {{ Request::is('*/data/chart/*') ? 'active' : '' }}">
                 <a href="#chart" data-bs-toggle="collapse"
                     aria-expanded="{{ Request::is('*/data/chart/*') ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
@@ -255,7 +255,7 @@
                     </li>
 
                 </ul>
-            </li>
+            </li> --}}
         </ul>
 
     </nav>

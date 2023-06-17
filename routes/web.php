@@ -147,6 +147,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
                 // 門市工作區站
                 Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
+                // 門市的圖表
+                Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');
             });
 
             Route::prefix('users')->group(function () {

@@ -18,7 +18,7 @@ class Restaurant extends Model
 
     public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->hasMany(Task::class);
     }
 
     public static function getDistinctBrands()

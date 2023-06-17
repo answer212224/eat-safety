@@ -69,7 +69,13 @@
                             <tbody>
                                 @foreach ($restaurants as $restaurant)
                                     <tr>
-                                        <td>{{ $restaurant->sid }}</td>
+                                        <td><a href="{{ route('restaurant-chart', ['restaurant' => $restaurant]) }}">{{ $restaurant->sid }}<svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-activity">
+                                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                                </svg></a></td>
                                         <td>{{ $restaurant->brand }}</td>
                                         <td>{{ $restaurant->shop }}</td>
                                         <td>{{ $restaurant->location }}</td>
