@@ -276,29 +276,32 @@
                         </div>
                     </div>
                 </div>
-                @can('delete-task')
-                    <div id="Action" class="col-lg-12 layout-spacing mt-4">
-                        <div class="statbox widget box box-shadow">
-                            <div class="widget-header">
-                                <div class="row">
-                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                        <h4>操作</h4>
-                                    </div>
+
+                <div id="Action" class="col-lg-12 layout-spacing mt-4">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>操作</h4>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="widget-content widget-content-area">
-                                <div class="row">
+                        <div class="widget-content widget-content-area">
+                            <div class="row">
+                                @can('update-task')
                                     <button type="submit" class="btn btn-success mb-3">更新</button>
+                                @endcan
+                                <a href="{{ url()->previous() }}" class="btn btn-dark">上一頁</a>
+                                @can('delete-task')
                                     <a href="{{ route('task-delete', ['task' => $task]) }}" class="btn btn-danger"
                                         data-confirm-delete="true">刪除</a>
-                                </div>
+                                @endcan
                             </div>
-
-
                         </div>
                     </div>
-                @endcan
+                </div>
+
             </div>
         </form>
 
