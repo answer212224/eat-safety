@@ -98,13 +98,14 @@ class RestaurantController extends Controller
             return $task;
         });
 
+
+
         // 依照分類裡的月份排序
         $tasks = $tasks->map(function ($task) {
             return $task->sortBy(function ($item, $key) {
                 return $key;
             });
         });
-
 
         return view('backend.restaurants.chart', [
             'title' => $restaurant->brand . $restaurant->shop,

@@ -115,24 +115,28 @@
                                         width: 2,
                                         colors: ['transparent']
                                     },
-                                    series: [{
-                                            name: '食安及5S',
-                                            @isset($tasks['食安及5S'])
+                                    series: [
+                                        @isset($tasks['食安及5S'])
+                                            {
+                                                name: '食安及5S',
                                                 data: @json($tasks['食安及5S']->values())
-                                            @endisset
-                                        },
-                                        {
-                                            @isset($tasks['清潔檢查'])
+
+                                            },
+                                        @endisset
+                                        @isset($tasks['清潔檢查'])
+                                            {
                                                 name: '清潔檢查',
                                                 data: @json($tasks['清潔檢查']->values())
-                                            @endisset
-                                        },
-                                        {
-                                            @isset($tasks['餐點採樣'])
+
+                                            },
+                                        @endisset
+                                        @isset($tasks['餐點採樣'])
+                                            {
                                                 name: '餐點採樣',
                                                 data: @json($tasks['餐點採樣']->values())
-                                            @endisset
-                                        }
+
+                                            },
+                                        @endisset
                                     ],
                                     xaxis: {
                                         categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月',
