@@ -21,7 +21,7 @@ class DefectController extends Controller
             return $item;
         });
         return view('backend.defects.index', [
-            'title' => '缺失資料',
+            'title' => '食安缺失資料',
             'defects' => $defects,
         ]);
     }
@@ -211,7 +211,7 @@ class DefectController extends Controller
 
         return view('backend.tasks.defects.edit', [
             'taskHasDefect' => $taskHasDefect,
-            'title' => '編輯缺失'
+            'title' => '編輯食安缺失'
         ]);
     }
 

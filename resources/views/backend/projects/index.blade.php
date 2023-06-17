@@ -25,7 +25,7 @@
                         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="#">資料</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">專案資料</li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -78,10 +78,8 @@
                                                 <livewire:switch-project-status :project="$project" />
                                             </td>
                                             <td>
-                                                <a href="{{ route('meal-edit', $project->id) }}"
-                                                    class="badge badge-light-primary">編輯</a>
-                                                <a href="{{ route('meal-destroy', $project->id) }}"
-                                                    class="badge badge-light-danger">刪除</a>
+                                                <a href="" class="badge badge-light-primary">編輯</a>
+                                                <a href="" class="badge badge-light-danger">刪除</a>
                                             </td>
                                         @endcan
                                     </tr>

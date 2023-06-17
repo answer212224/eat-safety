@@ -10,7 +10,7 @@ class RestaurantController extends Controller
     public function index()
     {
         return view('backend.restaurants.index', [
-            'title' => '餐廳資料',
+            'title' => '門市資料',
             'restaurants' => Restaurant::all(),
         ]);
     }

@@ -10,7 +10,7 @@ class ClearDefectController extends Controller
 {
     public function index()
     {
-        $title = '清檢缺失';
+        $title = '清檢缺失資料';
         return view('backend.clear_defects.index', [
             'title' => $title,
             'clearDefects' => \App\Models\ClearDefect::get(),
@@ -31,7 +31,7 @@ class ClearDefectController extends Controller
 
         try {
             Excel::import(new ClearDefectImport, request()->file('excel'));
-            alert()->success('成功', '餐點採樣匯入成功');
+            alert()->success('成功', '清檢缺失資料匯入成功');
             return back();
         } catch (\Exception $e) {
             alert()->error('錯誤', $e->getMessage());

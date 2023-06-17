@@ -22,7 +22,7 @@
 
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="#">資料</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">門市資料</li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
 
                             </ol>
                         </nav>

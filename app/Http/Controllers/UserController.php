@@ -15,7 +15,7 @@ class UserController extends Controller
     {
 
         return view('backend.users.index', [
-            'title' => '使用者資料',
+            'title' => '同仁資料',
             'users' => User::all(),
         ]);
     }
@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         $roles = ModelsRole::all();
         return view('backend.users.edit', [
-            'title' => '使用者資料',
+            'title' => '同仁資料編輯',
             'user' => $user,
             'roles' => $roles,
         ]);

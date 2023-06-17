@@ -26,7 +26,7 @@
                         <li class="breadcrumb-item"><a href="#">資料</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            {{ $restaurant->brand }}{{ $restaurant->shop }}工作站</li>
+                            {{ $restaurant->brand }}{{ $restaurant->shop }}{{ $title }}</li>
                     </ol>
                 </nav>
             </div>

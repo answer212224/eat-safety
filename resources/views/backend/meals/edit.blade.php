@@ -20,7 +20,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">資料</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('meal-index') }}">餐點採樣資料</a></li>
-                <li class="breadcrumb-item active" aria-current="page">編輯</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
     </div>
