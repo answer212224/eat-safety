@@ -157,7 +157,10 @@
                         Request::routeIs('task-defect-show') ||
                         Request::routeIs('task-meal-check') ||
                         Request::routeIs('task-project-check') ||
-                        Request::routeIs('task-defect-edit')
+                        Request::routeIs('task-defect-edit') ||
+                        Request::routeIs('task-clear-defect-edit') ||
+                        Request::routeIs('task-defect-owner') ||
+                        Request::routeIs('task-clear-defect-owner')
                             ? 'active'
                             : '' }}">
                         <a href="{{ route('task-list') }}"> 稽核任務列表 </a>

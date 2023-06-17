@@ -8,14 +8,14 @@ use Livewire\Component;
 
 class DefectSelect extends Component
 {
-    public $group = null;
-    public $title = null;
-    public $description = null;
+    public $group;
+    public $title;
+    public $description;
     public $taskHasDefect;
 
     public function mount()
     {
-        if (isset($this->taskHasDefect)) {
+        if ($this->taskHasDefect) {
             $this->group = $this->taskHasDefect->defect->group;
             $this->title = $this->taskHasDefect->defect->title;
             $this->description = $this->taskHasDefect->defect->id;

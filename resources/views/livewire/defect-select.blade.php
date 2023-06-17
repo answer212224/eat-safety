@@ -1,5 +1,4 @@
 <div class="">
-
     <div class="form-group">
         <label for="group">缺失分類</label>
         <select class="form-select" wire:model="group">
@@ -14,7 +13,6 @@
         <label for="title">子項目</label>
         <select class="form-select" wire:model="title">
             <option value="">請選擇...</option>
-            @dump($distinctGroups)
             @foreach ($distinByGroupsTitles as $distinctTitle)
                 <option value={{ $distinctTitle }}>{{ $distinctTitle }}</option>
             @endforeach

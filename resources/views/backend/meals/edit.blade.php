@@ -123,7 +123,7 @@
                 <div class="statbox widget box box-shadow">
                     <div class="widget-content widget-content-area">
                         <button type="submit" class="btn btn-outline-success w-100 mb-3">更新</button>
-                        <a class="btn btn-outline-dark w-100" href="{{ route('meal-index') }}">上一頁</a>
+                        <a class="btn btn-outline-dark w-100" href="{{ url()->previous() }}">上一頁</a>
                     </div>
                 </div>
             </div>

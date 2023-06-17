@@ -42,9 +42,8 @@
                             @foreach ($taskHasDefect->images as $image)
                                 <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1" alt="...">
                             @endforeach
-                            // TODO: 還沒做清檢編輯
                             @if ($task->category == '清潔檢查')
-                                <a href="">
+                                <a href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
                                     <div class="card-body px-0 pb-0">
 
                                         <p>主項目 : {{ $taskHasDefect->clearDefect->main_item }}</p>
@@ -148,7 +147,7 @@
         <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-dark w-100">上一頁</a>
                 </div>
             </div>
         </div>

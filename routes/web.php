@@ -54,12 +54,18 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::post('/{task}/defect', [DefectController::class, 'store'])->name('task-defect-store');
             // 稽核員清檢稽核儲存缺失
             Route::post('/{task}/clear-defect', [DefectController::class, 'clearStore'])->name('task-clear-defect-store');
-            // 稽核員編輯缺失
+            // 稽核員食安編輯缺失
             Route::get('/{taskHasDefect}/defect/edit', [DefectController::class, 'edit'])->name('task-defect-edit');
-            // 稽核員編輯缺失
+            // 稽核員清檢編輯缺失
+            Route::get('/{taskHasDefect}/clear-defect/edit', [DefectController::class, 'clearEdit'])->name('task-clear-defect-edit');
+            // 稽核儲存食安編輯缺失
             Route::post('/{taskHasDefect}/defect/update', [DefectController::class, 'update'])->name('task-defect-update');
-            // 稽核員刪除缺失
+            // 稽核儲存清檢編輯缺失
+            Route::post('/{taskHasDefect}/clear-defect/update', [DefectController::class, 'clearUpdate'])->name('task-clear-defect-update');
+            // 稽核員食安刪除缺失
             Route::post('/{taskHasDefect}/defect/delete', [DefectController::class, 'delete'])->name('task-defect-delete');
+            // 稽核員清檢刪除缺失
+            Route::post('/{taskHasDefect}/clear-defect/delete', [DefectController::class, 'clearDelete'])->name('task-clear-defect-delete');
             // 開始採樣
             Route::get('/{task}/meal/check', [TaskController::class, 'mealCheck'])->name('task-meal-check');
             // 開始採樣

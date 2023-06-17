@@ -12,7 +12,7 @@
 
     <div class="form-group my-3">
         <label>子項目</label>
-        <select class="form-select" name="clear_defect_id" id="inputSelect">
+        <select class="form-select" name="clear_defect_id" id="inputSelect" wire:model="subItem">
             <option value="">請選擇...</option>
             @foreach ($subItems as $key => $subItem)
                 <option value="{{ $key }}">{{ $subItem }}</option>
@@ -25,27 +25,36 @@
         <select id="select-state" name="description[]" multiple placeholder="選擇缺失或自行輸入(可複選)" autocomplete="off"
             name=description>
             <option value="">選擇缺失或自行輸入(可複選)</option>
-            <option value="積垢不潔">積垢不潔</option>
-            <option value="積塵">積塵</option>
-            <option value="留有食渣">留有食渣</option>
-            <option value="留有病媒屍體">留有病媒屍體</option>
+            @if ($taskHasDefect)
+                @foreach ($taskHasDefect->description as $description)
+                    <option selected value="{{ $description }}">{{ $description }}</option>
+                @endforeach
+            @else
+                <option value="積垢不潔">積垢不潔</option>
+                <option value="積塵">積塵</option>
+                <option value="留有食渣">留有食渣</option>
+                <option value="留有病媒屍體">留有病媒屍體</option>
+            @endif
         </select>
     </div>
     <div class="form-group my-3" wire:ignore>
         <div>
             <label>數量</label>
-            <input id="demo3_21" type="number" value="1" name="demo3_21">
+            <input id="demo3_21" type="number" name="demo3_21"
+                @if ($taskHasDefect) value="{{ $taskHasDefect->amount }}" @else value="0" @endif>
         </div>
     </div>
 
     <div class="form-group my-3">
         <label>備註</label>
-        <input type="text" class="form-control" name="memo" aria-label="Username" value="">
+        <input type="text" class="form-control" name="memo" aria-label="Memo"
+            @if ($taskHasDefect) value="{{ $taskHasDefect->memo }}" @endif>
     </div>
 
 
     <div class="form-check form-check-danger form-check-inline">
-        <input class="form-check-input" type="checkbox" id="form-check-danger" name="is_ignore">
+        <input class="form-check-input" type="checkbox" id="form-check-danger" name="is_ignore"
+            @if ($taskHasDefect && $taskHasDefect->is_ignore) checked @endif>
         <label class="form-check-label" for="form-check-danger">
             忽略扣分
         </label>

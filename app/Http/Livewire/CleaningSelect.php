@@ -9,7 +9,16 @@ use App\Models\ClearDefect;
 class CleaningSelect extends Component
 {
     public $mainItem;
+    public $taskHasDefect;
+    public $subItem;
 
+    public function mount()
+    {
+        if ($this->taskHasDefect) {
+            $this->mainItem = $this->taskHasDefect->clearDefect->main_item;
+            $this->subItem = $this->taskHasDefect->clear_defect_id;
+        }
+    }
 
     public function render()
     {

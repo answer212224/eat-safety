@@ -6,6 +6,7 @@ use App\Imports\DefectsImport;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Defect;
+use App\Models\TaskHasClearDefect;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
@@ -215,9 +216,22 @@ class DefectController extends Controller
         ]);
     }
 
+    public function clearEdit(TaskHasClearDefect $taskHasDefect)
+    {
+
+        if ($taskHasDefect->task->status == 'completed') {
+            alert()->warning('請確認', '此任務已完成，無法編輯');
+            return back();
+        }
+
+        return view('backend.tasks.defects.edit', [
+            'taskHasDefect' => $taskHasDefect,
+            'title' => '編輯清檢缺失'
+        ]);
+    }
+
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
-        // dd($request->all());
         if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
             alert()->warning('請確認', '請填寫完整資料');
             return redirect();
@@ -243,11 +257,53 @@ class DefectController extends Controller
             'images' => $path,
         ]);
 
-        alert()->success('成功', '缺失已更新');
+        alert()->success('成功', '食安缺失已更新');
+        return back();
+    }
+
+    public function clearUpdate(TaskHasClearDefect $taskHasDefect, Request $request)
+    {
+        if (empty($request->workspace) || empty($request->clear_defect_id) || empty($request->filepond)) {
+            alert()->warning('請確認', '請填寫完整資料');
+            return redirect();
+        }
+        $path = [];
+        // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
+        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+
+        if (isset($request->filepond[0])) {
+            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            array_push($path, $filePath0);
+            if (isset($request->filepond[1])) {
+                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                array_push($path, $filePath1);
+            }
+        }
+
+        $taskHasDefect->update([
+            'clear_defect_id' => $request->clear_defect_id,
+            'restaurant_workspace_id' => $request->workspace,
+            'images' => $path,
+            'description' => $request->description,
+            'is_ignore' => $request->is_ignore ? 1 : 0,
+            'amount' => $request->demo3_21,
+            'memo' => $request->memo,
+        ]);
+
+        alert()->success('成功', '清檢缺失已更新');
         return back();
     }
 
     public function delete(TaskHasDefect $taskHasDefect)
+    {
+        $taskHasDefect->delete();
+        alert()->success('成功', '缺失已刪除');
+        return redirect()->route('task-list');
+    }
+
+    public function clearDelete(TaskHasClearDefect $taskHasDefect)
     {
         $taskHasDefect->delete();
         alert()->success('成功', '缺失已刪除');
