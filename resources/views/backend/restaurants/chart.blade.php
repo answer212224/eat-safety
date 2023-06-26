@@ -73,7 +73,7 @@
 
                                 var d_1options1 = {
                                     chart: {
-                                        height: 350,
+                                        height: 405,
                                         type: 'bar',
                                         toolbar: {
                                             show: false,
@@ -202,7 +202,7 @@
 
                                 var d_1options1 = {
                                     chart: {
-                                        height: 350,
+                                        height: 405,
                                         type: 'bar',
                                         toolbar: {
                                             show: false,
