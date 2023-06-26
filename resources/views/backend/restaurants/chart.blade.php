@@ -208,7 +208,7 @@
                                             show: false,
                                         }
                                     },
-                                    colors: ['#622bd7', '#ffbb44'],
+                                    colors: ['#622bd7', '#ffbb44', '#00ab55'],
                                     plotOptions: {
                                         bar: {
                                             horizontal: false,
@@ -237,24 +237,39 @@
                                         }
                                     },
                                     grid: {
-                                        borderColor: '#e0e6ed',
+                                        borderColor: '#191e3a',
                                     },
                                     stroke: {
                                         show: true,
                                         width: 2,
                                         colors: ['transparent']
                                     },
-                                    series: [{
-                                        name: 'Direct',
-                                        data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
-                                    }, {
-                                        name: 'Organic',
-                                        data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
-                                    }],
+                                    series: [
+                                        @isset($tasks['食安及5S'])
+                                            {
+                                                name: '食安及5S',
+                                                data: @json($tasks['食安及5S']->values())
+
+                                            },
+                                        @endisset
+                                        @isset($tasks['清潔檢查'])
+                                            {
+                                                name: '清潔檢查',
+                                                data: @json($tasks['清潔檢查']->values())
+
+                                            },
+                                        @endisset
+                                        @isset($tasks['餐點採樣'])
+                                            {
+                                                name: '餐點採樣',
+                                                data: @json($tasks['餐點採樣']->values())
+
+                                            },
+                                        @endisset
+                                    ],
                                     xaxis: {
-                                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-                                            'Oct',
-                                            'Nov', 'Dec'
+                                        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月',
+                                            '十一月', '十二月'
                                         ],
                                     },
                                     fill: {
