@@ -25,7 +25,7 @@
                     <x-widgets._w-chart-three
                         title="{{ today()->format('Y') }}年 {{ $restaurant->brand }}{{ $restaurant->shop }} 稽核任務每月數量" />
                 </div>
-                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
                     <livewire:restaurant-activites :restaurant="$restaurant" />
                 </div>
 
