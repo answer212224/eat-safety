@@ -137,7 +137,7 @@ class PermissionsDemoSeeder extends Seeder
             'name' => '開發人員',
             'department' => '資管部',
             'department_serial' => '001',
-            'status' => 1
+            'status' => 8
         ]);
         $user->assignRole($superAdmin);
     }

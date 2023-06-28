@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('restaurant_id');
-            $table->string('category');
+            $table->enum('category', ['食安及5S', '清潔檢查', '餐點採樣']);
             $table->dateTime('task_date');
             $table->enum('status', ['pending', 'processing', 'pending_approval', 'completed'])->default('pending');
             $table->string('inner_manager')->nullable();
