@@ -154,14 +154,23 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
+        $data['task_date'] = Carbon::parse($data['task_date']);
 
         foreach ($data['users'] as $userId) {
             $user = User::find($userId);
-
-            if ($user->tasks()->where('task_date', $data['task_date'])->where('category', $data['category'])->where('restaurant_id', $data['restaurant_id'])->exists()) {
+            // 如果該使用者已經有相同日期和相同店家和相同類別的任務，就不能新增
+            if ($user->tasks()->whereDate('task_date', $data['task_date'])->where('category', $data['category'])->where('restaurant_id', $data['restaurant_id'])->exists()) {
                 alert()->warning('無法新增', $user->name . '相同日期和相同店家和相同類別的任務');
                 return back();
+            }
+
+            // 如果該使用者新增的稽核任務的使用者當天有不同地區的任務，就要提醒
+            $userTasks = $user->tasks()->whereDate('task_date', $data['task_date'])->get();
+            foreach ($userTasks as $userTask) {
+
+                if ($userTask->restaurant->location != Restaurant::find($data['restaurant_id'])->location) {
+                    alert()->info('請確認', $user->name . '當天有不同地區的任務');
+                }
             }
         }
 
@@ -185,8 +194,7 @@ class TaskController extends Controller
             $task->projects()->attach($data['projects']);
         }
 
-
-        return back();
+        return redirect()->route('task-edit', $task->id);
     }
 
     public function edit(Task $task)
