@@ -34,6 +34,10 @@ class DefectsImport implements ToCollection
             ];
         });
 
+        // 額外新增2筆資料
+        $collection->push(['effective_date' => $collection[0]['effective_date'], 'group' => '待確認', 'title' => '待確認', 'category' => '待確認', 'description' => '待確認', 'deduct_point' => 0, 'report_description' => '待確認']);
+        $collection->push(['effective_date' => $collection[0]['effective_date'], 'group' => '待確認', 'title' => '待確認', 'category' => '待確認', 'description' => '其他', 'deduct_point' => 0, 'report_description' => '其他']);
+
         // 檢查食安缺失是否有該月份的稽核任務
         $taskHasDefects =  Task::whereHas('taskHasDefects.defect', function ($query) use ($collection) {
             $query->whereYear('effective_date', $collection[0]['effective_date'])
