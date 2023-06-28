@@ -199,8 +199,8 @@ class TaskController extends Controller
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
 
         $taskDate = Carbon::create($task->task_date);
-        $brandSid = Str::substr($task->restaurant->sid, 0, 3);
 
+        $brandSid = Str::substr($task->restaurant->sid, 0, 3);
 
         $optionMeals = Meal::whereYear('effective_date', $taskDate)
             ->whereMonth('effective_date', $taskDate)
@@ -212,6 +212,7 @@ class TaskController extends Controller
             ->where('sid', $brandSid)
             ->get();
 
+        // 這邊要用 merge，因為有些店家會有自己的餐點
         $meals = $defaltMeals->merge($optionMeals);
 
         // 這邊要用 groupBy，因為同一個區站會有多個缺陷

@@ -15,11 +15,13 @@ class MealsImport implements ToCollection
      */
     public function collection(Collection $collection)
     {
-
+        // 移除第一行
         $collection->shift();
+        // 移除空白行
         $collection = $collection->reject(function ($item) {
             return $item[0] == null;
         });
+        // 轉換日期格式
         $collection->transform(function ($item) {
             return [
                 'effective_date' => Date::excelToDateTimeObject($item[0]),
@@ -43,7 +45,6 @@ class MealsImport implements ToCollection
             $query->whereYear('effective_date', $collection[0]['effective_date'])
                 ->whereMonth('effective_date', $collection[0]['effective_date']);
         })->get();
-
 
         // 如有該月份的稽核任務，則不可更新該月份的餐點採樣資料
         if ($taskHasMeals->count() > 0) {

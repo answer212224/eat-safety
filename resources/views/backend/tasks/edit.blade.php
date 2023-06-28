@@ -292,7 +292,7 @@
                                 @can('update-task')
                                     <button type="submit" class="btn btn-success mb-3">更新</button>
                                 @endcan
-                                <a href="{{ url()->previous() }}" class="btn btn-dark">上一頁</a>
+                                <a href="{{ url()->previous() }}" class="btn btn-dark mb-3">上一頁</a>
                                 @can('delete-task')
                                     <a href="{{ route('task-delete', ['task' => $task]) }}" class="btn btn-danger"
                                         data-confirm-delete="true">刪除</a>
