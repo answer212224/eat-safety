@@ -78,8 +78,10 @@
                                                 <livewire:switch-project-status :project="$project" />
                                             </td>
                                             <td>
-                                                <a href="" class="badge badge-light-primary">編輯</a>
-                                                <a href="" class="badge badge-light-danger">刪除</a>
+                                                <a href="{{ route('project-edit', ['project' => $project]) }}"
+                                                    class="badge badge-light-primary">編輯</a>
+                                                <a class="badge badge-light-danger" data-confirm-delete="true"
+                                                    href="{{ route('project-destroy', ['project' => $project]) }}">刪除</a>
                                             </td>
                                         @endcan
                                     </tr>
@@ -109,14 +111,12 @@
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">名稱*</span>
-                                    <input type="text" class="form-control" placeholder="環境衛生" name="name"
-                                        required>
+                                    <input type="text" class="form-control" name="name" required>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">細項*</span>
-                                    <input type="text" class="form-control" placeholder="排水孔未封堵" name="description"
-                                        required>
+                                    <input type="text" class="form-control" name="description" required>
                                 </div>
 
 

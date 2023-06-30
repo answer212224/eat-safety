@@ -126,6 +126,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::get('/', [ProjectController::class, 'index'])->name('project-index');
                 // 新增專案執行資料
                 Route::post('/', [ProjectController::class, 'store'])->name('project-store');
+                // 專案資料編輯
+                Route::get('{project}/edit', [ProjectController::class, 'edit'])->name('project-edit');
+                // 專案資料更新
+                Route::put('/{project}', [ProjectController::class, 'update'])->name('project-update');
                 // 刪除專案執行資料
                 Route::delete('/{project}/destory', [ProjectController::class, 'destroy'])->name('project-destroy');
             });
