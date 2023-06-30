@@ -28,6 +28,16 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $title = '專案編輯';
+        // 如果有任務使用這個專案執行，就不給編輯
+        $tasks = Task::whereHas('projects', function ($query) use ($project) {
+            $query->where('project_id', $project->id);
+        })->get();
+
+        if ($tasks->count() > 0) {
+            alert()->error('錯誤', '此專案已經被使用，無法編輯');
+            return back();
+        }
+
         return view('backend.projects.edit', compact('title', 'project'));
     }
 
