@@ -200,15 +200,16 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $title = '編輯任務';
+        $score = 100;
 
         confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
 
         // 這邊要先 load 關聯，不然會有 N+1 問題
-        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals']);
+        $task = $task->load(['taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.user', 'meals']);
 
         $taskDate = Carbon::create($task->task_date);
 
-        $brandSid = Str::substr($task->restaurant->sid, 0, 3);
+        $brandSid = Str::substr($task->restaurant->sid, 0, 2);
 
         $optionMeals = Meal::whereYear('effective_date', $taskDate)
             ->whereMonth('effective_date', $taskDate)
@@ -223,9 +224,27 @@ class TaskController extends Controller
         // 這邊要用 merge，因為有些店家會有自己的餐點
         $meals = $defaltMeals->merge($optionMeals);
 
-        // 這邊要用 groupBy，因為同一個區站會有多個缺陷
-        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
-        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals'));
+
+
+
+        // 如果是食安及5S的任務，就要依照餐廳的 workspace 分類
+        if ($task->category == '食安及5S') {
+            $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+            // 排除忽略扣分，加總該任務底下所有的缺失扣分
+            $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
+            // 扣分
+            $score = $score + $sum;
+        } else {
+            $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
+            // 排除忽略扣分，加總該任務底下所有的缺失扣分乘上數量
+            $sum = $task->taskHasClearDefects->where('is_ignore', 0)->sum(function ($item) {
+                return $item->clearDefect->deduct_point * $item->amount;
+            });
+            // 扣分
+            $score = $score + $sum;
+        }
+
+        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals', 'score'));
     }
 
     public function update(Task $task, Request $request)

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('effective_date')->comment('啟用月份');
             $table->string('main_item')->comment('主項目');
             $table->string('sub_item')->comment('次項目');
+            $table->integer('deduct_point')->default(-2)->comment('扣分');
             $table->timestamps();
         });
     }

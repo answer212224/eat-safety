@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('task_id');
             $table->foreignId('clear_defect_id');
             $table->foreignId('restaurant_workspace_id');
-            $table->json('description');
+            $table->json('description')->nullable();
             $table->json('images');
             $table->integer('amount')->default(0);
             $table->string('memo')->nullable();

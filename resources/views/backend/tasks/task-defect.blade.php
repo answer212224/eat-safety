@@ -50,6 +50,8 @@
                                         <p>次項目 : {{ $taskHasDefect->clearDefect->sub_item }}</p>
                                         <p>缺失說明 : {{ collect($taskHasDefect->description)->implode('、') }}</p>
                                         <p>數量 : {{ $taskHasDefect->amount }}</p>
+                                        <p>扣分 : {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                        </p>
                                         <p>忽略扣分 : {{ $taskHasDefect->is_ignore ? '是' : '否' }}</p>
                                         <p>備註 : {{ $taskHasDefect->memo }}</p>
 

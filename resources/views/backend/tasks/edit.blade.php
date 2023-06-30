@@ -49,55 +49,47 @@
                 <div id="Task" class="col-lg-12 layout-spacing">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
-                            <div class="row">
-                                <h4>稽核任務狀態
-                                </h4>
-                                <div class='w-100'>
-                                    <div class="form-check form-check-secondary form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status" value="pending"
-                                            id="form-check-radio-pending"
-                                            @if ($task->status == 'pending') checked @endif>
-                                        <label class="form-check-label" for="form-check-radio-pending">
-                                            未稽核
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-warning form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status"
-                                            id="form-check-radio-processing" value="processing"
-                                            @if ($task->status == 'processing') checked @endif>
-                                        <label class="form-check-label" for="form-check-radio-processing">
-                                            稽核中
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-danger form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status"
-                                            id="form-check-radio-pending_approval" value="pending_approval"
-                                            @if ($task->status == 'pending_approval') checked @endif>
-                                        <label class="form-check-label" for="form-check-radio-pending_approval">
-                                            待核對
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-success form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status"
-                                            id="form-check-radio-completed" value="completed"
-                                            @if ($task->status == 'completed') checked @endif>
-                                        <label class="form-check-label" for="form-check-radio-completed">
-                                            已完成
-                                        </label>
-                                    </div>
-                                </div>
 
-                            </div>
 
                         </div>
                         <div class="widget-content widget-content-area">
-
-
-                            @method('PUT')
                             <div class="row">
                                 <div class="col-lg-6 col-12">
-
                                     <div class="form-group">
+                                        <div class="d-flex">
+                                            <div class="form-check form-check-secondary form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    value="pending" id="form-check-radio-pending"
+                                                    @if ($task->status == 'pending') checked @endif>
+                                                <label class="form-check-label" for="form-check-radio-pending">
+                                                    未稽核
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-warning form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="form-check-radio-processing" value="processing"
+                                                    @if ($task->status == 'processing') checked @endif>
+                                                <label class="form-check-label" for="form-check-radio-processing">
+                                                    稽核中
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-danger form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="form-check-radio-pending_approval" value="pending_approval"
+                                                    @if ($task->status == 'pending_approval') checked @endif>
+                                                <label class="form-check-label" for="form-check-radio-pending_approval">
+                                                    待核對
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-success form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="form-check-radio-completed" value="completed"
+                                                    @if ($task->status == 'completed') checked @endif>
+                                                <label class="form-check-label" for="form-check-radio-completed">
+                                                    已完成
+                                                </label>
+                                            </div>
+                                        </div>
                                         <div class="d-flex">
                                             <div class="n-chk">
                                                 <div class="form-check form-check-primary form-check-inline">
@@ -158,7 +150,7 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">分數</label>
-                                        <input type="text" value="{{ $task->total }}" class="form-control"
+                                        <input type="text" value="{{ $score }}" class="form-control"
                                             disabled>
                                     </div>
 
@@ -240,33 +232,62 @@
                                         @foreach ($defects as $taskHasDefect)
                                             <div class="card style-2 mb-4">
                                                 @foreach ($taskHasDefect->images as $image)
-                                                    <a href="{{ asset('storage/' . $image) }}"><img
-                                                            src="{{ asset('storage/' . $image) }}"
-                                                            class="card-img-top my-1" alt="..."></a>
+                                                    <img src="{{ asset('storage/' . $image) }}"
+                                                        class="card-img-top my-1" alt="...">
                                                 @endforeach
-
                                                 <a
                                                     href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
-                                                    <div class="card-body px-0 pb-0">
-                                                        <h5 class="card-title mb-3">
-                                                            {{ $taskHasDefect->defect->group }}
-                                                        </h5>
-                                                        <h6>{{ $taskHasDefect->defect->title }}</h6>
-                                                        <p>{{ $taskHasDefect->defect->description }}</p>
-                                                        <div class="media mt-4 mb-0 pt-1">
-                                                            {{-- <img src="" class="card-media-image me-3" alt=""> --}}
-                                                            <div class="media-body">
-                                                                <h4 class="media-heading mb-1">
-                                                                    {{ $taskHasDefect->user->name }}</h4>
-                                                                <p class="media-text">
-                                                                    {{ $taskHasDefect->created_at }}</p>
+                                                    @if ($task->category == '食安及5S')
+                                                        <div class="card-body px-0 pb-0">
+                                                            <p><b>缺失分類: </b>{{ $taskHasDefect->defect->group }}</p>
+                                                            <p><b>子項目: </b>{{ $taskHasDefect->defect->title }}</p>
+                                                            <p><b>稽核標準:</b> {{ $taskHasDefect->defect->description }}
+                                                            </p>
+                                                            <p><b>扣分: </b>{{ $taskHasDefect->defect->deduct_point }}
+                                                            </p>
+                                                            <p><b>忽略扣分: </b>{{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                                            </p>
+                                                            <p><b>備註: </b>{{ $taskHasDefect->defect->memo }}</p>
+                                                            <div class="media mt-4 mb-0 pt-1">
+                                                                {{-- <img src="" class="card-media-image me-3" alt=""> --}}
+                                                                <div class="media-body">
+                                                                    <h4 class="media-heading mb-1">
+                                                                        {{ $taskHasDefect->user->name }}</h4>
+                                                                    <p class="media-text">
+                                                                        {{ $taskHasDefect->created_at }}</p>
 
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        <div class="card-body px-0 pb-0">
+                                                            <p><b>主項目: </b>{{ $taskHasDefect->clearDefect->main_item }}
+                                                            </p>
+                                                            <p><b>次項目:</b> {{ $taskHasDefect->clearDefect->sub_item }}
+                                                            </p>
+                                                            <p><b>數量:</b> {{ $taskHasDefect->amount }}
+                                                            </p>
+                                                            <p><b>扣分(計分方式: -2 * 數量):
+                                                                </b>{{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                                            </p>
+
+                                                            <p><b>忽略扣分:
+                                                                </b>{{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                                            </p>
+                                                            <p><b>備註: </b>{{ $taskHasDefect->clearDefect->memo }}</p>
+                                                            <div class="media mt-4 mb-0 pt-1">
+                                                                {{-- <img src="" class="card-media-image me-3" alt=""> --}}
+                                                                <div class="media-body">
+                                                                    <h4 class="media-heading mb-1">
+                                                                        {{ $taskHasDefect->user->name }}</h4>
+                                                                    <p class="media-text">
+                                                                        {{ $taskHasDefect->created_at }}</p>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                 </a>
-
-
                                             </div>
                                         @endforeach
                                     </div>

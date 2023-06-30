@@ -25,7 +25,7 @@
         <select id="select-state" name="description[]" multiple placeholder="選擇缺失或自行輸入(可複選)" autocomplete="off"
             name=description>
             <option value="">選擇缺失或自行輸入(可複選)</option>
-            @if ($taskHasDefect)
+            @if (optional($taskHasDefect)->description)
                 @foreach ($taskHasDefect->description as $description)
                     <option selected value="{{ $description }}">{{ $description }}</option>
                 @endforeach

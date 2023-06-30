@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'processing', 'pending_approval', 'completed'])->default('pending');
             $table->string('inner_manager')->nullable();
             $table->string('outer_manager')->nullable();
-            $table->integer('total')->default(100);
             $table->timestamps();
         });
     }
