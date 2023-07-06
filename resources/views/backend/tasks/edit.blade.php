@@ -235,9 +235,9 @@
                                                     <img src="{{ asset('storage/' . $image) }}"
                                                         class="card-img-top my-1" alt="...">
                                                 @endforeach
-                                                <a
-                                                    href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
-                                                    @if ($task->category == '食安及5S')
+                                                @if ($task->category == '食安及5S')
+                                                    <a
+                                                        href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
                                                         <div class="card-body px-0 pb-0">
                                                             <p><b>缺失分類: </b>{{ $taskHasDefect->defect->group }}</p>
                                                             <p><b>子項目: </b>{{ $taskHasDefect->defect->title }}</p>
@@ -260,33 +260,38 @@
                                                             </div>
                                                         </div>
                                                     @else
-                                                        <div class="card-body px-0 pb-0">
-                                                            <p><b>主項目: </b>{{ $taskHasDefect->clearDefect->main_item }}
-                                                            </p>
-                                                            <p><b>次項目:</b> {{ $taskHasDefect->clearDefect->sub_item }}
-                                                            </p>
-                                                            <p><b>數量:</b> {{ $taskHasDefect->amount }}
-                                                            </p>
-                                                            <p><b>扣分(計分方式: -2 * 數量):
-                                                                </b>{{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
-                                                            </p>
+                                                        <a
+                                                            href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                                            <div class="card-body px-0 pb-0">
+                                                                <p><b>主項目:
+                                                                    </b>{{ $taskHasDefect->clearDefect->main_item }}
+                                                                </p>
+                                                                <p><b>次項目:</b>
+                                                                    {{ $taskHasDefect->clearDefect->sub_item }}
+                                                                </p>
+                                                                <p><b>數量:</b> {{ $taskHasDefect->amount }}
+                                                                </p>
+                                                                <p><b>扣分(計分方式: -2 * 數量):
+                                                                    </b>{{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                                                </p>
 
-                                                            <p><b>忽略扣分:
-                                                                </b>{{ $taskHasDefect->is_ignore ? '是' : '否' }}
-                                                            </p>
-                                                            <p><b>備註: </b>{{ $taskHasDefect->clearDefect->memo }}</p>
-                                                            <div class="media mt-4 mb-0 pt-1">
-                                                                {{-- <img src="" class="card-media-image me-3" alt=""> --}}
-                                                                <div class="media-body">
-                                                                    <h4 class="media-heading mb-1">
-                                                                        {{ $taskHasDefect->user->name }}</h4>
-                                                                    <p class="media-text">
-                                                                        {{ $taskHasDefect->created_at }}</p>
+                                                                <p><b>忽略扣分:
+                                                                    </b>{{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                                                </p>
+                                                                <p><b>備註: </b>{{ $taskHasDefect->clearDefect->memo }}
+                                                                </p>
+                                                                <div class="media mt-4 mb-0 pt-1">
+                                                                    {{-- <img src="" class="card-media-image me-3" alt=""> --}}
+                                                                    <div class="media-body">
+                                                                        <h4 class="media-heading mb-1">
+                                                                            {{ $taskHasDefect->user->name }}</h4>
+                                                                        <p class="media-text">
+                                                                            {{ $taskHasDefect->created_at }}</p>
 
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endif
+                                                @endif
                                                 </a>
                                             </div>
                                         @endforeach
