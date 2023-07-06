@@ -15,15 +15,9 @@ php artisan storage:link
 
 ## Account
 
--   super-admin
-    -   email: super-admin@example.com
-    -   password: 123
--   admin
-    -   email: admin@example.com
-    -   password: 123
--   auditor
-    -   email: auditor@example.com
-    -   password: 123
+-   開發者帳號
+    -   UID: 001
+    -   password: vu;31up
 
 ## Usage
 
@@ -41,7 +35,7 @@ php artisan permission:assign-role-to-user role_name user_name
 
 ## EER
 
-![eer](https://i.imgur.com/GJEtU09.jpg)
+![eer](https://i.imgur.com/w42sNb5.png)
 
 ### Server
 
