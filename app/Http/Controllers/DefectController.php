@@ -250,10 +250,7 @@ class DefectController extends Controller
     // 更新食安缺失
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
-        if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
-            alert()->warning('請確認', '請填寫完整資料');
-            return redirect();
-        }
+
         $path = [];
 
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
@@ -268,6 +265,11 @@ class DefectController extends Controller
                 array_push($path, $filePath1);
             }
         }
+
+        if (empty($path)) {
+            alert()->warning('請確認', '請上傳圖片');
+            return back();
+        };
 
         $taskHasDefect->update([
             'defect_id' => $request->defect_id,
