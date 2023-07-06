@@ -16,7 +16,7 @@ class DefectController extends Controller
 {
     public function index()
     {
-        // 這裡的 defects 是一個集合，所以可以使用 transform() 來改變集合裡面的每一個元素
+        // 將資料庫中的 effective_date 欄位的日期格式轉換成 Y-m 格式
         $defects = Defect::get()->transform(function ($item) {
             $item->effective_date = Carbon::create($item->effective_date)->format('Y-m');
             return $item;
@@ -26,29 +26,32 @@ class DefectController extends Controller
             'defects' => $defects,
         ]);
     }
+    // 食安及5S稽核缺失新增
     public function store(Task $task, Request $request)
     {
         $path = [];
-
+        // 取得 Filepond 的實體
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-
+        // 判斷是否有上傳圖片，有的話就取得圖片路徑
         if (isset($request->filepond[0])) {
+            // 取得圖片路徑
             $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            // 將 \ 轉換成 /
             $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            // 將圖片路徑放進 $path 陣列
             array_push($path, $filePath0);
+            // 判斷是否有第二張圖片，有的話就取得圖片路徑
             if (isset($request->filepond[1])) {
+                // 取得圖片路徑
                 $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                // 將 \ 轉換成 /
                 $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                // 將圖片路徑放進 $path 陣列
                 array_push($path, $filePath1);
             }
         }
 
-        if (empty($request->filepond) || empty($request->workspace) || empty($request->defect_id)) {
-            alert()->warning('請確認', '請填寫完整資料');
-            return back();
-        }
-
-
+        // 如果同一個站台有同樣的缺失，跳出警告訊息
         if ($task->taskHasDefects()->where('restaurant_workspace_id', $request->workspace)->where('defect_id', $request->defect_id)->exists()) {
             $task->update([
                 'status' => 'processing',
@@ -58,8 +61,11 @@ class DefectController extends Controller
                 'defect_id' => $request->defect_id,
                 'restaurant_workspace_id' => $request->workspace,
                 'images' => $path,
+                'is_ignore' => $request->is_ignore ? 1 : 0,
+                'memo' => $request->memo,
             ]);
             alert()->warning('請注意', '同樣站台有同樣缺失，缺失已新增');
+            // 引導使用者到該任務的缺失列表
             return redirect()->route('task-defect-owner', $task->id);
         } else {
             $task->update([
@@ -79,33 +85,36 @@ class DefectController extends Controller
         }
     }
 
+    // 清潔檢查稽核缺失新增
     public function clearStore(Task $task, Request $request)
     {
         $path = [];
-
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-
+        // 判斷是否有上傳圖片，有的話就取得圖片路徑
         if (isset($request->filepond[0])) {
+            // 取得圖片路徑
             $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
+            // 將 \ 轉換成 /
             $filePath0 = Str::of($filePath0)->replace('\\', '/');
+            // 將圖片路徑放進 $path 陣列
             array_push($path, $filePath0);
+            // 判斷是否有第二張圖片，有的話就取得圖片路徑
             if (isset($request->filepond[1])) {
+                // 取得圖片路徑
                 $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
+                // 將 \ 轉換成 /
                 $filePath1 = Str::of($filePath1)->replace('\\', '/');
+                // 將圖片路徑放進 $path 陣列
                 array_push($path, $filePath1);
             }
         }
 
-        if (empty($request->filepond) || empty($request->workspace) || empty($request->clear_defect_id)) {
-            alert()->warning('請確認', '請填寫完整資料');
-            return back();
-        }
-
-
+        // 更新任務狀態
         $task->update([
             'status' => 'processing',
         ]);
 
+        // 新增清潔檢查缺失
         $task->taskHasClearDefects()->create([
             'user_id' => auth()->user()->id,
             'clear_defect_id' => $request->clear_defect_id,
@@ -116,10 +125,12 @@ class DefectController extends Controller
             'amount' => $request->demo3_21,
             'memo' => $request->memo,
         ]);
+
         alert()->success('成功', '缺失已新增');
         return back();
     }
 
+    // 主管食安核對缺失 使用同一個view 回傳不同的資料
     public function show(Task $task)
     {
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
@@ -134,6 +145,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 檢查是否有專案未檢查
         $isProjectAllChecked = $task->projects->every(function ($value, $key) {
             return $value->pivot->is_checked == 1;
         });
@@ -143,6 +155,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 檢查是否有稽核員未完成稽核
         $isComplete = $task->taskUsers->pluck('is_completed');
         $isComplete = $isComplete->every(function ($value, $key) {
             return $value == 1;
@@ -153,6 +166,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 將缺失依照站台分類
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
 
         return view('backend.tasks.task-defect', [
@@ -174,6 +188,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 檢查是否有專案未檢查
         $isProjectAllChecked = $task->projects->every(function ($value, $key) {
             return $value->pivot->is_checked == 1;
         });
@@ -183,6 +198,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 檢查是否有稽核員未完成稽核
         $isComplete = $task->taskUsers->pluck('is_completed');
         $isComplete = $isComplete->every(function ($value, $key) {
             return $value == 1;
@@ -193,6 +209,7 @@ class DefectController extends Controller
             return back();
         }
 
+        // 將缺失依照站台分類
         $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
 
         return view('backend.tasks.task-defect', [
