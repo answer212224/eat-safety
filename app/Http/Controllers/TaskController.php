@@ -45,8 +45,6 @@ class TaskController extends Controller
         return view('backend.tasks.meals.check', compact('title', 'task'));
     }
 
-
-
     public function projectCheck(Task $task)
     {
         $title = '開始專案';
@@ -60,11 +58,9 @@ class TaskController extends Controller
 
         $data = $request->all();
 
-
         $task->meals()->update([
             'is_taken' => false,
         ]);
-
 
         if (!empty($data['is_takens'])) {
             $task->meals()->updateExistingPivot($data['is_takens'], [
@@ -131,6 +127,7 @@ class TaskController extends Controller
         $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
+            // 如果是 pending 就顯示未稽核，如果是 processing 就顯示稽核中，如果是 pending_approval 就顯示待核對，如果是 completed 就顯示已完成
             if ($task->status == 'pending') {
                 $status = '未稽核';
             } elseif ($task->status == 'processing') {
@@ -140,9 +137,11 @@ class TaskController extends Controller
             } elseif ($task->status == 'completed') {
                 $status = '已完成';
             }
+            // 任務的 title 顯示分店、類別、使用者名稱、任務日期、任務狀態
             $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $status;
+
+            // 任務的 start 顯示任務日期
             $task->start = $task->task_date;
-            // $task->users = $task->users->pluck('name', 'id')->toArray();
             $task->url = route('task-edit', $task->id);
 
             return $task;
@@ -156,6 +155,7 @@ class TaskController extends Controller
         $data = $request->all();
         $data['task_date'] = Carbon::parse($data['task_date']);
 
+        // 檢查是否有重複的任務
         foreach ($data['users'] as $userId) {
             $user = User::find($userId);
             // 如果該使用者已經有相同日期和相同店家和相同類別的任務，就不能新增
@@ -182,6 +182,7 @@ class TaskController extends Controller
 
         $task->users()->attach($data['users']);
 
+        // 如果有選擇預設餐點，就新增預設餐點
         if (!empty($data['defaltMeals'])) {
             $task->meals()->attach($data['defaltMeals']);
         }
@@ -208,14 +209,16 @@ class TaskController extends Controller
         $task = $task->load(['taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.user', 'meals']);
 
         $taskDate = Carbon::create($task->task_date);
-
+        // 取得店家的品牌代號
         $brandSid = Str::substr($task->restaurant->sid, 0, 2);
 
+        // 取得該品牌當月的餐點
         $optionMeals = Meal::whereYear('effective_date', $taskDate)
             ->whereMonth('effective_date', $taskDate)
             ->where('sid', $task->restaurant->sid)
             ->get();
 
+        // 取得該品牌當月的餐點
         $defaltMeals = Meal::whereYear('effective_date', $taskDate)
             ->whereMonth('effective_date', $taskDate)
             ->where('sid', $brandSid)
@@ -224,10 +227,6 @@ class TaskController extends Controller
         // 這邊要用 merge，因為有些店家會有自己的餐點
         $meals = $defaltMeals->merge($optionMeals);
 
-
-
-
-        // 如果是食安及5S的任務，就要依照餐廳的 workspace 分類
         if ($task->category == '食安及5S') {
             $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
             // 排除忽略扣分，加總該任務底下所有的缺失扣分
@@ -252,8 +251,9 @@ class TaskController extends Controller
         // 更新任務的餐點
         $meals = $request->input('meals');
 
-        // 如果沒有選擇餐點，就不更新
+        // 更新任務的餐點
         $task->meals()->sync($meals);
+        // 更新任務狀態
         $task->update([
             'status' => $request->status,
         ]);
