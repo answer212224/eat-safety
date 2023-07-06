@@ -250,7 +250,6 @@ class DefectController extends Controller
     // 更新食安缺失
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
-        dd($request->all());
         if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
             alert()->warning('請確認', '請填寫完整資料');
             return redirect();
