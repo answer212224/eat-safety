@@ -355,8 +355,6 @@ class DefectController extends Controller
 
         $defectsGroup = $task->taskHasClearDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
 
-
-
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'defectsGroup' => $defectsGroup,
@@ -379,7 +377,7 @@ class DefectController extends Controller
 
         try {
             Excel::import(new DefectsImport, request()->file('excel'));
-            alert()->success('成功', '餐點採樣匯入成功');
+            alert()->success('成功', '食安缺失匯入成功');
             return back();
         } catch (\Exception $e) {
             alert()->error('錯誤', $e->getMessage());
