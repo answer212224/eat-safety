@@ -247,14 +247,16 @@ class DefectController extends Controller
         ]);
     }
 
+    // 更新食安缺失
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
+        dd($request->all());
         if (empty($request->workspace) || empty($request->defect_id) || empty($request->filepond)) {
             alert()->warning('請確認', '請填寫完整資料');
             return redirect();
         }
         $path = [];
-        // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
+
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
         if (isset($request->filepond[0])) {
@@ -271,13 +273,16 @@ class DefectController extends Controller
         $taskHasDefect->update([
             'defect_id' => $request->defect_id,
             'restaurant_workspace_id' => $request->workspace,
+            'is_ignore' => $request->is_ignore ? 1 : 0,
             'images' => $path,
+            'memo' => $request->memo,
         ]);
 
         alert()->success('成功', '食安缺失已更新');
         return back();
     }
 
+    // 更新清檢缺失
     public function clearUpdate(TaskHasClearDefect $taskHasDefect, Request $request)
     {
         if (empty($request->workspace) || empty($request->clear_defect_id) || empty($request->filepond)) {
@@ -285,7 +290,6 @@ class DefectController extends Controller
             return redirect();
         }
         $path = [];
-        // Get the temporary path using the serverId returned by the upload function in `FilepondController.php`
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
         if (isset($request->filepond[0])) {
@@ -313,6 +317,7 @@ class DefectController extends Controller
         return back();
     }
 
+    // 稽核員刪除食安缺失
     public function delete(TaskHasDefect $taskHasDefect)
     {
         $taskHasDefect->delete();
@@ -320,6 +325,7 @@ class DefectController extends Controller
         return redirect()->route('task-list');
     }
 
+    // 稽核員刪除清檢缺失
     public function clearDelete(TaskHasClearDefect $taskHasDefect)
     {
         $taskHasDefect->delete();
@@ -327,6 +333,7 @@ class DefectController extends Controller
         return redirect()->route('task-list');
     }
 
+    // 稽核員查看食安缺失
     public function owner(Task $task)
     {
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
@@ -345,6 +352,7 @@ class DefectController extends Controller
         ]);
     }
 
+    // 稽核員查看清檢缺失
     public function clearOwner(Task $task)
     {
 
@@ -362,7 +370,7 @@ class DefectController extends Controller
         ]);
     }
 
-
+    // 匯入食安缺失
     public function import(Request $request)
     {
         if ($request->file('excel') == null) {
