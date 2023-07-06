@@ -95,10 +95,10 @@
 
                                 @if ($task->category == '清潔檢查')
                                     <form action="{{ route('task-clear-defect-store', ['task' => $task->id]) }}"
-                                        method="post" enctype="multipart/form-data">
+                                        method="post" enctype="multipart/form-data" id="defect_form">
                                     @else
                                         <form action="{{ route('task-defect-store', ['task' => $task->id]) }}"
-                                            method="post" enctype="multipart/form-data">
+                                            method="post" enctype="multipart/form-data" id="defect_form">
                                 @endif
 
                                 @csrf
@@ -150,7 +150,7 @@
 
                                         <div class="button-action mt-3 text-center">
                                             <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                            <button class="btn btn-success me-3" id="submitBtn">提交</button>
+                                            <a class="btn btn-success me-3" id="submitBtn">提交</a>
                                         </div>
 
                                     </div>
@@ -214,6 +214,23 @@
                             stepperDefault.next();
                         })
                     });
+
+                    // 提交表單，檢查欄位是否有填寫
+                    submitBtn.addEventListener('click', function() {
+                        var selectLength = inputSelect.value;
+
+                        if (selectLength == false) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: '請選擇缺失',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            return;
+                        }
+                        document.getElementById('defect_form').submit();
+                    })
+
 
                     stepperPrevButtonDefault.forEach(element => {
                         element.addEventListener('click', function() {

@@ -97,7 +97,7 @@
                                 <div class="multiple-file-upload">
                                     <input type="file" class="file-upload-multiple" name="filepond[]"
                                         id="product-images" multiple data-allow-reorder="true" data-max-file-size="10MB"
-                                        data-max-files="2">
+                                        data-max-files="2" required>
                                 </div>
                             </div>
 
