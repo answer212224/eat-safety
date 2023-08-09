@@ -80,8 +80,6 @@
                                             <td>
                                                 <a href="{{ route('project-edit', ['project' => $project]) }}"
                                                     class="badge badge-light-primary">編輯</a>
-                                                <a class="badge badge-light-danger" data-confirm-delete="true"
-                                                    href="{{ route('project-destroy', ['project' => $project]) }}">刪除</a>
                                             </td>
                                         @endcan
                                     </tr>

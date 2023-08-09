@@ -137,8 +137,9 @@ class TaskController extends Controller
             } elseif ($task->status == 'completed') {
                 $status = '已完成';
             }
-            // 任務的 title 顯示分店、類別、使用者名稱、任務日期、任務狀態
-            $task->title = $task->restaurant->sid . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('m/d') . ' ' . $status;
+
+            // 任務的 title 顯示品牌、類別、使用者名稱、任務日期顯示7/9、任務狀態
+            $task->title = $task->restaurant->brand_code . $task->restaurant->shop . ' ' . $task->category . ' ' . $task->users->pluck('name')->implode('、') . ' ' . Carbon::parse($task->task_date)->format('n月j日') . ' ' . $status;
 
             // 任務的 start 顯示任務日期
             $task->start = $task->task_date;
@@ -153,6 +154,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $data['task_date'] = Carbon::parse($data['task_date']);
 
         // 檢查是否有重複的任務
@@ -195,7 +197,8 @@ class TaskController extends Controller
             $task->projects()->attach($data['projects']);
         }
 
-        return redirect()->route('task-edit', $task->id);
+        alert()->success('新增成功', '新增任務成功');
+        return redirect()->route('task-assign');
     }
 
     public function edit(Task $task)

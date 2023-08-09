@@ -18,8 +18,10 @@ class MealSelect extends Component
     public $start;
     public $category = "食安及5S";
 
-
-
+    public function mount()
+    {
+        $this->start = Carbon::today()->addHours(8)->format('Y-m-d H:i');
+    }
     public function render()
     {
         if ($this->category == "餐點採樣") {

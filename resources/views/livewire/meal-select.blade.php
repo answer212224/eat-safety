@@ -56,8 +56,8 @@
     <div class="col-md-12">
         <div class="form-group mt-3">
             <label class="form-label">稽核日期</label>
-            <input id="event-start-date" wire:model='start' name="task_date" type="datetime-local" class="form-control"
-                required>
+            <input id="event-start-date" wire:model='start' name="task_date" class="form-control flatpickr"
+                required autocomplete="off">
         </div>
     </div>
 
@@ -84,7 +84,7 @@
                 @foreach ($optionMeals as $optionMeal)
                     <label class="list-group-item">
                         <input class="form-check-input me-1" type="checkbox" name="optionMeals[]"
-                            value="{{ $optionMeal->id }}">
+                            value="{{ $optionMeal->id }}" checked>
                         {{ $optionMeal->name }}
                     </label>
                 @endforeach
@@ -107,7 +107,7 @@
                     @foreach ($projects as $project)
                         <label class="list-group-item">
                             <input class="form-check-input me-1" type="checkbox" value="{{ $project->id }}"
-                                name="projects[]">
+                                name="projects[]" checked>
                             {{ $project->description }}
                         </label>
                     @endforeach
@@ -124,7 +124,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             new TomSelect("#select-users", {
-                maxItems: 2
+                maxItems: 3
             });
 
             new TomSelect("#select-sid", {
@@ -134,6 +134,16 @@
                 }
             });
 
+            flatpickr.localize(flatpickr.l10ns.zh_tw);
+            flatpickr(".flatpickr");
+            flatpickr("#event-start-date", {
+                dateFormat: "Y-m-d H:i",
+                defaultDate: "{{today()->addHours(8)->format('Y-m-d H:i')}}",
+                enableTime: true,
+                hourIncrement: 2,
+                minuteIncrement: 30,
+                time_24hr: true,
+            });
         });
     </script>
 @endpush

@@ -93,8 +93,8 @@
                                     @can('update-meal')
                                         <td> <a class="badge badge-light-primary"
                                                 href="{{ route('meal-edit', ['meal' => $meal]) }}">編輯</a>
-                                            <a class="badge badge-light-danger" data-confirm-delete="true"
-                                                href="{{ route('meal-destroy', ['meal' => $meal]) }}">刪除</a>
+                                            {{-- <a class="badge badge-light-danger" data-confirm-delete="true"
+                                                href="{{ route('meal-destroy', ['meal' => $meal]) }}">刪除</a> --}}
                                         </td>
                                     @endcan
                                 </tr>

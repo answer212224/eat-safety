@@ -21,6 +21,10 @@
 
         @vite(['resources/scss/light/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
