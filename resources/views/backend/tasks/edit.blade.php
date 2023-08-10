@@ -156,7 +156,7 @@
                                     </div>
 
                                     <div class="form-group mt-3">
-                                        <label class="form-label">分數</label>
+                                        <label class="form-label">分店最終分數</label>
                                         <input type="text" value="{{ $score }}" class="form-control"
                                             disabled>
                                     </div>
