@@ -219,7 +219,7 @@ class TaskController extends Controller
 
         // alert 當月未指派到的status=1分店
         $restaurants = Restaurant::where('status', 1)->whereDoesntHave('tasks', function ($query) use ($data) {
-            $query->where('task_date', $data['task_date']);
+            $query->whereMonth('task_date', $data['task_date']->month);
         })->get();
 
         if ($restaurants->isNotEmpty()) {
