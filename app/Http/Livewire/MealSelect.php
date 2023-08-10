@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 
 class MealSelect extends Component
 {
-    public $hasMeal = false;
-    public $hasProject = false;
+    public $hasMeal = true;
+    public $hasProject = true;
     public $restaurant;
     public $start;
     public $category = "食安及5S";

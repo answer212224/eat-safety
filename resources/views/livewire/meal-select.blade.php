@@ -77,7 +77,7 @@
                     <label class="list-group-item">
                         <input class="form-check-input me-1" type="checkbox" name="defaltMeals[]"
                             value="{{ $defaltMeal->id }}" checked>
-                        {{ $defaltMeal->name }}
+                        (品牌){{ $defaltMeal->name }}
 
                     </label>
                 @endforeach
@@ -85,7 +85,7 @@
                     <label class="list-group-item">
                         <input class="form-check-input me-1" type="checkbox" name="optionMeals[]"
                             value="{{ $optionMeal->id }}" checked>
-                        {{ $optionMeal->name }}
+                        (分店){{ $optionMeal->name }}
                     </label>
                 @endforeach
             </div>

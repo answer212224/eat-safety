@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Meal;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Restaurant;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,7 +17,6 @@ class TaskController extends Controller
     public function list()
     {
         $title = '任務清單';
-        // 中文解釋：如果 auth()->user()->tasks 不是空的，就執行 load('users')，否則就給空陣列
         $tasks = optional(auth()->user()->tasks)->load('users');
         if (!empty($tasks)) {
             $tasks = $tasks->sortByDesc('id');
@@ -155,6 +155,8 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
+
+
         $data['task_date'] = Carbon::parse($data['task_date']);
 
         // 檢查是否有重複的任務
@@ -197,7 +199,18 @@ class TaskController extends Controller
             $task->projects()->attach($data['projects']);
         }
 
-        alert()->success('新增成功', '新增任務成功');
+        // alert 當月未指派到的status=1分店
+        $restaurants = Restaurant::where('status', 1)->whereDoesntHave('tasks', function ($query) use ($data) {
+            $query->where('task_date', $data['task_date']);
+        })->get();
+
+        if ($restaurants->isNotEmpty()) {
+            $restaurants->transform(function ($restaurant) {
+                return $restaurant->sid . $restaurant->shop;
+            });
+            alert()->warning('請確認', '本月尚未指派到的分店: ' . $restaurants->implode('、'));
+        }
+
         return redirect()->route('task-assign');
     }
 
@@ -205,6 +218,9 @@ class TaskController extends Controller
     {
         $title = '編輯任務';
         $score = 100;
+        // 取得role是auditor的使用者
+        $users = User::role('auditor')->get();
+        $projects = Project::where('status', 1)->get();
 
         confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
 
@@ -245,24 +261,19 @@ class TaskController extends Controller
             // 扣分
             $score = $score + $sum;
         }
-
-        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals', 'score'));
+        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals', 'score', 'users', 'projects'));
     }
 
     public function update(Task $task, Request $request)
     {
-        // 更新任務的餐點
-        $meals = $request->input('meals');
-
-        // 更新任務的餐點
-        $task->meals()->sync($meals);
-        // 更新任務狀態
+        $task->users()->sync($request->users);
+        $task->projects()->sync($request->projects);
+        $task->meals()->sync($request->meals);
         $task->update([
             'status' => $request->status,
         ]);
 
         alert()->success('更新成功', '更新任務成功');
-
         return back();
     }
 

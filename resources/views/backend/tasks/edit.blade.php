@@ -12,12 +12,15 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
         @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
         @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
     <x-slot:scrollspyConfig>
         data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100"
-        </x-slot>
+    </x-slot>
 
         <div class="page-meta">
             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
@@ -122,9 +125,13 @@
                                     <div class="form-group mt-3">
                                         <label class="form-label">選擇稽核員</label>
                                         <select class="form-control" name="users[]" multiple autocomplete="off"
-                                            required id="select-users" disabled>
+                                            required id="select-users">
                                             @foreach ($task->users as $user)
                                                 <option value="{{ $user->id }}" selected>{{ $user->name }}
+                                                </option>
+                                            @endforeach
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -145,7 +152,7 @@
                                     <div class="form-group mt-3">
                                         <label class="form-label">稽核日期</label>
                                         <input id="event-start-date" name="task_date" type="datetime-local"
-                                            class="form-control" disabled value="{{ $task->task_date }}">
+                                            class="form-control flatpickr" value="{{ $task->task_date }}">
                                     </div>
 
                                     <div class="form-group mt-3">
@@ -174,7 +181,7 @@
                                         <select multiple class="form-control" name='meals[]' id="select-meals">
                                             @foreach ($task->meals as $meal)
                                                 <option value="{{ $meal->id }}" selected>
-                                                    {{ $meal->name }}#{{ $meal->pivot->memo }}
+                                                    @if($meal->pivot->is_taken)已採樣:@endif{{ $meal->name }}@if(isset($meal->pivot->memo))#{{ $meal->pivot->memo }}@endif
                                                 </option>
                                             @endforeach
                                             @foreach ($meals as $meal)
@@ -187,10 +194,15 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">專案</label>
-                                        <select multiple class="form-control" name='defaltMeals[]'
-                                            id="select-projects" disabled>
+                                        <select multiple class="form-control" name='projects[]'
+                                            id="select-projects">
                                             @foreach ($task->projects as $project)
                                                 <option value="{{ $project->id }}" selected>
+                                                    @if($project->pivot->is_checked)已執行:@endif{{ $project->description }}
+                                                </option>
+                                            @endforeach
+                                            @foreach ($projects as $project)
+                                                <option value="{{ $project->id }}">
                                                     {{ $project->description }}
                                                 </option>
                                             @endforeach
@@ -336,11 +348,27 @@
             <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
             <script>
                 new TomSelect("#select-users", {
-                    maxItems: 2
+                    maxItems: 3
                 });
 
                 new TomSelect("#select-meals");
                 new TomSelect("#select-projects");
+
+
+ 
+                document.addEventListener("DOMContentLoaded", () => {
+                    flatpickr.localize(flatpickr.l10ns.zh_tw);
+                    flatpickr(".flatpickr");
+                    flatpickr("#event-start-date", {
+                        dateFormat: "Y-m-d H:i",
+                        defaultDate: "{{today()->addHours(8)->format('Y-m-d H:i')}}",
+                        enableTime: true,
+                        hourIncrement: 2,
+                        minuteIncrement: 30,
+                        time_24hr: true,
+                    });
+                });
+
             </script>
         </x-slot:footerFiles>
         <!--  END CUSTOM SCRIPTS FILE  -->

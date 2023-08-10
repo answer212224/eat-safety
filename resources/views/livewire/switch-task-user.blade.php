@@ -23,13 +23,17 @@
 
             <div class="note-description-content">
                 <p class="note-description">
-                    採樣 {{ $task->meals->count() }} 項:
+                    <strong>採樣</strong> <u>{{ $task->meals->count() }}</u> <strong>項:</strong>
                     @foreach ($task->meals as $meal)
-                        {{ $meal->name }}#{{ $meal->pivot->memo }}。
+                        <span class="badge badge-dark mb-1">{{ $meal->name }}</span>
                     @endforeach
                 </p>
+                <hr>
                 <p class="note-description">
-                    專案 {{ $task->projects->count() }} 項: {{ $task->projects->pluck('description')->implode('。') }}
+                    <strong>專案</strong> <u>{{ $task->projects->count() }}</u> <strong>項:</strong> 
+                    @foreach ($task->projects as $project)
+                        <span class="badge badge-dark mb-1">{{$project->name}}</span>
+                    @endforeach
                 </p>
             </div>
             <hr />
