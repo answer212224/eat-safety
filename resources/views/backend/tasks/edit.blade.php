@@ -151,7 +151,7 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">稽核日期</label>
-                                        <input id="event-start-date" name="task_date" type="datetime-local"
+                                        <input id="event-start-date" name="task_date"
                                             class="form-control flatpickr" value="{{ $task->task_date }}">
                                     </div>
 
@@ -396,7 +396,7 @@
                     flatpickr(".flatpickr");
                     flatpickr("#event-start-date", {
                         dateFormat: "Y-m-d H:i",
-                        defaultDate: "{{today()->addHours(8)->format('Y-m-d H:i')}}",
+                      
                         enableTime: true,
                         hourIncrement: 2,
                         minuteIncrement: 30,
