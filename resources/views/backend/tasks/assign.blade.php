@@ -23,8 +23,14 @@
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+
+        
+        <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+        {{-- jq --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -64,6 +70,27 @@
         </div>
     </div>
 
+    <!-- unassignedStoresModal Modal -->
+    <div class="modal modal-lg fadeInUp" id="unassignedStoresModal" tabindex="-1" aria-labelledby="unassignedStoresModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="unassignedStoresModalLabel">未指派的分店</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="unassignedStores">
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn btn-light-dark" data-bs-dismiss="modal">Close</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+
     <!-- BEGIN CUSTOM SCRIPTS FILE -->
     <x-slot:footerFiles>
         <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>
@@ -85,16 +112,47 @@
                     myModal.show();
                 }
 
+                var calendarAddEvent2 = function() {
+                    // 當前月曆的月份
+                    var currentMonth = calendar.getDate().getMonth() + 1;
+                    // 顯示當顯月分未指派的分店
+                    $.ajax({
+                        url: "{{ route('getUnassignedStores') }}",
+                        type: "GET",
+                        data: {
+                            month: currentMonth
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            var stores = data.stores;
+                            var html = '';
+                            stores.forEach(function(store) {
+                                html += '<li class="list-group-item">' + store.brand + store.shop + '</li>';
+                            });
+                            $('#unassignedStores').html(html);
+                            // 顯示月份
+                            $('#unassignedStoresModalLabel').html('未指派的分店 - ' + currentMonth + '月' + ' (' + stores.length + '間)');
+                            $('#unassignedStoresModal').modal('show');
+
+                        }
+                    });
+
+                }
+
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
-
 
                     locale: 'zh-tw',
                     customButtons: {
                         myCustomButton: {
                             text: '新增稽核',
                             click: calendarAddEvent
-                        }
+                        },
+                        myCustomButton2: {
+                            text: '顯示未指派的分店',
+                            click: calendarAddEvent2
+                        },
+                        
                     },
 
                     eventClassNames: function({
@@ -109,7 +167,7 @@
 
                     @can('create-task')
                         headerToolbar: {
-                            left: 'prev next myCustomButton',
+                            left: 'prev next myCustomButton myCustomButton2',
                             center: 'title',
                             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                         },

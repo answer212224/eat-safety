@@ -172,25 +172,30 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
-        $data['task_date'] = Carbon::parse($data['task_date']);
+        $data['task_date'] = Carbon::parse($data['task_date'])->format('Y-m-d');
 
         // 檢查是否有重複的任務
         foreach ($data['users'] as $userId) {
             $user = User::find($userId);
-            // 如果該使用者已經有相同日期和相同店家和相同類別的任務，就不能新增
-            if ($user->tasks()->whereDate('task_date', $data['task_date'])->where('category', $data['category'])->where('restaurant_id', $data['restaurant_id'])->exists()) {
-                alert()->warning('無法新增', $user->name . '相同日期和相同店家和相同類別的任務');
-                return back();
+            // 如果該使用者已經有相同日期和相同店家，就要提醒
+            $task = $user->tasks()->whereDate('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->first();
+            if ($task) {
+                alert()->warning('請確認', $user->name . '在' . Carbon::parse($task->task_date)->format('Y-m-d') . '已經有' . $task->restaurant->brand_code . $task->restaurant->shop . '的任務');
             }
 
             // 如果該使用者新增的稽核任務的使用者當天有不同地區的任務，就要提醒
             $userTasks = $user->tasks()->whereDate('task_date', $data['task_date'])->get();
             foreach ($userTasks as $userTask) {
-
                 if ($userTask->restaurant->location != Restaurant::find($data['restaurant_id'])->location) {
-                    alert()->info('請確認', $user->name . '當天有不同地區的任務');
+                    alert()->warning('請確認', $user->name . '當天有不同地區的任務');
                 }
             }
+        }
+
+        // 檢查當日是否有相同分店和相同類別的任務
+        $task = Task::whereDate('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->where('category', $data['category'])->first();
+        if ($task) {
+            alert()->warning('請確認', Carbon::parse($task->task_date)->format('Y-m-d') . '已經有' . $task->restaurant->brand_code . $task->restaurant->shop . '的' . $task->category . '任務');
         }
 
         $task = Task::create([
@@ -214,19 +219,7 @@ class TaskController extends Controller
             $task->projects()->attach($data['projects']);
         }
 
-        // alert 當月未指派到的status=1分店
-        $restaurants = Restaurant::where('status', 1)->whereDoesntHave('tasks', function ($query) use ($data) {
-            $query->whereMonth('task_date', $data['task_date']->month);
-        })->get();
-
-        if ($restaurants->isNotEmpty()) {
-            $restaurants->transform(function ($restaurant) {
-                return $restaurant->sid . $restaurant->shop;
-            });
-            alert()->warning('請確認', '本月尚未指派到的分店: ' . $restaurants->implode('、'));
-        }
-
-        return redirect()->route('task-assign');
+        return back();
     }
 
     public function edit(Task $task)
@@ -321,5 +314,15 @@ class TaskController extends Controller
         alert()->success('刪除成功', '刪除任務成功');
 
         return redirect()->route('task-assign');
+    }
+
+    public function getUnassignedStores(Request $request)
+    {
+        return response()->json([
+            'stores' => Restaurant::where('status', 1)->whereDoesntHave('tasks', function ($query) use ($request) {
+                $query->whereMonth('task_date', $request->month);
+            })->get(),
+            'month' => $request->month,
+        ]);
     }
 }
