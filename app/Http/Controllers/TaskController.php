@@ -29,9 +29,9 @@ class TaskController extends Controller
 
     public function create(Task $task)
     {
-        // 如果非任務日期，就不能開始稽核
-        if (Carbon::parse($task->task_date)->ne(Carbon::today())) {
-            alert()->error('錯誤', '該任務非今日日期，無法開始稽核');
+        // 如果任務時間不是今日日期，就不能開始稽核，只判斷日期是否為今日日期
+        if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
+            alert()->error('錯誤', '只能在任務日期當天開始稽核');
             return back();
         }
 
@@ -47,12 +47,11 @@ class TaskController extends Controller
 
     public function mealCheck(Task $task)
     {
-        // 如果非任務日期，就不能開始採樣
-        if (Carbon::parse($task->task_date)->ne(Carbon::today())) {
-            alert()->error('錯誤', '該任務非今日日期，無法開始採樣');
+        // 如果任務時間不是今日日期，就不能開始採樣，只判斷日期是否為今日日期
+        if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
+            alert()->error('錯誤', '只能在任務日期當天開始採樣');
             return back();
         }
-
         $title = '開始採樣';
 
         return view('backend.tasks.meals.check', compact('title', 'task'));
@@ -60,9 +59,9 @@ class TaskController extends Controller
 
     public function projectCheck(Task $task)
     {
-        // 如果非任務日期，就不能開始專案執行
-        if (Carbon::parse($task->task_date)->ne(Carbon::today())) {
-            alert()->error('錯誤', '該任務非今日日期，無法開始專案執行');
+        // 如果任務時間不是今日日期，就不能開始專案，只判斷日期是否為今日日期
+        if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
+            alert()->error('錯誤', '只能在任務日期當天開始專案');
             return back();
         }
         $title = '開始專案';
@@ -172,8 +171,6 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-
 
         $data['task_date'] = Carbon::parse($data['task_date']);
 
