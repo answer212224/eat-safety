@@ -274,6 +274,8 @@ class TaskController extends Controller
 
     public function update(Task $task, Request $request)
     {
+
+
         $task->users()->sync($request->users);
         $task->projects()->sync($request->projects);
         $task->meals()->sync($request->meals);
@@ -281,7 +283,15 @@ class TaskController extends Controller
             'status' => $request->status,
         ]);
 
-        alert()->success('更新成功', '更新任務成功');
+        // 查看當天所有任務的所有使用者，request.task_date轉成Carbon格式
+        $tasks = Task::whereDate('task_date', Carbon::parse($request->task_date))->get();
+        // 假如有重複的使用者，跳出該使用者的名字
+        $users = $tasks->pluck('users')->flatten()->pluck('name')->duplicates();
+        // 如果有重複的使用者，跳出警告
+        if ($users->count() > 0) {
+            alert()->warning('請確認', Carbon::parse($request->task_date)->format('Y-m-d') . '已經有' . $users->implode('、') . '的任務');
+        }
+
         return back();
     }
 
