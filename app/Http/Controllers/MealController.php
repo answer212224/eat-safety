@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MealsExport;
 use Carbon\Carbon;
 use App\Models\Meal;
 use App\Models\Task;
@@ -106,5 +107,21 @@ class MealController extends Controller
             Alert::error('錯誤', $e->getMessage());
             return back();
         }
+    }
+
+    /**
+     * 根據任務下載餐點採樣excel
+     */
+    public function export(Task $task)
+    {
+        $meals = $task->meals;
+
+        $meals->transform(function ($item) use ($task) {
+            $item->month = Carbon::create($item->effective_date)->format('Y-m');
+            $item->date = $task->task_date;
+            return $item;
+        });
+
+        return (new MealsExport($meals))->download('餐點採樣.xlsx');
     }
 }

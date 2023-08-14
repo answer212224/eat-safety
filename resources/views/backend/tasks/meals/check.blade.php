@@ -68,6 +68,7 @@
                 <div class="card">
                     <div class="card-body">
                         <button type="submit" class="btn btn-success w-100 mb-3">提交</button>
+                        <a href="{{route('task-meal-export',['task' => $task])}}" class="btn btn-dark w-100 mb-3">採樣單下載</a>
                         <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
                     </div>
                 </div>

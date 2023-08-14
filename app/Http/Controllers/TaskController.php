@@ -172,19 +172,19 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
-        $data['task_date'] = Carbon::parse($data['task_date'])->format('Y-m-d');
+        $data['task_date'] = Carbon::parse($data['task_date']);
 
         // 檢查是否有重複的任務
         foreach ($data['users'] as $userId) {
             $user = User::find($userId);
             // 如果該使用者已經有相同日期和相同店家，就要提醒
-            $task = $user->tasks()->whereDate('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->first();
+            $task = $user->tasks()->whereDate('task_date', $data['task_date']->format('Y-m-d'))->where('restaurant_id', $data['restaurant_id'])->first();
             if ($task) {
                 alert()->warning('請確認', $user->name . '在' . Carbon::parse($task->task_date)->format('Y-m-d') . '已經有' . $task->restaurant->brand_code . $task->restaurant->shop . '的任務');
             }
 
             // 如果該使用者新增的稽核任務的使用者當天有不同地區的任務，就要提醒
-            $userTasks = $user->tasks()->whereDate('task_date', $data['task_date'])->get();
+            $userTasks = $user->tasks()->whereDate('task_date', $data['task_date']->format('Y-m-d'))->get();
             foreach ($userTasks as $userTask) {
                 if ($userTask->restaurant->location != Restaurant::find($data['restaurant_id'])->location) {
                     alert()->warning('請確認', $user->name . '當天有不同地區的任務');
@@ -193,7 +193,7 @@ class TaskController extends Controller
         }
 
         // 檢查當日是否有相同分店和相同類別的任務
-        $task = Task::whereDate('task_date', $data['task_date'])->where('restaurant_id', $data['restaurant_id'])->where('category', $data['category'])->first();
+        $task = Task::whereDate('task_date', $data['task_date']->format('Y-m-d'))->where('restaurant_id', $data['restaurant_id'])->where('category', $data['category'])->first();
         if ($task) {
             alert()->warning('請確認', Carbon::parse($task->task_date)->format('Y-m-d') . '已經有' . $task->restaurant->brand_code . $task->restaurant->shop . '的' . $task->category . '任務');
         }

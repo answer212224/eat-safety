@@ -70,6 +70,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/{task}/meal/check', [TaskController::class, 'mealCheck'])->name('task-meal-check');
             // 開始採樣
             Route::post('{task}/meal/check', [TaskController::class, 'mealCheckSubmit'])->name('task-meal-submit');
+            // 下載採樣單
+            Route::get('{task}/meal/export', [MealController::class, 'export'])->name('task-meal-export');
             // 開始專案
             Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
             // 開始專案
