@@ -20,6 +20,8 @@ class TaskController extends Controller
         $tasks = optional(auth()->user()->tasks)->load('users');
         if (!empty($tasks)) {
             $tasks = $tasks->sortByDesc('id');
+        } elseif (auth()->user()->can('view-all-task')) {
+            $tasks = Task::all()->load('users');
         } else {
             $tasks = [];
         }
@@ -48,10 +50,10 @@ class TaskController extends Controller
     public function mealCheck(Task $task)
     {
         // 如果任務時間不是今日日期，就不能開始採樣，只判斷日期是否為今日日期
-        if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
-            alert()->error('錯誤', '只能在任務日期當天開始採樣');
-            return back();
-        }
+        // if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
+        //     alert()->error('錯誤', '只能在任務日期當天開始採樣');
+        //     return back();
+        // }
         $title = '開始採樣';
 
         return view('backend.tasks.meals.check', compact('title', 'task'));
@@ -60,10 +62,10 @@ class TaskController extends Controller
     public function projectCheck(Task $task)
     {
         // 如果任務時間不是今日日期，就不能開始專案，只判斷日期是否為今日日期
-        if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
-            alert()->error('錯誤', '只能在任務日期當天開始專案');
-            return back();
-        }
+        // if (Carbon::parse($task->task_date)->format('Y-m-d') != Carbon::today()->format('Y-m-d')) {
+        //     alert()->error('錯誤', '只能在任務日期當天開始專案');
+        //     return back();
+        // }
         $title = '開始專案';
 
         return view('backend.tasks.projects.check', compact('title', 'task'));
