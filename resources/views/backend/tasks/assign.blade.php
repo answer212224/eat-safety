@@ -113,14 +113,17 @@
                 }
 
                 var calendarAddEvent2 = function() {
-                    // 當前月曆的月份
+                    // 當前月曆的年份和月份
                     var currentMonth = calendar.getDate().getMonth() + 1;
+                    var currentYear = calendar.getDate().getFullYear();
+
                     // 顯示當顯月分未指派的分店
                     $.ajax({
                         url: "{{ route('getUnassignedStores') }}",
                         type: "GET",
                         data: {
-                            month: currentMonth
+                            month: currentMonth,
+                            year: currentYear
                         },
                         success: function(data) {
                             console.log(data);
@@ -131,7 +134,7 @@
                             });
                             $('#unassignedStores').html(html);
                             // 顯示月份
-                            $('#unassignedStoresModalLabel').html('未指派的分店 - ' + currentMonth + '月' + ' (' + stores.length + '間)');
+                            $('#unassignedStoresModalLabel').html('未指派的分店 - ' + currentYear + '年' + currentMonth + '月' + ' (' + stores.length + '間)');
                             $('#unassignedStoresModal').modal('show');
 
                         }

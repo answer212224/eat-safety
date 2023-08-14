@@ -330,8 +330,9 @@ class TaskController extends Controller
     {
         return response()->json([
             'stores' => Restaurant::where('status', 1)->whereDoesntHave('tasks', function ($query) use ($request) {
-                $query->whereMonth('task_date', $request->month);
+                $query->whereYear('task_date', $request->year)->whereMonth('task_date', $request->month);
             })->get(),
+            'year' => $request->year,
             'month' => $request->month,
         ]);
     }
