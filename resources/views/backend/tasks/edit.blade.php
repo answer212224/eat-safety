@@ -230,6 +230,7 @@
                                     <h4>稽核缺失</h4>
                                 </div>
 
+
                             </div>
                         </div>
                         <div class="widget-content widget-content-area">
@@ -395,7 +396,7 @@
                                     <button type="submit" class="btn btn-success mb-3">更新</button>
                                 @endcan
                                 {{-- 稽核報告下載 --}}
-                                @if ($task->status == '已完成')
+                                @if ($task->status == 'completed')
                                     <a href="{{ route('task-report', ['task' => $task]) }}" class="btn btn-info mb-3"
                                         target="_blank">稽核報告下載</a>
                                 @endif

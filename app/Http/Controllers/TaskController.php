@@ -10,6 +10,8 @@ use App\Models\Project;
 use App\Models\Restaurant;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Elibyy\TCPDF\Facades\TCPDF;
+
 
 
 class TaskController extends Controller
@@ -337,5 +339,45 @@ class TaskController extends Controller
             'year' => $request->year,
             'month' => $request->month,
         ]);
+    }
+
+    /**
+     * 中文稽核報告pdf下載
+     */
+    public function report(Task $task)
+    {
+        // 取得缺失扣分加總
+        $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
+        // 任務底下的缺失按照區站分類
+        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+        // 取得缺失群組底下扣分
+        $defectsGroup->transform(function ($defects) {
+            $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
+            return $defects;
+        });
+
+        // dd($defectsGroup->first()->first());
+
+        $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . $task->task_date . '.pdf';
+
+        $view = \View::make('pdf.5s', compact('task', 'sum', 'defectsGroup'));
+
+
+        $html = $view->render();
+
+        $pdf = new TCPDF();
+
+        $pdf::setFooterCallback(function ($pdf) {
+            // 頁數
+            $pdf->SetY(-15);
+            $pdf->SetFont('msungstdlight', '', 10);
+            $pdf->Cell(0, 0, '第' . $pdf->getAliasNumPage() . '頁/共' . $pdf->getAliasNbPages() . '頁', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        });
+
+        $pdf::SetFont('msungstdlight', '', 14);
+        $pdf::AddPage();
+        $pdf::writeHTML($html, true, false, true, false, '');
+
+        $pdf::Output($filename);
     }
 }
