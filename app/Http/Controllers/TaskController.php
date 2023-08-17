@@ -342,25 +342,49 @@ class TaskController extends Controller
     }
 
     /**
-     * 中文稽核報告pdf下載
+     * 5S和清檢稽核報告pdf下載
      */
     public function report(Task $task)
     {
-        // 取得缺失扣分加總
-        $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
-        // 任務底下的缺失按照區站分類
-        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
-        // 取得缺失群組底下扣分
-        $defectsGroup->transform(function ($defects) {
-            $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
-            return $defects;
-        });
+        if ($task->category == '食安及5S') {
 
-        // dd($defectsGroup->first()->first());
+            $task->task_date = Carbon::parse($task->task_date);
+            // 取得缺失扣分加總
+            $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
+            // 任務底下的缺失按照區站分類
+            $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+
+            // 取得缺失群組底下扣分
+            $defectsGroup->transform(function ($defects) {
+                $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
+                return $defects;
+            });
+        } else {
+            $task->task_date = Carbon::parse($task->task_date);
+            // 取得缺失扣分加總
+            $sum = $task->taskHasClearDefects->where('is_ignore', 0)->sum(function ($item) {
+                return $item->clearDefect->deduct_point * $item->amount;
+            });
+            // 任務底下的缺失按照區站分類
+            $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
+
+            // 取得缺失群組底下扣分和數量
+            $defectsGroup->transform(function ($defects) {
+                $defects->sum = $defects->where('is_ignore', 0)->sum(function ($item) {
+                    return $item->clearDefect->deduct_point * $item->amount;
+                });
+                $defects->amount = $defects->sum('amount');
+                return $defects;
+            });
+        }
 
         $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . $task->task_date . '.pdf';
 
-        $view = \View::make('pdf.5s', compact('task', 'sum', 'defectsGroup'));
+        if ($task->category == '食安及5S') {
+            $view = \View::make('pdf.5s', compact('task', 'sum', 'defectsGroup'));
+        } else {
+            $view = \View::make('pdf.clear', compact('task', 'sum', 'defectsGroup'));
+        }
 
 
         $html = $view->render();

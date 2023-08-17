@@ -395,11 +395,12 @@
                                 @can('update-task')
                                     <button type="submit" class="btn btn-success mb-3">更新</button>
                                 @endcan
-                                {{-- 稽核報告下載 --}}
+                 
                                 @if ($task->status == 'completed')
                                     <a href="{{ route('task-report', ['task' => $task]) }}" class="btn btn-info mb-3"
                                         target="_blank">稽核報告下載</a>
                                 @endif
+
                                 <a href="{{ url()->previous() }}" class="btn btn-dark mb-3">上一頁</a>
                                 @can('delete-task')
                                     <a href="{{ route('task-delete', ['task' => $task]) }}" class="btn btn-danger"
