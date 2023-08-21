@@ -64,9 +64,10 @@
                                     <th>部門</th>
                                     <th>角色</th>
                                     <th>狀態</th>
-                                    <th class="text-end">更新時間</th>
+                                    <th>更新時間</th>
+                                    <th></th>
                                     @can('update-user')
-                                        <th class="text-end">操作</th>
+                                        <th class="text-end"></th>
                                     @endcan
                                 </tr>
                             </thead>
@@ -113,6 +114,10 @@
                                             @endswitch
                                         </td>
                                         <td class="text-end">{{ $user->updated_at }}</td>
+                                        <td>
+                                            <a href="{{ route('user-show', ['user' => $user]) }}"
+                                                class="badge badge-light-primary">查看缺失</a>
+                                        </td>
                                         @can('update-user')
                                             <td class="text-end">
                                                 <a href="{{ route('user-edit', ['user' => $user]) }}"

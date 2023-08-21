@@ -164,6 +164,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::get('/list', [UserController::class, 'index'])->name('user-index');
                 Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user-edit');
                 Route::put('/{user}', [UserController::class, 'update'])->name('user-update');
+                // user-show
+                Route::get('/{user}/show', [UserController::class, 'show'])->name('user-show');
             });
         });
         Route::prefix('chart')->group(function () {

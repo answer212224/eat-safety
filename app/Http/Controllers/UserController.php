@@ -72,4 +72,15 @@ class UserController extends Controller
 
         Log::info("使用者資料更新成功");
     }
+
+    // user-show
+    public function show(User $user)
+    {
+        $user->load('taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.restaurantWorkspace.restaurant', 'taskHasClearDefects.restaurantWorkspace.restaurant', 'taskHasDefects.task', 'taskHasClearDefects');
+        // dd($user->taskHasDefects);
+        return view('backend.users.show', [
+            'title' => '同仁資料',
+            'user' => $user,
+        ]);
+    }
 }
