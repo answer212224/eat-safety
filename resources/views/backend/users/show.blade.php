@@ -17,7 +17,6 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('user-index') }}">資料</a></li>
-                {{-- 上一頁 --}}
                 <li class="breadcrumb-item"><a href="{{ route('user-index') }}">同仁資料</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
             </ol>

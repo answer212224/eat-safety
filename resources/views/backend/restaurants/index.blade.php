@@ -62,20 +62,14 @@
                                     <th>區域</th>
                                     <th>地址</th>
                                     <th>狀態</th>
-                                    <th>區站</th>
-                                    <th class="text-end">更新時間</th>
+                                    <th>更新時間</th>
+                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($restaurants as $restaurant)
                                     <tr>
-                                        <td><a href="{{ route('restaurant-chart', ['restaurant' => $restaurant]) }}">{{ $restaurant->sid }}<svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-activity">
-                                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                                </svg></a></td>
+                                        <td>{{ $restaurant->sid }}</td>
                                         <td>{{ $restaurant->brand }}</td>
                                         <td>{{ $restaurant->shop }}</td>
                                         <td>{{ $restaurant->location }}</td>
@@ -87,12 +81,21 @@
                                                 <span class="badge badge-danger">停用</span>
                                             @endif
                                         </td>
-                                        <td><a href="{{ route('restaurant-workspace', ['restaurant' => $restaurant]) }}"
+                                        <td>{{ $restaurant->updated_at }}</td>
+                                        <td>
+                                            <a href="{{ route('restaurant-workspace', ['restaurant' => $restaurant]) }}"
                                                 class="badge badge-dark">
                                                 區站
                                             </a>
+                                            <a href="{{ route('restaurant-chart', ['restaurant' => $restaurant]) }}">
+                                                <span class="badge badge-primary">圖表</span>
+                                            </a>
+                                            <a href="{{ route('restaurant-defects', ['restaurant' => $restaurant]) }}"
+                                                class="badge badge-warning">
+                                                食安缺失
                                         </td>
-                                        <td class="text-end">{{ $restaurant->updated_at }}</td>
+                                        
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>

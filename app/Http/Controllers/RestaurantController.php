@@ -113,4 +113,17 @@ class RestaurantController extends Controller
             'tasks' => $tasks,
         ]);
     }
+
+    /**
+     * restaurant-defect
+     */
+    public function defects(Restaurant $restaurant)
+    {
+        $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasDefects');
+
+        return view('backend.restaurants.defects', [
+            'title' => '分店食安缺失資料',
+            'restaurant' => $restaurant,
+        ]);
+    }
 }

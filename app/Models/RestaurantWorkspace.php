@@ -15,4 +15,13 @@ class RestaurantWorkspace extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+
+    /**
+     * hasMany TaskHasDefect
+     */
+
+    public function taskHasDefects()
+    {
+        return $this->hasMany(TaskHasDefect::class);
+    }
 }

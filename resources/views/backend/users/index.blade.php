@@ -116,12 +116,12 @@
                                         <td class="text-end">{{ $user->updated_at }}</td>
                                         <td>
                                             <a href="{{ route('user-show', ['user' => $user]) }}"
-                                                class="badge badge-light-primary">查看缺失</a>
+                                                class="badge badge-warning">查看缺失</a>
                                         </td>
                                         @can('update-user')
                                             <td class="text-end">
                                                 <a href="{{ route('user-edit', ['user' => $user]) }}"
-                                                    class="badge badge-light-primary">編輯</a>
+                                                    class="badge badge-success">編輯</a>
                                             </td>
                                         @endcan
                                     </tr>
