@@ -93,6 +93,10 @@
                                             <a href="{{ route('restaurant-defects', ['restaurant' => $restaurant]) }}"
                                                 class="badge badge-warning">
                                                 食安缺失
+                                            </a>
+                                            <a href="{{ route('restaurant-clear-defects', ['restaurant' => $restaurant]) }}"
+                                                class="badge badge-info">
+                                                清檢缺失
                                         </td>
                                         
                                         

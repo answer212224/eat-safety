@@ -159,6 +159,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');
                 // restaurant-defects
                 Route::get('/{restaurant}/defects', [RestaurantController::class, 'defects'])->name('restaurant-defects');
+                // restaurant-clear-defects
+                Route::get('/{restaurant}/clear-defects', [RestaurantController::class, 'clearDefects'])->name('restaurant-clear-defects');
             });
 
             Route::prefix('users')->group(function () {

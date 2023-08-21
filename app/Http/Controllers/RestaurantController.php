@@ -126,4 +126,18 @@ class RestaurantController extends Controller
             'restaurant' => $restaurant,
         ]);
     }
+
+    /**
+     * 分店的清檢缺失
+     * restaurant-clear-defects
+     */
+    public function clearDefects(Restaurant $restaurant)
+    {
+        $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasClearDefects');
+
+        return view('backend.restaurants.clear-defects', [
+            'title' => '分店清潔缺失資料',
+            'restaurant' => $restaurant,
+        ]);
+    }
 }

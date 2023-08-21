@@ -19,9 +19,16 @@ class RestaurantWorkspace extends Model
     /**
      * hasMany TaskHasDefect
      */
-
     public function taskHasDefects()
     {
         return $this->hasMany(TaskHasDefect::class);
+    }
+
+    /**
+     * hasMany TaskHasClearDefect
+     */
+    public function taskHasClearDefects()
+    {
+        return $this->hasMany(TaskHasClearDefect::class);
     }
 }
