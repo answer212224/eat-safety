@@ -40,6 +40,7 @@
             <tr>
                 <td colspan="1" align="center">各站分數及缺失數</td>
                 <td colspan="11" align="left">
+                    <br/>
                     @foreach ($defectsGroup as $key => $items)
                         {{ $key }}：{{ $items->sum }}分
                         @if($key=='中廚'||$key=='西廚'||$key=='日廚')
@@ -57,15 +58,18 @@
                 </td>
             </tr>
             @foreach($defectsGroup as $key => $items)
-                <tr>
-                    <td colspan="12" align="center">{{ $key }}</td>
-                </tr>
-                @foreach ($items as $item)   
+                @foreach ($items as $item)
+                    <tr>
+                        <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
+                    </tr>
                     <tr>
                         @foreach ($item->images as $image)
-                        <td colspan="6">
+                        <td colspan="6" style="text-align: center">
+                            <br/>
                             @if (request()->isSecure())
-                                <img src="{{ asset('storage/' . $image) }}" alt="" width="200px">
+                                {{-- base64 --}}
+                                {{-- <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px" height="200"> --}}
+                                <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px" height="200">
                             @else
                                 {{ asset('storage/' . $image) }}                               
                             @endif

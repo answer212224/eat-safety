@@ -404,9 +404,9 @@ class TaskController extends Controller
             $pdf->Cell(0, 0, '第' . $pdf->getAliasNumPage() . '頁/共' . $pdf->getAliasNbPages() . '頁', 0, false, 'C', 0, '', 0, false, 'T', 'M');
         });
 
-        $pdf::SetFont('msungstdlight', '', 14);
+        $pdf::SetFont('msungstdlight', '', 12);
         $pdf::AddPage();
-        $pdf::writeHTML($html, true, false, true, false, '');
+        $pdf::writeHTML($html, true, false, true, false);
 
         $pdf::Output($filename);
     }
