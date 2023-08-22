@@ -11,6 +11,7 @@ use App\Models\Restaurant;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Elibyy\TCPDF\Facades\TCPDF;
+use App\Models\RestaurantWorkspace;
 
 
 
@@ -347,18 +348,23 @@ class TaskController extends Controller
     public function report(Task $task)
     {
         if ($task->category == '食安及5S') {
-
+            $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             $task->task_date = Carbon::parse($task->task_date);
             // 取得缺失扣分加總
             $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
-            // 任務底下的缺失按照區站分類
-            $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
-
+            // 任務底下的缺失按照區站kitchen分類
+            $defectsGroup = $task->taskHasDefects->groupBy('restaurantWorkspace.kitchen');
             // 取得缺失群組底下扣分
             $defectsGroup->transform(function ($defects) {
                 $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
                 return $defects;
             });
+            // 缺失群組底下的缺失再依照restaurant_workspace_id分類
+            $defectsGroup->transform(function ($defects) {
+                $defects->group = $defects->groupBy('restaurantWorkspace.area');
+                return $defects;
+            });
+            // dd($defectsGroup['中廚']->group);
         } else {
             $task->task_date = Carbon::parse($task->task_date);
             // 取得缺失扣分加總

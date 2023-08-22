@@ -38,21 +38,27 @@
                 <td colspan="10" align="center">{{ 100 + $sum  }}</td>
             </tr>
             <tr>
-                <td colspan="12" align="center">各區站缺失項目及扣分</td>
+                <td colspan="1" align="center">各站分數及缺失數</td>
+                <td colspan="11" align="left">
+                    @foreach ($defectsGroup as $key => $items)
+                        {{ $key }}：{{ $items->sum }}分
+                        @if($key=='中廚'||$key=='西廚'||$key=='日廚')
+                        （
+                            @foreach($items->group as $area => $item)
+                                {{ Str::substr($area, 2) }}：{{ $item->count() }}項
+                                @if(!$loop->last)
+                                    、
+                                @endif
+                            @endforeach
+                        ）
+                        @endif
+                        缺失數{{ $items->count() }}項<br/>
+                    @endforeach
+                </td>
             </tr>
-        
-            @foreach ($defectsGroup as $item)
+            @foreach($defectsGroup as $key => $items)
                 <tr>
-                    <td colspan="4" align="center">{{ $item->first()->restaurantWorkspace->area }}</td>
-                    <td colspan="4" align="center">{{ $item->count() }} 項</td>
-                    <td colspan="4" align="center">{{ $item->sum }}</td>
-                </tr>
-
-            @endforeach
-
-            @foreach($defectsGroup as $items)
-                <tr>
-                    <td colspan="12" align="center">{{ $item->first()->restaurantWorkspace->area }}</td>
+                    <td colspan="12" align="center">{{ $key }}</td>
                 </tr>
                 @foreach ($items as $item)   
                     <tr>
