@@ -176,6 +176,14 @@
                         },
                     @endcan
 
+                    @cannot('create-task')
+                        headerToolbar: {
+                            left: 'prev next myCustomButton2',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                        },
+                    @endcannot
+
                     buttonText: {
                         today: '今天',
                         month: '月',
