@@ -46,9 +46,9 @@
                             <div class="card-text">
                                 <div class="form-check form-switch form-check-inline">
                                     <input class="form-check-input" type="checkbox" role="switch" name="is_takens[]"
-                                        value="{{ $meal->id }}" id="flexSwitchCheckDefault"
+                                        value="{{ $meal->id }}" id="{{ $meal->id }}"
                                         @if ($meal->pivot->is_taken) checked @endif>
-                                    <label class="form-check-label" for="flexSwitchCheckDefault">是否有採樣，若無請填寫原因</label>
+                                    <label class="form-check-label" for="{{ $meal->id }}">是否有採樣，若無請填寫原因</label>
                                 </div>
                             </div>
 
