@@ -47,6 +47,12 @@ class TaskController extends Controller
         }
         $title = '開始稽核';
 
+        // 假如已有開始時間，就不要再更新開始時間
+        if (empty($task->start_at)) {
+            $task->start_at = Carbon::now();
+            $task->save();
+        }
+
         return view('backend.tasks.create', compact('title', 'task'));
     }
 
@@ -308,6 +314,7 @@ class TaskController extends Controller
         }
 
         $task->update([
+            'end_at' => Carbon::now(),
             'outer_manager' => $request->outer_manager,
             'inner_manager' => $request->inner_manager,
             'status' => 'completed',

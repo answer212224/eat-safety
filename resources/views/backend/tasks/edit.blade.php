@@ -147,7 +147,19 @@
                                     <div class="form-group mt-3">
                                         <label class="form-label">稽核日期</label>
                                         <input id="event-start-date" name="task_date"
-                                            class="form-control flatpickr" value="{{ $task->task_date }}">
+                                            class="form-control flatpickr">
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label>稽核開始時間</label>
+                                        <input type="text" name="start_time" class="form-control" disabled
+                                            value="{{ $task->start_at }}">
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label>稽核結束時間</label>
+                                        <input type="text" name="end_time" class="form-control" disabled
+                                            value="{{ $task->end_at }}">
                                     </div>
 
                                     <div class="form-group mt-3">
@@ -205,17 +217,10 @@
                                     </div>
 
                                 </div>
-
-
-
                             </div>
-
                         </div>
                     </div>
-
-
                 </div>
-
 
                 <div id="Defect" class="col-lg-12 layout-spacing mt-4">
                     <div class="statbox widget box box-shadow">
@@ -424,7 +429,7 @@
                     flatpickr(".flatpickr");
                     flatpickr("#event-start-date", {
                         dateFormat: "Y-m-d H:i",
-                      
+                        defaultDate: "{{ $task->task_date }}",
                         enableTime: true,
                         hourIncrement: 2,
                         minuteIncrement: 30,
