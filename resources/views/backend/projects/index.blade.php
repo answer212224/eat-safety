@@ -29,11 +29,12 @@
                             </ol>
                         </nav>
                     </div>
+                    @can('create-project')
                     <div class="col-4 align-self-center text-end">
                         <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">新增</button>
                     </div>
-
+                    @endcan
                 </div>
 
 
