@@ -26,7 +26,7 @@
             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
-                    <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-assign') }}">指派稽核</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-assign') }}">稽核行事曆</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
                 </ol>
             </nav>

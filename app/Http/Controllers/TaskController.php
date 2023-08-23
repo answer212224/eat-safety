@@ -235,7 +235,7 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        $title = '編輯任務';
+        $title = '編輯或查看稽核';
         $score = 100;
         // 取得role是auditor的使用者
         $users = User::role('auditor')->get();
