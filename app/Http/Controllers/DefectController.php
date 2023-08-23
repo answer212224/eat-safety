@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\DefectsImport;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Defect;
-use App\Models\TaskHasClearDefect;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
+use App\Imports\DefectsImport;
+use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class DefectController extends Controller
 {
@@ -26,29 +27,23 @@ class DefectController extends Controller
             'defects' => $defects,
         ]);
     }
-    // 食安及5S稽核缺失新增
+    /**
+     * 新增食安和清簡的缺失 包含圖片上傳最多兩張
+     */
     public function store(Task $task, Request $request)
     {
-        $path = [];
-        // 取得 Filepond 的實體
+        $images = [];
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-        // 判斷是否有上傳圖片，有的話就取得圖片路徑
-        if (isset($request->filepond[0])) {
-            // 取得圖片路徑
-            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
-            // 將 \ 轉換成 /
-            $filePath0 = Str::of($filePath0)->replace('\\', '/');
-            // 將圖片路徑放進 $path 陣列
-            array_push($path, $filePath0);
-            // 判斷是否有第二張圖片，有的話就取得圖片路徑
-            if (isset($request->filepond[1])) {
-                // 取得圖片路徑
-                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
-                // 將 \ 轉換成 /
-                $filePath1 = Str::of($filePath1)->replace('\\', '/');
-                // 將圖片路徑放進 $path 陣列
-                array_push($path, $filePath1);
-            }
+        $disk = config('filepond.temporary_files_disk');
+
+        foreach ($request->filepond as $file) {
+            $path = $filepond->getPathFromServerId($file);
+            $file = Storage::disk($disk)->get($path);
+
+            $fileName = Str::random(3) . '.jpg';
+            Storage::disk($disk)->put("uploads/$task->id/$fileName", $file);
+
+            $images[] = "uploads/$task->id/$fileName";
         }
 
         // 如果同一個站台有同樣的缺失，跳出警告訊息
@@ -60,7 +55,7 @@ class DefectController extends Controller
                 'user_id' => auth()->user()->id,
                 'defect_id' => $request->defect_id,
                 'restaurant_workspace_id' => $request->workspace,
-                'images' => $path,
+                'images' => $images,
                 'is_ignore' => $request->is_ignore ? 1 : 0,
                 'memo' => $request->memo,
             ]);
@@ -76,7 +71,7 @@ class DefectController extends Controller
                 'user_id' => auth()->user()->id,
                 'defect_id' => $request->defect_id,
                 'restaurant_workspace_id' => $request->workspace,
-                'images' => $path,
+                'images' => $images,
                 'is_ignore' => $request->is_ignore ? 1 : 0,
                 'memo' => $request->memo,
             ]);

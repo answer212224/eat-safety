@@ -59,6 +59,7 @@ window.multifiles = FilePond.create(
 );
 
 FilePond.setOptions({
+    acceptedFileTypes: ["image/png", "image/jpeg", "image/jpg"],
     server: {
         url: "/filepond/api",
         process: "/process",
