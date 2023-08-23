@@ -245,32 +245,14 @@ class DefectController extends Controller
     // 更新食安缺失
     public function update(TaskHasDefect $taskHasDefect, Request $request)
     {
-
-        $path = [];
-
-        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-
-        if (isset($request->filepond[0])) {
-            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
-            $filePath0 = Str::of($filePath0)->replace('\\', '/');
-            array_push($path, $filePath0);
-            if (isset($request->filepond[1])) {
-                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
-                $filePath1 = Str::of($filePath1)->replace('\\', '/');
-                array_push($path, $filePath1);
-            }
+        if (empty($request->workspace) || empty($request->defect_id)) {
+            alert()->warning('請確認', '請填寫完整資料');
+            return redirect();
         }
-
-        if (empty($path)) {
-            alert()->warning('請確認', '請上傳圖片');
-            return back();
-        };
-
         $taskHasDefect->update([
             'defect_id' => $request->defect_id,
             'restaurant_workspace_id' => $request->workspace,
             'is_ignore' => $request->is_ignore ? 1 : 0,
-            'images' => $path,
             'memo' => $request->memo,
         ]);
 
@@ -281,28 +263,14 @@ class DefectController extends Controller
     // 更新清檢缺失
     public function clearUpdate(TaskHasClearDefect $taskHasDefect, Request $request)
     {
-        if (empty($request->workspace) || empty($request->clear_defect_id) || empty($request->filepond)) {
+        if (empty($request->workspace) || empty($request->clear_defect_id)) {
             alert()->warning('請確認', '請填寫完整資料');
             return redirect();
-        }
-        $path = [];
-        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-
-        if (isset($request->filepond[0])) {
-            $filePath0 = $filepond->getPathFromServerId($request->filepond[0]);
-            $filePath0 = Str::of($filePath0)->replace('\\', '/');
-            array_push($path, $filePath0);
-            if (isset($request->filepond[1])) {
-                $filePath1 = $filepond->getPathFromServerId($request->filepond[1]);
-                $filePath1 = Str::of($filePath1)->replace('\\', '/');
-                array_push($path, $filePath1);
-            }
         }
 
         $taskHasDefect->update([
             'clear_defect_id' => $request->clear_defect_id,
             'restaurant_workspace_id' => $request->workspace,
-            'images' => $path,
             'description' => $request->description,
             'is_ignore' => $request->is_ignore ? 1 : 0,
             'amount' => $request->demo3_21,

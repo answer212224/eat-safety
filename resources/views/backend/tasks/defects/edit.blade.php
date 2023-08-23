@@ -93,17 +93,18 @@
                         <div class="row">
 
                             <div class="col-xxl-12 col-md-12 mb-4">
-                                <label for="product-images">缺失照片</label>
-                                <div class="multiple-file-upload">
-                                    <input type="file" class="file-upload-multiple" name="filepond[]"
-                                        id="product-images" multiple data-allow-reorder="true" data-max-file-size="10MB"
-                                        data-max-files="2" required>
+                                {{-- 缺失照片 --}}
+                                <div class="row">
+                                    @foreach($taskHasDefect->images as $image)
+                                        <img src="{{ asset("storage/$image") }}" alt="" class="m-2">
+                                    @endforeach
                                 </div>
+                                
                             </div>
 
                             <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
                                 <button class="btn btn-success w-100">更新</button>
-                                <a href="{{ url()->previous() }}" class="btn btn-dark w-100 my-3">上一頁</a>
+                                <a href="{{ route('task-clear-defect-owner',['task' => $taskHasDefect->task->id]) }}" class="btn btn-dark w-100 my-3">上一頁</a>
                             </div>
                         </div>
                     </div>
@@ -146,15 +147,7 @@
 
 
                 <script src="{{ asset('plugins/tagify/tagify.min.js') }}"></script>
-                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230602"></script>
-                <script type="module">
-
-                    @foreach ($taskHasDefect->images as $image)
-                        multifiles.addFiles('{{ asset('storage/' . $image) }}');
-                    @endforeach
-
-
-                </script>
+                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230823"></script>
                 </x-slot>
                 <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>
