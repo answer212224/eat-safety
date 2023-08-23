@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <td colspan="1" align="center">日期</td>
-                <td colspan="3" align="center">{{ $task->task_date->format('y年n月j日') }}</td>
+                <td colspan="3" align="center">{{ $task->task_date->format('Y年n月j日') }}</td>
                 <td colspan="1" align="center">時間</td>
                 <td colspan="2" align="center">{{ $task->task_date->format('h:i') }}</td>
                 <td colspan="2" align="center">稽核員</td>
@@ -38,18 +38,25 @@
                 <td colspan="10" align="center">{{ 100 + $sum  }}</td>
             </tr>
             <tr>
-                <td colspan="12" align="center">各區站缺失項目及數量和扣分</td>
+                <td colspan="1" align="center">各站分數及缺失數</td>
+                <td colspan="11" align="left">
+                    <br/>
+                    @foreach ($defectsGroup as $key => $items)
+                        {{ $key }}：{{ $items->sum }}分
+                        @if($key=='中廚'||$key=='西廚'||$key=='日廚')
+                        （
+                            @foreach($items->group as $area => $item)
+                                {{ Str::substr($area, 2) }}：{{ $item->count() }}項
+                                @if(!$loop->last)
+                                    、
+                                @endif
+                            @endforeach
+                        ）
+                        @endif
+                        缺失數{{ $items->count() }}項<br/>
+                    @endforeach
+                </td>
             </tr>
-        
-            @foreach ($defectsGroup as $item)
-                <tr>
-                    <td colspan="3" align="center">{{ $item->first()->restaurantWorkspace->area }}</td>
-                    <td colspan="3" align="center">{{ $item->count() }} 項</td>
-                    <td colspan="3" align="center">{{ $item->amount }} 個</td>
-                    <td colspan="3" align="center">{{ $item->sum }}</td>
-                </tr>
-
-            @endforeach
 
             @foreach($defectsGroup as $items)
                 <tr>
@@ -74,6 +81,10 @@
                     <tr>
                         <td colspan="3" align="">次項目</td>
                         <td colspan="9" align="">{{ $item->clearDefect->sub_item }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="">數量</td>
+                        <td colspan="9" align="">{{ $item->amount }}</td>
                     </tr>
                     <tr>
                         <td colspan="3" align="">備註</td>

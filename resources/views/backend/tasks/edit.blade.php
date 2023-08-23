@@ -36,13 +36,8 @@
         <div id="navSection" data-bs-spy="affix" class="nav sidenav">
             <div class="sidenav-content">
                 <a href="#Task" class="active nav-link">稽核任務</a>
-
                 <a href="#Defect" class="nav-link">稽核缺失</a>
-
-                @can('delete-task')
-                    <a href="#Action" class="nav-link">操作</a>
-                @endcan
-
+                <a href="#Action" class="nav-link">操作</a>
             </div>
         </div>
         <form action="{{ route('task-update', ['task' => $task]) }}" method="post">

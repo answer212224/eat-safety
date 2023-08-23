@@ -69,7 +69,7 @@
                             @if (request()->isSecure())
                                 {{-- base64 --}}
                                 {{-- <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px" height="200"> --}}
-                                <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px" height="200">
+                                <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
                             @else
                                 {{ asset('storage/' . $image) }}                               
                             @endif
