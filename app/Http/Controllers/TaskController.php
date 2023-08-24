@@ -285,7 +285,18 @@ class TaskController extends Controller
 
     public function update(Task $task, Request $request)
     {
+        $user_ids = collect($request->users);
 
+        $diff = $user_ids->diff($task->users->pluck('id'));
+
+        // 從diff中取出id，尋找該同仁是否當日有其他任務，有的話就要提醒
+        foreach ($diff as $id) {
+            $user = User::find($id);
+            $count = $user->tasks()->whereDate('task_date', Carbon::parse($task->task_date))->count();
+            if ($count > 0) {
+                alert()->warning('請確認', $user->name . '在' . Carbon::parse($task->task_date)->format('Y-m-d') . '已經有其他任務');
+            }
+        }
 
         $task->users()->sync($request->users);
         $task->projects()->sync($request->projects);
@@ -293,15 +304,6 @@ class TaskController extends Controller
         $task->update([
             'status' => $request->status,
         ]);
-
-        // 查看當天所有任務的所有使用者，request.task_date轉成Carbon格式
-        $tasks = Task::whereDate('task_date', Carbon::parse($request->task_date))->get();
-        // 假如有重複的使用者，跳出該使用者的名字
-        $users = $tasks->pluck('users')->flatten()->pluck('name')->duplicates();
-        // 如果有重複的使用者，跳出警告
-        if ($users->count() > 0) {
-            alert()->warning('請確認', Carbon::parse($request->task_date)->format('Y-m-d') . '已經有' . $users->implode('、') . '的任務');
-        }
 
         return back();
     }
