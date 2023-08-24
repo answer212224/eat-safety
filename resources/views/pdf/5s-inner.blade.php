@@ -13,7 +13,7 @@
     {{-- header logo --}}
     <div class="header">
         <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt="" style="width: 50px">
-        <span >清潔檢查稽核報告</span>
+        <span >食安及5S內場稽核報告</span>
     </div>
     <div class="table">
         <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">食安分數</td>
-                <td colspan="10" align="center">{{ 100 + $sum  }}</td>
+                <td colspan="10" align="center">{{ 100 + $defectsGroup->sum('sum') }}</td>
             </tr>
             <tr>
                 <td colspan="1" align="center">各站分數及缺失數</td>
@@ -53,21 +53,23 @@
                             @endforeach
                         ）
                         @endif
-                        缺失數{{ $items->count() }}項<br/>
+                        ，缺失數 {{ $items->count() }} 項<br/>
                     @endforeach
                 </td>
             </tr>
-
-            @foreach($defectsGroup as $items)
-                <tr>
-                    <td colspan="12" align="center">{{ $item->first()->restaurantWorkspace->area }}</td>
-                </tr>
-                @foreach ($items as $item)   
+            @foreach($defectsGroup as $key => $items)
+                @foreach ($items as $item)
+                    <tr>
+                        <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
+                    </tr>
                     <tr>
                         @foreach ($item->images as $image)
-                        <td colspan="6">
+                        <td colspan="6" style="text-align: center">
+                            <br/>
                             @if (request()->isSecure())
-                                <img src="{{ asset('storage/' . $image) }}" alt="" width="200px">
+                                {{-- base64 --}}
+                                {{-- <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px" height="200"> --}}
+                                <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
                             @else
                                 {{ asset('storage/' . $image) }}                               
                             @endif
@@ -75,20 +77,21 @@
                         @endforeach
                     </tr>
                     <tr>
-                        <td colspan="3" align="">主項目</td>
-                        <td colspan="9" align="">{{ $item->clearDefect->main_item }}</td>
+                        <td colspan="3" align="">缺失分類</td>
+                        <td colspan="9" align="">{{ $item->defect->group }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3" align="">次項目</td>
-                        <td colspan="9" align="">{{ $item->clearDefect->sub_item }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">數量</td>
-                        <td colspan="9" align="">{{ $item->amount }}</td>
+                        <td colspan="3" align="">報告呈現說明</td>
+                        <td colspan="9" align="">{{ $item->defect->report_description }}</td>
                     </tr>
                     <tr>
                         <td colspan="3" align="">備註</td>
-                        <td colspan="9" align="">{{ $item->memo }}</td>
+                        <td colspan="9" align="">
+                            {{ $item->memo }}
+                            @if($item->is_ignore)
+                                <span style="color: red">（忽略扣分）</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             @endforeach

@@ -46,8 +46,10 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::put('/{task}', [TaskController::class, 'update'])->name('task-update');
             // 稽核任務刪除
             Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('task-delete');
-            // 稽核報告下載
-            Route::get('{task}/report', [TaskController::class, 'report'])->name('task-report');
+            // 內場稽核報告下載
+            Route::get('{task}/inner-report', [TaskController::class, 'innerReport'])->name('task-inner-report');
+            // 外場稽核報告下載
+            Route::get('{task}/outer-report', [TaskController::class, 'outerReport'])->name('task-outer-report');
             // 稽核任務列表
             Route::get('/list', [TaskController::class, 'list'])->name('task-list');
             // 食安稽核或清檢稽核

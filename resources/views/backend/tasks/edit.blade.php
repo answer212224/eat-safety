@@ -394,8 +394,12 @@
                                 @endcan
                  
                                 @if ($task->status == 'completed')
-                                    <a href="{{ route('task-report', ['task' => $task]) }}" class="btn btn-info mb-3"
-                                        target="_blank">稽核報告下載</a>
+                                    <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="btn btn-info mb-3"
+                                        target="_blank">內場稽核報告下載
+                                    </a>            
+                                    <a href="{{ route('task-outer-report', ['task' => $task]) }}" class="btn btn-info mb-3"
+                                        target="_blank">外場稽核報告下載
+                                    </a>
                                 @endif
 
                                 <a href="{{ url()->previous() }}" class="btn btn-dark mb-3">上一頁</a>

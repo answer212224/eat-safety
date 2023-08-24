@@ -352,20 +352,21 @@ class TaskController extends Controller
     }
 
     /**
-     * 5S和清檢稽核報告pdf下載
+     * 5S和清檢稽核報告內場pdf下載
      */
-    public function report(Task $task)
+    public function innerReport(Task $task)
     {
         if ($task->category == '食安及5S') {
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             $task->task_date = Carbon::parse($task->task_date);
-            // 取得缺失扣分加總排除忽略扣分
-            $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
+
             // 任務底下的缺失按照區站kitchen分類
-            $defectsGroup = $task->taskHasDefects->groupBy('restaurantWorkspace.kitchen');
+            $defectsGroup = $task->taskHasDefects->where('restaurantWorkspace.category_value', '!=', 'outside')->groupBy('restaurantWorkspace.kitchen');
+
+
             // 取得缺失群組底下扣分
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
+                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum('defect.deduct_point');
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -376,18 +377,16 @@ class TaskController extends Controller
         } else {
             $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
             $task->task_date = Carbon::parse($task->task_date);
-            // 取得缺失扣分加總排除忽略扣分
-            $sum = $task->taskHasClearDefects->where('is_ignore', 0)->sum(function ($item) {
-                return $item->clearDefect->deduct_point * $item->amount;
-            });
+
             // 任務底下的缺失按照區站kitchen分類
-            $defectsGroup = $task->taskHasClearDefects->groupBy('restaurantWorkspace.kitchen');
+            $defectsGroup = $task->taskHasClearDefects->where('restaurantWorkspace.category_value', '!=', 'outside')->groupBy('restaurantWorkspace.kitchen');
+
             // 取得缺失群組底下扣分和數量
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->sum(function ($item) {
+                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum(function ($item) {
                     return $item->clearDefect->deduct_point * $item->amount;
                 });
-                $defects->amount = $defects->sum('amount');
+                $defects->amount = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum('amount');
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -397,14 +396,63 @@ class TaskController extends Controller
             });
         }
 
-        $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . $task->task_date . '.pdf';
+        $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . '_內場_' . $task->task_date . '.pdf';
 
         if ($task->category == '食安及5S') {
-            $view = \View::make('pdf.5s', compact('task', 'sum', 'defectsGroup'));
+            $view = \View::make('pdf.5s-inner', compact('task', 'defectsGroup'));
         } else {
-            $view = \View::make('pdf.clear', compact('task', 'sum', 'defectsGroup'));
+            $view = \View::make('pdf.clear-inner', compact('task', 'defectsGroup'));
         }
 
+        $html = $view->render();
+
+        $pdf = new TCPDF();
+
+        $pdf::setFooterCallback(function ($pdf) {
+            // 頁數
+            $pdf->SetY(-15);
+            $pdf->SetFont('msungstdlight', '', 10);
+            $pdf->Cell(0, 0, '第' . $pdf->getAliasNumPage() . '頁/共' . $pdf->getAliasNbPages() . '頁', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        });
+
+        $pdf::SetFont('msungstdlight', '', 12);
+        $pdf::AddPage();
+        $pdf::writeHTML($html, true, false, true, false);
+
+        $pdf::Output($filename);
+    }
+
+    /**
+     * 5S和清檢稽核報告外場pdf下載
+     */
+    public function outerReport(Task $task)
+    {
+        if ($task->category == '食安及5S') {
+            $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
+            // 只取得外場的缺失
+            $defects = $task->taskHasDefects->where('restaurantWorkspace.category_value', 'outside');
+            $task->task_date = Carbon::parse($task->task_date);
+            $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
+        } else {
+            $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
+            // 只取得外場的缺失
+            $defects = $task->taskHasClearDefects->where('restaurantWorkspace.category_value', 'outside');
+            $task->task_date = Carbon::parse($task->task_date);
+            $defects->sum = $defects->where('is_ignore', 0)->sum(function ($item) {
+                return $item->clearDefect->deduct_point * $item->amount;
+            });
+        }
+
+        // 取得缺失總扣分，排除忽略扣分
+
+
+        $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . '_外場_' . $task->task_date . '.pdf';
+
+        if ($task->category == '食安及5S') {
+            $view = \View::make('pdf.5s-outer', compact('task', 'defects'));
+        } else {
+            $view = \View::make('pdf.clear-outer', compact('task', 'defects'));
+        }
 
         $html = $view->render();
 

@@ -13,7 +13,7 @@
     {{-- header logo --}}
     <div class="header">
         <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt="" style="width: 50px">
-        <span >食安及5S稽核報告</span>
+        <span >食安及5S外場稽核報告</span>
     </div>
     <div class="table">
         <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
@@ -22,8 +22,8 @@
                 <td colspan="3" align="center">{{ $task->restaurant->brand }}</td>
                 <td colspan="1" align="center">分店</td>
                 <td colspan="3" align="center">{{ $task->restaurant->shop }}</td>
-                <td colspan="2" align="center">內場主管</td>
-                <td colspan="2" align="center">{{ $task->inner_manager }}</td>
+                <td colspan="2" align="center">外場主管</td>
+                <td colspan="2" align="center">{{ $task->outer_manager }}</td>
             </tr>
             <tr>
                 <td colspan="1" align="center">日期</td>
@@ -35,30 +35,17 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">食安分數</td>
-                <td colspan="10" align="center">{{ 100 + $sum  }}</td>
+                <td colspan="10" align="center">{{ 100 + $defects->sum }}</td>
             </tr>
             <tr>
                 <td colspan="1" align="center">各站分數及缺失數</td>
                 <td colspan="11" align="left">
                     <br/>
-                    @foreach ($defectsGroup as $key => $items)
-                        {{ $key }}：{{ $items->sum }}分
-                        @if($key=='中廚'||$key=='西廚'||$key=='日廚')
-                        （
-                            @foreach($items->group as $area => $item)
-                                {{ Str::substr($area, 2) }}：{{ $item->count() }}項
-                                @if(!$loop->last)
-                                    、
-                                @endif
-                            @endforeach
-                        ）
-                        @endif
-                        缺失數{{ $items->count() }}項<br/>
-                    @endforeach
+                    外場：{{ $defects->sum }}分，缺失數 {{ $defects->count() }} 項
                 </td>
             </tr>
-            @foreach($defectsGroup as $key => $items)
-                @foreach ($items as $item)
+
+                @foreach ($defects as $item)
                     <tr>
                         <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
                     </tr>
@@ -67,8 +54,6 @@
                         <td colspan="6" style="text-align: center">
                             <br/>
                             @if (request()->isSecure())
-                                {{-- base64 --}}
-                                {{-- <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px" height="200"> --}}
                                 <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
                             @else
                                 {{ asset('storage/' . $image) }}                               
@@ -86,10 +71,15 @@
                     </tr>
                     <tr>
                         <td colspan="3" align="">備註</td>
-                        <td colspan="9" align="">{{ $item->memo }}</td>
+                        <td colspan="9" align="">
+                            {{ $item->memo }}
+                            @if($item->is_ignore)
+                                <span style="color: red">（忽略扣分）</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
-            @endforeach
+
         </table>
     </div>
 
