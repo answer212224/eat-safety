@@ -36,7 +36,7 @@
 
     <div class="row layout-top-spacing">
         @foreach($restaurant->restaurantWorkspaces as $restaurantWorkspace)
-            <h3 id="{{ $restaurantWorkspace->id }}" class="text-center">{{ $restaurantWorkspace->area }}</h3>
+            <h3 id="{{ $restaurantWorkspace->id }}" class="border-left">{{ $restaurantWorkspace->area }}</h3>
             @foreach($restaurantWorkspace->taskHasDefects as $taskHasDefect)
                 <div class="card style-2 mb-4">     
                     <div class="card-body px-0 pb-0">  

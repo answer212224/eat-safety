@@ -36,12 +36,13 @@
     
 
     <div class="row layout-top-spacing">
-        <h3 id="food" class="text-center">食安及5S</h3>
+
+        <h4 id="food" class="border-left">食安及5S</h4>
         @foreach($user->taskHasDefects as $taskHasDefect)
             <div class="card style-2 mb-4">
                 
                 <div class="card-header">
-                    <h3>{{ $taskHasDefect->restaurantWorkspace->restaurant->brand }} - {{ $taskHasDefect->restaurantWorkspace->area }}</h3>
+                    <h4>{{ $taskHasDefect->restaurantWorkspace->restaurant->brand }} - {{ $taskHasDefect->restaurantWorkspace->area }}</h4>
                 </div>
 
                 <div class="card-body px-0 pb-0">  
@@ -103,63 +104,66 @@
             </div>
         @endforeach
         <hr>
-        <h3 id="clear" class="text-center">清潔檢查</h3>
+        <h4 id="clear" class="border-left">清潔檢查</h4>
         @foreach($user->taskHasClearDefects as $taskHasClearDefect)
-        <div class="card style-2 mb-4">
-            <div class="card-body px-0 pb-0">
-                <div class="row">
-                    <div class="col-3">照片</div>
-                    <div class="col-9">
-                        @foreach ($taskHasClearDefect->images as $image)
-                            <img src="{{ asset('storage/' . $image) }}"
-                                class="card-img-top my-1" alt="...">
-                        @endforeach
-                    </div>
+            <div class="card style-2 mb-4">
+                <div class="card-header">
+                    <h4>{{ $taskHasClearDefect->restaurantWorkspace->restaurant->brand }} - {{ $taskHasClearDefect->restaurantWorkspace->area }}</h4>
                 </div>
-                <div class="row mt-1">
-                    <div class="col-3">主項目</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->clearDefect->main_item }}
+                <div class="card-body px-0 pb-0">
+                    <div class="row">
+                        <div class="col-3">照片</div>
+                        <div class="col-9">
+                            @foreach ($taskHasClearDefect->images as $image)
+                                <img src="{{ asset('storage/' . $image) }}"
+                                    class="card-img-top my-1" alt="...">
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">次項目</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->clearDefect->sub_item }}
+                    <div class="row mt-1">
+                        <div class="col-3">主項目</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->clearDefect->main_item }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">數量</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->amount }}
+                    <div class="row">
+                        <div class="col-3">次項目</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->clearDefect->sub_item }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">扣分(計分方式: -2 * 數量)</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->clearDefect->deduct_point * $taskHasClearDefect->amount }}
+                    <div class="row">
+                        <div class="col-3">數量</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->amount }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">忽略扣分</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->is_ignore ? '是' : '否' }}
+                    <div class="row">
+                        <div class="col-3">扣分(計分方式: -2 * 數量)</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->clearDefect->deduct_point * $taskHasClearDefect->amount }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">建立時間</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->created_at }}
+                    <div class="row">
+                        <div class="col-3">忽略扣分</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->is_ignore ? '是' : '否' }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">備註</div>
-                    <div class="col-9">
-                        {{ $taskHasClearDefect->memo }}
+                    <div class="row">
+                        <div class="col-3">建立時間</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->created_at }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">備註</div>
+                        <div class="col-9">
+                            {{ $taskHasClearDefect->memo }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endforeach
     </div>
 
