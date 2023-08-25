@@ -67,50 +67,43 @@ class RestaurantController extends Controller
         return back();
     }
 
+    /**
+     * 取得分店的今年度的缺失數量
+     */
     public function chart(Restaurant $restaurant)
     {
-        // 取得今年該餐廳的所有任務
-        $tasks = $restaurant->tasks()->whereYear('task_date', today())->get();
+        $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects');
 
-        // 將任務的日期轉換成月份
-        $tasks = $tasks->map(function ($task) {
-            $task->month = Carbon::parse($task->task_date)->month;
-            return $task;
-        });
-
-        // 以分類分組
-        $tasks = $tasks->groupBy('category');
-
-        // 以月份分組，並計算該月份的任務數量
-        $tasks = $tasks->map(function ($task) {
-            return $task->groupBy('month')->map(function ($item) {
-                return $item->count();
+        $defects = $restaurant->restaurantWorkspaces->map(function ($workspace) {
+            return $workspace->taskHasDefects->filter(function ($defect) {
+                return $defect->created_at->year == Carbon::now()->year;
             });
-        });
+        })->flatten();
 
-        // 將月份補齊
-        $tasks = $tasks->map(function ($task) {
-            for ($i = 1; $i <= 12; $i++) {
-                if (!isset($task[$i])) {
-                    $task[$i] = 0;
-                }
-            }
-            return $task;
-        });
-
-
-
-        // 依照分類裡的月份排序
-        $tasks = $tasks->map(function ($task) {
-            return $task->sortBy(function ($item, $key) {
-                return $key;
+        $clearDefects = $restaurant->restaurantWorkspaces->map(function ($workspace) {
+            return $workspace->taskHasClearDefects->filter(function ($defect) {
+                return $defect->created_at->year == Carbon::now()->year;
             });
+        })->flatten();
+
+        // 依照一月到十二月的順序，取得每個月的缺失數量，若該月份沒有缺失，則為0
+        $defects = collect(range(1, 12))->map(function ($month) use ($defects) {
+            return $defects->filter(function ($defect) use ($month) {
+                return $defect->created_at->month == $month;
+            })->count();
+        });
+
+        $clearDefects = collect(range(1, 12))->map(function ($month) use ($clearDefects) {
+            return $clearDefects->filter(function ($defect) use ($month) {
+                return $defect->created_at->month == $month;
+            })->count();
         });
 
         return view('backend.restaurants.chart', [
             'title' => $restaurant->brand . $restaurant->shop,
             'restaurant' => $restaurant,
-            'tasks' => $tasks,
+            'defects' => $defects,
+            'clearDefects' => $clearDefects,
         ]);
     }
 
