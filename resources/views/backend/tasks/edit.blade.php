@@ -15,12 +15,14 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
         <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+        {{-- jq --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
     <x-slot:scrollspyConfig>
         data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100"
-    </x-slot>
+        </x-slot>
 
         <div class="page-meta">
             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
@@ -40,7 +42,7 @@
                 <a href="#Action" class="nav-link">操作</a>
             </div>
         </div>
-        <form action="{{ route('task-update', ['task' => $task]) }}" method="post">
+        <form action="{{ route('task-update', ['task' => $task]) }}" method="post" id="formput">
             @method('put')
             @csrf
             <div class="row layout-top-spacing">
@@ -146,8 +148,7 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">稽核日期</label>
-                                        <input id="event-start-date" name="task_date"
-                                            class="form-control flatpickr">
+                                        <input id="event-start-date" name="task_date" class="form-control flatpickr">
                                     </div>
 
                                     <div class="form-group mt-3">
@@ -188,7 +189,11 @@
                                         <select multiple class="form-control" name='meals[]' id="select-meals">
                                             @foreach ($task->meals as $meal)
                                                 <option value="{{ $meal->id }}" selected>
-                                                    @if($meal->pivot->is_taken)已採樣:@endif{{ $meal->name }}@if(isset($meal->pivot->memo))#{{ $meal->pivot->memo }}@endif
+                                                    @if ($meal->pivot->is_taken)
+                                                        已採樣:
+                                                        @endif{{ $meal->name }}@if (isset($meal->pivot->memo))
+                                                            #{{ $meal->pivot->memo }}
+                                                        @endif
                                                 </option>
                                             @endforeach
                                             @foreach ($meals as $meal)
@@ -201,11 +206,12 @@
 
                                     <div class="form-group mt-3">
                                         <label class="form-label">專案</label>
-                                        <select multiple class="form-control" name='projects[]'
-                                            id="select-projects">
+                                        <select multiple class="form-control" name='projects[]' id="select-projects">
                                             @foreach ($task->projects as $project)
                                                 <option value="{{ $project->id }}" selected>
-                                                    @if($project->pivot->is_checked)已執行:@endif{{ $project->description }}
+                                                    @if ($project->pivot->is_checked)
+                                                        已執行:
+                                                    @endif{{ $project->description }}
                                                 </option>
                                             @endforeach
                                             @foreach ($projects as $project)
@@ -243,7 +249,7 @@
                                     </a>
                                     <div class="collapse show my-1" id="collapseExample{{ $defects[0]->id }}">
                                         @foreach ($defects as $taskHasDefect)
-                                            <div class="card style-2 mb-4">                               
+                                            <div class="card style-2 mb-4">
                                                 @if ($task->category == '食安及5S')
                                                     <div class="card-body px-0 pb-0">
                                                         <div class="row p-1">
@@ -304,7 +310,7 @@
                                                                 {{ $taskHasDefect->memo }}
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 @else
                                                     <div class="card-body px-0 pb-0">
@@ -365,8 +371,8 @@
                                                                 {{ $taskHasDefect->memo }}
                                                             </div>
                                                         </div>
-                                                    </div>                     
-                                                @endif   
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -390,15 +396,15 @@
                         <div class="widget-content widget-content-area">
                             <div class="row">
                                 @can('update-task')
-                                    <button type="submit" class="btn btn-success mb-3">更新</button>
+                                    <a class="btn btn-primary mb-3" onclick="checkTask({{ $task->id }})">更新</a>
                                 @endcan
-                 
+
                                 @if ($task->status == 'completed')
-                                    <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="btn btn-info mb-3"
-                                        target="_blank">內場稽核報告下載
-                                    </a>            
-                                    <a href="{{ route('task-outer-report', ['task' => $task]) }}" class="btn btn-info mb-3"
-                                        target="_blank">外場稽核報告下載
+                                    <a href="{{ route('task-inner-report', ['task' => $task]) }}"
+                                        class="btn btn-info mb-3" target="_blank">內場稽核報告下載
+                                    </a>
+                                    <a href="{{ route('task-outer-report', ['task' => $task]) }}"
+                                        class="btn btn-info mb-3" target="_blank">外場稽核報告下載
                                     </a>
                                 @endif
 
@@ -427,7 +433,7 @@
                 new TomSelect("#select-projects");
 
 
- 
+
                 document.addEventListener("DOMContentLoaded", () => {
                     flatpickr.localize(flatpickr.l10ns.zh_tw);
                     flatpickr(".flatpickr");
@@ -440,8 +446,42 @@
                         time_24hr: true,
                     });
                 });
-
             </script>
+
+            <script>
+                function checkTask(task) {
+                    $.ajax({
+                        url: "{{ url('api/checkTask') }}/" + task,
+                        type: "GET",
+                        dataType: "json",
+
+                        data: {
+                            "task_date": $("#event-start-date").val(),
+                            "users": $("#select-users").val(),
+                        },
+
+                        success: function(data) {
+                            if (data.status == 'error') {
+                                Swal.fire({
+                                    title: data.message,
+                                    showDenyButton: true,
+                                    confirmButtonText: '繼續更新',
+                                    denyButtonText: `取消更新`,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $("#formput").submit();
+                                    } else if (result.isDenied) {
+                                        Swal.fire('變更未儲存', '', 'info')
+                                    }
+                                })
+                            } else {
+                                $("#formput").submit();
+                            }
+                        },
+                    });
+                }
+            </script>
+
         </x-slot:footerFiles>
         <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

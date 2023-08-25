@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/getUnassignedStores', [TaskController::class, 'getUnassignedStores'])->name('getUnassignedStores');
+// 判斷會員當天是否有重複的任務
+Route::get('/checkTask/{task}', [TaskController::class, 'checkTask'])->name('checkTask');

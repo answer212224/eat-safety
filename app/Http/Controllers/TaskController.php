@@ -285,25 +285,14 @@ class TaskController extends Controller
 
     public function update(Task $task, Request $request)
     {
-        $user_ids = collect($request->users);
-
-        $diff = $user_ids->diff($task->users->pluck('id'));
-
-        // 從diff中取出id，尋找該同仁是否當日有其他任務，有的話就要提醒
-        foreach ($diff as $id) {
-            $user = User::find($id);
-            $count = $user->tasks()->whereDate('task_date', Carbon::parse($task->task_date))->count();
-            if ($count > 0) {
-                alert()->warning('請確認', $user->name . '在' . Carbon::parse($task->task_date)->format('Y-m-d') . '已經有其他任務');
-            }
-        }
-
         $task->users()->sync($request->users);
         $task->projects()->sync($request->projects);
         $task->meals()->sync($request->meals);
         $task->update([
             'status' => $request->status,
         ]);
+
+        alert()->success('更新成功', '更新任務成功');
 
         return back();
     }
@@ -470,5 +459,37 @@ class TaskController extends Controller
         $pdf::writeHTML($html, true, false, true, false);
 
         $pdf::Output($filename);
+    }
+
+
+    public function checkTask(Request $request, Task $task)
+    {
+
+        $user_ids = collect($request->users);
+        $task_date = Carbon::parse($request->task_date);
+        $diff = $user_ids->diff($task->users->pluck('id'));
+
+        $userName = [];
+
+        // 檢查同仁當天有無任務
+        foreach ($diff as $user_id) {
+            $user = User::find($user_id);
+
+            $count = $user->tasks()->whereDate('task_date', $task_date)->count();
+            if ($count > 0) {
+                $userName[] = $user->name;
+            }
+        }
+
+        if (!empty($userName)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $task_date->format('Y-m-d') . '已經有' . implode('、', $userName) . '的任務',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'success',
+            ]);
+        }
     }
 }

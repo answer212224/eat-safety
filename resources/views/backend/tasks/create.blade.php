@@ -24,6 +24,9 @@
                 href="{{ asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}">
             @vite(['resources/scss/light/plugins/bootstrap-touchspin/custom-jquery.bootstrap-touchspin.min.scss'])
             @vite(['resources/scss/dark/plugins/bootstrap-touchspin/custom-jquery.bootstrap-touchspin.min.scss'])
+            {{-- jq cdn --}}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
             <style>
                 input[type="number"]::-webkit-inner-spin-button,
                 input[type="number"]::-webkit-outer-spin-button {
@@ -46,8 +49,7 @@
             <div class="page-meta">
                 <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
+                        <li class="breadcrumb-item"><a href="#">稽核任務列表</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ $task->category }}</li>
                     </ol>
                 </nav>
@@ -56,35 +58,38 @@
 
             <!-- CONTENT HERE -->
 
-            <div class="row layout-top-spacing" id="cancel-row">
-                <div id="wizard_Default" class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="row layout-top-spacing">
+                <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>{{ $title }}</h4>
+                                    <h4>開始稽核</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="widget-content widget-content-area">
                             <div class="bs-stepper stepper-form-one">
                                 <div class="bs-stepper-header" role="tablist">
-                                    <div class="step" data-target="#defaultStep-one">
-                                        <button type="button" class="step-trigger" role="tab">
+                                    <div class="step" data-target="#one">
+                                        <button type="button" class="step-trigger" role="tab" id="stepper1"
+                                            aria-controls="one">
                                             <span class="bs-stepper-circle">1</span>
                                             <span class="bs-stepper-label">上傳照片</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
-                                    <div class="step" data-target="#defaultStep-two">
-                                        <button type="button" class="step-trigger" role="tab">
+                                    <div class="step" data-target="#two">
+                                        <button type="button" class="step-trigger" role="tab" id="stepper2"
+                                            aria-controls="two">
                                             <span class="bs-stepper-circle">2</span>
                                             <span class="bs-stepper-label">選擇工作區</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
-                                    <div class="step" data-target="#defaultStep-three">
-                                        <button type="button" class="step-trigger" role="tab">
+                                    <div class="step" data-target="#three">
+                                        <button type="button" class="step-trigger" role="tab" id="stepper3"
+                                            aria-controls="three">
                                             <span class="bs-stepper-circle">3</span>
                                             <span class="bs-stepper-label">
                                                 <span class="bs-stepper-title">選擇缺失</span>
@@ -103,25 +108,24 @@
 
                                 @csrf
                                 <div class="bs-stepper-content">
-                                    <div id="defaultStep-one" class="content" role="tabpanel">
+                                    <div id="one" class="content" role="tabpanel">
 
                                         {{-- 上傳圖片 --}}
                                         <div class="multiple-file-upload">
                                             <label for="filepond">上傳照片</label>
                                             <input type="file" class="file-upload-multiple" name="filepond[]"
                                                 multiple data-allow-reorder="true" data-max-file-size="4MB"
-                                                data-max-files="2"
-                                                id="inputImg">
+                                                data-max-files="2" id="filepond">
                                         </div>
 
 
                                         <div class="button-action mt-5 text-center">
                                             <a class="btn btn-secondary btn-prev me-3" disabled>上一步</a>
-                                            <a class="btn btn-secondary btn-nxt">下一步</a>
+                                            <a class="btn btn-secondary btn-nxt" onclick="stepper.next()">下一步</a>
                                         </div>
                                     </div>
 
-                                    <div id="defaultStep-two" class="content" role="tabpanel">
+                                    <div id="two" class="content" role="tabpanel">
 
                                         <div class="form-group mb-4">
                                             <label for="workspace">工作區</label>
@@ -135,11 +139,12 @@
 
 
                                         <div class="button-action mt-5 text-center">
-                                            <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                            <a class="btn btn-secondary btn-nxt">下一步</a>
+                                            <a class="btn btn-secondary btn-prev me-3"
+                                                onclick="stepper.previous()">上一步</a>
+                                            <a class="btn btn-secondary btn-nxt" onclick="stepper.next()">下一步</a>
                                         </div>
                                     </div>
-                                    <div id="defaultStep-three" class="content" role="tabpanel">
+                                    <div id="three" class="content" role="tabpanel">
                                         @if ($task->category == '清潔檢查')
                                             <livewire:cleaning-select :task="$task" />
                                         @else
@@ -149,8 +154,9 @@
 
 
                                         <div class="button-action mt-3 text-center">
-                                            <a class="btn btn-secondary btn-prev me-3">上一步</a>
-                                            <a class="btn btn-success me-3" id="submitBtn">提交</a>
+                                            <a class="btn btn-secondary btn-prev me-3"
+                                                onclick="stepper.previous()">上一步</a>
+                                            <button class="btn btn-success me-3">提交</button>
                                         </div>
 
                                     </div>
@@ -186,59 +192,49 @@
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageResize.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/FilePondPluginImageTransform.min.js') }}"></script>
                 <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
-                <script src="{{ asset('plugins/filepond/custom-filepond.js') }}?20230823"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                {{-- <script src="{{ asset('plugins/filepond/custom-filepond.js') }}"></script> --}}
+
                 <script>
-                    var stepperWizardDefault = document.querySelector('.stepper-form-one');
-                    var stepperDefault = new Stepper(stepperWizardDefault, {
-                        animation: true
-                    })
-                    var stepperNextButtonDefault = stepperWizardDefault.querySelectorAll('.btn-nxt');
-                    var stepperPrevButtonDefault = stepperWizardDefault.querySelectorAll('.btn-prev');
-                    var inputImg = document.getElementById('inputImg');
-                    var inputSelect = document.getElementById('inputSelect');
-                    var submitBtn = document.getElementById('submitBtn');
+                    FilePond.registerPlugin(
+                        FilePondPluginImagePreview,
+                        FilePondPluginImageExifOrientation,
+                        FilePondPluginFileValidateSize
+                        // FilePondPluginImageEdit
+                    );
 
-                    stepperNextButtonDefault.forEach(element => {
-                        element.addEventListener('click', function() {
-                            var imgLength = inputImg.querySelectorAll('input').length;
-                            if (imgLength < 2) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: '請至少上傳一張照片',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                                return;
-                            }
-                            stepperDefault.next();
-                        })
-                    });
 
-                    // 提交表單，檢查欄位是否有填寫
-                    submitBtn.addEventListener('click', function() {
-                        var selectLength = inputSelect.value;
-
-                        if (selectLength == false) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: '請選擇缺失',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                            return;
+                    window.multifiles = FilePond.create(
+                        document.querySelector(".file-upload-multiple"), {
+                            labelIdle: `<span class="no-image-placeholder"><i class="flaticon-cloud-upload"></i></span><p class="drag-para">拖曳檔案或<span class="filepond--label-action" tabindex="0">點擊此處上傳</span></p>`,
                         }
-                        document.getElementById('defect_form').submit();
-                    })
+                    );
 
-
-                    stepperPrevButtonDefault.forEach(element => {
-                        element.addEventListener('click', function() {
-                            stepperDefault.previous();
-                        })
+                    FilePond.setOptions({
+                        acceptedFileTypes: ["image/png", "image/jpeg", "image/jpg"],
+                        server: {
+                            url: "/filepond/api",
+                            process: "/process",
+                            revert: "/process",
+                            patch: "?patch=",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        },
                     });
+
+                    var stepperEl = document.querySelector('.bs-stepper')
+                    var stepper = new Stepper(stepperEl)
+                    // 在下一步時，檢查是否有上傳圖片
+                    stepperEl.addEventListener('show.bs-stepper', function(event) {
+                        if (event.detail.indexStep == 1) {
+                            if (window.multifiles.getFiles().length == 0) {
+                                event.preventDefault();
+                                alert('請上傳圖片');
+                            }
+                        }
+                    })
                 </script>
 
-                </x-slot>
-                <!--  END CUSTOM SCRIPTS FILE  -->
+            </x-slot:footerFiles>
+            <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>
