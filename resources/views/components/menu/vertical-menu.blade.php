@@ -221,8 +221,12 @@
                         class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') ? 'active' : '' }}">
                         <a href="{{ route('restaurant-index') }}"> 門市資料 </a>
                     </li>
-                    <li class="{{ Request::routeIs('user-index') || Request::routeIs('user-edit') || Request::routeIs('user-show') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('user-index') || Request::routeIs('user-edit') || Request::routeIs('user-show') ? 'active' : '' }}">
                         <a href="{{ route('user-index') }}"> 同仁資料 </a>
+                    </li>
+                    <li class="{{ Request::routeIs('task-meals') ? 'active' : '' }}">
+                        <a href="{{ route('task-meals') }}"> 稽核採樣資料 </a>
                     </li>
                 </ul>
             </li>

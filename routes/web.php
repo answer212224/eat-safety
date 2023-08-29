@@ -12,6 +12,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PosDepartmentController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TaskMealController;
 
 /*
 |--------------------------------------------------------------------------
@@ -172,6 +173,11 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::put('/{user}', [UserController::class, 'update'])->name('user-update');
                 // user-show
                 Route::get('/{user}/show', [UserController::class, 'show'])->name('user-show');
+            });
+
+            Route::prefix('task-meals')->group(function () {
+                // task-meals
+                Route::get('/', [TaskMealController::class, 'index'])->name('task-meals');
             });
         });
         Route::prefix('chart')->group(function () {

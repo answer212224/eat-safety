@@ -58,6 +58,7 @@
                         <table id="zero-config" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>員工編號</th>
                                     <th>姓名</th>
                                     <th>電子信箱</th>
@@ -75,6 +76,7 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
+                                        <td>{{ $user->id }}</td>
                                         <td>{{ $user->uid }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
