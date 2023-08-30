@@ -118,10 +118,6 @@
                             className: 'btn'
                         },
                         {
-                            extend: 'csv',
-                            className: 'btn'
-                        },
-                        {
                             extend: 'excel',
                             className: 'btn'
                         },
