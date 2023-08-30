@@ -10,6 +10,13 @@
             <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
             @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
             @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+            {{-- flatpickr --}}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+            <link rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
+
+
+
 
             <!--  END CUSTOM STYLE FILE  -->
             </x-slot>
@@ -50,6 +57,29 @@
                     </form>
                 </div>
             @endcan
+
+            {{-- 統計btn --}}
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body w-50">
+                            {{-- 篩選月份 --}}
+                            <form action="{{ route('defect-chart') }}" method="get">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">月份統計圖</span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="yearMonth"
+                                        id="yearMonth" placeholder="" value="{{ today()->format('Y-m') }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">查看</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <div class="row layout-top-spacing">
@@ -97,6 +127,12 @@
             <x-slot:footerFiles>
                 <script src="{{ asset('plugins/global/vendors.min.js') }}"></script>
                 <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+                {{-- flatpickr --}}
+                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+                <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+                {{-- monthSelectPlugin  cdn --}}
+                <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
+
                 <script>
                     $('#zero-config').DataTable({
                         "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
@@ -118,7 +154,27 @@
                         "pageLength": 10,
 
                     });
+
+                    // flatpickr
+                    // TypeError: fp.createDay is not a function
+                    flatpickr("#yearMonth", {
+                        "locale": "zh_tw",
+                        plugins: [
+                            new monthSelectPlugin({
+                                shorthand: true,
+                                dateFormat: "Y-m",
+                                altFormat: "M/Y",
+
+                            }),
+                        ],
+                        onChange: function(selectedDates, dateStr, instance) {
+                            console.log(dateStr);
+
+                        }
+                    });
                 </script>
+
+
                 </x-slot>
                 <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

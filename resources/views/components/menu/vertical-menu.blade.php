@@ -211,7 +211,8 @@
                     <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">
                         <a href="{{ route('project-index') }}"> 專案資料 </a>
                     </li>
-                    <li class="{{ Request::routeIs('defect-index') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('defect-index') || Request::routeIs('defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('defect-index') }}"> 食安缺失資料 </a>
                     </li>
                     <li class="{{ Request::routeIs('clear-defect-index') ? 'active' : '' }}">
@@ -230,36 +231,6 @@
                     </li>
                 </ul>
             </li>
-
-            {{-- 圖表 --}}
-            {{-- <li class="menu {{ Request::is('*/data/chart/*') ? 'active' : '' }}">
-                <a href="#chart" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('*/data/chart/*') ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-pie-chart">
-                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
-                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
-                        </svg>
-                        <span>圖表</span>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/chart/*') ? 'show' : '' }}"
-                    id="chart" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('chart-demo') ? 'active' : '' }}">
-                        <a href="{{ route('chart-demo') }}"> 圖表DEMO </a>
-                    </li>
-
-                </ul>
-            </li> --}}
         </ul>
 
     </nav>

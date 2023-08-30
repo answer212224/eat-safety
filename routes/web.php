@@ -145,6 +145,8 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 // 食安缺失資料
                 Route::get('/', [DefectController::class, 'index'])->name('defect-index');
                 Route::post('/import', [DefectController::class, 'import'])->name('defect-import');
+                // 統計圖表
+                Route::get('/chart', [DefectController::class, 'chart'])->name('defect-chart');
             });
 
             Route::prefix('clear-defects')->group(function () {

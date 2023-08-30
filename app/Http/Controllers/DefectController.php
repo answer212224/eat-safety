@@ -327,6 +327,58 @@ class DefectController extends Controller
         ]);
     }
 
+    /**
+     * 查看每月稽核缺失統計圖表
+     * @param Request $request
+     * @see https://www.highcharts.com/demo/column-basic
+     * @return \Illuminate\Http\Response
+     */
+    public function chart(Request $request)
+    {
+        $title = "食安缺失{$request->yearMonth}統計圖表";
+
+        $yearMonth = Carbon::create($request->yearMonth);
+        // 取得該月份的任務缺失資料
+        $taskHasDefect = TaskHasDefect::with('defect')
+            ->whereYear('created_at', $yearMonth->year)
+            ->whereMonth('created_at', $yearMonth->month)
+            ->get();
+        // taskHasDefect 使用 defect.group 分類
+        $defectGroupByGroup = $taskHasDefect->groupBy('defect.group');
+        // 取得key值
+        $defectGroupByGroupKeys = $defectGroupByGroup->keys();
+
+        // taskHasDefect 使用 defect.title 分類
+        $defectGroupByTitle = $taskHasDefect->groupBy('defect.title');
+        // defectGroupByTitle 依照 defectGroupByGroup裡面的key分類,第0個為[1,0,0,0,0]
+        $defectGroupByTitle = $defectGroupByTitle->map(function ($item, $key) use ($defectGroupByGroupKeys) {
+            $defectGroupByTitleValues = array_fill(0, $defectGroupByGroupKeys->count(), 0);
+            foreach ($item as $value) {
+                $defectGroupByTitleValues[$defectGroupByGroupKeys->search($value->defect->group)]++;
+            }
+            return $defectGroupByTitleValues;
+        });
+
+        // $defectGroupByTitle有幾種就隨機給幾種隨機的顏色
+        $colors = [];
+        foreach ($defectGroupByTitle as $key => $value) {
+            // 使用faker取得隨機色碼
+            $colors[] = fake()->hexColor();
+        }
+
+        // 轉成series格式
+        $series = [];
+        foreach ($defectGroupByTitle as $key => $value) {
+            $series[] = [
+                'name' => $key,
+                'data' => $value
+            ];
+        }
+
+        return view('backend.defects.chart', compact('title', 'series', 'defectGroupByGroupKeys', 'colors'));
+    }
+
+
     // 匯入食安缺失
     public function import(Request $request)
     {
