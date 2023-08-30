@@ -215,7 +215,8 @@
                         class="{{ Request::routeIs('defect-index') || Request::routeIs('defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('defect-index') }}"> 食安缺失資料 </a>
                     </li>
-                    <li class="{{ Request::routeIs('clear-defect-index') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('clear-defect-index') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('clear-defect-index') }}"> 清檢缺失資料 </a>
                     </li>
                     <li
