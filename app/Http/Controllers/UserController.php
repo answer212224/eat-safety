@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\SysPerson;
 use Illuminate\Http\Request;
@@ -74,10 +75,18 @@ class UserController extends Controller
     }
 
     // user-show
-    public function show(User $user)
+    public function show(User $user, Request $request)
     {
         $user->load('taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.restaurantWorkspace.restaurant', 'taskHasClearDefects.restaurantWorkspace.restaurant', 'taskHasDefects.task', 'taskHasClearDefects');
-        // dd($user->taskHasDefects);
+        $yearMonth = Carbon::create($request->yearMonth);
+        // 取得該月份的所有資料
+        $user->taskHasDefects = $user->taskHasDefects->filter(function ($taskHasDefect) use ($yearMonth) {
+            return $taskHasDefect->created_at->year == $yearMonth->year && $taskHasDefect->created_at->month == $yearMonth->month;
+        });
+        $user->taskHasClearDefects = $user->taskHasClearDefects->filter(function ($taskHasClearDefect) use ($yearMonth) {
+            return $taskHasClearDefect->created_at->year == $yearMonth->year && $taskHasClearDefect->created_at->month == $yearMonth->month;
+        });
+
         return view('backend.users.show', [
             'title' => '同仁資料',
             'user' => $user,
