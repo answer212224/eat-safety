@@ -35,13 +35,15 @@ class ClearDefectController extends Controller
             ->whereYear('created_at', $yearMonth->year)
             ->whereMonth('created_at', $yearMonth->month)
             ->get();
-        // taskHasDefect 使用 clearDefect.group 分類
+
+        // taskHasDefect 使用 clearDefect.main_item 分類
         $defectGroupByGroup = $taskHasDefect->groupBy('clearDefect.main_item');
         // 取得key值
         $defectGroupByGroupKeys = $defectGroupByGroup->keys();
 
-        // taskHasDefect 使用 clearDefect.title 分類
+        // taskHasDefect 使用 clearDefect.sub_item 分類
         $defectGroupByTitle = $taskHasDefect->groupBy('clearDefect.sub_item');
+
         // defectGroupByTitle 依照 defectGroupByGroup裡面的key分類,第0個為[1,0,0,0,0]
         $defectGroupByTitle = $defectGroupByTitle->map(function ($item, $key) use ($defectGroupByGroupKeys) {
             $defectGroupByTitleValues = array_fill(0, $defectGroupByGroupKeys->count(), 0);
