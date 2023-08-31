@@ -1,19 +1,22 @@
 {{-- pdf --}}
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-   
-    
+
+
 </head>
+
 <body>
     {{-- header logo --}}
     <div class="header">
-        <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt="" style="width: 50px">
-        <span >食安及5S外場稽核報告</span>
+        <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt=""
+            style="width: 50px">
+        <span>食安及5S外場稽核報告</span>
     </div>
     <div class="table">
         <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
@@ -40,48 +43,49 @@
             <tr>
                 <td colspan="1" align="center">各站分數及缺失數</td>
                 <td colspan="11" align="left">
-                    <br/>
-                    外場：{{ $defects->sum }}分，缺失數 {{ $defects->count() }} 項
+                    <br />
+                    外場：{{ 100 + $defects->sum }}分，缺失數 {{ $defects->count() }} 項
                 </td>
             </tr>
 
-                @foreach ($defects as $item)
-                    <tr>
-                        <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
-                    </tr>
-                    <tr>
-                        @foreach ($item->images as $image)
+            @foreach ($defects as $item)
+                <tr>
+                    <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
+                </tr>
+                <tr>
+                    @foreach ($item->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <br/>
+                            <br />
                             @if (request()->isSecure())
                                 <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
                             @else
-                                {{ asset('storage/' . $image) }}                               
+                                {{ asset('storage/' . $image) }}
                             @endif
                         </td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">缺失分類</td>
-                        <td colspan="9" align="">{{ $item->defect->group }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">報告呈現說明</td>
-                        <td colspan="9" align="">{{ $item->defect->report_description }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">備註</td>
-                        <td colspan="9" align="">
-                            {{ $item->memo }}
-                            @if($item->is_ignore)
-                                <span style="color: red">（忽略扣分）</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                    @endforeach
+                </tr>
+                <tr>
+                    <td colspan="3" align="">缺失分類</td>
+                    <td colspan="9" align="">{{ $item->defect->group }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">報告呈現說明</td>
+                    <td colspan="9" align="">{{ $item->defect->report_description }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">備註</td>
+                    <td colspan="9" align="">
+                        {{ $item->memo }}
+                        @if ($item->is_ignore)
+                            <span style="color: red">（忽略扣分）</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
 
         </table>
     </div>
 
 </body>
+
 </html>
