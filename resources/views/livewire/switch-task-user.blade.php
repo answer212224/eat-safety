@@ -30,9 +30,9 @@
                 </p>
                 <hr>
                 <p class="note-description">
-                    <strong>專案</strong> <u>{{ $task->projects->count() }}</u> <strong>項:</strong> 
+                    <strong>專案</strong> <u>{{ $task->projects->count() }}</u> <strong>項:</strong>
                     @foreach ($task->projects as $project)
-                        <span class="badge badge-dark mb-1">{{$project->name}}</span>
+                        <span class="badge badge-dark mb-1">{{ $project->name }}</span>
                     @endforeach
                 </p>
             </div>
@@ -94,6 +94,14 @@
                         @elseif($task->category == '餐點採樣')
                             <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                                 餐點採樣核對</a>
+                        @endif
+                        @if ($task->status == 'completed')
+                            <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="dropdown-item"
+                                target="_blank">內場稽核報告下載
+                            </a>
+                            <a href="{{ route('task-outer-report', ['task' => $task]) }}" class="dropdown-item"
+                                target="_blank">外場稽核報告下載
+                            </a>
                         @endif
 
                     </div>
