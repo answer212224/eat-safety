@@ -77,7 +77,16 @@
                 </tr>
                 <tr>
                     <td colspan="3" align="">缺失說明</td>
-                    <td colspan="9" align="">{{ implode('、', $item->description) }}</td>
+                    <td colspan="9">
+                        @if ($item->description == null)
+                            無
+                        @else
+                            {{-- array to string --}}
+                            @foreach ($item->description as $description)
+                                {{ $description }}
+                            @endforeach
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="3" align="">備註</td>

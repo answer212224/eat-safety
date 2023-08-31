@@ -45,8 +45,8 @@
                                         <div class="col-3">照片</div>
                                         <div class="col-9">
                                             @foreach ($taskHasDefect->images as $image)
-                                                <img src="{{ asset('storage/' . $image) }}"
-                                                    class="card-img-top my-1" alt="...">
+                                                <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1"
+                                                    alt="...">
                                             @endforeach
                                         </div>
                                     </div>
@@ -66,6 +66,19 @@
                                         <div class="col-3">數量</div>
                                         <div class="col-9">
                                             {{ $taskHasDefect->amount }}
+                                        </div>
+                                    </div>
+                                    <div class="row p-1">
+                                        <div class="col-3">缺失說明</div>
+                                        <div class="col-9">
+                                            @if ($taskHasDefect->description == null)
+                                                無
+                                            @else
+                                                {{-- array to string --}}
+                                                @foreach ($taskHasDefect->description as $description)
+                                                    {{ $description }}
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="row p-1">
@@ -101,7 +114,8 @@
                                     <div class="row p-1">
                                         <div class="col-3"></div>
                                         <div class="col-9">
-                                            <a href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                            <a
+                                                href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
                                                 <button class="btn btn-primary">編輯</button>
                                             </a>
                                         </div>
@@ -113,8 +127,8 @@
                                         <div class="col-3">照片</div>
                                         <div class="col-9">
                                             @foreach ($taskHasDefect->images as $image)
-                                                <img src="{{ asset('storage/' . $image) }}"
-                                                    class="card-img-top my-1" alt="...">
+                                                <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1"
+                                                    alt="...">
                                             @endforeach
                                         </div>
                                     </div>
@@ -168,17 +182,18 @@
                                         </div>
                                     </div>
                                     {{-- 編輯 --}}
-                                        {{-- <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}"> --}}
+                                    {{-- <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}"> --}}
                                     <div class="row p-1">
                                         <div class="col-3"></div>
                                         <div class="col-9">
-                                            <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                            <a
+                                                href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
                                                 <button class="btn btn-primary">編輯</button>
                                             </a>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                 </div>
                             @endif
                         </div>
@@ -257,6 +272,6 @@
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
 
-        </x-slot>
-        <!--  END CUSTOM SCRIPTS FILE  -->
+    </x-slot>
+    <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>
