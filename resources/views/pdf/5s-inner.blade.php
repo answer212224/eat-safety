@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
-
 </head>
 
 <body>
@@ -68,19 +66,13 @@
                     <tr>
                         @foreach ($item->images as $image)
                             <td colspan="6" style="text-align: center">
-                                <br />
-                                @if (request()->isSecure())
-                                    {{-- base64 --}}
-                                    {{-- <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px" height="200"> --}}
-                                    <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
-                                @else
-                                    {{ asset('storage/' . $image) }}
-                                @endif
+                                <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
                             </td>
                         @endforeach
                     </tr>
                     <tr>
-                        <td colspan="3" align="">缺失分類</td>
+                        <td colspan="3" align="">缺失分類
+                        </td>
                         <td colspan="9" align="">{{ $item->defect->group }}</td>
                     </tr>
                     <tr>

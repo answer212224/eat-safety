@@ -345,8 +345,54 @@ class TaskController extends Controller
      */
     public function innerReport(Task $task)
     {
+        ini_set('memory_limit', '256M');
         if ($task->category == '食安及5S') {
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
+            // 將所有圖片轉成base64
+            $task->taskHasDefects->transform(function ($item) {
+                if (!empty($item->images)) {
+                    $item->images = collect($item->images)->transform(function ($image) {
+                        try {
+                            $exif = exif_read_data(storage_path('app/public/' . $image));
+                        } catch (\Exception $e) {
+                            $exif = [];
+                        }
+
+
+                        // 圖片旋轉
+                        if (!empty($exif['Orientation'])) {
+                            $image = imagecreatefromjpeg(storage_path('app/public/' . $image));
+
+                            switch ($exif['Orientation']) {
+                                case 3:
+                                    $image = imagerotate($image, 180, 0);
+                                    break;
+                                case 6:
+                                    $image = imagerotate($image, -90, 0);
+                                    break;
+                                case 8:
+                                    $image = imagerotate($image, 90, 0);
+                                    break;
+                            }
+                            ob_start();
+                            // 將圖片輸出到緩衝區
+                            imagejpeg($image, null, 75);
+                            // 從緩衝區取得圖片資料
+                            $image = ob_get_contents();
+                            // 清除記憶體
+                            ob_end_clean();
+                            // 將圖片轉成base64
+                            $image = base64_encode($image);
+                        } else {
+                            // 將圖片轉成base64
+                            $image = base64_encode(file_get_contents(storage_path('app/public/' . $image)));
+                        }
+                        return $image;
+                    });
+                }
+                return $item;
+            });
+
             $task->task_date = Carbon::parse($task->task_date);
 
             // 任務底下的缺失按照區站kitchen分類
@@ -365,6 +411,52 @@ class TaskController extends Controller
             });
         } else {
             $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
+
+            // 將所有圖片轉成base64
+            $task->taskHasClearDefects->transform(function ($item) {
+                if (!empty($item->images)) {
+                    $item->images = collect($item->images)->transform(function ($image) {
+                        try {
+                            $exif = exif_read_data(storage_path('app/public/' . $image));
+                        } catch (\Exception $e) {
+                            $exif = [];
+                        }
+
+
+                        // 圖片旋轉
+                        if (!empty($exif['Orientation'])) {
+                            $image = imagecreatefromjpeg(storage_path('app/public/' . $image));
+
+                            switch ($exif['Orientation']) {
+                                case 3:
+                                    $image = imagerotate($image, 180, 0);
+                                    break;
+                                case 6:
+                                    $image = imagerotate($image, -90, 0);
+                                    break;
+                                case 8:
+                                    $image = imagerotate($image, 90, 0);
+                                    break;
+                            }
+                            ob_start();
+                            // 將圖片輸出到緩衝區
+                            imagejpeg($image, null, 75);
+                            // 從緩衝區取得圖片資料
+                            $image = ob_get_contents();
+                            // 清除記憶體
+                            ob_end_clean();
+                            // 將圖片轉成base64
+                            $image = base64_encode($image);
+                        } else {
+                            // 將圖片轉成base64
+                            $image = base64_encode(file_get_contents(storage_path('app/public/' . $image)));
+                        }
+                        return $image;
+                    });
+                }
+                return $item;
+            });
+
             $task->task_date = Carbon::parse($task->task_date);
 
             // 任務底下的缺失按照區站kitchen分類
