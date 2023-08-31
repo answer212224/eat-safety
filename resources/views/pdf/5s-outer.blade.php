@@ -55,12 +55,7 @@
                 <tr>
                     @foreach ($item->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <br />
-                            @if (request()->isSecure())
-                                <img src="{{ asset('storage/' . $image) }}" alt="test" width="200px">
-                            @else
-                                {{ asset('storage/' . $image) }}
-                            @endif
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
                         </td>
                     @endforeach
                 </tr>

@@ -512,12 +512,104 @@ class TaskController extends Controller
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             // 只取得外場的缺失
             $defects = $task->taskHasDefects->where('restaurantWorkspace.category_value', 'outside');
+            // 將圖片轉成base64
+            $defects->transform(function ($item) {
+                if (!empty($item->images)) {
+                    $item->images = collect($item->images)->transform(function ($image) {
+                        try {
+                            $exif = exif_read_data(storage_path('app/public/' . $image));
+                        } catch (\Exception $e) {
+                            $exif = [];
+                        }
+
+
+                        // 圖片旋轉
+                        if (!empty($exif['Orientation'])) {
+                            $image = imagecreatefromjpeg(storage_path('app/public/' . $image));
+
+                            switch ($exif['Orientation']) {
+                                case 3:
+                                    $image = imagerotate($image, 180, 0);
+                                    break;
+                                case 6:
+                                    $image = imagerotate($image, -90, 0);
+                                    break;
+                                case 8:
+                                    $image = imagerotate($image, 90, 0);
+                                    break;
+                            }
+                            ob_start();
+                            // 將圖片輸出到緩衝區
+                            imagejpeg($image, null, 75);
+                            // 從緩衝區取得圖片資料
+                            $image = ob_get_contents();
+                            // 清除記憶體
+                            ob_end_clean();
+                            // 將圖片轉成base64
+                            $image = base64_encode($image);
+                        } else {
+                            // 將圖片轉成base64
+                            $image = base64_encode(file_get_contents(storage_path('app/public/' . $image)));
+                        }
+                        return $image;
+                    });
+                }
+                return $item;
+            });
+
+
+
             $task->task_date = Carbon::parse($task->task_date);
             $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
         } else {
             $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
             // 只取得外場的缺失
             $defects = $task->taskHasClearDefects->where('restaurantWorkspace.category_value', 'outside');
+            // 將圖片轉成base64
+            $defects->transform(function ($item) {
+                if (!empty($item->images)) {
+                    $item->images = collect($item->images)->transform(function ($image) {
+                        try {
+                            $exif = exif_read_data(storage_path('app/public/' . $image));
+                        } catch (\Exception $e) {
+                            $exif = [];
+                        }
+
+
+                        // 圖片旋轉
+                        if (!empty($exif['Orientation'])) {
+                            $image = imagecreatefromjpeg(storage_path('app/public/' . $image));
+
+                            switch ($exif['Orientation']) {
+                                case 3:
+                                    $image = imagerotate($image, 180, 0);
+                                    break;
+                                case 6:
+                                    $image = imagerotate($image, -90, 0);
+                                    break;
+                                case 8:
+                                    $image = imagerotate($image, 90, 0);
+                                    break;
+                            }
+                            ob_start();
+                            // 將圖片輸出到緩衝區
+                            imagejpeg($image, null, 75);
+                            // 從緩衝區取得圖片資料
+                            $image = ob_get_contents();
+                            // 清除記憶體
+                            ob_end_clean();
+                            // 將圖片轉成base64
+                            $image = base64_encode($image);
+                        } else {
+                            // 將圖片轉成base64
+                            $image = base64_encode(file_get_contents(storage_path('app/public/' . $image)));
+                        }
+                        return $image;
+                    });
+                }
+                return $item;
+            });
+
             $task->task_date = Carbon::parse($task->task_date);
             $defects->sum = $defects->where('is_ignore', 0)->sum(function ($item) {
                 return $item->clearDefect->deduct_point * $item->amount;
