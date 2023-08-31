@@ -89,10 +89,14 @@
                         <td colspan="3" align="">數量</td>
                         <td colspan="9" align="">{{ $item->amount }}</td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td colspan="3" align="">缺失說明</td>
-                        <td colspan="9" align="">{{ implode('、', $item->description) }}</td>
-                    </tr>
+                        @if ($item->description)
+                            <td colspan="9" align="">無</td>
+                        @else
+                            <td colspan="9" align="">{{ implode('、', $item->description) }}</td>
+                        @endif
+                    </tr> --}}
 
                     <tr>
                         <td colspan="3" align="">備註</td>

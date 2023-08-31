@@ -341,12 +341,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="row p-1">
-                                                        <div class="col-3">缺失說明</div>
-                                                        <div class="col-9">
-                                                            {{ implode('、', $taskHasDefect->description) }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
                                                         <div class="col-3">扣分(計分方式: -2 * 數量)</div>
                                                         <div class="col-9">
                                                             {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
