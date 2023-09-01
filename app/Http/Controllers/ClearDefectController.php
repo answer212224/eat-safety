@@ -93,4 +93,29 @@ class ClearDefectController extends Controller
             return back();
         }
     }
+
+    /**
+     * 手動新增清檢缺失
+     */
+    public function manualStore(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'main_item' => 'required',
+                'sub_item' => 'required',
+                'effective_date' => 'required',
+            ]);
+
+            $validatedData['effective_date'] = Carbon::create($validatedData['effective_date']);
+
+            \App\Models\ClearDefect::create($validatedData);
+
+            alert()->success('成功', '清檢缺失資料新增成功');
+            return back();
+        } catch (\Exception $e) {
+
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        }
+    }
 }

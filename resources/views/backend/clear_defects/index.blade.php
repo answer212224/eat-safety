@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="{{ asset('plugins/table/datatable/datatables.css') }}">
         @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
         @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+        @vite(['resources/scss/light/assets/components/modal.scss'])
+        @vite(['resources/scss/dark/assets/components/modal.scss'])
         {{-- flatpickr --}}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
@@ -56,14 +58,14 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="card">
-                <div class="card-body w-50">
+                <div class="card-body">
                     {{-- 篩選月份 --}}
                     <form action="{{ route('clear-defect-chart') }}" method="get">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">月份統計圖</span>
                             </div>
-                            <input type="text" class="form-control form-control-sm" name="yearMonth" id="yearMonth"
+                            <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
                                 placeholder="" value="{{ today()->format('Y-m') }}">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">查看</button>
@@ -105,6 +107,43 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{ route('clear-defect-manualStore') }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">新增缺失</h5>
+                    </div>
+                    <div class="modal-body">
+
+                        {{-- input 啟用月份欄位 effective_date --}}
+                        <label for="effective_date">啟用月份</label>
+                        <input type="text" class="form-control yearMonth" name="effective_date" id="effective_date"
+                            value="{{ today()->format('Y-m') }}" required>
+
+                        {{-- input 主項目欄位 main_item --}}
+                        <label for="main_item">主項目</label>
+                        <input type="text" class="form-control" name="main_item" id="main_item" required>
+
+                        {{-- input 次項目欄位 sub_item --}}
+                        <label for="sub_item">次項目</label>
+                        <input type="text" class="form-control" name="sub_item" id="sub_item" required>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i>
+                            取消</a>
+                        <button type="submit" class="btn btn-primary">儲存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
         <script src="{{ asset('plugins/global/vendors.min.js') }}"></script>
@@ -133,10 +172,12 @@
                 "stripeClasses": [],
                 "lengthMenu": [7, 10, 20, 50],
                 "pageLength": 10,
-
+                "order": [
+                    [0, "desc"]
+                ],
             });
 
-            flatpickr("#yearMonth", {
+            flatpickr(".yearMonth", {
                 "locale": "zh_tw",
                 plugins: [
                     new monthSelectPlugin({

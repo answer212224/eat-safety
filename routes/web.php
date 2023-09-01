@@ -158,6 +158,9 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::post('/import', [ClearDefectController::class, 'import'])->name('clear-defect-import');
                 // 統計圖表
                 Route::get('/chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
+
+                // 清檢缺失資料新增
+                Route::post('/', [ClearDefectController::class, 'manualStore'])->name('clear-defect-manualStore');
             });
 
             Route::prefix('restaurants')->group(function () {

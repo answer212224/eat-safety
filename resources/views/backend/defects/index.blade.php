@@ -62,7 +62,7 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="card">
-                <div class="card-body w-50">
+                <div class="card-body">
                     {{-- 篩選月份 --}}
                     <form action="{{ route('defect-chart') }}" method="get">
                         <div class="input-group">
