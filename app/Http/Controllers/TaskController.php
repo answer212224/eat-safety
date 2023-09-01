@@ -376,7 +376,7 @@ class TaskController extends Controller
                             }
                             ob_start();
                             // 將圖片輸出到緩衝區
-                            imagejpeg($image, null, 75);
+                            imagejpeg($image, null, 50);
                             // 從緩衝區取得圖片資料
                             $image = ob_get_contents();
                             // 清除記憶體
@@ -440,7 +440,7 @@ class TaskController extends Controller
                             }
                             ob_start();
                             // 將圖片輸出到緩衝區
-                            imagejpeg($image, null, 75);
+                            imagejpeg($image, null, 50);
                             // 從緩衝區取得圖片資料
                             $image = ob_get_contents();
                             // 清除記憶體
