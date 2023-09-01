@@ -147,6 +147,9 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 Route::post('/import', [DefectController::class, 'import'])->name('defect-import');
                 // 統計圖表
                 Route::get('/chart', [DefectController::class, 'chart'])->name('defect-chart');
+
+                // 缺失資料新增
+                Route::post('/', [DefectController::class, 'manualStore'])->name('defect-manualStore');
             });
 
             Route::prefix('clear-defects')->group(function () {

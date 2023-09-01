@@ -401,4 +401,28 @@ class DefectController extends Controller
             return back();
         }
     }
+
+    /**
+     * 手動新增食安缺失
+     */
+    public function manualStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'effective_date' => 'required',
+            'group' => 'required',
+            'title' => 'required',
+            'category' => 'required',
+            'deduct_point' => 'required',
+            'description' => 'required',
+            'report_description' => 'required',
+        ]);
+
+
+        $validatedData['effective_date'] = Carbon::create($validatedData['effective_date']);
+
+        Defect::create($validatedData);
+
+        alert()->success('成功', '食安缺失新增成功');
+        return back();
+    }
 }
