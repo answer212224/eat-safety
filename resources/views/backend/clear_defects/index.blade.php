@@ -92,7 +92,7 @@
                     <tbody>
                         @foreach ($clearDefects as $clearDefect)
                             <tr>
-                                <td>{{ $clearDefect->effective_date }}</td>
+                                <td>{{ date('Y-m', strtotime($clearDefect->effective_date)) }}</td>
                                 <td>{{ $clearDefect->main_item }}</td>
                                 <td>{{ $clearDefect->sub_item }}</td>
                                 <td class="text-end">{{ $clearDefect->updated_at }}</td>

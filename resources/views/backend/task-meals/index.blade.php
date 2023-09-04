@@ -70,7 +70,8 @@
                             @foreach ($tasks as $task)
                                 @foreach ($task->meals as $meal)
                                     <tr>
-                                        <td>{{ $meal->effective_date }}</td>
+
+                                        <td>{{ date('Y-m', strtotime($meal->effective_date)) }}</td>
                                         <td>{{ $task->task_date }}</td>
                                         <td>{{ $meal->brand }}</td>
                                         <td>{{ $meal->shop }}</td>
