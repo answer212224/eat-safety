@@ -110,9 +110,18 @@ class RestaurantController extends Controller
     /**
      * restaurant-defect
      */
-    public function defects(Restaurant $restaurant)
+    public function defects(Restaurant $restaurant, Request $request)
     {
         $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasDefects');
+
+        $yearMonth = Carbon::create($request->yearMonth);
+
+        // 取得該月份的所有資料
+        $restaurant->restaurantWorkspaces->each(function ($workspace) use ($yearMonth) {
+            $workspace->taskHasDefects = $workspace->taskHasDefects->filter(function ($defect) use ($yearMonth) {
+                return $defect->created_at->year == $yearMonth->year && $defect->created_at->month == $yearMonth->month;
+            });
+        });
 
         return view('backend.restaurants.defects', [
             'title' => '分店食安缺失資料',
@@ -124,9 +133,18 @@ class RestaurantController extends Controller
      * 分店的清檢缺失
      * restaurant-clear-defects
      */
-    public function clearDefects(Restaurant $restaurant)
+    public function clearDefects(Restaurant $restaurant, Request $request)
     {
         $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasClearDefects');
+
+        $yearMonth = Carbon::create($request->yearMonth);
+
+        // 取得該月份的所有資料
+        $restaurant->restaurantWorkspaces->each(function ($workspace) use ($yearMonth) {
+            $workspace->taskHasClearDefects = $workspace->taskHasClearDefects->filter(function ($defect) use ($yearMonth) {
+                return $defect->created_at->year == $yearMonth->year && $defect->created_at->month == $yearMonth->month;
+            });
+        });
 
         return view('backend.restaurants.clear-defects', [
             'title' => '分店清潔缺失資料',

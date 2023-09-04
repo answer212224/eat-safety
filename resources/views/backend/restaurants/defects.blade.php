@@ -6,6 +6,9 @@
     <x-slot:headerFiles>
         @vite(['resources/scss/light/assets/apps/blog-create.scss'])
         @vite(['resources/scss/dark/assets/apps/blog-create.scss'])
+        {{-- flatpickr --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
     </x-slot:headerFiles>
 
     <x-slot:scrollspyConfig>
@@ -18,12 +21,35 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">資料</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $restaurant->brand }} - {{ $restaurant->shop }}
+                <li class="breadcrumb-item active" aria-current="page">{{ $restaurant->brand }} -
+                    {{ $restaurant->shop }}
                 </li>
             </ol>
         </nav>
     </div>
     <!-- /BREADCRUMB -->
+
+    <div class="row layout-top-spacing">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body w-100">
+                    {{-- 篩選月份 --}}
+                    <form action="{{ route('restaurant-defects', ['restaurant' => $restaurant]) }}" method="get">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">年月</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" name="yearMonth" id="yearMonth"
+                                placeholder="" value="{{ request()->yearMonth }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">篩選</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BEGIN PAGE LEVEL STYLES -->
     <div id="navSection" data-bs-spy="affix" class="nav sidenav">
@@ -106,5 +132,27 @@
     </div>
 
     <x-slot:footerFiles>
+        {{-- flatpickr --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+        {{-- monthSelectPlugin  cdn --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
+        <script>
+            flatpickr("#yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
+                onChange: function(selectedDates, dateStr, instance) {
+                    console.log(dateStr);
+
+                }
+            });
+        </script>
     </x-slot:footerFiles>
 </x-base-layout>
