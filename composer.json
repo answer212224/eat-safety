@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "elibyy/tcpdf-laravel": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^2.7",
         "laravel/fortify": "^1.13",
         "laravel/framework": "^9.41",
         "laravel/sanctum": "^3.0",

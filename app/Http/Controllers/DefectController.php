@@ -11,7 +11,9 @@ use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+
 
 class DefectController extends Controller
 {
@@ -28,56 +30,47 @@ class DefectController extends Controller
         ]);
     }
     /**
-     * 新增食安和清簡的缺失 包含圖片上傳最多兩張
+     * 新增食安的缺失 包含圖片上傳最多兩張
      */
     public function store(Task $task, Request $request)
     {
         $images = [];
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-        $disk = config('filepond.temporary_files_disk');
 
         foreach ($request->filepond as $file) {
-            $path = $filepond->getPathFromServerId($file);
-            $file = Storage::disk($disk)->get($path);
 
-            $fileName = Str::random(3) . '.jpg';
-            Storage::disk($disk)->put("uploads/$task->id/$fileName", $file);
+            $filepondPath = $filepond->getPathFromServerId($file);
+            $originalImagePath = public_path('storage/' . $filepondPath);
 
-            $images[] = "uploads/$task->id/$fileName";
+            $image = Image::make($originalImagePath);
+            // 壓縮圖片
+            $image->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
+
+            $filePath = storage_path("app/public/uploads/" . $fileName);
+
+            $image->save($filePath, 60);
+
+            $images[] = "uploads/$fileName";
         }
 
-        // 如果同一個站台有同樣的缺失，跳出警告訊息
-        if ($task->taskHasDefects()->where('restaurant_workspace_id', $request->workspace)->where('defect_id', $request->defect_id)->exists()) {
-            $task->update([
-                'status' => 'processing',
-            ]);
-            $task->taskHasDefects()->create([
-                'user_id' => auth()->user()->id,
-                'defect_id' => $request->defect_id,
-                'restaurant_workspace_id' => $request->workspace,
-                'images' => $images,
-                'is_ignore' => $request->is_ignore ? 1 : 0,
-                'memo' => $request->memo,
-            ]);
-            alert()->warning('請注意', '同樣站台有同樣缺失，缺失已新增');
-            // 引導使用者到該任務的缺失列表
-            return redirect()->route('task-defect-owner', $task->id);
-        } else {
-            $task->update([
-                'status' => 'processing',
-            ]);
+        $task->update([
+            'status' => 'processing',
+        ]);
 
-            $task->taskHasDefects()->create([
-                'user_id' => auth()->user()->id,
-                'defect_id' => $request->defect_id,
-                'restaurant_workspace_id' => $request->workspace,
-                'images' => $images,
-                'is_ignore' => $request->is_ignore ? 1 : 0,
-                'memo' => $request->memo,
-            ]);
-            alert()->success('成功', '缺失已新增');
-            return back();
-        }
+        $task->taskHasDefects()->create([
+            'user_id' => auth()->user()->id,
+            'defect_id' => $request->defect_id,
+            'restaurant_workspace_id' => $request->workspace,
+            'images' => $images,
+            'is_ignore' => $request->is_ignore ? 1 : 0,
+            'memo' => $request->memo,
+        ]);
+        alert()->success('成功', '缺失已新增');
+        return back();
     }
 
     // 清潔檢查稽核缺失新增
@@ -85,16 +78,26 @@ class DefectController extends Controller
     {
         $images = [];
         $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-        $disk = config('filepond.temporary_files_disk');
+
 
         foreach ($request->filepond as $file) {
-            $path = $filepond->getPathFromServerId($file);
-            $file = Storage::disk($disk)->get($path);
 
-            $fileName = Str::random(3) . '.jpg';
-            Storage::disk($disk)->put("uploads/$task->id/$fileName", $file);
+            $filepondPath = $filepond->getPathFromServerId($file);
+            $originalImagePath = public_path('storage/' . $filepondPath);
 
-            $images[] = "uploads/$task->id/$fileName";
+            $image = Image::make($originalImagePath);
+            // 壓縮圖片
+            $image->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
+
+            $filePath = storage_path("app/public/uploads/" . $fileName);
+
+            $image->save($filePath, 60);
+
+            $images[] = "uploads/$fileName";
         }
 
         // 更新任務狀態

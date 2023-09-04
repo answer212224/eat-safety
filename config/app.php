@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         Elibyy\TCPDF\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
