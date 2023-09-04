@@ -1,7 +1,7 @@
 <div class="">
     <div class="form-group">
         <label for="group">缺失分類</label>
-        <select class="form-select" wire:model="group">
+        <select class="form-select" wire:model="group" required>
             <option value="">請選擇...</option>
             @foreach ($distinctGroups as $distinctGroup)
                 <option value={{ $distinctGroup }}>{{ $distinctGroup }}</option>
@@ -11,7 +11,7 @@
 
     <div class="form-group my-3">
         <label for="title">子項目</label>
-        <select class="form-select" wire:model="title">
+        <select class="form-select" wire:model="title" required>
             <option value="">請選擇...</option>
             @foreach ($distinByGroupsTitles as $distinctTitle)
                 <option value={{ $distinctTitle }}>{{ $distinctTitle }}</option>

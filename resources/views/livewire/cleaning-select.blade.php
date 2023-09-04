@@ -2,7 +2,7 @@
 
     <div class="form-group">
         <label>主項目</label>
-        <select class="form-select" wire:model="mainItem">
+        <select class="form-select" wire:model="mainItem" required>
             <option value="">請選擇...</option>
             @foreach ($distinctMainItems as $distinctMainItem)
                 <option value={{ $distinctMainItem }}>{{ $distinctMainItem }}</option>
@@ -12,7 +12,7 @@
 
     <div class="form-group my-3">
         <label>子項目</label>
-        <select class="form-select" name="clear_defect_id" id="inputSelect" wire:model="subItem">
+        <select class="form-select" name="clear_defect_id" id="inputSelect" wire:model="subItem" required>
             <option value="">請選擇...</option>
             @foreach ($subItems as $key => $subItem)
                 <option value="{{ $key }}">{{ $subItem }}</option>
@@ -23,7 +23,7 @@
     <div class="form-group my-3" wire:ignore>
         <label>缺失說明複選</label>
         <select id="select-state" name="description[]" multiple placeholder="選擇缺失或自行輸入(可複選)" autocomplete="off"
-            name=description>
+            name="description" required>
             <option value="">選擇缺失或自行輸入(可複選)</option>
             @if (optional($taskHasDefect)->description)
                 @foreach ($taskHasDefect->description as $description)
@@ -40,7 +40,7 @@
     <div class="form-group my-3" wire:ignore>
         <div>
             <label>數量</label>
-            <input id="demo3_21" type="number" name="demo3_21"
+            <input id="demo3_21" type="number" name="demo3_21" required
                 @if ($taskHasDefect) value="{{ $taskHasDefect->amount }}" @else value="0" @endif>
         </div>
     </div>
