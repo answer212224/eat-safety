@@ -140,7 +140,11 @@
                 },
                 "stripeClasses": [],
                 "lengthMenu": [7, 10, 20, 50],
-                "pageLength": 10
+                "pageLength": 10,
+                //新到舊
+                "order": [
+                    [1, "asc"]
+                ],
             });
 
             // flatpickr
