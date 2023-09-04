@@ -43,6 +43,8 @@ class DefectController extends Controller
             $originalImagePath = public_path('storage/' . $filepondPath);
 
             $image = Image::make($originalImagePath);
+            // 修正圖片方向
+            $image->orientate();
             // 壓縮圖片
             $image->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
@@ -86,6 +88,8 @@ class DefectController extends Controller
             $originalImagePath = public_path('storage/' . $filepondPath);
 
             $image = Image::make($originalImagePath);
+            // 修正圖片方向
+            $image->orientate();
             // 壓縮圖片
             $image->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
