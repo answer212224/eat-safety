@@ -322,6 +322,13 @@ class TaskController extends Controller
             alert()->warning('無法刪除', '已經開始執行的任務無法刪除');
             return back();
         }
+
+        // 包含刪除食安和清檢的缺失專案和採樣
+        $task->taskHasDefects()->delete();
+        $task->taskHasClearDefects()->delete();
+        $task->meals()->detach();
+        $task->projects()->detach();
+        $task->users()->detach();
         $task->delete();
 
         alert()->success('刪除成功', '刪除任務成功');
