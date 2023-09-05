@@ -49,7 +49,7 @@
                 <div class="input-group">
                     <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
                         aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
-                    <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04" acc>文件上傳</button>
+                    <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04" acc>匯入</button>
                 </div>
             </form>
         </div>
