@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\TaskImport;
 use Carbon\Carbon;
 use App\Models\Meal;
 use App\Models\Task;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\RestaurantWorkspace;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -151,8 +153,6 @@ class TaskController extends Controller
                 $query->where('user_id', auth()->user()->id);
             })->get()->load('users');
         }
-        $users = User::all();
-        $restaurants = Restaurant::all();
 
         $tasks->transform(function ($task) {
             // 如果是 pending 就顯示未稽核，如果是 processing 就顯示稽核中，如果是 pending_approval 就顯示待核對，如果是 completed 就顯示已完成
@@ -176,7 +176,7 @@ class TaskController extends Controller
             return $task;
         });
 
-        return view('backend.tasks.assign', compact('title', 'tasks', 'users', 'restaurants'));
+        return view('backend.tasks.assign', compact('title', 'tasks'));
     }
 
     public function store(Request $request)
@@ -681,6 +681,31 @@ class TaskController extends Controller
             return response()->json([
                 'status' => 'success',
             ]);
+        }
+    }
+
+    /**
+     * 從excel匯入任務
+     */
+    public function import(Request $request)
+    {
+        if ($request->file('excel') == null) {
+            alert()->error('錯誤', '請選擇檔案');
+            return back();
+        }
+
+        if ($request->file('excel')->getClientOriginalExtension() != 'xlsx') {
+            alert()->error('錯誤', '檔案格式錯誤');
+            return back();
+        }
+
+        try {
+            Excel::import(new TaskImport, request()->file('excel'));
+            alert()->success('成功', '稽核匯入成功');
+            return back();
+        } catch (\Exception $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
         }
     }
 }

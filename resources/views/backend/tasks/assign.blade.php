@@ -24,7 +24,7 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-        
+
         <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
         <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
         {{-- jq --}}
@@ -36,7 +36,22 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- CONTENT HERE -->
+    @can('create-task')
+        <div class="row layout-top-spacing">
 
+            <div class="row mb-3">
+                <form action="{{ route('task-import') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="inputGroupFile04" accept=".xlsx"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="excel">
+                        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04" acc>匯入</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    @endcan
     <div class="row layout-top-spacing layout-spacing" id="cancel-row">
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="calendar-container">
@@ -71,21 +86,21 @@
     </div>
 
     <!-- unassignedStoresModal Modal -->
-    <div class="modal modal-lg fadeInUp" id="unassignedStoresModal" tabindex="-1" aria-labelledby="unassignedStoresModalLabel"
-        aria-hidden="true">
+    <div class="modal modal-lg fadeInUp" id="unassignedStoresModal" tabindex="-1"
+        aria-labelledby="unassignedStoresModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="unassignedStoresModalLabel">未指派的分店</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="unassignedStores">
-
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn btn-light-dark" data-bs-dismiss="modal">Close</a>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unassignedStoresModalLabel">未指派的分店</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body" id="unassignedStores">
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn btn-light-dark" data-bs-dismiss="modal">Close</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -130,11 +145,13 @@
                             var stores = data.stores;
                             var html = '';
                             stores.forEach(function(store) {
-                                html += '<li class="list-group-item">' + store.brand + store.shop + '</li>';
+                                html += '<li class="list-group-item">' + store.brand + store
+                                    .shop + '</li>';
                             });
                             $('#unassignedStores').html(html);
                             // 顯示月份
-                            $('#unassignedStoresModalLabel').html('未指派的分店 - ' + currentYear + '年' + currentMonth + '月' + ' (' + stores.length + '間)');
+                            $('#unassignedStoresModalLabel').html('未指派的分店 - ' + currentYear + '年' +
+                                currentMonth + '月' + ' (' + stores.length + '間)');
                             $('#unassignedStoresModal').modal('show');
 
                         }
@@ -152,10 +169,10 @@
                             click: calendarAddEvent
                         },
                         myCustomButton2: {
-                            text: '顯示未指派的分店',
+                            text: '未指派分店',
                             click: calendarAddEvent2
                         },
-                        
+
                     },
 
                     eventClassNames: function({
