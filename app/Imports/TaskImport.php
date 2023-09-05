@@ -34,6 +34,11 @@ class TaskImport implements ToCollection
 
 
         $collection->transform(function ($item) {
+            // 假設不是食安及5S或清潔檢查，回傳exception
+            if (!in_array($item[0], ['食安及5S', '清潔檢查'])) {
+                throw new \Exception('請確認類別是否正確：' . $item[0]);
+            }
+
             try {
                 $restaurant = Restaurant::where('sid', $item[2])->firstOrFail();
             } catch (ModelNotFoundException $e) {
