@@ -236,6 +236,27 @@
                         event.preventDefault();
                         alert('請上傳正確檔案格式');
                     }
+                    // 假如還再上傳中
+                    if (window.multifiles.getFiles()[0].status != 5) {
+                        event.preventDefault();
+                        alert('圖片上傳中，請稍後');
+                    }
+
+                    // 假設有第二張圖片，檢查是否有圖片
+                    if (window.multifiles.getFiles().length == 2) {
+                        // 假如不是圖片
+                        if (window.multifiles.getFiles()[1].fileType != 'image/png' && window.multifiles.getFiles()[
+                                1]
+                            .fileType != 'image/jpeg' && window.multifiles.getFiles()[1].fileType != 'image/jpg') {
+                            event.preventDefault();
+                            alert('請上傳正確檔案格式');
+                        }
+                        // 假如還再上傳中
+                        if (window.multifiles.getFiles()[1].status != 5) {
+                            event.preventDefault();
+                            alert('圖片上傳中，請稍後');
+                        }
+                    }
                 }
             })
         </script>

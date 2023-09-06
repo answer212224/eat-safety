@@ -13,6 +13,7 @@ use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Sopamo\LaravelFilepond\Exceptions\InvalidPathException;
 
 
 class DefectController extends Controller
@@ -31,32 +32,41 @@ class DefectController extends Controller
     }
     /**
      * 新增食安的缺失 包含圖片上傳最多兩張
+     * @param Task $task
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Sopamo\LaravelFilepond\Exceptions\InvalidPathException
      */
     public function store(Task $task, Request $request)
     {
-        $images = [];
-        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+        try {
+            $images = [];
+            $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
-        foreach ($request->filepond as $file) {
+            foreach ($request->filepond as $file) {
 
-            $filepondPath = $filepond->getPathFromServerId($file);
-            $originalImagePath = public_path('storage/' . $filepondPath);
+                $filepondPath = $filepond->getPathFromServerId($file);
+                $originalImagePath = public_path('storage/' . $filepondPath);
 
-            $image = Image::make($originalImagePath);
-            // 修正圖片方向
-            $image->orientate();
-            // 壓縮圖片
-            $image->resize(800, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+                $image = Image::make($originalImagePath);
+                // 修正圖片方向
+                $image->orientate();
+                // 壓縮圖片
+                $image->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-            $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
+                $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
 
-            $filePath = storage_path("app/public/uploads/" . $fileName);
+                $filePath = storage_path("app/public/uploads/" . $fileName);
 
-            $image->save($filePath, 60);
+                $image->save($filePath, 60);
 
-            $images[] = "uploads/$fileName";
+                $images[] = "uploads/$fileName";
+            }
+        } catch (InvalidPathException $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
         }
 
         $task->update([
@@ -75,33 +85,44 @@ class DefectController extends Controller
         return back();
     }
 
-    // 清潔檢查稽核缺失新增
+    /**
+     * 新增清檢的缺失 包含圖片上傳最多兩張
+     * @param Task $task
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Sopamo\LaravelFilepond\Exceptions\InvalidPathException
+     */
     public function clearStore(Task $task, Request $request)
     {
-        $images = [];
-        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+        try {
+            $images = [];
+            $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
 
-        foreach ($request->filepond as $file) {
+            foreach ($request->filepond as $file) {
 
-            $filepondPath = $filepond->getPathFromServerId($file);
-            $originalImagePath = public_path('storage/' . $filepondPath);
+                $filepondPath = $filepond->getPathFromServerId($file);
+                $originalImagePath = public_path('storage/' . $filepondPath);
 
-            $image = Image::make($originalImagePath);
-            // 修正圖片方向
-            $image->orientate();
-            // 壓縮圖片
-            $image->resize(800, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+                $image = Image::make($originalImagePath);
+                // 修正圖片方向
+                $image->orientate();
+                // 壓縮圖片
+                $image->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-            $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
+                $fileName = Str::random(3) . '_' . $task->id . '_' . now()->format('Ymdhis') . '.jpg';
 
-            $filePath = storage_path("app/public/uploads/" . $fileName);
+                $filePath = storage_path("app/public/uploads/" . $fileName);
 
-            $image->save($filePath, 60);
+                $image->save($filePath, 60);
 
-            $images[] = "uploads/$fileName";
+                $images[] = "uploads/$fileName";
+            }
+        } catch (InvalidPathException $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
         }
 
         // 更新任務狀態
