@@ -51,10 +51,13 @@
                             <tr>
                                 <th>缺失分類</th>
                                 <th>子項目</th>
+                                <th>缺失類別</th>
                                 <th>扣分</th>
                                 <th>門市</th>
                                 <th>工作站</th>
                                 <th>稽核人員</th>
+                                <th>備註</th>
+                                <th>不扣分</th>
                                 <th>建立時間</th>
                             </tr>
                         </thead>
@@ -63,11 +66,14 @@
                                 <tr>
                                     <td>{{ $defectRecord->defect->group }}</td>
                                     <td>{{ $defectRecord->defect->title }}</td>
+                                    <td>{{ $defectRecord->defect->category }}</td>
                                     <td>{{ $defectRecord->defect->deduct_point }}</td>
                                     <td>{{ $defectRecord->restaurantWorkspace->restaurant->brand }}{{ $defectRecord->restaurantWorkspace->restaurant->shop }}
                                     </td>
                                     <td>{{ $defectRecord->restaurantWorkspace->area }}</td>
                                     <td>{{ $defectRecord->user->name }}</td>
+                                    <td>{{ $defectRecord->memo }}</td>
+                                    <td>{{ $defectRecord->is_ignore ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->created_at }}</td>
                                 </tr>
                             @endforeach
@@ -125,7 +131,7 @@
                 "pageLength": 10,
                 //新到舊
                 "order": [
-                    [6, "desc"]
+                    [9, "desc"]
                 ],
             });
 

@@ -64,7 +64,9 @@
                                 <th>備註</th>
                                 <th>檢項</th>
                                 <th>檢樣項目</th>
+                                <th>有無帶回</th>
                                 <th>稽核員的備註</th>
+                                <th>是否改善</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +86,9 @@
                                         <td>{{ $meal->note }}</td>
                                         <td>{{ $meal->item }}</td>
                                         <td>{{ $meal->items }}</td>
+                                        <td>{{ $meal->pivot->is_taken ? '有' : '' }}</td>
                                         <td>{{ $meal->pivot->memo }}</td>
+                                        <td>{{ $meal->pivot->is_improved ? '是' : '' }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
