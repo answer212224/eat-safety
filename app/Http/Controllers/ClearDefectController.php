@@ -118,4 +118,31 @@ class ClearDefectController extends Controller
             return back();
         }
     }
+
+    /**
+     * 清檢缺失紀錄
+     */
+    public function records(Request $request)
+    {
+        $dateRange = $request->input('date-range');
+        if ($dateRange) {
+            $range = explode(' 至 ', $dateRange);
+            $dateStart = $range[0];
+            $dateEnd = $range[1];
+            // dateEnd +1 day
+            $dateEnd = date('Y-m-d', strtotime($dateEnd . ' +1 day'));
+            $defectRecords = TaskHasClearDefect::with('clearDefect', 'task', 'restaurantWorkspace.restaurant')
+                ->whereBetween('created_at', [$dateStart, $dateEnd])
+                ->get();
+        } else {
+            $defectRecords = TaskHasClearDefect::with('clearDefect', 'task', 'restaurantWorkspace.restaurant')->get();
+        }
+
+
+        return view('backend.clear_defects.records', [
+            'title' => '食安缺失紀錄',
+            'defectRecords' => $defectRecords,
+            'dateRange' => $dateRange,
+        ]);
+    }
 }

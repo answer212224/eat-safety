@@ -193,7 +193,7 @@
                             <line x1="3" y1="9" x2="21" y2="9"></line>
                             <line x1="9" y1="21" x2="9" y2="9"></line>
                         </svg>
-                        <span>表格</span>
+                        <span>資料表</span>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -230,6 +230,13 @@
                     <li class="{{ Request::routeIs('task-meals') ? 'active' : '' }}">
                         <a href="{{ route('task-meals') }}"> 稽核採樣資料 </a>
                     </li>
+                    <li class="{{ Request::routeIs('defect-records') ? 'active' : '' }}">
+                        <a href="{{ route('defect-records') }}"> 食安缺失紀錄 </a>
+                    </li>
+                    <li class="{{ Request::routeIs('clear-defect-records') ? 'active' : '' }}">
+                        <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
+                    </li>
+                    <li></li>
                 </ul>
             </li>
         </ul>

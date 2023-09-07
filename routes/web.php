@@ -191,6 +191,11 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 // task-meals
                 Route::get('/', [TaskMealController::class, 'index'])->name('task-meals');
             });
+
+            // 食安缺失紀錄
+            Route::get('/defect-records', [DefectController::class, 'records'])->name('defect-records');
+            // 清檢缺失紀錄
+            Route::get('/clear-defect-records', [ClearDefectController::class, 'records'])->name('clear-defect-records');
         });
         Route::prefix('chart')->group(function () {
 
