@@ -11,10 +11,19 @@ class TaskMealController extends Controller
     {
         $title = '稽核採樣紀錄';
         $dateRange = $request->input('date-range');
+        // 假設有選擇日期區間
         if ($dateRange) {
+
             $range = explode(' 至 ', $dateRange);
-            $dateStart = $range[0];
-            $dateEnd = $range[1];
+
+            if (count($range) == 2) {
+                $dateStart = $range[0];
+                $dateEnd = $range[1];
+            } else {
+
+                $dateStart = $range[0];
+                $dateEnd = $range[0];
+            }
             // dateEnd +1 day
             $dateEnd = date('Y-m-d', strtotime($dateEnd . ' +1 day'));
             $tasks = Task::whereBetween('task_date', [$dateStart, $dateEnd])->get();

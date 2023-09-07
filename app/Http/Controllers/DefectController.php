@@ -462,8 +462,16 @@ class DefectController extends Controller
         $dateRange = $request->input('date-range');
         if ($dateRange) {
             $range = explode(' 至 ', $dateRange);
-            $dateStart = $range[0];
-            $dateEnd = $range[1];
+
+            if (count($range) == 2) {
+                $dateStart = $range[0];
+                $dateEnd = $range[1];
+            } else {
+
+                $dateStart = $range[0];
+                $dateEnd = $range[0];
+            }
+
             // dateEnd +1 day
             $dateEnd = date('Y-m-d', strtotime($dateEnd . ' +1 day'));
             $defectRecords = TaskHasDefect::with('defect', 'task', 'restaurantWorkspace.restaurant')
