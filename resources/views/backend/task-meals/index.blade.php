@@ -24,8 +24,8 @@
     <div class="page-meta">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">資料</li>
-                <li class="breadcrumb-item active" aria-current="page">稽核採樣資料</li>
+                <li class="breadcrumb-item">紀錄</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
     </div>
@@ -64,6 +64,7 @@
                                 <th>備註</th>
                                 <th>檢項</th>
                                 <th>檢樣項目</th>
+                                <th>稽核員的備註</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,6 +84,7 @@
                                         <td>{{ $meal->note }}</td>
                                         <td>{{ $meal->item }}</td>
                                         <td>{{ $meal->items }}</td>
+                                        <td>{{ $meal->pivot->memo }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach

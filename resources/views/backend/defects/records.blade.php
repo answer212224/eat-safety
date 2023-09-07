@@ -21,7 +21,7 @@
     <div class="page-meta">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">資料</li>
+                <li class="breadcrumb-item">紀錄</li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>

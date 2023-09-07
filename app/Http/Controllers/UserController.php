@@ -16,7 +16,7 @@ class UserController extends Controller
     {
 
         return view('backend.users.index', [
-            'title' => '同仁資料',
+            'title' => '同仁資料庫',
             'users' => User::all(),
         ]);
     }

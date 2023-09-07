@@ -9,7 +9,7 @@ class TaskMealController extends Controller
 {
     public function index(Request $request)
     {
-        $title = '稽核採樣資料';
+        $title = '稽核採樣紀錄';
         $dateRange = $request->input('date-range');
         if ($dateRange) {
             $range = explode(' 至 ', $dateRange);

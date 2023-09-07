@@ -10,7 +10,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $title = '專案資料';
+        $title = '專案資料庫';
         confirmDelete('確定刪除', "您確定要刪除嗎？\n\n刪除後將無法復原！");
         $projects = Project::all();
         return view('backend.projects.index', compact('title', 'projects'));

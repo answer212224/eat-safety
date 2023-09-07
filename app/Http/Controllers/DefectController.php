@@ -26,7 +26,7 @@ class DefectController extends Controller
             return $item;
         });
         return view('backend.defects.index', [
-            'title' => '食安缺失資料',
+            'title' => '食安缺失資料庫',
             'defects' => $defects,
         ]);
     }

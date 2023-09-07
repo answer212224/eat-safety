@@ -186,23 +186,15 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 // user-show
                 Route::get('/{user}/show', [UserController::class, 'show'])->name('user-show');
             });
+        });
 
-            Route::prefix('task-meals')->group(function () {
-                // task-meals
-                Route::get('/', [TaskMealController::class, 'index'])->name('task-meals');
-            });
-
+        Route::prefix('record')->group(function () {
+            // task-meals
+            Route::get('/task-meals', [TaskMealController::class, 'index'])->name('task-meals');
             // 食安缺失紀錄
             Route::get('/defect-records', [DefectController::class, 'records'])->name('defect-records');
             // 清檢缺失紀錄
             Route::get('/clear-defect-records', [ClearDefectController::class, 'records'])->name('clear-defect-records');
-        });
-        Route::prefix('chart')->group(function () {
-
-            Route::prefix('demo')->group(function () {
-                // 餐點採樣圖表
-                Route::get('/', [ChartController::class, 'index'])->name('chart-demo');
-            });
         });
     });
 });

@@ -11,7 +11,7 @@ class RestaurantController extends Controller
     public function index()
     {
         return view('backend.restaurants.index', [
-            'title' => '門市資料',
+            'title' => '門市資料庫',
             'restaurants' => Restaurant::all(),
         ]);
     }
@@ -19,10 +19,9 @@ class RestaurantController extends Controller
     public function create()
     {
         return view('backend.restaurants.create', [
-            'title' => '新增餐廳',
+            'title' => '新增門市',
         ]);
     }
-
 
     public function edit(Restaurant $restaurant)
     {

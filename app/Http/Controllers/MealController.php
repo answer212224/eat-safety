@@ -15,9 +15,7 @@ class MealController extends Controller
 {
     public function index()
     {
-
-
-        $title = '餐點採樣資料';
+        $title = '採樣資料庫';
 
         confirmDelete('確定刪除', "您確定要刪除嗎？\n\n刪除後將無法復原！");
 
@@ -42,7 +40,7 @@ class MealController extends Controller
 
     public function edit(Meal $meal)
     {
-        $title = '編輯餐點採樣';
+        $title = '編輯採樣';
         // 如果有任務使用這個餐點採樣，就不給編輯
         $tasks = Task::whereHas('meals', function ($query) use ($meal) {
             $query->where('meal_id', $meal->id);

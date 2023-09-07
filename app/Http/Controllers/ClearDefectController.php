@@ -12,7 +12,7 @@ class ClearDefectController extends Controller
 {
     public function index()
     {
-        $title = '清檢缺失資料';
+        $title = '清檢缺失資料庫';
         return view('backend.clear_defects.index', [
             'title' => $title,
             'clearDefects' => \App\Models\ClearDefect::get(),
@@ -140,7 +140,7 @@ class ClearDefectController extends Controller
 
 
         return view('backend.clear_defects.records', [
-            'title' => '食安缺失紀錄',
+            'title' => '清檢缺失紀錄',
             'defectRecords' => $defectRecords,
             'dateRange' => $dateRange,
         ]);
