@@ -55,27 +55,7 @@
         </div>
     @endcan
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    {{-- 篩選月份 --}}
-                    <form action="{{ route('clear-defect-chart') }}" method="get">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">月份統計圖</span>
-                            </div>
-                            <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
-                                placeholder="" value="{{ today()->format('Y-m') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">查看</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="row layout-top-spacing">
         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
@@ -175,22 +155,6 @@
                 "order": [
                     [0, "desc"]
                 ],
-            });
-
-            flatpickr(".yearMonth", {
-                "locale": "zh_tw",
-                plugins: [
-                    new monthSelectPlugin({
-                        shorthand: true,
-                        dateFormat: "Y-m",
-                        altFormat: "M/Y",
-
-                    }),
-                ],
-                onChange: function(selectedDates, dateStr, instance) {
-                    console.log(dateStr);
-
-                }
             });
         </script>
     </x-slot>

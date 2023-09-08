@@ -232,10 +232,12 @@
                     <li class="{{ Request::routeIs('task-meals') ? 'active' : '' }}">
                         <a href="{{ route('task-meals') }}"> 稽核採樣紀錄 </a>
                     </li>
-                    <li class="{{ Request::routeIs('defect-records') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('defect-records') || Request::routeIs('defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('defect-records') }}"> 食安缺失紀錄 </a>
                     </li>
-                    <li class="{{ Request::routeIs('clear-defect-records') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
                     </li>
                 </ul>

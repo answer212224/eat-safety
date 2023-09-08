@@ -58,30 +58,6 @@
         </div>
     @endcan
 
-    {{-- 統計btn --}}
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    {{-- 篩選月份 --}}
-                    <form action="{{ route('defect-chart') }}" method="get">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">月份統計圖</span>
-                            </div>
-                            <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
-                                placeholder="" value="{{ today()->format('Y-m') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">查看</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="row layout-top-spacing">
         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div class="widget-content widget-content-area br-8">
@@ -153,15 +129,14 @@
                             required>
                         {{-- input 扣分欄位 deduct_point --}}
                         <label for="deduct_point">扣分</label>
-                        <input type="number" class="form-control" name="deduct_point" id="deduct_point"
-                            value="" required>
+                        <input type="number" class="form-control" name="deduct_point" id="deduct_point" value=""
+                            required>
                         {{-- 稽核標準欄位 description  text --}}
                         <label for="description">稽核標準</label>
                         <textarea class="form-control" name="description" id="description" cols="30" rows="10" required></textarea>
                         {{-- 報告呈現說明欄位 report_description --}}
                         <label for="report_description">報告呈現說明</label>
-                        <textarea class="form-control" name="report_description" id="report_description" cols="30" rows="10"
-                            required></textarea>
+                        <textarea class="form-control" name="report_description" id="report_description" cols="30" rows="10" required></textarea>
 
                     </div>
                     <div class="modal-footer">

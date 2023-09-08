@@ -10,10 +10,8 @@
         @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
         @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_miscellaneous.scss'])
         {{-- flatpickr --}}
-        <link rel="stylesheet" href="{{ asset('plugins/flatpickr/flatpickr.css') }}">
-        <link rel="stylesheet" href="{{ asset('plugins/noUiSlider/nouislider.min.css') }}">
-        @vite(['resources/scss/light/plugins/flatpickr/custom-flatpickr.scss'])
-        @vite(['resources/scss/dark/plugins/flatpickr/custom-flatpickr.scss'])
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
 
@@ -25,6 +23,28 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
+    </div>
+
+    <div class="row layout-top-spacing">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {{-- 篩選月份 --}}
+                    <form action="{{ route('clear-defect-chart') }}" method="get">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">月份統計圖</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
+                                placeholder="" value="{{ today()->format('Y-m') }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">查看</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- CONTENT --}}
@@ -91,8 +111,10 @@
         <script src="{{ asset('plugins/table/datatable/button-ext/buttons.html5.min.js') }}"></script>
         <script src="{{ asset('plugins/table/datatable/button-ext/buttons.print.min.js') }}"></script>
         {{-- flatpickr --}}
-        <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+        {{-- monthSelectPlugin  cdn --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
 
         <script>
             $('#html5-extension').DataTable({
@@ -133,16 +155,25 @@
                 ],
             });
 
-            // flatpickr
-            flatpickr.localize(flatpickr.l10ns.zh_tw);
-            var flatpickr = flatpickr(document.getElementById('date-range'), {
+            flatpickr("#date-range", {
+                "locale": "zh_tw",
                 mode: "range",
                 dateFormat: "Y-m-d",
-
-
             });
 
-            flatpickr.localize(flatpickr.l10ns.zh_tw);
+
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
+
+            });
         </script>
     </x-slot:footerFiles>
 </x-base-layout>

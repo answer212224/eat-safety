@@ -147,9 +147,6 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 // 食安缺失資料
                 Route::get('/', [DefectController::class, 'index'])->name('defect-index');
                 Route::post('/import', [DefectController::class, 'import'])->name('defect-import');
-                // 統計圖表
-                Route::get('/chart', [DefectController::class, 'chart'])->name('defect-chart');
-
                 // 缺失資料新增
                 Route::post('/', [DefectController::class, 'manualStore'])->name('defect-manualStore');
             });
@@ -158,9 +155,6 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
                 // 清檢缺失資料
                 Route::get('/', [ClearDefectController::class, 'index'])->name('clear-defect-index');
                 Route::post('/import', [ClearDefectController::class, 'import'])->name('clear-defect-import');
-                // 統計圖表
-                Route::get('/chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
-
                 // 清檢缺失資料新增
                 Route::post('/', [ClearDefectController::class, 'manualStore'])->name('clear-defect-manualStore');
             });
@@ -193,8 +187,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/task-meals', [TaskMealController::class, 'index'])->name('task-meals');
             // 食安缺失紀錄
             Route::get('/defect-records', [DefectController::class, 'records'])->name('defect-records');
+            // 食安統計圖表
+            Route::get('/defect-chart', [DefectController::class, 'chart'])->name('defect-chart');
             // 清檢缺失紀錄
             Route::get('/clear-defect-records', [ClearDefectController::class, 'records'])->name('clear-defect-records');
+            // 清檢統計圖表
+            Route::get('/clear-defect-chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
         });
     });
 });
