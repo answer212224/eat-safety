@@ -48,6 +48,7 @@ class DefectController extends Controller
                 $filepondPath = $filepond->getPathFromServerId($file);
                 $originalImagePath = public_path('storage/' . $filepondPath);
 
+
                 $image = Image::make($originalImagePath);
                 // 修正圖片方向
                 $image->orientate();
@@ -63,6 +64,9 @@ class DefectController extends Controller
                 $image->save($filePath, 60);
 
                 $images[] = "uploads/$fileName";
+
+                // 刪除暫存圖片
+                Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
             alert()->error('錯誤', $e->getMessage());
@@ -119,6 +123,9 @@ class DefectController extends Controller
                 $image->save($filePath, 60);
 
                 $images[] = "uploads/$fileName";
+
+                // 刪除暫存圖片
+                Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
             alert()->error('錯誤', $e->getMessage());
