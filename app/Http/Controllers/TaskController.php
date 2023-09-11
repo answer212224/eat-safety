@@ -106,14 +106,9 @@ class TaskController extends Controller
             }
         }
 
-        if ($task->meals()->where('is_taken', false)->exists()) {
-            $num = $task->meals()->where('is_taken', false)->count();
-            alert()->warning('尚未完成', '尚有' . $num . '個餐點未完成');
-        } else {
-            alert()->success('採樣完畢', '採樣成功');
-        }
+        alert()->success('採樣完畢', '採樣成功');
 
-        return back();
+        return redirect()->route('task-list');
     }
 
     public function projectCheckSubmit(Request $request, Task $task)
@@ -130,13 +125,7 @@ class TaskController extends Controller
             ]);
         }
 
-        if ($task->projects()->where('is_checked', false)->exists()) {
-            $num = $task->projects()->where('is_checked', false)->count();
-            alert()->warning('尚未完成', '尚有' . $num . '個專案未完成');
-        } else {
-            alert()->success('專案完畢', '專案成功');
-        }
-
+        alert()->success('專案執行完畢', '專案更新成功');
         return back();
     }
 
