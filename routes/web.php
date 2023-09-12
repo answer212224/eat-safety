@@ -194,10 +194,12 @@ Route::prefix('v1')->middleware(['auth'])->group(function () {
             Route::get('/clear-defect-records', [ClearDefectController::class, 'records'])->name('clear-defect-records');
             // 清檢統計圖表
             Route::get('/clear-defect-chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
-            // RowData頁面預覽
-            Route::get('/row-data-preview', [RowDataController::class, 'rowDataPreview'])->name('row-data-preview');
-            // RowData匯出
-            Route::get('/row-data-export', [RowDataController::class, 'rowDataExport'])->name('row-data-export');
+        });
+
+        Route::prefix('row-data')->group(function () {
+            Route::get('/defect', [RowDataController::class, 'rowDataDefect'])->name('row-data-defect');
+            // row-data-clear-defect
+            Route::get('/clear-defect', [RowDataController::class, 'rowDataClearDefect'])->name('row-data-clear-defect');
         });
     });
 });

@@ -240,12 +240,48 @@
                         class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
                     </li>
-                    <li class="{{ Request::routeIs('row-data-preview') ? 'active' : '' }}">
-                        <a href="{{ route('row-data-preview') }}">Row Data 紀錄</a>
+
+                </ul>
+            </li>
+
+            {{-- RowData --}}
+            <li class="menu {{ Request::is('*/data/row-data/*') ? 'active' : '' }}">
+                <a href="#row-data" data-bs-toggle="collapse"
+                    aria-expanded="{{ Request::is('*/data/row-data/*') ? 'true' : 'false' }}"
+                    class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-layers">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span>ROWDATA</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <ul class="collapse submenu list-unstyled {{ Request::is('*/data/row-data/*') ? 'show' : '' }}"
+                    id="row-data" data-bs-parent="#accordionExample">
+                    <li class="{{ Request::routeIs('row-data-defect') ? 'active' : '' }}">
+                        <a href="{{ route('row-data-defect') }}"> 食安及5S </a>
+                    </li>
+                    <li class="{{ Request::routeIs('row-data-clear-defect') ? 'active' : '' }}">
+                        <a href="{{ route('row-data-clear-defect') }}"> 清潔檢查 </a>
                     </li>
                 </ul>
             </li>
         </ul>
+
+
+
 
     </nav>
 

@@ -33,10 +33,10 @@
                     <form action="" method="get">
                         <div class="table-form">
 
-                            <label for="date-range" class="col-sm-1 col-form-label col-form-label-sm">稽核期間:</label>
+                            <label for="yearMonth" class="col-sm-1 col-form-label col-form-label-sm">稽核月份:</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm" name="date-range"
-                                    id="date-range" name="date-range" placeholder="" value="{{ $dateRange }}">
+                                <input type="text" class="form-control form-control-sm" name="yearMonth"
+                                    id="yearMonth" name="yearMonth" placeholder="" value="{{ $yearMonth }}">
                             </div>
                             <div class="col-sm-4 ml-1 text-center">
                                 <button class="btn btn-info w-75">篩選</button>
@@ -154,10 +154,16 @@
 
             });
 
-            flatpickr("#date-range", {
+            flatpickr("#yearMonth", {
                 "locale": "zh_tw",
-                mode: "range",
-                dateFormat: "Y-m-d",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
             });
         </script>
     </x-slot:footerFiles>

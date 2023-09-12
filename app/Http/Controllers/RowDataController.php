@@ -11,29 +11,19 @@ use Illuminate\Support\Carbon;
 class RowDataController extends Controller
 {
     /**
-     * rowDataPreview
+     * rowDataDefect
      */
-    public function rowDataPreview(Request $request)
+    public function rowDataDefect(Request $request)
     {
-        $dateRange = $request->input('date-range');
+        $yearMonth = $request->input('yearMonth');
         // N+1 問題
         $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasDefects.defect', 'users');
 
-        // 假設有選擇日期區間
-        if ($dateRange) {
-
-            $range = explode(' 至 ', $dateRange);
-
-            if (count($range) == 2) {
-                $dateStart = $range[0];
-                $dateEnd = $range[1];
-            } else {
-                $dateStart = $range[0];
-                $dateEnd = $range[0];
-            }
-            // dateEnd +1 day
-            $dateEnd = date('Y-m-d', strtotime($dateEnd . ' +1 day'));
-            $tasks = Task::whereBetween('task_date', [$dateStart, $dateEnd]);
+        // 假設有選月份
+        if ($yearMonth) {
+            // yearMonth轉成Carbon格式
+            $yearMonth = Carbon::create($yearMonth);
+            $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
         }
         // 只取得已完成的任務
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
@@ -176,10 +166,20 @@ class RowDataController extends Controller
         }
 
         return view('backend.row-data.index', [
-            'title' => 'Row Data Preview',
-            'dateRange' => $dateRange,
+            'title' => '食安缺失RowData',
+            'yearMonth' => $yearMonth,
             'tableHeader' => $tableHeader,
             'tableBodys' => $tablebodys,
+        ]);
+    }
+
+    /**
+     * rowDataClearDefect
+     */
+    public function rowDataClearDefect(Request $request)
+    {
+        return view('backend.row-data.clear-defect', [
+            'title' => '清檢缺失RowData',
         ]);
     }
 }
