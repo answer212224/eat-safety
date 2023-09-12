@@ -77,6 +77,7 @@
                                 <th>稽核人員</th>
                                 <th>備註</th>
                                 <th>不扣分</th>
+                                <th>改善</th>
                                 <th>建立時間</th>
                             </tr>
                         </thead>
@@ -92,6 +93,7 @@
                                     <td>{{ $defectRecord->user->name }}</td>
                                     <td>{{ $defectRecord->memo }}</td>
                                     <td>{{ $defectRecord->is_ignore ? '是' : '' }}</td>
+                                    <td>{{ $defectRecord->is_impoved ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->created_at }}</td>
                                 </tr>
                             @endforeach

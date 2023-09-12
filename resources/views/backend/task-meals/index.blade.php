@@ -64,9 +64,9 @@
                                 <th>備註</th>
                                 <th>檢項</th>
                                 <th>檢樣項目</th>
-                                <th>有無帶回</th>
-                                <th>稽核員的備註</th>
-                                <th>是否改善</th>
+                                <th>帶回</th>
+                                <th>原因</th>
+                                <th>改善</th>
                             </tr>
                         </thead>
                         <tbody>
