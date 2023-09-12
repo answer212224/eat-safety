@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\ClearDefect;
 use App\Models\Task;
 use App\Models\Defect;
 use Illuminate\Http\Request;
@@ -15,21 +15,32 @@ class RowDataController extends Controller
      */
     public function rowDataDefect(Request $request)
     {
+
         $yearMonth = $request->input('yearMonth');
+
+        if (!$yearMonth) {
+            $yearMonth = today();
+        }
+
         // N+1 問題
         $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasDefects.defect', 'users');
 
-        // 假設有選月份
-        if ($yearMonth) {
-            // yearMonth轉成Carbon格式
-            $yearMonth = Carbon::create($yearMonth);
-            $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
-        }
-        // 只取得已完成的任務
+        // yearMonth轉成Carbon格式
+        $yearMonth = Carbon::create($yearMonth);
+
+        $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
+
+        // 只取得已完成的任務和食安及5S的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
 
         // 取得最新生效的缺失條文日期
-        $latestDefectDate = Defect::whereYear('effective_date', '<=', today())->whereMonth('effective_date', '<=', today())->orderBy('effective_date', 'desc')->first()->effective_date;
+        try {
+            $latestDefectDate = Defect::whereYear('effective_date', '<=', $yearMonth)->whereMonth('effective_date', '<=', $yearMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        } catch (\Exception $e) {
+            alert()->error('啟動月份' . $yearMonth->format('Y年m月') . '沒有可用的食安缺失條文');
+            return redirect()->back();
+        }
+
         // 轉換成 Carbon 格式
         $latestDefectDate = Carbon::create($latestDefectDate);
         // 取得所有不重複的群組
@@ -73,6 +84,7 @@ class RowDataController extends Controller
                     return $item->defect->deduct_point;
                 }
             });
+
             // 計算該任務底下餐廳工作區是外場的分數
             $frontTask = $task->taskHasDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('defect');
             $frontScore = $frontTask->sum(function ($item) {
@@ -178,8 +190,105 @@ class RowDataController extends Controller
      */
     public function rowDataClearDefect(Request $request)
     {
+        $yearMonth = $request->input('yearMonth');
+
+        if (!$yearMonth) {
+            $yearMonth = today();
+        }
+
+        // N+1 問題
+        $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasClearDefects');
+
+        // yearMonth轉成Carbon格式
+        $yearMonth = Carbon::create($yearMonth);
+
+        $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
+
+        // 只取得已完成的任務和清潔檢查的缺失
+        $tasks = $tasks->where('status', 'completed')->where('category', '清潔檢查')->get();
+
+        // 取得最新生效的缺失條文日期
+        try {
+            $latestDefectDate = ClearDefect::whereYear('effective_date', '<=', $yearMonth)->whereMonth('effective_date', '<=', $yearMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        } catch (\Exception $e) {
+            alert()->error('啟動月份' . $yearMonth->format('Y年m月') . '沒有可用的清潔檢查缺失條文');
+            return redirect()->back();
+        }
+
+        // 轉換成 Carbon 格式
+        $latestDefectDate = Carbon::create($latestDefectDate);
+
+        // table header
+        $tableHeader = [
+            '門市',
+            '分數',
+        ];
+
+        for ($i = 1; $i <= 15; $i++) {
+            $tableHeader[] = '廚區' . $i;
+        }
+
+        $tablebodys = [];
+
+        foreach ($tasks as $task) {
+            // 將$task->task_date轉成Carbon格式 取年月份
+            $taskMonth = Carbon::create($task->task_date)->format('Y年n月');
+            // 計算分數
+            $score = $task->taskHasClearDefects->sum(function ($item) {
+                // 只計算需要扣分的缺失
+                if (!$item->is_ignore) {
+                    return $item->amount * -2;
+                }
+            });
+            $score = 100 + $score;
+
+            // 取得內場各區站
+            $restaurantBackWorkspaces = $task->restaurant->restaurantBackWorkspaces;
+            $backArea = $restaurantBackWorkspaces->pluck('area');
+            $backAreaId = $restaurantBackWorkspaces->pluck('id');
+
+            // 取得內場taskHasClearDefects
+            $backTask = $task->taskHasClearDefects->whereIn('restaurant_workspace_id', $backAreaId->toArray())->load('restaurantWorkspace');
+
+            // 計算各區站數量
+            $backTask = $backTask->groupBy('restaurantWorkspace.area')->map(function ($item) {
+                return $item->sum('amount');
+            });
+
+            // 依照backArea順序將backTask數量取出，沒有的話補0
+            $backTask = collect($backArea)->map(function ($item) use ($backTask) {
+                return [
+                    'count' => $backTask[$item] ?? 0,
+                    'area' => $item
+                ];
+            });
+
+            // backTask補滿14個 不夠的補0
+            $backTask = $backTask->pad(14, 0);
+
+            // 取得外場
+            $frontTask = $task->taskHasClearDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('restaurantWorkspace');
+            $frontTask = [
+                'area' => '外場',
+                'count' => $frontTask->sum('amount')
+            ];
+
+            $tableBody = [
+                'restaurant' => $taskMonth . $task->restaurant->sid,
+                'score' => $score,
+                'backTask' => $backTask->toArray(),
+                'frontTask' => $frontTask,
+
+            ];
+
+            $tablebodys[] = $tableBody;
+        }
+
         return view('backend.row-data.clear-defect', [
-            'title' => '清檢缺失RowData',
+            'title' => '清潔檢查缺失RowData',
+            'yearMonth' => $yearMonth,
+            'tableHeader' => $tableHeader,
+            'tableBodys' => $tablebodys,
         ]);
     }
 }
