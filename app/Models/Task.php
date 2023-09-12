@@ -26,6 +26,14 @@ class Task extends Model
         return $this->hasMany(TaskHasDefect::class);
     }
 
+    // 取得defects不是5S的
+    public function taskHasDefectsNot5S()
+    {
+        return $this->hasMany(TaskHasDefect::class)->whereHas('defect', function ($query) {
+            $query->where('category', '!=', '5S');
+        });
+    }
+
     public function taskHasClearDefects()
     {
         return $this->hasMany(TaskHasClearDefect::class);
@@ -39,11 +47,6 @@ class Task extends Model
     public function meals(): BelongsToMany
     {
         return $this->belongsToMany(Meal::class)->withPivot(['is_improved', 'is_taken', 'memo']);
-    }
-
-    public function claerDefects(): BelongsToMany
-    {
-        return $this->belongsToMany(ClearDefect::class)->withPivot(['is_improved', 'is_taken', 'memo']);
     }
 
     public function projects(): BelongsToMany

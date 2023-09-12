@@ -13,7 +13,20 @@ class Restaurant extends Model
 
     public function restaurantWorkspaces()
     {
-        return $this->hasMany(RestaurantWorkspace::class);
+        // 假如area是"1廚務部"，不要取得該筆資料
+        return $this->hasMany(RestaurantWorkspace::class)->where('area', 'not like', '%廚務部')->orderBy('category_value');
+    }
+
+    // 取得內場區域(area不是廚務部和外場)
+    public function restaurantBackWorkspaces()
+    {
+        return $this->hasMany(RestaurantWorkspace::class)->where('area', 'not like', '%廚務部')->where('area', 'not like', '%外場')->orderBy('category_value');
+    }
+
+    // 取得外場(area是外場)
+    public function restaurantFrontWorkspace()
+    {
+        return $this->hasOne(RestaurantWorkspace::class)->where('area', 'like', '%外場');
     }
 
     public function tasks()

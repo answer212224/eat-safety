@@ -240,6 +240,9 @@
                         class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
                     </li>
+                    <li class="{{ Request::routeIs('row-data-preview') ? 'active' : '' }}">
+                        <a href="{{ route('row-data-preview') }}">Row Data 紀錄</a>
+                    </li>
                 </ul>
             </li>
         </ul>
