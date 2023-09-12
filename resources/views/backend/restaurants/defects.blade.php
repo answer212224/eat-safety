@@ -79,7 +79,7 @@
                         <div class="row p-1">
                             <div class="col-3">缺失分類</div>
                             <div class="col-9">
-                                {{ $taskHasDefect->defect->category }}
+                                {{ $taskHasDefect->defect->group }}
                             </div>
                         </div>
                         <div class="row p-1">
