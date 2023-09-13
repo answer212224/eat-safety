@@ -96,19 +96,29 @@
                                         {{ $body['frontTask5S']['count'] }}
                                     </td>
                                     <td>
-                                        {{ $body['a'] }}
+                                        @if ($body['backTaskChineseKitchen'] !== null)
+                                            {{ 100 + $body['backTaskChineseKitchen'] }}
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['b'] }}
+                                        @if ($body['backTaskWesternKitchen'] !== null)
+                                            {{ 100 + $body['backTaskWesternKitchen'] }}
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['c'] }}
+                                        @if ($body['backTaskJapaneseKitchen'] !== null)
+                                            {{ 100 + $body['backTaskJapaneseKitchen'] }}
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['d'] }}
+                                        @if ($body['backTaskPastryKitchen'] !== null)
+                                            {{ 100 + $body['backTaskPastryKitchen'] }}
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['e'] }}
+                                        @if ($body['backTaskUndecidedKitchen'] !== null)
+                                            {{ 100 + $body['backTaskUndecidedKitchen'] }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $body['f'] }}
@@ -142,6 +152,9 @@
                                     </td>
                                     <td>
                                         {{ $body['p'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['q'] }}
                                     </td>
                                 </tr>
                             @endforeach

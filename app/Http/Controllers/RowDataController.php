@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClearDefect;
 use App\Models\Task;
 use App\Models\Defect;
+use App\Models\Restaurant;
+use App\Models\ClearDefect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -29,6 +30,9 @@ class RowDataController extends Controller
         $yearMonth = Carbon::create($yearMonth);
 
         $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
+
+        // 只取11號的任務
+        // $tasks = $tasks->whereDay('task_date', 11);
 
         // 只取得已完成的任務和食安及5S的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
@@ -71,13 +75,9 @@ class RowDataController extends Controller
             $tableHeader[] = '5S區站' . $i;
         }
         // 廚區分數1~4
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $tableHeader[] = '廚區分數' . $i;
         }
-
-        // ['內場專案查核', '外場專案查核', '外場5S總', '內場5S總', '閉店缺失', '內場閉店缺失', '外場閉店缺失總數', '外場閉店缺失', '內場重大缺失', '外場重大缺失', '內場專案結果', '外場專案結果'];
-        $tableHeader[] = '內場專案查核';
-        $tableHeader[] = '外場專案查核';
         $tableHeader[] = '外場5S總';
         $tableHeader[] = '內場5S總';
         $tableHeader[] = '閉店缺失';
@@ -86,6 +86,8 @@ class RowDataController extends Controller
         $tableHeader[] = '外場閉店缺失';
         $tableHeader[] = '內場重大缺失';
         $tableHeader[] = '外場重大缺失';
+        $tableHeader[] = '內場專案查核';
+        $tableHeader[] = '外場專案查核';
         $tableHeader[] = '內場專案結果';
         $tableHeader[] = '外場專案結果';
 
@@ -93,6 +95,7 @@ class RowDataController extends Controller
         $tablebodys = [];
 
         foreach ($tasks as $task) {
+
             // 將$task->task_date轉成Carbon格式 取月份
             $taskMonth = Carbon::create($task->task_date)->format('n月');
             // 計算該任務底下餐廳工作區是內場的分數
@@ -175,6 +178,81 @@ class RowDataController extends Controller
                 'count' => $frontTask->whereIn('defect.category', ['5S'])->count()
             ];
 
+            // 取得中廚區站的id
+            $restaurantChineseKitchenWorkspaces = $task->restaurant->restaurantChineseKitchenWorkspaces->pluck('id');
+            // 取得西廚區站的id
+            $restaurantWesternKitchenWorkspaces = $task->restaurant->restaurantWesternKitchenWorkspaces->pluck('id');
+            // 取得日廚區站的id
+            $restaurantJapaneseKitchenWorkspaces = $task->restaurant->restaurantJapaneseKitchenWorkspaces->pluck('id');
+            // 取得西點區站的id
+            $restaurantPastryKitchenWorkspace = optional($task->restaurant->restaurantPastryKitchenWorkspace)->id;
+            // 取得未定區站的id
+            $restaurantUndecidedKitchenWorkspace = optional($task->restaurant->restaurantUndecidedKitchenWorkspace)->id;
+
+            // 判斷是否有中廚區站
+            if ($restaurantChineseKitchenWorkspaces->isEmpty()) {
+                $backTaskChineseKitchen = null;
+            } else {
+                // 計算中廚區站的總分
+                $backTaskChineseKitchen = $backTask->whereIn('restaurant_workspace_id', $restaurantChineseKitchenWorkspaces)->sum(function ($item) {
+                    // 只計算需要扣分的缺失
+                    if (!$item->is_ignore) {
+                        return $item->defect->deduct_point;
+                    }
+                });
+            }
+
+            // 判斷是否有西廚區站
+            if ($restaurantWesternKitchenWorkspaces->isEmpty()) {
+                $backTaskWesternKitchen = null;
+            } else {
+                // 計算西廚區站的總分
+                $backTaskWesternKitchen = $backTask->whereIn('restaurant_workspace_id', $restaurantWesternKitchenWorkspaces)->sum(function ($item) {
+                    // 只計算需要扣分的缺失
+                    if (!$item->is_ignore) {
+                        return $item->defect->deduct_point;
+                    }
+                });
+            }
+
+            // 判斷是否有日廚區站
+            if ($restaurantJapaneseKitchenWorkspaces->isEmpty()) {
+                $backTaskJapaneseKitchen = null;
+            } else {
+                // 計算日廚區站的總分
+                $backTaskJapaneseKitchen = $backTask->whereIn('restaurant_workspace_id', $restaurantJapaneseKitchenWorkspaces)->sum(function ($item) {
+                    // 只計算需要扣分的缺失
+                    if (!$item->is_ignore) {
+                        return $item->defect->deduct_point;
+                    }
+                });
+            }
+
+            // 判斷是否有西點區站
+            if (!$restaurantPastryKitchenWorkspace) {
+                $backTaskPastryKitchen = null;
+            } else {
+                // 計算西點區站的總分
+                $backTaskPastryKitchen = $backTask->where('restaurant_workspace_id', $restaurantPastryKitchenWorkspace)->sum(function ($item) {
+                    // 只計算需要扣分的缺失
+                    if (!$item->is_ignore) {
+                        return $item->defect->deduct_point;
+                    }
+                });
+            }
+
+            // 判斷是否有未定區站
+            if (!$restaurantUndecidedKitchenWorkspace) {
+                $backTaskUndecidedKitchen = null;
+            } else {
+                // 計算未定區站的總分
+                $backTaskUndecidedKitchen = $backTask->where('restaurant_workspace_id', $restaurantUndecidedKitchenWorkspace)->sum(function ($item) {
+                    // 只計算需要扣分的缺失
+                    if (!$item->is_ignore) {
+                        return $item->defect->deduct_point;
+                    }
+                });
+            }
 
             $tableBody = [
                 'restaurant_name' => $taskMonth . $task->restaurant->brand_code . $task->restaurant->shop,
@@ -191,11 +269,11 @@ class RowDataController extends Controller
                 'frontTaskNot5S' => $frontTaskNot5S,
                 'backTask5S' => $backTask5S->toArray(),
                 'frontTask5S' => $frontTask5S,
-                'a' => '確認中',
-                'b' => '確認中',
-                'c' => '確認中',
-                'd' => '確認中',
-                'e' => '確認中',
+                'backTaskChineseKitchen' => $backTaskChineseKitchen,
+                'backTaskWesternKitchen' => $backTaskWesternKitchen,
+                'backTaskJapaneseKitchen' => $backTaskJapaneseKitchen,
+                'backTaskPastryKitchen' => $backTaskPastryKitchen,
+                'backTaskUndecidedKitchen' => $backTaskUndecidedKitchen,
                 'f' => '確認中',
                 'g' => '確認中',
                 'h' => '確認中',
@@ -207,6 +285,7 @@ class RowDataController extends Controller
                 'n' => '確認中',
                 'o' => '確認中',
                 'p' => '確認中',
+                'q' => '確認中',
             ];
 
             $tablebodys[] = $tableBody;
