@@ -28,7 +28,7 @@ use App\Http\Controllers\TaskMealController;
 
 require_once 'theme-routes.php';
 
-Route::prefix('v1')->middleware(['auth'])->group(function () {
+Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/barebone', function () {
 
