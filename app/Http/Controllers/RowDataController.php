@@ -78,8 +78,8 @@ class RowDataController extends Controller
         for ($i = 1; $i <= 5; $i++) {
             $tableHeader[] = '廚區分數' . $i;
         }
-        $tableHeader[] = '外場5S總';
         $tableHeader[] = '內場5S總';
+        $tableHeader[] = '外場5S總';
         $tableHeader[] = '閉店缺失';
         $tableHeader[] = '內場閉店缺失';
         $tableHeader[] = '外場閉店缺失總數';
@@ -161,6 +161,9 @@ class RowDataController extends Controller
                 return $item->count();
             });
 
+            // 計算內場5S總數
+            $backTask5STotal = $backTask->whereIn('defect.category', ['5S'])->count();
+
             // 依照backArea順序將backTask5S數量取出，沒有的話補0
             $backTask5S = collect($backArea)->map(function ($item) use ($backTask5S) {
                 return [
@@ -172,10 +175,13 @@ class RowDataController extends Controller
             // backTask5S補滿14個 不夠的補0
             $backTask5S = $backTask5S->pad(14, 0);
 
+            // 計算外場5S總數
+            $frontTask5STotal = $frontTask->whereIn('defect.category', ['5S'])->count();
+
             // 外場是5S的缺失count
             $frontTask5S = [
                 'area' => '外場',
-                'count' => $frontTask->whereIn('defect.category', ['5S'])->count()
+                'count' => $frontTask5STotal
             ];
 
             // 取得中廚區站的id
@@ -274,8 +280,9 @@ class RowDataController extends Controller
                 'backTaskJapaneseKitchen' => $backTaskJapaneseKitchen,
                 'backTaskPastryKitchen' => $backTaskPastryKitchen,
                 'backTaskUndecidedKitchen' => $backTaskUndecidedKitchen,
-                'f' => '確認中',
-                'g' => '確認中',
+                'backTask5STotal' =>  $backTask5STotal,
+                'backTask5STotal' => $backTask5STotal,
+                'frontTask5STotal' => $frontTask5STotal,
                 'h' => '確認中',
                 'i' => '確認中',
                 'j' => '確認中',

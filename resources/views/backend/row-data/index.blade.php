@@ -121,10 +121,10 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $body['f'] }}
+                                        {{ $body['backTask5STotal'] }}
                                     </td>
                                     <td>
-                                        {{ $body['g'] }}
+                                        {{ $body['frontTask5STotal'] }}
                                     </td>
                                     <td>
                                         {{ $body['h'] }}
