@@ -95,6 +95,54 @@
                                     <td class="bs-tooltip" title="{{ $body['frontTask5S']['area'] }}">
                                         {{ $body['frontTask5S']['count'] }}
                                     </td>
+                                    <td>
+                                        {{ $body['a'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['b'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['c'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['d'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['e'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['f'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['g'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['h'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['i'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['j'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['k'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['l'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['m'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['n'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['o'] }}
+                                    </td>
+                                    <td>
+                                        {{ $body['p'] }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -70,6 +70,25 @@ class RowDataController extends Controller
         for ($i = 1; $i <= 15; $i++) {
             $tableHeader[] = '5S區站' . $i;
         }
+        // 廚區分數1~4
+        for ($i = 1; $i <= 4; $i++) {
+            $tableHeader[] = '廚區分數' . $i;
+        }
+
+        // ['內場專案查核', '外場專案查核', '外場5S總', '內場5S總', '閉店缺失', '內場閉店缺失', '外場閉店缺失總數', '外場閉店缺失', '內場重大缺失', '外場重大缺失', '內場專案結果', '外場專案結果'];
+        $tableHeader[] = '內場專案查核';
+        $tableHeader[] = '外場專案查核';
+        $tableHeader[] = '外場5S總';
+        $tableHeader[] = '內場5S總';
+        $tableHeader[] = '閉店缺失';
+        $tableHeader[] = '內場閉店缺失';
+        $tableHeader[] = '外場閉店缺失總數';
+        $tableHeader[] = '外場閉店缺失';
+        $tableHeader[] = '內場重大缺失';
+        $tableHeader[] = '外場重大缺失';
+        $tableHeader[] = '內場專案結果';
+        $tableHeader[] = '外場專案結果';
+
 
         $tablebodys = [];
 
@@ -172,6 +191,22 @@ class RowDataController extends Controller
                 'frontTaskNot5S' => $frontTaskNot5S,
                 'backTask5S' => $backTask5S->toArray(),
                 'frontTask5S' => $frontTask5S,
+                'a' => '確認中',
+                'b' => '確認中',
+                'c' => '確認中',
+                'd' => '確認中',
+                'e' => '確認中',
+                'f' => '確認中',
+                'g' => '確認中',
+                'h' => '確認中',
+                'i' => '確認中',
+                'j' => '確認中',
+                'k' => '確認中',
+                'l' => '確認中',
+                'm' => '確認中',
+                'n' => '確認中',
+                'o' => '確認中',
+                'p' => '確認中',
             ];
 
             $tablebodys[] = $tableBody;
