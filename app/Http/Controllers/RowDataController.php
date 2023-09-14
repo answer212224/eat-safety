@@ -31,8 +31,8 @@ class RowDataController extends Controller
 
         $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
 
-        // 只取11號的任務
-        // $tasks = $tasks->whereDay('task_date', 11);
+        // 只取14號的任務
+        // $tasks = $tasks->whereDay('task_date', 14);
 
         // 只取得已完成的任務和食安及5S的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
@@ -78,17 +78,19 @@ class RowDataController extends Controller
         for ($i = 1; $i <= 5; $i++) {
             $tableHeader[] = '廚區分數' . $i;
         }
-        $tableHeader[] = '內場5S總';
-        $tableHeader[] = '外場5S總';
-        $tableHeader[] = '閉店缺失';
-        $tableHeader[] = '內場閉店缺失';
-        $tableHeader[] = '外場閉店缺失總數';
-        $tableHeader[] = '外場閉店缺失';
-        $tableHeader[] = '內場重大缺失';
-        $tableHeader[] = '外場重大缺失';
+        $tableHeader[] = '內場5S總數';
+        $tableHeader[] = '外場5S總數';
+        $tableHeader[] = '內場閉店總數';
+        $tableHeader[] = '內場閉店說明';
+        $tableHeader[] = '外場閉店總數';
+        $tableHeader[] = '外場閉店說明';
+        $tableHeader[] = '內場重大缺失總數';
+        $tableHeader[] = '內場重大缺失說明';
+        $tableHeader[] = '外場重大缺失總數';
+        $tableHeader[] = '外場重大缺失說明';
         $tableHeader[] = '內場專案查核';
-        $tableHeader[] = '外場專案查核';
         $tableHeader[] = '內場專案結果';
+        $tableHeader[] = '外場專案查核';
         $tableHeader[] = '外場專案結果';
 
 
@@ -183,6 +185,34 @@ class RowDataController extends Controller
                 'area' => '外場',
                 'count' => $frontTask5STotal
             ];
+
+            // 內場閉店缺失總數 假設是am8:30之前是顯示"下午場巡檢"字串，am8:30之後是顯示晚上巡檢的缺失數量
+            if (Carbon::create($task->task_date)->format('H:i') <= '08:30') {
+                $backCloseDefectCount = $backTask->where('defect.category', '閉店')->count();
+                $backCloseDefectCountDescrptions = $backTask->where('defect.category', '閉店')->pluck('defect.report_description')->toArray();
+            } else {
+                $backCloseDefectCount = "下午場巡檢";
+                $backCloseDefectCountDescrptions = null;
+            }
+
+            // 外場閉店缺失總數 假設是am8:30之前是顯示"下午場巡檢"字串，am8:30之後是顯示晚上巡檢的缺失數量
+            if (Carbon::create($task->task_date)->format('H:i') <= '08:30') {
+                $frontCloseDefectCount = $frontTask->where('defect.category', '閉店')->count();
+                $frontCloseDefectCountDescrptions = $frontTask->where('defect.category', '閉店')->pluck('defect.report_description')->toArray();
+            } else {
+                $frontCloseDefectCount = "下午場巡檢";
+                $frontCloseDefectCountDescrptions = null;
+            }
+
+            // 內場重大缺失總數
+            $backMajorDefectCount = $backTask->where('defect.category', '重大缺失')->count();
+            // 內場重大缺失標準
+            $backMajorDefectCountDescrptions = $backTask->where('defect.category', '重大缺失')->pluck('defect.report_description')->toArray();
+            // 外場重大缺失總數
+            $frontMajorDefectCount = $frontTask->where('defect.category', '重大缺失')->count();
+            // 外場重大缺失標準
+            $frontMajorDefectCountDescrptions = $frontTask->where('defect.category', '重大缺失')->pluck('defect.report_description')->toArray();
+
 
             // 取得中廚區站的id
             $restaurantChineseKitchenWorkspaces = $task->restaurant->restaurantChineseKitchenWorkspaces->pluck('id');
@@ -283,13 +313,14 @@ class RowDataController extends Controller
                 'backTask5STotal' =>  $backTask5STotal,
                 'backTask5STotal' => $backTask5STotal,
                 'frontTask5STotal' => $frontTask5STotal,
-                'h' => '確認中',
-                'i' => '確認中',
-                'j' => '確認中',
-                'k' => '確認中',
-                'l' => '確認中',
-                'm' => '確認中',
-                'n' => '確認中',
+                'backCloseDefectCount' => $backCloseDefectCount,
+                'backCloseDefectCountDescrptions' => $backCloseDefectCountDescrptions,
+                'frontCloseDefectCount' => $frontCloseDefectCount,
+                'frontCloseDefectCountDescrptions' => $frontCloseDefectCountDescrptions,
+                'backMajorDefectCount' => $backMajorDefectCount,
+                'frontMajorDefectCount' => $frontMajorDefectCount,
+                'backMajorDefectCountDescrptions' => $backMajorDefectCountDescrptions,
+                'frontMajorDefectCountDescrptions' => $frontMajorDefectCountDescrptions,
                 'o' => '確認中',
                 'p' => '確認中',
                 'q' => '確認中',

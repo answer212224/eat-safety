@@ -127,29 +127,59 @@
                                         {{ $body['frontTask5STotal'] }}
                                     </td>
                                     <td>
-                                        {{ $body['h'] }}
+                                        {{ $body['backCloseDefectCount'] }}
                                     </td>
                                     <td>
-                                        {{ $body['i'] }}
+                                        @if ($body['backCloseDefectCountDescrptions'] !== null)
+                                            {{-- 每個item 前面用給序號123 --}}
+                                            @foreach ($body['backCloseDefectCountDescrptions'] as $key => $item)
+                                                {{ $key + 1 }}.{{ $item }}
+                                            @endforeach
+                                        @endif
+
                                     </td>
                                     <td>
-                                        {{ $body['j'] }}
+                                        {{ $body['frontCloseDefectCount'] }}
                                     </td>
                                     <td>
-                                        {{ $body['k'] }}
+                                        @if ($body['frontCloseDefectCountDescrptions'] !== null)
+                                            {{-- 每個item 前面用給序號123 --}}
+                                            @foreach ($body['frontCloseDefectCountDescrptions'] as $key => $item)
+                                                {{ $key + 1 }}.{{ $item }}
+                                            @endforeach
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['l'] }}
+                                        {{ $body['backMajorDefectCount'] }}
                                     </td>
                                     <td>
-                                        {{ $body['m'] }}
+                                        @if ($body['backMajorDefectCountDescrptions'] !== null)
+                                            {{-- 每個item 前面用給序號123 --}}
+                                            @foreach ($body['backMajorDefectCountDescrptions'] as $key => $item)
+                                                {{ $key + 1 }}.{{ $item }}
+                                            @endforeach
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $body['n'] }}
+                                        {{ $body['frontMajorDefectCount'] }}
+                                    </td>
+                                    <td>
+                                        @if ($body['frontMajorDefectCountDescrptions'] !== null)
+                                            {{-- 每個item 前面用給序號123 --}}
+                                            @foreach ($body['frontMajorDefectCountDescrptions'] as $key => $item)
+                                                {{ $key + 1 }}.{{ $item }}
+                                            @endforeach
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $body['o'] }}
                                     </td>
+
+                                    <td>
+                                        {{ $body['o'] }}
+                                    </td>
+
+
                                     <td>
                                         {{ $body['p'] }}
                                     </td>

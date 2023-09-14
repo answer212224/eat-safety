@@ -73,6 +73,7 @@
                                 <th>缺失分類</th>
                                 <th>子項目</th>
                                 <th>缺失類別</th>
+                                <th>報告呈現</th>
                                 <th>扣分</th>
                                 <th>門市</th>
                                 <th>工作站</th>
@@ -89,6 +90,7 @@
                                     <td>{{ $defectRecord->defect->group }}</td>
                                     <td>{{ $defectRecord->defect->title }}</td>
                                     <td>{{ $defectRecord->defect->category }}</td>
+                                    <td>{{ $defectRecord->defect->report_description }}</td>
                                     <td>{{ $defectRecord->defect->deduct_point }}</td>
                                     <td>{{ $defectRecord->restaurantWorkspace->restaurant->brand }}{{ $defectRecord->restaurantWorkspace->restaurant->shop }}
                                     </td>
@@ -156,7 +158,7 @@
                 "pageLength": 10,
                 //新到舊
                 "order": [
-                    [10, "desc"]
+                    [11, "desc"]
                 ],
             });
 

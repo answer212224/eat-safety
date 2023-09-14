@@ -56,8 +56,8 @@
     <div class="col-md-12">
         <div class="form-group mt-3">
             <label class="form-label">稽核日期</label>
-            <input id="event-start-date" wire:model='start' name="task_date" class="form-control flatpickr"
-                required autocomplete="off">
+            <input id="event-start-date" wire:model='start' name="task_date" class="form-control flatpickr" required
+                autocomplete="off">
         </div>
     </div>
 
@@ -77,7 +77,8 @@
                     <label class="list-group-item">
                         <input class="form-check-input me-1" type="checkbox" name="defaltMeals[]"
                             value="{{ $defaltMeal->id }}" checked>
-                        (品牌){{ $defaltMeal->name }}
+                        (品牌)
+                        {{ $defaltMeal->name }}
 
                     </label>
                 @endforeach
@@ -85,7 +86,8 @@
                     <label class="list-group-item">
                         <input class="form-check-input me-1" type="checkbox" name="optionMeals[]"
                             value="{{ $optionMeal->id }}" checked>
-                        (分店){{ $optionMeal->name }}
+                        (分店)
+                        {{ $optionMeal->name }}
                     </label>
                 @endforeach
             </div>
@@ -93,7 +95,7 @@
         {{-- 採樣checkbox end --}}
     </div>
 
-    @if ($category != '餐點採樣')
+    @if ($category == '食安及5S')
         <div class="row my-3">
             <div class="col-md-12">
                 <div class="form-check form-switch form-check-inline form-switch-warning">
@@ -108,7 +110,9 @@
                         <label class="list-group-item">
                             <input class="form-check-input me-1" type="checkbox" value="{{ $project->id }}"
                                 name="projects[]" checked>
-                            {{ $project->description }}
+
+                            {{ $project->name }}
+                            <p>{{ $project->description }}</p>
                         </label>
                     @endforeach
                 </div>
@@ -138,7 +142,7 @@
             flatpickr(".flatpickr");
             flatpickr("#event-start-date", {
                 dateFormat: "Y-m-d H:i",
-                defaultDate: "{{today()->addHours(8)->format('Y-m-d H:i')}}",
+                defaultDate: "{{ today()->addHours(8)->format('Y-m-d H:i') }}",
                 enableTime: true,
                 hourIncrement: 2,
                 minuteIncrement: 30,

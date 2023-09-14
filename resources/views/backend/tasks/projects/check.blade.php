@@ -18,7 +18,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
                 <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-list') }}">稽核清單</a></li>
-                <li class="breadcrumb-item active" aria-current="page">開始專案</li>
+                <li class="breadcrumb-item active" aria-current="page">專案查核</li>
             </ol>
         </nav>
     </div>
@@ -38,6 +38,7 @@
                                 <label class="list-group-item">
                                     <input name="projects[]" value="{{ $project->id }}" class="form-check-input"
                                         type="checkbox" @if ($project->pivot->is_checked) checked @endif>
+                                    {{ $project->name }}
                                     {{ $project->description }}
                                 </label>
                             @endforeach

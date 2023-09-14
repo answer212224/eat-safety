@@ -48,8 +48,8 @@
                 <table id="zero-config" class="table dt-table-hover" style="width:100%">
                     <thead>
                         <tr>
-                            <th>名稱</th>
-                            <th>細項</th>
+                            <th>專案名稱</th>
+                            <th>(內外場)食安缺失子項目</th>
                             @role('auditor')
                                 <th>狀態</th>
                             @endrole
@@ -100,20 +100,25 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">新增專案</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">新增專案查核</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">名稱*</span>
+                            <span class="input-group-text">專案名稱</span>
                             <input type="text" class="form-control" name="name" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">細項*</span>
-                            <input type="text" class="form-control" name="description" required>
+                            <span class="input-group-text">(內外場)食安缺失子項目</span>
+                            <select class="form-control" name="description" id="" required>
+                                @foreach ($defectbackAndfront as $item)
+                                    <option value="{{ $item }}">
+                                        {{ $item }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
 

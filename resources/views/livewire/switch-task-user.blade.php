@@ -32,7 +32,7 @@
                 <p class="note-description">
                     <strong>專案</strong> <u>{{ $task->projects->count() }}</u> <strong>項:</strong>
                     @foreach ($task->projects as $project)
-                        <span class="badge badge-dark mb-1">{{ $project->name }}</span>
+                        <span class="badge badge-dark mb-1">{{ $project->name }}：{{ $project->description }}</span>
                     @endforeach
                 </p>
             </div>
@@ -82,7 +82,7 @@
                             @endif
                             @if ($task->projects->count() > 0)
                                 <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
-                                    專案執行</a>
+                                    專案查核</a>
                             @endif
                         @endif
                         @if ($task->category == '食安及5S')

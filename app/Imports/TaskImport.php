@@ -85,10 +85,13 @@ class TaskImport implements ToCollection
 
             // 將餐點採樣資料和任務關聯
             $task->meals()->sync($meals);
+            // 如果是食安及5S，才要將專案和任務關聯
             // 取得啟用的專案資料
             $projects = \App\Models\Project::where('status', true)->get();
-            // 將專案和任務關聯
-            $task->projects()->sync($projects);
+            if ($task->category == '食安及5S') {
+                // 將專案和任務關聯
+                $task->projects()->sync($projects);
+            }
         }
     }
 }

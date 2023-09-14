@@ -125,8 +125,8 @@ class TaskController extends Controller
             ]);
         }
 
-        alert()->success('專案執行完畢', '專案更新成功');
-        return back();
+        alert()->success('專案確認完畢', '專案更新成功');
+        return redirect()->route('task-list');
     }
 
 

@@ -31,27 +31,24 @@
             <div class="col-lg-9 layout-spacing">
                 <div class="statbox widget box box-shadow">
                     <div class="widget-content widget-content-area">
-
-
                         <div class="row">
-                            <div class="col-lg-6">
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">名稱</span>
-                                    <input type="text" class="form-control" value="{{ $project->name }}"
-                                        name="name" required>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">細項</span>
-                                    <input type="text" class="form-control" value="{{ $project->description }}"
-                                        name="description" required>
-                                </div>
-
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">專案名稱</span>
+                                <input type="text" class="form-control" name="name" required
+                                    value="{{ $project->name }}">
                             </div>
 
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">(內外場)食安缺失子項目</span>
+                                <select class="form-control" name="description" id="" required>
+                                    @foreach ($defectbackAndfront as $item)
+                                        <option value="{{ $item }}"
+                                            {{ $project->description == $item ? 'selected' : '' }}>
+                                            {{ $item }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -59,7 +56,6 @@
                 <div class="statbox widget box box-shadow">
                     <div class="widget-content widget-content-area">
                         <button type="submit" class="btn btn-outline-success w-100 mb-3">更新</button>
-                        <a class="btn btn-outline-dark w-100" href="{{ url()->previous() }}">上一頁</a>
                     </div>
                 </div>
             </div>
