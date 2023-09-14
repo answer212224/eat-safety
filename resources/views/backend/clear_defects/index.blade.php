@@ -100,17 +100,23 @@
                     <div class="modal-body">
 
                         {{-- input 啟用月份欄位 effective_date --}}
-                        <label for="effective_date">啟用月份</label>
-                        <input type="text" class="form-control yearMonth" name="effective_date" id="effective_date"
-                            value="{{ today()->format('Y-m') }}" required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">啟用月份</span>
+                            <input type="text" class="form-control yearMonth" name="effective_date"
+                                id="effective_date" value="{{ today()->format('Y-m') }}" required>
+                        </div>
 
                         {{-- input 主項目欄位 main_item --}}
-                        <label for="main_item">主項目</label>
-                        <input type="text" class="form-control" name="main_item" id="main_item" required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">主項目</span>
+                            <input type="text" class="form-control" name="main_item" id="main_item" required>
+                        </div>
 
                         {{-- input 次項目欄位 sub_item --}}
-                        <label for="sub_item">次項目</label>
-                        <input type="text" class="form-control" name="sub_item" id="sub_item" required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">次項目</span>
+                            <input type="text" class="form-control" name="sub_item" id="sub_item" required>
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -155,6 +161,22 @@
                 "order": [
                     [0, "desc"]
                 ],
+            });
+
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
+                onChange: function(selectedDates, dateStr, instance) {
+                    console.log(dateStr);
+
+                }
             });
         </script>
     </x-slot>

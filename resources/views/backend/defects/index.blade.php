@@ -112,31 +112,46 @@
                     <div class="modal-body">
 
                         {{-- input 啟用月份欄位 effective_date --}}
-                        <label for="effective_date">啟用月份</label>
-                        <input type="text" class="form-control yearMonth" name="effective_date" id="effective_date"
-                            value="{{ today()->format('Y-m') }}" required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">啟用月份</span>
+                            <input type="text" class="form-control yearMonth" name="effective_date"
+                                id="effective_date" value="{{ today()->format('Y-m') }}" required>
+                        </div>
+
                         {{-- input 缺失分類欄位 group --}}
-                        <label for="group">缺失分類</label>
-                        <input type="text" class="form-control" name="group" id="group" value=""
-                            required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">缺失分類</span>
+                            <input type="text" class="form-control" name="group" id="group" value=""
+                                required>
+                        </div>
+
                         {{-- input 子項目欄位 title --}}
-                        <label for="title">子項目</label>
-                        <input type="text" class="form-control" name="title" id="title" value=""
-                            required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">子項目</span>
+                            <input type="text" class="form-control" name="title" id="title" value=""
+                                required>
+                        </div>
+
                         {{-- input 缺失類別欄位 category --}}
-                        <label for="category">缺失類別</label>
-                        <input type="text" class="form-control" name="category" id="category" value=""
-                            required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">缺失類別</span>
+                            <input type="text" class="form-control" name="category" id="category" value=""
+                                required>
+                        </div>
                         {{-- input 扣分欄位 deduct_point --}}
-                        <label for="deduct_point">扣分</label>
-                        <input type="number" class="form-control" name="deduct_point" id="deduct_point" value=""
-                            required>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">扣分</span>
+                            <input type="number" class="form-control" name="deduct_point" id="deduct_point"
+                                value="" required>
+                        </div>
+
                         {{-- 稽核標準欄位 description  text --}}
                         <label for="description">稽核標準</label>
                         <textarea class="form-control" name="description" id="description" cols="30" rows="10" required></textarea>
                         {{-- 報告呈現說明欄位 report_description --}}
-                        <label for="report_description">報告呈現說明</label>
-                        <textarea class="form-control" name="report_description" id="report_description" cols="30" rows="10" required></textarea>
+                        <label for="report_description" class="mt-3">報告呈現說明</label>
+                        <textarea class="form-control" name="report_description" id="report_description" cols="30" rows="10"
+                            required></textarea>
 
                     </div>
                     <div class="modal-footer">
