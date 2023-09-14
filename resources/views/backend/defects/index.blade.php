@@ -142,7 +142,7 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">扣分</span>
                             <input type="number" class="form-control" name="deduct_point" id="deduct_point"
-                                value="" required>
+                                value="" required max="0">
                         </div>
 
                         {{-- 稽核標準欄位 description  text --}}
