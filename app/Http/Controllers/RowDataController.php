@@ -24,15 +24,12 @@ class RowDataController extends Controller
         }
 
         // N+1 問題
-        $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasDefects.defect', 'users');
+        $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasDefects.defect', 'users', 'backProjects', 'frontProjects');
 
         // yearMonth轉成Carbon格式
         $yearMonth = Carbon::create($yearMonth);
 
         $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
-
-        // 只取14號的任務
-        // $tasks = $tasks->whereDay('task_date', 14);
 
         // 只取得已完成的任務和食安及5S的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
@@ -78,21 +75,27 @@ class RowDataController extends Controller
         for ($i = 1; $i <= 5; $i++) {
             $tableHeader[] = '廚區分數' . $i;
         }
+
         $tableHeader[] = '內場5S總數';
         $tableHeader[] = '外場5S總數';
         $tableHeader[] = '內場閉店總數';
-        $tableHeader[] = '內場閉店說明';
+        $tableHeader[] = '內場閉店報告呈現';
         $tableHeader[] = '外場閉店總數';
-        $tableHeader[] = '外場閉店說明';
+        $tableHeader[] = '外場閉店報告呈現';
         $tableHeader[] = '內場重大缺失總數';
-        $tableHeader[] = '內場重大缺失說明';
+        $tableHeader[] = '內場重大缺失報告呈現';
         $tableHeader[] = '外場重大缺失總數';
-        $tableHeader[] = '外場重大缺失說明';
-        $tableHeader[] = '內場專案查核';
-        $tableHeader[] = '內場專案結果';
-        $tableHeader[] = '外場專案查核';
-        $tableHeader[] = '外場專案結果';
+        $tableHeader[] = '外場重大缺失報告呈現';
 
+        for ($i = 1; $i <= 5; $i++) {
+            $tableHeader[] = '內場專案查核';
+            $tableHeader[] = '內場專案結果';
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            $tableHeader[] = '外場專案查核';
+            $tableHeader[] = '外場專案結果';
+        }
 
         $tablebodys = [];
 
@@ -289,6 +292,26 @@ class RowDataController extends Controller
                     }
                 });
             }
+            // 取得內場專案查核description
+            $backProjectsDescriptions = $task->backProjects->pluck('description');
+            // 取得外場專案查核description
+            $frontProjectsDescriptions = $task->frontProjects->pluck('description');
+
+            // 檢查有沒有內場缺失的title與該backProjectsDescriptions相同,若有的話就不符合
+            $backProjectsDescripCount = $backProjectsDescriptions->map(function ($item) use ($backTask) {
+                // 去掉(內場)字串
+                $item = str_replace('(內場)', '', $item);
+
+                return $backTask->where('defect.title', $item)->count();
+            });
+
+            // 檢查有沒有外場缺失的title與該frontProjectsDescriptions相同,若有的話就不符合
+            $frontProjectsDescripCount = $frontProjectsDescriptions->map(function ($item) use ($frontTask) {
+                // 去掉(外場)字串
+                $item = str_replace('(外場)', '', $item);
+
+                return $frontTask->where('defect.title', $item)->count();
+            });
 
             $tableBody = [
                 'restaurant_name' => $taskMonth . $task->restaurant->brand_code . $task->restaurant->shop,
@@ -321,9 +344,10 @@ class RowDataController extends Controller
                 'frontMajorDefectCount' => $frontMajorDefectCount,
                 'backMajorDefectCountDescrptions' => $backMajorDefectCountDescrptions,
                 'frontMajorDefectCountDescrptions' => $frontMajorDefectCountDescrptions,
-                'o' => '確認中',
-                'p' => '確認中',
-                'q' => '確認中',
+                'backProjectsTitle' => $backProjectsDescriptions->toArray(),
+                'backProjectsDescripCount' => $backProjectsDescripCount->toArray(),
+                'frontProjectsTitle' => $frontProjectsDescriptions->toArray(),
+                'frontProjectsDescripCount' => $frontProjectsDescripCount->toArray(),
             ];
 
             $tablebodys[] = $tableBody;

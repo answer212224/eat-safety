@@ -171,21 +171,54 @@
                                             @endforeach
                                         @endif
                                     </td>
-                                    <td>
-                                        {{ $body['o'] }}
-                                    </td>
+                                    {{-- 5個內場專案查核 --}}
+                                    @for ($i = 0; $i < 5; $i++)
+                                        <td>
+                                            {{-- 假設$body['backProjectsTitle'][0]存在，顯示內容，沒有的話就顯示無 --}}
+                                            @if (isset($body['backProjectsTitle'][$i]))
+                                                {{ $body['backProjectsTitle'][$i] }}
+                                            @else
+                                                無
+                                            @endif
+                                        </td>
 
-                                    <td>
-                                        {{ $body['o'] }}
-                                    </td>
+                                        <td>
+                                            {{-- 假設$body['backProjectsDescripCount'][0]大於0顯示不符合，等於0顯示符合，沒有的話就顯示無 --}}
+                                            @if (isset($body['backProjectsDescripCount'][$i]))
+                                                @if ($body['backProjectsDescripCount'][$i] > 0)
+                                                    不符合
+                                                @else
+                                                    符合
+                                                @endif
+                                            @else
+                                                無
+                                            @endif
+                                        </td>
+                                    @endfor
+                                    {{-- 5個外場專案查核 --}}
+                                    @for ($i = 0; $i < 5; $i++)
+                                        <td>
+                                            {{-- 假設$body['frontProjectsTitle'][0]存在，顯示內容，沒有的話就顯示無 --}}
+                                            @if (isset($body['frontProjectsTitle'][$i]))
+                                                {{ $body['frontProjectsTitle'][$i] }}
+                                            @else
+                                                無
+                                            @endif
+                                        </td>
 
-
-                                    <td>
-                                        {{ $body['p'] }}
-                                    </td>
-                                    <td>
-                                        {{ $body['q'] }}
-                                    </td>
+                                        <td>
+                                            {{-- 假設$body['frontProjectsDescripCount'][0]大於0顯示不符合，等於0顯示符合，沒有的話就顯示無 --}}
+                                            @if (isset($body['frontProjectsDescripCount'][$i]))
+                                                @if ($body['frontProjectsDescripCount'][$i] > 0)
+                                                    不符合
+                                                @else
+                                                    符合
+                                                @endif
+                                            @else
+                                                無
+                                            @endif
+                                        </td>
+                                    @endfor
                                 </tr>
                             @endforeach
                         </tbody>

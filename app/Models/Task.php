@@ -54,6 +54,18 @@ class Task extends Model
         return $this->belongsToMany(Project::class)->withPivot('is_improved', 'is_checked', 'note');
     }
 
+    // 取得project的description 有包含字串是 %內場%
+    public function backProjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class)->where('description', 'like', '%內場%')->withPivot('is_improved', 'is_checked', 'note');
+    }
+
+    // 取得project的description 有包含字串是 %外場%
+    public function frontProjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class)->where('description', 'like', '%外場%')->withPivot('is_improved', 'is_checked', 'note');
+    }
+
     public function taskUsers()
     {
         return $this->hasMany(TaskUser::class);
