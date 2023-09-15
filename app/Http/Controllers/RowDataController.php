@@ -88,13 +88,13 @@ class RowDataController extends Controller
         $tableHeader[] = '外場重大缺失報告呈現';
 
         for ($i = 1; $i <= 5; $i++) {
-            $tableHeader[] = '內場專案查核';
-            $tableHeader[] = '內場專案結果';
+            $tableHeader[] = '內場專案查核' . $i;
+            $tableHeader[] = '內場專案結果' . $i;
         }
 
         for ($i = 1; $i <= 5; $i++) {
-            $tableHeader[] = '外場專案查核';
-            $tableHeader[] = '外場專案結果';
+            $tableHeader[] = '外場專案查核' . $i;
+            $tableHeader[] = '外場專案結果' . $i;
         }
 
         $tablebodys = [];
