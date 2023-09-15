@@ -411,7 +411,7 @@
                                 <a class="btn btn-primary mb-3" onclick="checkTask({{ $task->id }})">更新</a>
                             @endcan
 
-                            @if ($task->status == 'completed')
+                            @if ($task->status == 'completed' && $task->category != '餐點採樣')
                                 <a href="{{ route('task-inner-report', ['task' => $task]) }}"
                                     class="btn btn-info mb-3" target="_blank">內場稽核報告下載
                                 </a>
@@ -420,7 +420,7 @@
                                 </a>
                             @endif
 
-                            <a href="{{ url()->previous() }}" class="btn btn-dark mb-3">上一頁</a>
+                            <a href="{{ route('task-assign') }}" class="btn btn-dark mb-3">上一頁</a>
                             @can('delete-task')
                                 <a href="{{ route('task-delete', ['task' => $task]) }}" class="btn btn-danger"
                                     data-confirm-delete="true">刪除</a>

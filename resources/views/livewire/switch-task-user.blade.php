@@ -95,7 +95,7 @@
                             <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                                 餐點採樣核對</a>
                         @endif
-                        @if ($task->status == 'completed')
+                        @if ($task->status == 'completed' && $task->category != '餐點採樣')
                             <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="dropdown-item"
                                 target="_blank">內場稽核報告下載
                             </a>
