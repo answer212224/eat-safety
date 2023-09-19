@@ -13,6 +13,7 @@ use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Exception\NotReadableException;
 use Sopamo\LaravelFilepond\Exceptions\InvalidPathException;
 
 
@@ -69,6 +70,9 @@ class DefectController extends Controller
                 Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        } catch (NotReadableException $e) {
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
@@ -128,6 +132,9 @@ class DefectController extends Controller
                 Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        } catch (NotReadableException $e) {
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
