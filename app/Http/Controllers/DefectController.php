@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Models\TaskHasClearDefect;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -47,8 +48,14 @@ class DefectController extends Controller
             foreach ($request->filepond as $file) {
 
                 $filepondPath = $filepond->getPathFromServerId($file);
-                $originalImagePath = public_path('storage/' . $filepondPath);
 
+                if (!Storage::disk('public')->exists($filepondPath)) {
+                    Log::critical('圖片不存在' . ' ' . $filepondPath);
+                    alert()->error('錯誤', '圖片不存在');
+                    return back();
+                }
+
+                $originalImagePath = public_path('storage/' . $filepondPath);
 
                 $image = Image::make($originalImagePath);
                 // 修正圖片方向
@@ -67,12 +74,18 @@ class DefectController extends Controller
                 $images[] = "uploads/$fileName";
 
                 // 刪除暫存圖片
-                Storage::disk('public')->delete($filepondPath);
+                // Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
+            Log::critical($e->getMessage());
             alert()->error('錯誤', $e->getMessage());
             return back();
         } catch (NotReadableException $e) {
+            Log::critical($e->getMessage());
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        } catch (\Exception $e) {
+            Log::critical($e->getMessage());
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
@@ -106,11 +119,18 @@ class DefectController extends Controller
             $images = [];
             $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
 
-
             foreach ($request->filepond as $file) {
 
                 $filepondPath = $filepond->getPathFromServerId($file);
+
+                if (!Storage::disk('public')->exists($filepondPath)) {
+                    Log::critical('圖片不存在' . ' ' . $filepondPath);
+                    alert()->error('錯誤', '圖片不存在');
+                    return back();
+                }
+
                 $originalImagePath = public_path('storage/' . $filepondPath);
+
 
                 $image = Image::make($originalImagePath);
                 // 修正圖片方向
@@ -129,12 +149,18 @@ class DefectController extends Controller
                 $images[] = "uploads/$fileName";
 
                 // 刪除暫存圖片
-                Storage::disk('public')->delete($filepondPath);
+                // Storage::disk('public')->delete($filepondPath);
             }
         } catch (InvalidPathException $e) {
+            Log::critical($e->getMessage());
             alert()->error('錯誤', $e->getMessage());
             return back();
         } catch (NotReadableException $e) {
+            Log::critical($e->getMessage());
+            alert()->error('錯誤', $e->getMessage());
+            return back();
+        } catch (\Exception $e) {
+            Log::critical($e->getMessage());
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
