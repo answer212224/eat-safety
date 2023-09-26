@@ -177,7 +177,8 @@
                     <li class="{{ Request::routeIs('meal-index') || Request::routeIs('meal-edit') ? 'active' : '' }}">
                         <a href="{{ route('meal-index') }}"> 採樣資料庫 </a>
                     </li>
-                    <li class="{{ Request::routeIs('project-index') ? 'active' : '' }}">
+                    <li
+                        class="{{ Request::routeIs('project-index') || Request::routeIs('project-edit') ? 'active' : '' }}">
                         <a href="{{ route('project-index') }}"> 專案資料庫 </a>
                     </li>
                     <li

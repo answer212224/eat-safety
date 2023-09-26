@@ -14,7 +14,14 @@
         @vite(['resources/scss/light/assets/components/modal.scss'])
         @vite(['resources/scss/dark/assets/components/modal.scss'])
 
+        {{-- flatpickr --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
         <!--  END CUSTOM STYLE FILE  -->
+        {{-- flatpickr --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
 
@@ -93,8 +100,10 @@
     </div>
 
 
+
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        wire:i>
         <div class="modal-dialog">
             <form action="{{ route('project-store') }}" method="post">
                 @csrf
@@ -111,16 +120,7 @@
                             <input type="text" class="form-control" name="name" required>
                         </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">(內外場)食安缺失子項目</span>
-                            <select class="form-control" name="description" id="" required>
-                                @foreach ($defectbackAndfront as $item)
-                                    <option value="{{ $item }}">
-                                        {{ $item }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
+                        @livewire('project-defect-month')
 
                     </div>
                     <div class="modal-footer">
@@ -156,7 +156,21 @@
                 "lengthMenu": [7, 10, 20, 50],
                 "pageLength": 10,
             });
+
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
+
+            });
         </script>
+
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

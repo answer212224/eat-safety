@@ -48,7 +48,7 @@ class MealsImport implements ToCollection
 
         // 如有該月份的稽核任務，則不可更新該月份的餐點採樣資料
         if ($taskHasMeals->count() > 0) {
-            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的稽核任務，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的餐點採樣資料");
+            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的採樣紀錄，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的餐點採樣資料");
         }
         // 如無該月份的稽核任務，則可更新該月份的餐點採樣資料
         Meal::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();

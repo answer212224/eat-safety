@@ -8,7 +8,14 @@
         <!--  BEGIN CUSTOM STYLE FILE  -->
         @vite(['resources/scss/light/assets/apps/blog-create.scss'])
         @vite(['resources/scss/dark/assets/apps/blog-create.scss'])
-
+        {{-- flatpickr --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
+        <!--  END CUSTOM STYLE FILE  -->
+        {{-- flatpickr --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
 
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
@@ -19,7 +26,7 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">資料</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('meal-index') }}">專案資料</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('project-index') }}">專案資料</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
@@ -38,16 +45,8 @@
                                     value="{{ $project->name }}">
                             </div>
 
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">(內外場)食安缺失子項目</span>
-                                <select class="form-control" name="description" id="" required>
-                                    @foreach ($defectbackAndfront as $item)
-                                        <option value="{{ $item }}"
-                                            {{ $project->description == $item ? 'selected' : '' }}>
-                                            {{ $item }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @livewire('project-defect-month', ['project' => $project])
+
                         </div>
                     </div>
                 </div>
@@ -65,7 +64,20 @@
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+        <script>
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
 
+                    }),
+                ],
+
+            });
+        </script>
     </x-slot:footerFiles>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

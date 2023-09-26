@@ -115,69 +115,68 @@
                     </div>
                     <div class="modal-body">
                         <div class="input-group mb-3">
-                            <span class="input-group-text">月份*</span>
-                            <input type="date" class="form-control" name="effective_date" aria-label="Username"
+                            <span class="input-group-text">月份</span>
+                            <input type="text" class="form-control" name="effective_date" aria-label="Username"
                                 required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">品牌店代碼*</span>
-                            <input type="text" class="form-control" placeholder="EAT001" name="sid" required>
+                            <span class="input-group-text">品牌店代碼</span>
+                            <input type="text" class="form-control" name="sid" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">品牌*</span>
-                            <input type="text" class="form-control" placeholder="饗食" name="brand" required>
+                            <span class="input-group-text">品牌</span>
+                            <input type="text" class="form-control" name="brand" required>
                         </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">店別</span>
-                            <input type="text" class="form-control" placeholder="新光" name="shop">
+                            <input type="text" class="form-control" name="shop">
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">類別*</span>
-                            <input type="text" class="form-control" placeholder="食材" name="category" required>
+                            <span class="input-group-text">類別</span>
+                            <input type="text" class="form-control" name="category" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">廚別*</span>
-                            <input type="text" class="form-control" placeholder="日廚" name="chef" required>
+                            <span class="input-group-text">廚別</span>
+                            <input type="text" class="form-control" name="chef" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">區站*</span>
-                            <input type="text" class="form-control" placeholder="內廚房" name="workspace" required>
+                            <span class="input-group-text">區站</span>
+                            <input type="text" class="form-control" name="workspace" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">編號*</span>
-                            <input type="text" class="form-control" placeholder="1" name="qno" required>
+                            <span class="input-group-text">編號</span>
+                            <input type="text" class="form-control" name="qno" required>
                         </div>
 
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">名稱*</span>
-                            <input type="text" class="form-control" placeholder="和風花枝" name="name" required>
+                            <span class="input-group-text">名稱</span>
+                            <input type="text" class="form-control" name="name" required>
                         </div>
 
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">備註</span>
-                            <input type="text" class="form-control" placeholder="4月不合格" name="note">
+                            <input type="text" class="form-control" name="note">
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">檢項*</span>
-                            <input type="text" class="form-control" placeholder="E" name="item" required>
+                            <span class="input-group-text">檢項</span>
+                            <input type="text" class="form-control" name="item" required>
                         </div>
 
 
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">檢驗項目*</span>
-                            <input type="text" class="form-control" placeholder="大腸桿菌、金黃" name="items"
-                                required>
+                            <span class="input-group-text">檢驗項目</span>
+                            <input type="text" class="form-control" name="items" required>
                         </div>
 
 

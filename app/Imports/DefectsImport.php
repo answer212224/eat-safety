@@ -46,7 +46,7 @@ class DefectsImport implements ToCollection
 
         // 如有該月份的稽核任務，則不可更新該月份的食安缺失資料
         if ($taskHasDefects->count() > 0) {
-            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的稽核任務，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的食安缺失資料");
+            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的缺失紀錄，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的食安缺失資料");
         }
 
         // 如無該月份的稽核任務，則可更新該月份的食安缺失資料

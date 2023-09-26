@@ -34,18 +34,18 @@ class ClearDefectImport implements ToCollection
         $collection->push(['effective_date' => $collection[0]['effective_date'], 'main_item' => '待確認', 'sub_item' => '待確認', 'deduct_point' => 0]);
         $collection->push(['effective_date' => $collection[0]['effective_date'], 'main_item' => '其他', 'sub_item' => '其他', 'deduct_point' => 0]);
 
-        // 檢查清檢缺失是否有該月份的稽核任務
+        // 檢查清檢缺失是否有該月份的缺失紀錄
         $taskHasDefects =  Task::whereHas('taskHasClearDefects.ClearDefect', function ($query) use ($collection) {
             $query->whereYear('effective_date', $collection[0]['effective_date'])
                 ->whereMonth('effective_date', $collection[0]['effective_date']);
         })->get();
 
-        // 如有該月份的稽核任務，則不可更新該月份的食安缺失資料
+        // 如有該月份的缺失紀錄，則不可更新該月份的食安缺失資料
         if ($taskHasDefects->count() > 0) {
-            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的稽核任務，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的食安缺失資料");
+            throw new \Exception("已有{$collection[0]['effective_date']->format('Y-m')}月的缺失紀錄，無法更新{$collection[0]['effective_date']->format('Y-m')}月份的食安缺失資料");
         }
 
-        // 如無該月份的稽核任務，則可更新該月份的食安缺失資料
+        // 如無該月份的缺失紀錄，則可更新該月份的食安缺失資料
         // 刪除該月份的食安缺失資料
         \App\Models\ClearDefect::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();
 
