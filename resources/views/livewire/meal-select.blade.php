@@ -44,10 +44,15 @@
             <select class="form-control" wire:model='restaurant' name="restaurant_id" placeholder="選擇分店代號..."
                 autocomplete="off" id="select-sid" required>
                 <option value="">選擇分店代號...</option>
-                @foreach ($restaurants as $restaurant)
-                    <option value="{{ $restaurant->id }}">
-                        {{ $restaurant->sid }} {{ $restaurant->brand }} {{ $restaurant->shop }}
-                    </option>
+                @foreach ($restaurants as $brand => $restaurants)
+                    <optgroup label="{{ $brand }}">
+                        @foreach ($restaurants as $restaurant)
+                            <option value="{{ $restaurant->id }}">
+                                {{ $restaurant->sid }}{{ $restaurant->brand }}{{ $restaurant->shop }}
+                            </option>
+                        @endforeach
+
+                    </optgroup>
                 @endforeach
             </select>
         </div>

@@ -56,7 +56,7 @@
 
             {{-- APP --}}
             <li class="menu menu-heading">
-                <div class="heading">APP</span></div>
+                <div class="heading">APP</div>
             </li>
             @can('permission-controll')
                 <li class="menu {{ Request::is('*/app/permission/*') ? 'active' : '' }}">
@@ -145,7 +145,7 @@
             </li>
 
             <li class="menu menu-heading">
-                <div class="heading"><span>DATA</span></div>
+                <div class="heading">DATA</div>
             </li>
 
             {{-- 資料表 --}}
@@ -240,7 +240,10 @@
                         class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                         <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
                     </li>
-
+                    <li
+                        class="{{ Request::routeIs('restaurant-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
+                        <a href="{{ route('restaurant-records') }}"> 門市缺失紀錄 </a>
+                    </li>
                 </ul>
             </li>
 

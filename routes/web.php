@@ -194,6 +194,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/clear-defect-records', [ClearDefectController::class, 'records'])->name('clear-defect-records');
             // 清檢統計圖表
             Route::get('/clear-defect-chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
+            // 門市缺失紀錄
+            Route::get('/restaurant-records', [RestaurantController::class, 'records'])->name('restaurant-records');
         });
 
         Route::prefix('row-data')->group(function () {

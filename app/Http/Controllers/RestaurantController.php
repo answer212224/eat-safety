@@ -150,4 +150,24 @@ class RestaurantController extends Controller
             'restaurant' => $restaurant,
         ]);
     }
+
+    /**
+     * 門市缺失資料
+     * records
+     */
+    public function records(Request $request)
+    {
+        $restaurantIds = $request->input('restaurants', []);
+        // 取得任務是篩選的門市
+        $restaurants = Restaurant::whereIn('id', $restaurantIds)->get();
+
+        //    restaurants groupBy brand 給前端顯示
+        $restaurants = Restaurant::all()->groupBy('brand');
+
+        return view('backend.restaurants.records', [
+            'title' => '門市缺失資料',
+            'restaurants' => $restaurants,
+
+        ]);
+    }
 }
