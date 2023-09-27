@@ -207,6 +207,13 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             // row-data-clear-defect
             Route::get('/clear-defect', [RowDataController::class, 'rowDataClearDefect'])->name('row-data-clear-defect');
         });
+
+        Route::prefix('eatogether')->group(function () {
+            // 集團所有門市統計
+            Route::get('/restaurants', [RestaurantController::class, 'eatogether'])->name('eatogether-restaurants');
+            // 集團所有同仁統計
+            Route::get('/users', [UserController::class, 'eatogether'])->name('eatogether-users');
+        });
     });
 });
 

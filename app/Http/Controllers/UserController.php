@@ -136,4 +136,13 @@ class UserController extends Controller
             'clearDefectCount' => $clearDefectCount,
         ]);
     }
+
+    /**
+     * 集團所有同仁的統計
+     * eatogether
+     */
+    public function eatogether()
+    {
+        dd('eatogether');
+    }
 }

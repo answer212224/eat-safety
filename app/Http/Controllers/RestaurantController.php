@@ -273,4 +273,39 @@ class RestaurantController extends Controller
 
         ]);
     }
+
+    /**
+     * 集團status = 1門市的食安缺失數量和清檢缺失數量
+     * eatogether
+     */
+    public function eatogether()
+    {
+        $restaurants = Restaurant::where('status', 1)->get();
+        $restaurants->load('restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects');
+
+        // 計算各門市的食安缺失數量 key = 門市brand+shop
+        $defectsCount = $restaurants->map(function ($restaurant, $key) {
+            $count = $restaurant->restaurantWorkspaces->pluck('taskHasDefects')->flatten()->count();
+            return [
+                'name' => $restaurant->brand . $restaurant->shop,
+                'count' => $count,
+            ];
+        });
+
+        // 計算各門市的清檢缺失數量 key = 門市brand+shop
+        $clearDefectsCount = $restaurants->map(function ($restaurant, $key) {
+            $count = $restaurant->restaurantWorkspaces->pluck('taskHasClearDefects')->flatten()->count();
+            return [
+                'name' => $restaurant->brand . $restaurant->shop,
+                'count' => $count,
+            ];
+        });
+
+
+        return view('backend.eatogether.restaurants', [
+            'title' => '集團全部門市統計',
+            'defectsCount' => $defectsCount,
+            'clearDefectsCount' => $clearDefectsCount,
+        ]);
+    }
 }
