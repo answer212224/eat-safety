@@ -50,10 +50,26 @@ class RestaurantWorkspace extends Model
     }
 
     /**
+     * 取得is_ignore = 0 的資料
+     */
+    public function taskHasDefectsNotIgnore()
+    {
+        return $this->hasMany(TaskHasDefect::class)->where('is_ignore', 0);
+    }
+
+    /**
      * hasMany TaskHasClearDefect
      */
     public function taskHasClearDefects()
     {
         return $this->hasMany(TaskHasClearDefect::class);
+    }
+
+    /**
+     * 取得is_ignore = 0 的資料
+     */
+    public function taskHasClearDefectsNotIgnore()
+    {
+        return $this->hasMany(TaskHasClearDefect::class)->where('is_ignore', 0);
     }
 }

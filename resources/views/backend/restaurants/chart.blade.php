@@ -53,12 +53,14 @@
         <script>
             var options = {
                 series: [{
-                    name: '食安缺失',
-                    data: @json($defects)
-                }, {
-                    name: '清檢缺失',
-                    data: @json($clearDefects)
-                }, ],
+                        name: '內場食安缺失',
+                        data: @json($backDefectsCount->values())
+                    },
+                    {
+                        name: '外場食安缺失',
+                        data: @json($frontDefectsCount->values())
+                    },
+                ],
                 chart: {
                     type: 'bar',
                     height: 500
@@ -77,7 +79,7 @@
                 },
 
                 xaxis: {
-                    categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    categories: @json($backDefectsCount->keys()),
                 },
                 yaxis: {
                     title: {
@@ -95,15 +97,19 @@
         </script>
 
         <script>
+            // yearMonthDeductPoints = [
+            //     "2023-09" => 86 "2023-08" => 96
+            // ]
             var options = {
                 series: [{
                         name: "食安內場",
-                        data: [94, 90, 96, 94, 88, 90, 94]
+                        data: @json($backYearMonthDateDeductPoints->values())
                     },
                     {
                         name: "食安外場",
-                        data: [97, 94, 98, 96, 92, 94, 98]
+                        data: @json($frontYearMonthDateDeductPoints->values())
                     },
+
                 ],
                 chart: {
                     height: 500,
@@ -138,7 +144,7 @@
                     curve: 'smooth'
                 },
                 title: {
-                    text: '{{ $title }} 食安平均分數 - 目前數值未與真實資料相符',
+                    text: '{{ $title }} 食安平均分數',
                     style: {
                         fontSize: '24px',
                         fontWeight: 'bold',
@@ -157,9 +163,9 @@
                     size: 1
                 },
                 xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    categories: @json($backYearMonthDateDeductPoints->keys()),
                     title: {
-                        text: '月份'
+                        text: '年月'
                     }
                 },
                 yaxis: {

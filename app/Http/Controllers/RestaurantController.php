@@ -71,38 +71,96 @@ class RestaurantController extends Controller
      */
     public function chart(Restaurant $restaurant)
     {
-        $restaurant->load('restaurantWorkspaces', 'restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects');
+        $restaurant->load('restaurantBackWorkspaces.taskHasDefects', 'restaurantBackWorkspaces.taskHasDefectsNotIgnore.defect', 'restaurantFrontWorkspace.taskHasDefectsNotIgnore.defect');
 
-        $defects = $restaurant->restaurantWorkspaces->map(function ($workspace) {
-            return $workspace->taskHasDefects->filter(function ($defect) {
-                return $defect->created_at->year == Carbon::now()->year;
-            });
-        })->flatten();
-
-        $clearDefects = $restaurant->restaurantWorkspaces->map(function ($workspace) {
-            return $workspace->taskHasClearDefects->filter(function ($defect) {
-                return $defect->created_at->year == Carbon::now()->year;
-            });
-        })->flatten();
-
-        // 依照一月到十二月的順序，取得每個月的缺失數量，若該月份沒有缺失，則為0
-        $defects = collect(range(1, 12))->map(function ($month) use ($defects) {
-            return $defects->filter(function ($defect) use ($month) {
-                return $defect->created_at->month == $month;
-            })->count();
+        // 內場的每個年月缺失數量
+        $backDefectsCount = $restaurant->restaurantBackWorkspaces->pluck('taskHasDefects')->flatten()->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->count();
         });
 
-        $clearDefects = collect(range(1, 12))->map(function ($month) use ($clearDefects) {
-            return $clearDefects->filter(function ($defect) use ($month) {
-                return $defect->created_at->month == $month;
-            })->count();
+        // 外場的每個年月缺失數量
+        $frontDefectsCount = $restaurant->restaurantFrontWorkspace->taskHasDefectsNotIgnore->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->count();
+        });
+
+        // 比對兩組資料，如果有缺失的月份，就補0
+        $backDefectsCount->each(function ($value, $key) use ($frontDefectsCount) {
+            if (!$frontDefectsCount->has($key)) {
+                $frontDefectsCount->put($key, 0);
+            }
+        });
+
+        $frontDefectsCount->each(function ($value, $key) use ($backDefectsCount) {
+            if (!$backDefectsCount->has($key)) {
+                $backDefectsCount->put($key, 0);
+            }
+        });
+
+        // 內場的缺失扣分每個年月分組的平均
+        $backYearMonthDateDeductPoints = $restaurant->restaurantBackWorkspaces->pluck('taskHasDefectsNotIgnore')->flatten()->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m-d');
+        })->map(function ($defects) {
+            return 100 + ($defects->sum('defect.deduct_point'));
+        });
+        // 再根據年月分組，取得每個月的平均
+        $backYearMonthDateDeductPoints = $backYearMonthDateDeductPoints->groupBy(function ($defect, $key) {
+            return Carbon::create($key)->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->avg();
+        });
+
+        // 外場的缺失扣分每個年月分組的平均
+        $frontYearMonthDateDeductPoints = $restaurant->restaurantFrontWorkspace->taskHasDefectsNotIgnore->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m-d');
+        })->map(function ($defects) {
+            return 100 + ($defects->sum('defect.deduct_point'));
+        });
+        // 再根據年月分組，取得每個月的平均
+        $frontYearMonthDateDeductPoints = $frontYearMonthDateDeductPoints->groupBy(function ($defect, $key) {
+            return Carbon::create($key)->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->avg();
+        });
+
+        // 比對兩組資料，如果有缺失的月份，就補100
+        $backYearMonthDateDeductPoints->each(function ($value, $key) use ($frontYearMonthDateDeductPoints) {
+            if (!$frontYearMonthDateDeductPoints->has($key)) {
+                $frontYearMonthDateDeductPoints->put($key, 100);
+            }
+        });
+        $frontYearMonthDateDeductPoints->each(function ($value, $key) use ($backYearMonthDateDeductPoints) {
+            if (!$backYearMonthDateDeductPoints->has($key)) {
+                $backYearMonthDateDeductPoints->put($key, 100);
+            }
+        });
+
+        // 根據key排序
+        $backYearMonthDateDeductPoints = $backYearMonthDateDeductPoints->sortBy(function ($defect, $key) {
+            return $key;
+        });
+        $backDefectsCount = $backDefectsCount->sortBy(function ($defect, $key) {
+            return $key;
+        });
+
+        // 根據key排序
+        $frontYearMonthDateDeductPoints = $frontYearMonthDateDeductPoints->sortBy(function ($defect, $key) {
+            return $key;
+        });
+        $frontDefectsCount = $frontDefectsCount->sortBy(function ($defect, $key) {
+            return $key;
         });
 
         return view('backend.restaurants.chart', [
             'title' => $restaurant->brand . $restaurant->shop,
             'restaurant' => $restaurant,
-            'defects' => $defects,
-            'clearDefects' => $clearDefects,
+            'backDefectsCount' => $backDefectsCount,
+            'frontDefectsCount' => $frontDefectsCount,
+            'backYearMonthDateDeductPoints' => $backYearMonthDateDeductPoints,
+            'frontYearMonthDateDeductPoints' => $frontYearMonthDateDeductPoints,
         ]);
     }
 

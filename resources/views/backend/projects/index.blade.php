@@ -119,6 +119,7 @@
                             <span class="input-group-text">專案名稱</span>
                             <input type="text" class="form-control" name="name" required>
                         </div>
+                        <input type="hidden" name="status" value="1">
 
                         @livewire('project-defect-month')
 
