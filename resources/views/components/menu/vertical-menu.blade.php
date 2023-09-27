@@ -242,7 +242,7 @@
                         <a href="{{ route('clear-defect-records') }}"> 清檢缺失紀錄 </a>
                     </li>
                     <li
-                        class="{{ Request::routeIs('restaurant-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
+                        class="{{ Request::routeIs('restaurant-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }} d-none">
                         <a href="{{ route('restaurant-records') }}"> 門市缺失紀錄 </a>
                     </li>
                 </ul>
