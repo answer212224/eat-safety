@@ -278,10 +278,35 @@ class RestaurantController extends Controller
      * 集團status = 1門市的食安缺失數量和清檢缺失數量
      * eatogether
      */
-    public function eatogether()
+    public function eatogether(Request $request)
     {
+        $year = $request->input('year');
+        $month = $request->input('month');
+
+
         $restaurants = Restaurant::where('status', 1)->get();
-        $restaurants->load('restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects');
+
+        if ($year && $month) {
+            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($year, $month) {
+                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($year, $month) {
+                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            }]);
+        } else if ($year) {
+            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($year) {
+                $query->whereYear('created_at', $year);
+            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($year) {
+                $query->whereYear('created_at', $year);
+            }]);
+        } else if ($month) {
+            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($month) {
+                $query->whereMonth('created_at', $month);
+            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($month) {
+                $query->whereMonth('created_at', $month);
+            }]);
+        } else {
+            $restaurants->load(['restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects']);
+        }
 
         // 計算各門市的食安缺失數量 key = 門市brand+shop
         $defectsCount = $restaurants->map(function ($restaurant, $key) {
