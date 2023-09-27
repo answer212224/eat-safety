@@ -24,7 +24,7 @@
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
             <div class="card">
                 <div class="card-header">
-                    {{ $title }} 食安缺失數量
+                    {{ $title }} 清檢缺失數量
                 </div>
                 <div class="card-body">
                     <div id="chart"></div>
@@ -52,13 +52,10 @@
         <script>
             var options = {
                 series: [{
-                        name: '內場食安缺失',
-                        data: @json($backDefectsCount->values())
+                        name: '清檢缺失',
+                        data: @json($defectsCount->values())
                     },
-                    {
-                        name: '外場食安缺失',
-                        data: @json($frontDefectsCount->values())
-                    },
+
                 ],
                 chart: {
                     type: 'bar',
@@ -78,7 +75,7 @@
                 },
 
                 xaxis: {
-                    categories: @json($backDefectsCount->keys()),
+                    categories: @json($defectsCount->keys()),
                 },
                 yaxis: {
                     title: {
@@ -98,13 +95,10 @@
         <script>
             var options = {
                 series: [{
-                        name: "食安內場",
-                        data: @json($backYearMonthDateDeductPoints->values())
+                        name: "清檢",
+                        data: @json($yearMonthDateDeductPoints->values())
                     },
-                    {
-                        name: "食安外場",
-                        data: @json($frontYearMonthDateDeductPoints->values())
-                    },
+
 
                 ],
                 chart: {
@@ -140,7 +134,7 @@
                     curve: 'smooth'
                 },
                 title: {
-                    text: '{{ $title }} 食安平均分數',
+                    text: '{{ $title }} 清檢平均分數',
                     style: {
                         fontSize: '24px',
                         fontWeight: 'bold',
@@ -159,7 +153,7 @@
                     size: 1
                 },
                 xaxis: {
-                    categories: @json($backYearMonthDateDeductPoints->keys()),
+                    categories: @json($yearMonthDateDeductPoints->keys()),
                     title: {
                         text: '年月'
                     }

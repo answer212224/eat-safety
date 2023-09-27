@@ -88,11 +88,16 @@
                                         區站
                                     </a>
                                     <a href="{{ route('restaurant-chart', ['restaurant' => $restaurant]) }}">
-                                        <span class="badge badge-primary">圖表</span>
+                                        <span class="badge badge-primary">食安圖表</span>
                                     </a>
                                     <a href="{{ route('restaurant-defects', ['restaurant' => $restaurant]) }}"
-                                        class="badge badge-warning">
+                                        class="badge badge-primary">
                                         食安缺失
+                                    </a>
+                                    {{-- 清檢圖表 --}}
+                                    <a href="{{ route('restaurant-clear-chart', ['restaurant' => $restaurant]) }}"
+                                        class="badge badge-info">
+                                        清檢圖表
                                     </a>
                                     <a href="{{ route('restaurant-clear-defects', ['restaurant' => $restaurant]) }}"
                                         class="badge badge-info">

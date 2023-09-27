@@ -165,8 +165,10 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
                 Route::get('/list', [RestaurantController::class, 'index'])->name('restaurant-index');
                 // 門市工作區站
                 Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
-                // 門市的圖表
+                // 門市的食安圖表
                 Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');
+                // 門市的清檢圖表
+                Route::get('/{restaurant}/clear-chart', [RestaurantController::class, 'clearChart'])->name('restaurant-clear-chart');
                 // restaurant-defects
                 Route::get('/{restaurant}/defects', [RestaurantController::class, 'defects'])->name('restaurant-defects');
                 // restaurant-clear-defects

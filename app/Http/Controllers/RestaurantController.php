@@ -67,7 +67,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * 取得分店的今年度的缺失數量
+     * 食安圖表
      */
     public function chart(Restaurant $restaurant)
     {
@@ -161,6 +161,51 @@ class RestaurantController extends Controller
             'frontDefectsCount' => $frontDefectsCount,
             'backYearMonthDateDeductPoints' => $backYearMonthDateDeductPoints,
             'frontYearMonthDateDeductPoints' => $frontYearMonthDateDeductPoints,
+        ]);
+    }
+    /**
+     * 清檢圖表 不用分前後場
+     */
+    public function clearChart(Restaurant $restaurant)
+    {
+        $restaurant->load('restaurantWorkspaces.taskHasClearDefects', 'restaurantWorkspaces.taskHasClearDefectsNotIgnore');
+
+        // 每個年月缺失數量
+        $defectsCount = $restaurant->restaurantWorkspaces->pluck('taskHasClearDefects')->flatten()->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->count();
+        });
+
+        // 用key排序
+        $defectsCount = $defectsCount->sortBy(function ($defect, $key) {
+            return $key;
+        });
+
+        // 每個年月分組的平均
+        $yearMonthDateDeductPoints = $restaurant->restaurantWorkspaces->pluck('taskHasClearDefectsNotIgnore')->flatten()->groupBy(function ($defect) {
+            return $defect->created_at->format('Y-m-d');
+        })->map(function ($defects) {
+            return 100 + ($defects->sum('amount') * -2);
+        });
+
+        // 再根據年月分組，取得每個月的平均
+        $yearMonthDateDeductPoints = $yearMonthDateDeductPoints->groupBy(function ($defect, $key) {
+            return Carbon::create($key)->format('Y-m');
+        })->map(function ($defects) {
+            return $defects->avg();
+        });
+
+        // 用key排序
+        $yearMonthDateDeductPoints = $yearMonthDateDeductPoints->sortBy(function ($defect, $key) {
+            return $key;
+        });
+
+        return view('backend.restaurants.clear-chart', [
+            'title' => $restaurant->brand . $restaurant->shop,
+            'restaurant' => $restaurant,
+            'defectsCount' => $defectsCount,
+            'yearMonthDateDeductPoints' => $yearMonthDateDeductPoints,
         ]);
     }
 
