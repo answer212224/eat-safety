@@ -182,6 +182,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
                 Route::put('/{user}', [UserController::class, 'update'])->name('user-update');
                 // user-show
                 Route::get('/{user}/show', [UserController::class, 'show'])->name('user-show');
+                // user統計
+                Route::get('/{user}/chart', [UserController::class, 'chart'])->name('user-chart');
             });
         });
 

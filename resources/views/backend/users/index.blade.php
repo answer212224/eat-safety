@@ -117,8 +117,13 @@
                                 </td>
                                 <td class="text-end">{{ $user->updated_at }}</td>
                                 <td>
+                                    {{-- 統計 --}}
+                                    <a href="{{ route('user-chart', ['user' => $user]) }}"
+                                        class="badge badge-primary">統計</a>
+                                    {{-- 查看缺失 --}}
                                     <a href="{{ route('user-show', ['user' => $user]) }}"
                                         class="badge badge-warning">查看缺失</a>
+
                                 </td>
                                 @can('update-user')
                                     <td class="text-end">

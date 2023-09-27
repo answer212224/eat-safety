@@ -190,15 +190,13 @@
                         <a href="{{ route('clear-defect-index') }}"> 清檢缺失資料庫 </a>
                     </li>
                     <li
-                        class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') || Request::routeIs('restaurant-defects') || Request::routeIs('restaurant-clear-defects') ? 'active' : '' }}">
+                        class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') || Request::routeIs('restaurant-defects') || Request::routeIs('restaurant-clear-defects') || Request::routeIs('restaurant-chart') || Request::routeIs('restaurant-clear-chart') ? 'active' : '' }}">
                         <a href="{{ route('restaurant-index') }}"> 門市資料庫 </a>
                     </li>
                     <li
-                        class="{{ Request::routeIs('user-index') || Request::routeIs('user-edit') || Request::routeIs('user-show') ? 'active' : '' }}">
+                        class="{{ Request::routeIs('user-index') || Request::routeIs('user-edit') || Request::routeIs('user-show') || Request::routeIs('user-chart') ? 'active' : '' }}">
                         <a href="{{ route('user-index') }}"> 同仁資料庫 </a>
                     </li>
-
-
 
                 </ul>
             </li>

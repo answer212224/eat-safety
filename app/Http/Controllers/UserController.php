@@ -92,4 +92,48 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
+
+    // chart
+    public function chart(User $user)
+    {
+        $user->load('taskHasDefects', 'taskHasClearDefects');
+        $defectCount = $user->taskHasDefects->groupBy(function ($item) {
+            return $item->created_at->format('Y-m');
+        })->map(function ($item) {
+            return $item->count();
+        });
+        $clearDefectCount = $user->taskHasClearDefects->groupBy(function ($item) {
+            return $item->created_at->format('Y-m');
+        })->map(function ($item) {
+            return $item->count();
+        });
+
+        // 比對兩個陣列，如果有缺失的月份，補上0
+        $defectCount->each(function ($item, $key) use ($clearDefectCount) {
+            if (!isset($clearDefectCount[$key])) {
+                $clearDefectCount[$key] = 0;
+            }
+        });
+
+        $clearDefectCount->each(function ($item, $key) use ($defectCount) {
+            if (!isset($defectCount[$key])) {
+                $defectCount[$key] = 0;
+            }
+        });
+
+        // 用key排序
+        $defectCount = $defectCount->sortBy(function ($item, $key) {
+            return $key;
+        });
+        $clearDefectCount = $clearDefectCount->sortBy(function ($item, $key) {
+            return $key;
+        });
+
+        return view('backend.users.chart', [
+            'title' => $user->name . '統計',
+            'user' => $user,
+            'defectCount' => $defectCount,
+            'clearDefectCount' => $clearDefectCount,
+        ]);
+    }
 }
