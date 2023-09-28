@@ -141,8 +141,47 @@ class UserController extends Controller
      * 集團所有同仁的統計
      * eatogether
      */
-    public function eatogether()
+    public function eatogether(Request $request)
     {
-        dd('eatogether');
+        $year = $request->input('year', '');
+        $month = $request->input('month', '');
+
+        $users = User::get();
+
+        if ($year && $month) {
+            $users->load(['taskHasDefects' => function ($query) use ($year, $month) {
+                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            }]);
+            $users->load(['taskHasClearDefects' => function ($query) use ($year, $month) {
+                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            }]);
+        } else if ($year) {
+            $users->load(['taskHasDefects' => function ($query) use ($year) {
+                $query->whereYear('created_at', $year);
+            }]);
+            $users->load(['taskHasClearDefects' => function ($query) use ($year) {
+                $query->whereYear('created_at', $year);
+            }]);
+        } else if ($month) {
+            $users->load(['taskHasDefects' => function ($query) use ($month) {
+                $query->whereMonth('created_at', $month);
+            }]);
+            $users->load(['taskHasClearDefects' => function ($query) use ($month) {
+                $query->whereMonth('created_at', $month);
+            }]);
+        } else {
+            $users->load(['taskHasDefects', 'taskHasClearDefects']);
+        }
+
+        // 計算每個人的缺失數量
+        $users->each(function ($user) {
+            $user->defectCount = $user->taskHasDefects->count();
+            $user->clearDefectCount = $user->taskHasClearDefects->count();
+        });
+
+        return view('backend.eatogether.users', [
+            'title' => '集團同仁統計',
+            'users' => $users,
+        ]);
     }
 }
