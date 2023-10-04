@@ -60,56 +60,117 @@
                     @endforeach
                 </td>
             </tr>
-
-            @foreach ($defectsGroup as $items)
-                @foreach ($items as $item)
-                    <tr>
-                        <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
-                    </tr>
-                    <tr>
-                        @foreach ($item->images as $image)
-                            <td colspan="6" style="text-align: center">
-                                <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
-                            </td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">主項目</td>
-                        <td colspan="9" align="">{{ $item->clearDefect->main_item }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">次項目</td>
-                        <td colspan="9" align="">{{ $item->clearDefect->sub_item }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">數量</td>
-                        <td colspan="9" align="">{{ $item->amount }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">缺失說明</td>
-                        <td colspan="9">
-                            @if ($item->description == null)
-                                無
-                            @else
-                                {{-- array to string --}}
-                                @foreach ($item->description as $description)
-                                    {{ $description }}
-                                @endforeach
-                            @endif
+            {{-- 顯示第一個defectsFlat --}}
+            @if ($defectsFlat->count() > 0)
+                <tr>
+                    <td colspan="12" align="center" style="background-color:bisque">
+                        {{ $defectsFlat->first()->restaurantWorkspace->area }}</td>
+                </tr>
+                <tr>
+                    @foreach ($defectsFlat->first()->images as $image)
+                        <td colspan="6" style="text-align: center">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="180px">
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="">備註</td>
-                        <td colspan="9" align="">
-                            {{ $item->memo }}
-                            @if ($item->is_ignore)
-                                <span style="color: red">（忽略扣分）</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            @endforeach
+                    @endforeach
+                </tr>
+                <tr>
+                    <td colspan="3" align="">主項目</td>
+                    <td colspan="9" align="">{{ $defectsFlat->first()->clearDefect->main_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">次項目</td>
+                    <td colspan="9" align="">{{ $defectsFlat->first()->clearDefect->sub_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">數量</td>
+                    <td colspan="9" align="">{{ $defectsFlat->first()->amount }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">缺失說明</td>
+                    <td colspan="9">
+                        @if ($defectsFlat->first()->description == null)
+                            無
+                        @else
+                            {{-- array to string --}}
+                            @foreach ($defectsFlat->first()->description as $description)
+                                {{ $description }}
+                            @endforeach
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">備註</td>
+                    <td colspan="9" align="">
+                        {{ $defectsFlat->first()->memo }}
+                        @if ($defectsFlat->first()->is_ignore)
+                            <span style="color: red">（忽略扣分）</span>
+                        @endif
+                    </td>
+                </tr>
+            @endif
         </table>
+        @if ($defectsFlat->count() > 1)
+            {{-- 換頁 --}}
+            <div style="page-break-after:always"></div>
+            {{-- 換頁 --}}
+        @endif
+
+        @foreach ($defectsFlat->skip(1) as $item)
+            <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
+                <tr>
+                    <td colspan="12" align="center" style="background-color:bisque">
+                        {{ $item->restaurantWorkspace->area }}</td>
+                </tr>
+                <tr>
+                    @foreach ($item->images as $image)
+                        <td colspan="6" style="text-align: center">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="180px">
+                        </td>
+                    @endforeach
+                </tr>
+                <tr>
+                    <td colspan="3" align="">主項目</td>
+                    <td colspan="9" align="">{{ $item->clearDefect->main_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">次項目</td>
+                    <td colspan="9" align="">{{ $item->clearDefect->sub_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">數量</td>
+                    <td colspan="9" align="">{{ $item->amount }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">缺失說明</td>
+                    <td colspan="9">
+                        @if ($item->description == null)
+                            無
+                        @else
+                            {{-- array to string --}}
+                            @foreach ($item->description as $description)
+                                {{ $description }}
+                            @endforeach
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">備註</td>
+                    <td colspan="9" align="">
+                        {{ $item->memo }}
+                        @if ($item->is_ignore)
+                            <span style="color: red">（忽略扣分）</span>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+            {{-- 每兩次換頁，如果是最後一個就不要 --}}
+            @if ($loop->iteration % 2 == 0 && !$loop->last)
+                {{-- 換頁 --}}
+                <div style="page-break-after:always"></div>
+                {{-- 換頁 --}}
+            @endif
+        @endforeach
+
     </div>
 
 </body>

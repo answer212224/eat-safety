@@ -47,15 +47,73 @@
                     外場：{{ 100 + $defects->sum }}分，缺失數 {{ $defects->count() }} 項
                 </td>
             </tr>
-
-            @foreach ($defects as $item)
+            {{-- 顯示第一個defects --}}
+            @if ($defects->first())
                 <tr>
-                    <td colspan="12" align="center">{{ $item->restaurantWorkspace->area }}</td>
+                    <td colspan="12" align="center" style="background-color:bisque">
+                        {{ $defects->first()->restaurantWorkspace->area }}</td>
+                </tr>
+                <tr>
+                    @foreach ($defects->first()->images as $image)
+                        <td colspan="6" style="text-align: center">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="180px">
+                        </td>
+                    @endforeach
+                </tr>
+                <tr>
+                    <td colspan="3" align="">主項目</td>
+                    <td colspan="9" align="">{{ $defects->first()->clearDefect->main_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">次項目</td>
+                    <td colspan="9" align="">{{ $defects->first()->clearDefect->sub_item }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">數量</td>
+                    <td colspan="9" align="">{{ $defects->first()->amount }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">缺失說明</td>
+                    <td colspan="9">
+                        @if ($defects->first()->description == null)
+                            無
+                        @else
+                            {{-- array to string --}}
+                            @foreach ($defects->first()->description as $description)
+                                {{ $description }}
+                            @endforeach
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">備註</td>
+                    <td colspan="9" align="">
+                        {{ $defects->first()->memo }}
+                        @if ($defects->first()->is_ignore)
+                            <span style="color: red">（忽略扣分）</span>
+                        @endif
+                    </td>
+                </tr>
+            @endif
+        </table>
+        @if ($defects->count() > 1)
+            {{-- 換頁 --}}
+            <div style="page-break-after:always"></div>
+            {{-- 換頁 --}}
+        @endif
+
+        {{-- 忽略第一個defects --}}
+        @foreach ($defects->skip(1) as $item)
+            <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
+
+                <tr>
+                    <td colspan="12" align="center" style="background-color:bisque">
+                        {{ $item->restaurantWorkspace->area }}</td>
                 </tr>
                 <tr>
                     @foreach ($item->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="180px">
                         </td>
                     @endforeach
                 </tr>
@@ -93,9 +151,15 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
 
-        </table>
+            </table>
+            {{-- 每兩次換頁，如果是最後一個就不要 --}}
+            @if ($loop->iteration % 2 == 0 && !$loop->last)
+                {{-- 換頁 --}}
+                <div style="page-break-after:always"></div>
+                {{-- 換頁 --}}
+            @endif
+        @endforeach
     </div>
 
 </body>

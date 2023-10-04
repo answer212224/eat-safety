@@ -475,10 +475,14 @@ class TaskController extends Controller
 
         $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . '_內場_' . $task->task_date . '.pdf';
 
+        // defectsGroup flat
+        $defectsFlat = $defectsGroup->flatten(2);
+
+
         if ($task->category == '食安及5S') {
-            $view = \View::make('pdf.5s-inner', compact('task', 'defectsGroup'));
+            $view = \View::make('pdf.5s-inner', compact('task', 'defectsGroup', 'defectsFlat'));
         } else {
-            $view = \View::make('pdf.clear-inner', compact('task', 'defectsGroup'));
+            $view = \View::make('pdf.clear-inner', compact('task', 'defectsGroup', 'defectsFlat'));
         }
 
         $html = $view->render();
