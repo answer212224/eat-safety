@@ -135,7 +135,7 @@
             <div class="card style-2 mb-4">
                 <div class="card-header">
                     <h4>{{ $taskHasClearDefect->restaurantWorkspace->restaurant->brand }} -
-                        {{ $taskHasDefect->restaurantWorkspace->restaurant->shop }} -
+                        {{ $taskHasClearDefect->restaurantWorkspace->restaurant->shop }} -
                         {{ $taskHasClearDefect->restaurantWorkspace->area }}</h4>
                 </div>
                 <div class="card-body px-0 pb-0">
