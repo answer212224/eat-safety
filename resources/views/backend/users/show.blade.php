@@ -68,6 +68,7 @@
 
                 <div class="card-header">
                     <h4>{{ $taskHasDefect->restaurantWorkspace->restaurant->brand }} -
+                        {{ $taskHasDefect->restaurantWorkspace->restaurant->shop }} -
                         {{ $taskHasDefect->restaurantWorkspace->area }}</h4>
                 </div>
 
@@ -134,6 +135,7 @@
             <div class="card style-2 mb-4">
                 <div class="card-header">
                     <h4>{{ $taskHasClearDefect->restaurantWorkspace->restaurant->brand }} -
+                        {{ $taskHasDefect->restaurantWorkspace->restaurant->shop }} -
                         {{ $taskHasClearDefect->restaurantWorkspace->area }}</h4>
                 </div>
                 <div class="card-body px-0 pb-0">
@@ -155,6 +157,18 @@
                         <div class="col-3">次項目</div>
                         <div class="col-9">
                             {{ $taskHasClearDefect->clearDefect->sub_item }}
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-3">描述</div>
+                        <div class="col-9">
+                            {{-- pluck $taskHasClearDefect->description --}}
+                            @foreach ($taskHasClearDefect->description as $description)
+                                {{ $description }}
+                                @if (!$loop->last)
+                                    <br>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                     <div class="row p-1">
