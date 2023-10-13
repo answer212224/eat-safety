@@ -29,15 +29,16 @@ class PosDepartmentController extends Controller
 
     public static function update(Restaurant $restaurant)
     {
+        // 透過品牌代碼取得category_type為workstation_in_type的資料
         $category = EatogetherCategory::getWorkspaceTypeByBrand($restaurant)->first();
 
+        // 如果沒有資料，透過sid取得category_type為workstation_in_type的資料
         if (!$category) {
-            if ($restaurant->sid == 'XUJ001') {
-                $category = EatogetherCategory::getWorkspaceTypeBySid($restaurant)->first();
-            } else if ($restaurant->sid == 'XUJ002' || $restaurant->sid == 'XUJ003') {
-                $category = EatogetherCategory::getWorkspaceTypeByXUJ001AndXUJ002($restaurant)->first();
-            } else {
-                Log::info('無法取得門市資料', ['sid' => $restaurant->sid]);
+            $category = EatogetherCategory::getWorkspaceTypeBySidLike($restaurant)->first();
+            // 如果還是沒有資料，log並return
+            if (!$category) {
+                Log::info('找不到門市資料', ['sid' => $restaurant->sid]);
+                return;
             }
         }
 
