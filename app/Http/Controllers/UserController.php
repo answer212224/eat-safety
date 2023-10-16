@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\SysPerson;
 use Illuminate\Http\Request;
@@ -138,50 +139,71 @@ class UserController extends Controller
     }
 
     /**
-     * 集團所有同仁的統計
+     * 集團所有同仁的統計 計算每位同仁的該月缺失平均數
      * eatogether
      */
     public function eatogether(Request $request)
     {
-        $year = $request->input('year', '');
-        $month = $request->input('month', '');
+        $yearMonth = $request->yearMonth ? Carbon::create($request->yearMonth) : Carbon::now();
 
-        $users = User::get();
 
-        if ($year && $month) {
-            $users->load(['taskHasDefects' => function ($query) use ($year, $month) {
-                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-            }]);
-            $users->load(['taskHasClearDefects' => function ($query) use ($year, $month) {
-                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-            }]);
-        } else if ($year) {
-            $users->load(['taskHasDefects' => function ($query) use ($year) {
-                $query->whereYear('created_at', $year);
-            }]);
-            $users->load(['taskHasClearDefects' => function ($query) use ($year) {
-                $query->whereYear('created_at', $year);
-            }]);
-        } else if ($month) {
-            $users->load(['taskHasDefects' => function ($query) use ($month) {
-                $query->whereMonth('created_at', $month);
-            }]);
-            $users->load(['taskHasClearDefects' => function ($query) use ($month) {
-                $query->whereMonth('created_at', $month);
-            }]);
-        } else {
-            $users->load(['taskHasDefects', 'taskHasClearDefects']);
-        }
+        $yearMonth = Carbon::create($yearMonth);
 
-        // 計算每個人的缺失數量
-        $users->each(function ($user) {
-            $user->defectCount = $user->taskHasDefects->count();
-            $user->clearDefectCount = $user->taskHasClearDefects->count();
+        // 取得狀態為在職的同仁和狀態是試用期的同仁
+        $users = User::where('status', 0)->orWhere('status', 1)->get();
+
+        $users->each(function ($user) use ($yearMonth) {
+            $user->load('taskHasDefects', 'taskHasClearDefects', 'tasks');
+            $defectCount = $user->taskHasDefects->filter(function ($taskHasDefect) use ($yearMonth) {
+                return $taskHasDefect->created_at->year == $yearMonth->year && $taskHasDefect->created_at->month == $yearMonth->month;
+            })->count();
+            $clearDefectCount = $user->taskHasClearDefects->filter(function ($taskHasClearDefect) use ($yearMonth) {
+                return $taskHasClearDefect->created_at->year == $yearMonth->year && $taskHasClearDefect->created_at->month == $yearMonth->month;
+            })->count();
+
+
+            $user->defectCount = $defectCount;
+            $user->clearDefectCount = $clearDefectCount;
+
+            // 先去取得同仁該月份的所有任務
+            $tasks = $user->tasks->filter(function ($task) use ($yearMonth) {
+                $task->task_date = Carbon::create($task->task_date);
+                return $task->task_date->year == $yearMonth->year && $task->task_date->month == $yearMonth->month;
+            });
+            // 計算分類為食安食安及55的任務數量
+            $foodSafetyCount = $tasks->filter(function ($task) {
+                return $task->category == '食安及5S';
+            })->count();
+
+            // 計算分類為清潔檢查的任務數量
+            $cleanCount = $tasks->filter(function ($task) {
+                return $task->category == '清潔檢查';
+            })->count();
+
+            // 計算該月缺失平均數
+            // DivisionByZeroError
+            if ($foodSafetyCount == 0) {
+                $user->defectAverage = 0;
+            } else {
+                $user->defectAverage = $defectCount / $foodSafetyCount;
+                // 取得小數後1位
+                $user->defectAverage = round($user->defectAverage, 1);
+            }
+            if ($cleanCount == 0) {
+                $user->clearDefectAverage = 0;
+            } else {
+                $user->clearDefectAverage = $clearDefectCount / $cleanCount;
+                // 取得小數後1位
+                $user->clearDefectAverage = round($user->clearDefectAverage, 1);
+            }
         });
 
+        $yearMonth = $yearMonth->format('Y-m');
+
         return view('backend.eatogether.users', [
-            'title' => '集團同仁統計',
+            'title' => "{$yearMonth} 平均缺失數",
             'users' => $users,
+            'yearMonth' => $yearMonth,
         ]);
     }
 }
