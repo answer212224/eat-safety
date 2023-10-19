@@ -164,8 +164,15 @@
                                 </div>
 
                                 <div class="form-group mt-3">
-                                    <label class="form-label">分店最終分數</label>
-                                    <input type="text" value="{{ $score }}" class="form-control" disabled>
+                                    <label class="form-label">內場分數</label>
+                                    <input type="text" value="{{ 100 + $backScore }}" class="form-control"
+                                        disabled>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="form-label">外場分數</label>
+                                    <input type="text" value="{{ 100 + $frontScore }}" class="form-control"
+                                        disabled>
                                 </div>
 
                                 <div class="form-group mt-3">

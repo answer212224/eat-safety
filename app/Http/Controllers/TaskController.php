@@ -233,7 +233,7 @@ class TaskController extends Controller
         confirmDelete('確認刪除?', "確認刪除任務: {$task->task_date}{$task->category}-{$task->restaurant->brand}{$task->restaurant->shop}，刪除後無法還原，請確認是否刪除");
 
         // 這邊要先 load 關聯，不然會有 N+1 問題
-        $task = $task->load(['taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.user', 'meals']);
+        $task = $task->load(['taskHasDefects.defect', 'taskHasClearDefects.clearDefect', 'taskHasDefects.user', 'meals', 'restaurant.restaurantBackWorkspaces']);
 
         $taskDate = Carbon::create($task->task_date);
         // 取得店家的品牌代號
@@ -256,20 +256,42 @@ class TaskController extends Controller
 
         if ($task->category == '食安及5S') {
             $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
-            // 排除忽略扣分，加總該任務底下所有的缺失扣分
-            $sum = $task->taskHasDefects->where('is_ignore', 0)->sum('defect.deduct_point');
-            // 扣分
-            $score = $score + $sum;
+            // 只取得內場的缺失
+            $backTask = $task->taskHasDefects->whereIn('restaurant_workspace_id', $task->restaurant->restaurantBackWorkspaces->pluck('id'))->load('defect');
+            $backScore = $backTask->sum(function ($item) {
+                // 只計算需要扣分的缺失
+                if (!$item->is_ignore) {
+                    return $item->defect->deduct_point;
+                }
+            });
+            // 只取得外場的缺失
+            $frontTask = $task->taskHasDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('defect');
+            $frontScore = $frontTask->sum(function ($item) {
+                // 只計算需要扣分的缺失
+                if (!$item->is_ignore) {
+                    return $item->defect->deduct_point;
+                }
+            });
         } else {
             $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
-            // 排除忽略扣分，加總該任務底下所有的缺失扣分乘上數量
-            $sum = $task->taskHasClearDefects->where('is_ignore', 0)->sum(function ($item) {
-                return $item->clearDefect->deduct_point * $item->amount;
+            // 只取得內場的缺失
+            $backTask = $task->taskHasClearDefects->whereIn('restaurant_workspace_id', $task->restaurant->restaurantBackWorkspaces->pluck('id'))->load('clearDefect');
+            $backScore = $backTask->sum(function ($item) {
+                // 只計算需要扣分的缺失
+                if (!$item->is_ignore) {
+                    return $item->clearDefect->deduct_point * $item->amount;
+                }
             });
-            // 扣分
-            $score = $score + $sum;
+            // 只取得外場的缺失
+            $frontTask = $task->taskHasClearDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('clearDefect');
+            $frontScore = $frontTask->sum(function ($item) {
+                // 只計算需要扣分的缺失
+                if (!$item->is_ignore) {
+                    return $item->clearDefect->deduct_point * $item->amount;
+                }
+            });
         }
-        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals', 'score', 'users', 'projects'));
+        return view('backend.tasks.edit', compact('task', 'title', 'defectsGroup', 'meals', 'backScore', 'frontScore', 'users', 'projects'));
     }
 
     public function update(Task $task, Request $request)
