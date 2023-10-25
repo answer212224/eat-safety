@@ -27,6 +27,16 @@ class PosDepartmentController extends Controller
         return back();
     }
 
+    /**
+     * 區站更新流程
+     * 1. 透過品牌代碼取得category_type為workstation_in_type的資料
+     * 2. 如果沒有資料，透過sid取得category_type為workstation_in_type的資料
+     * 3. 如果還是沒有資料，log並return
+     * 4. 透過category_id取得category_type為workstation_in_type的資料
+     * 5. 將資料轉換成需要的格式
+     * 6. 將外場資料加入
+     * 7. 將資料更新或新增到restaurant_workspaces
+     */
     public static function update(Restaurant $restaurant)
     {
         // 透過品牌代碼取得category_type為workstation_in_type的資料
