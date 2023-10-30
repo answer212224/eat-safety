@@ -34,6 +34,7 @@ class TaskImport implements ToCollection
 
 
         $collection->transform(function ($item) {
+
             // 假設不是食安及5S或清潔檢查，回傳exception
             if (!in_array($item[0], ['食安及5S', '清潔檢查'])) {
                 throw new \Exception('請確認類別是否正確：' . $item[0]);
@@ -54,8 +55,9 @@ class TaskImport implements ToCollection
                     throw new \Exception('請確認同仁姓名是否正確：' . $name);
                 }
             }
+
             try {
-                $taskDate = Date::excelToDateTimeObject($item[3]);
+                $taskDate = Carbon::create($item[3]);
             } catch (TypeError $e) {
                 throw new \Exception('請確認稽核日期是否正確：' . $item[3]);
             }
