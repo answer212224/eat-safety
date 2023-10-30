@@ -24,7 +24,11 @@ class RowDataController extends Controller
         }
 
         // N+1 問題
-        $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasDefects.defect', 'users', 'backProjects', 'frontProjects');
+        $tasks = Task::query()->with(['restaurant.restaurantWorkspaces' => function ($query) {
+            $query->where('status', 1);
+        }, 'restaurant.restaurantBackWorkspaces' => function ($query) {
+            $query->where('status', 1);
+        }]);
 
         // yearMonth轉成Carbon格式
         $yearMonth = Carbon::create($yearMonth);
@@ -373,7 +377,12 @@ class RowDataController extends Controller
         }
 
         // N+1 問題
-        $tasks = Task::query()->with('restaurant.restaurantWorkspaces', 'restaurant.restaurantBackWorkspaces', 'restaurant.restaurantBackWorkspaces', 'taskHasClearDefects');
+
+        $tasks = Task::query()->with(['restaurant.restaurantWorkspaces' => function ($query) {
+            $query->where('status', 1);
+        }, 'restaurant.restaurantBackWorkspaces' => function ($query) {
+            $query->where('status', 1);
+        }]);
 
         // yearMonth轉成Carbon格式
         $yearMonth = Carbon::create($yearMonth);
