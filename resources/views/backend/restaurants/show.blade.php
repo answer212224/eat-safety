@@ -42,6 +42,7 @@
                     <thead>
                         <tr>
                             <th>區站</th>
+                            <th>上下線</th>
                             <th>類別代碼</th>
                             <th>更新時間</th>
                         </tr>
@@ -50,6 +51,14 @@
                         @foreach ($restaurant->restaurantWorkspaces as $workspaces)
                             <tr>
                                 <td>{{ $workspaces->area }}</td>
+                                {{-- checkbox --}}
+                                <td>
+                                    <div class="form-check form-check-success form-check-inline">
+                                        <input class="form-check-input" type="checkbox" data-id="{{ $workspaces->id }}"
+                                            id="workspace_{{ $workspaces->id }}"
+                                            @if ($workspaces->status == 1) checked @endif>
+                                    </div>
+                                </td>
                                 <td>{{ $workspaces->category_value }}</td>
                                 <td>{{ $workspaces->updated_at }}</td>
                             </tr>
@@ -61,8 +70,10 @@
 
     </div>
 
+
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+
         <script src="{{ asset('plugins/global/vendors.min.js') }}"></script>
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
         <script>
@@ -86,6 +97,30 @@
                 "order": [
                     [1, "asc"]
                 ],
+            });
+        </script>
+
+        {{--  --}}
+        <script>
+            $(document).ready(function() {
+                $('input[type="checkbox"]').click(function() {
+                    var id = $(this).attr('data-id');
+                    var status = $(this).prop('checked');
+                    var url = "{{ route('restaurant-workspace-status') }}";
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            workspace_id: id,
+                            status: status,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            alert(response.message);
+                        }
+                    });
+                });
             });
         </script>
     </x-slot>

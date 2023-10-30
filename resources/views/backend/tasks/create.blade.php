@@ -131,7 +131,7 @@
                                 <div class="form-group mb-4">
                                     <label for="workspace">工作區</label>
                                     <select class="form-select" name="workspace" id="inputWorkspace">
-                                        @foreach ($task->restaurant->restaurantWorkspaces as $restaurantWorkspace)
+                                        @foreach ($restaurantWorkspaces as $restaurantWorkspace)
                                             <option value="{{ $restaurantWorkspace->id }}">
                                                 {{ $restaurantWorkspace->area }}</option>
                                         @endforeach

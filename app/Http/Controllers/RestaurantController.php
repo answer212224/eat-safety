@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Restaurant;
 use Carbon\Carbon;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use App\Models\RestaurantWorkspace;
 
 class RestaurantController extends Controller
 {
@@ -41,6 +42,24 @@ class RestaurantController extends Controller
         $restaurant->update($request->all());
 
         return redirect()->route('restaurant-index');
+    }
+
+    // 更新門市區站的狀態 ajax
+    public function updateWorkspaceStatus(Request $request)
+    {
+        $workspace_id = $request->input('workspace_id');
+        $status = $request->input('status');
+
+        $workspace = RestaurantWorkspace::find($workspace_id);
+
+        $workspace->status = $status == 'true' ? 1 : 0;
+
+        $workspace->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '更新成功',
+        ]);
     }
 
     public function destroy(Restaurant $restaurant)

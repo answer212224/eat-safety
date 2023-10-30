@@ -47,7 +47,10 @@ class TaskController extends Controller
             alert()->error('錯誤', '您已經完成該稽核，請取消完成稽核狀態後再開始稽核');
             return back();
         }
+
         $title = '開始稽核';
+        // 取得$task->restaurant->restaurantWorkspaces status = 1 的 r
+        $restaurantWorkspaces = $task->restaurant->restaurantWorkspaces->where('status', 1);
 
         // 假如已有開始時間，就不要再更新開始時間
         if (empty($task->start_at)) {
@@ -55,7 +58,7 @@ class TaskController extends Controller
             $task->save();
         }
 
-        return view('backend.tasks.create', compact('title', 'task'));
+        return view('backend.tasks.create', compact('title', 'task', 'restaurantWorkspaces'));
     }
 
     public function mealCheck(Task $task)
