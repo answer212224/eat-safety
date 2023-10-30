@@ -95,7 +95,7 @@
                 "lengthMenu": [7, 10, 20, 50],
                 "pageLength": 10,
                 "order": [
-                    [1, "asc"]
+                    [2, "asc"]
                 ],
             });
         </script>
@@ -104,22 +104,30 @@
         <script>
             $(document).ready(function() {
                 $('input[type="checkbox"]').click(function() {
-                    var id = $(this).attr('data-id');
-                    var status = $(this).prop('checked');
-                    var url = "{{ route('restaurant-workspace-status') }}";
+                    // 要有權限才能操作
+                    @if (auth()->user()->can('update-restaurant'))
+                        // 有權限才能操作
+                        var id = $(this).attr('data-id');
+                        var status = $(this).prop('checked');
+                        var url = "{{ route('restaurant-workspace-status') }}";
 
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: {
-                            workspace_id: id,
-                            status: status,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            alert(response.message);
-                        }
-                    });
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                workspace_id: id,
+                                status: status,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                alert(response.message);
+                            }
+                        });
+                    @else
+                        alert('沒有權限');
+                        return false;
+                    @endif
+
                 });
             });
         </script>
