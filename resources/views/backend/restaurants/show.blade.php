@@ -56,6 +56,7 @@
                             <th>上下線</th>
                             <th>類別代碼</th>
                             <th>更新時間</th>
+                            <th>編輯</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +74,15 @@
                                 </td>
                                 <td>{{ $workspaces->category_value }}</td>
                                 <td>{{ $workspaces->updated_at }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        @can('update-restaurant')
+                                            <button type="button" class="btn btn-sm btn-primary btn-edit"
+                                                data-id="{{ $workspaces->id }}" data-bs-toggle="modal"
+                                                data-bs-target="#editModal">編輯</button>
+                                        @endcan
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -84,8 +94,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-        wire:i>
+    <div class="modal fade" id="exampleModal">
         <div class="modal-dialog">
             <form action="{{ route('restaurant-workspace-store', ['restaurant' => $restaurant]) }}" method="post">
                 @csrf
@@ -106,6 +115,35 @@
                         <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">關閉</button>
                         <button type="submit" class="btn btn-primary btn-add-event">新增區站</button>
                     </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {{-- edit Model --}}
+    <div class="modal fade" id="editModal">
+        <div class="modal-dialog">
+            <form action="{{ route('restaurant-workspace-update') }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">編輯區站</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="workspace_id">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">區站名稱</span>
+                            <input type="text" class="form-control" name="area" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">關閉</button>
+                        <button type="submit" class="btn btn-primary btn-add-event">更新</button>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -140,8 +178,7 @@
                 ],
             });
         </script>
-
-        {{--  --}}
+        {{-- 更新狀態 --}}
         <script>
             $(document).ready(function() {
                 $('input[type="checkbox"]').click(function() {
@@ -170,6 +207,22 @@
                     @endif
 
                 });
+            });
+        </script>
+
+        {{-- 更新 --}}
+        <script>
+            // 按下編輯按鈕
+            $('.btn-edit').click(function() {
+                // 取得按鈕上的data-id
+                var id = $(this).attr('data-id');
+                // 取得區站名稱
+                var area = $(this).parent().parent().parent().find('td').eq(0).text();
+                // 將區站名稱放入input
+                $('#editModal input[name="area"]').val(area);
+                // 將workspace_id放入input
+                $('#editModal input[name="workspace_id"]').val(id);
+
             });
         </script>
     </x-slot>

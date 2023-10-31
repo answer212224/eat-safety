@@ -169,6 +169,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
                 Route::post('/workspace/status', [RestaurantController::class, 'updateWorkspaceStatus'])->name('restaurant-workspace-status');
                 // 工作站新增
                 Route::post('/{restaurant}/workspace', [RestaurantController::class, 'storeWorkspace'])->name('restaurant-workspace-store');
+                // 工作站編輯
+                Route::post('workspace/update', [RestaurantController::class, 'updateWorkspace'])->name('restaurant-workspace-update');
 
                 // 門市的食安圖表
                 Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');

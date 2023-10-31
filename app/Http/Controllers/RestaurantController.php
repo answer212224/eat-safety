@@ -50,6 +50,26 @@ class RestaurantController extends Controller
 
         $restaurant->restaurantWorkspaces()->create($request->all());
 
+        alert()->success('新增成功', '新增工作區成功');
+
+        return back();
+    }
+
+    // updateWorkspace
+    public function updateWorkspace(Request $request)
+    {
+        $workspace_id = $request->input('workspace_id');
+        $area = $request->input('area');
+
+
+        $workspace = RestaurantWorkspace::find($workspace_id);
+
+        $workspace->area = $area;
+
+        $workspace->save();
+
+        alert()->success('更新成功', '更新工作區成功');
+
         return back();
     }
 
