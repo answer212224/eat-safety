@@ -12,6 +12,15 @@
         @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
         @vite(['resources/scss/light/assets/components/modal.scss'])
         @vite(['resources/scss/dark/assets/components/modal.scss'])
+
+        {{-- flatpickr --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
+        <!--  END CUSTOM STYLE FILE  -->
+        {{-- flatpickr --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -116,8 +125,7 @@
                     <div class="modal-body">
                         <div class="input-group mb-3">
                             <span class="input-group-text">月份</span>
-                            <input type="text" class="form-control" name="effective_date" aria-label="Username"
-                                required>
+                            <input type="text" class="form-control yearMonth" name="effective_date" required>
                         </div>
 
                         <div class="input-group mb-3">
@@ -217,6 +225,19 @@
                 //新到舊
                 "order": [
                     [0, "desc"]
+                ],
+
+            });
+
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m-d",
+                        altFormat: "M/Y/d",
+
+                    }),
                 ],
 
             });
