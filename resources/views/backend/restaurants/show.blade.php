@@ -19,16 +19,27 @@
 
     <!-- BREADCRUMB -->
     <div class="page-meta">
+        <div class="row justify-content-between">
+            <div class="col-8 align-self-center">
+                <nav class="breadcrumb-style-one" aria-label="breadcrumb">
 
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">資料</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ $restaurant->brand }}{{ $restaurant->shop }}{{ $title }}</li>
+                    </ol>
+                </nav>
+            </div>
 
-        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">資料</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('restaurant-index') }}">門市資料</a></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    {{ $restaurant->brand }}{{ $restaurant->shop }}{{ $title }}</li>
-            </ol>
-        </nav>
+            @can('create-restaurant')
+                <div class="col-4 align-self-center text-end">
+                    <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">新增</button>
+                </div>
+            @endcan
+
+        </div>
     </div>
 
     </div>
@@ -48,6 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
+
                         @foreach ($restaurant->restaurantWorkspaces as $workspaces)
                             <tr>
                                 <td>{{ $workspaces->area }}</td>
@@ -68,6 +80,35 @@
             </div>
         </div>
 
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        wire:i>
+        <div class="modal-dialog">
+            <form action="{{ route('restaurant-workspace-store', ['restaurant' => $restaurant]) }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">新增區站</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="category_value" value="{{ $restaurant->sid }}">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">區站名稱</span>
+                            <input type="text" class="form-control" name="area" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">關閉</button>
+                        <button type="submit" class="btn btn-primary btn-add-event">新增區站</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
 

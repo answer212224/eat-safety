@@ -44,6 +44,15 @@ class RestaurantController extends Controller
         return redirect()->route('restaurant-index');
     }
 
+    // storeWorkspace
+    public function storeWorkspace(Request $request, Restaurant $restaurant)
+    {
+
+        $restaurant->restaurantWorkspaces()->create($request->all());
+
+        return back();
+    }
+
     // 更新門市區站的狀態 ajax
     public function updateWorkspaceStatus(Request $request)
     {

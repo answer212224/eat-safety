@@ -167,6 +167,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
                 Route::get('/{restaurant}/workspace', [RestaurantController::class, 'show'])->name('restaurant-workspace');
                 // 用Restaurant_waorkspace的id 更新status
                 Route::post('/workspace/status', [RestaurantController::class, 'updateWorkspaceStatus'])->name('restaurant-workspace-status');
+                // 工作站新增
+                Route::post('/{restaurant}/workspace', [RestaurantController::class, 'storeWorkspace'])->name('restaurant-workspace-store');
 
                 // 門市的食安圖表
                 Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');
