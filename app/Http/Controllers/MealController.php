@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\MealsExport;
 use Carbon\Carbon;
 use App\Models\Meal;
 use App\Models\Task;
+use App\Models\Restaurant;
+use App\Exports\MealsExport;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,9 +32,34 @@ class MealController extends Controller
 
     public function store(Request $request)
     {
-        Meal::create($request->all());
+        // requset.sid = restaurants.sid
+        $restaurants = Restaurant::where('sid', $request->sid)->get();
+        if ($restaurants->count() == 0) {
+            // requset.sid = restaurants.brand_code
+            $restaurants = Restaurant::where('brand_code', $request->sid)->get();
+        }
+        // 假如都沒有找到餐廳
+        if ($restaurants->count() == 0) {
+            Alert::error('錯誤', '請確認品牌店別代碼是否正確');
+            return back();
+        }
 
-        Alert::success('成功', '餐點採樣新增成功');
+        // 新增餐點採樣
+        $meal = Meal::create($request->all());
+
+        // 取得 task.task_date的年月 = meal.effective_date 的年月 和 task.restaurant_id in (restaurants.id)
+        $tasks = Task::where('task_date', 'like', Carbon::create($meal->effective_date)->format('Y-m') . '%')
+            ->whereIn('restaurant_id', $restaurants->pluck('id'))
+            ->get();
+
+        // 將餐點採樣和任務做關聯
+        $tasks->each(function ($task) use ($meal) {
+            $task->meals()->attach($meal->id);
+        });
+
+
+        // restaurant.brand 和 restaurant.shop pluck.brand+shop
+        Alert::success('成功', $meal->name . '新增成功，並且已經加入到' . $tasks->pluck('restaurant.brand')->unique()->implode('、') . '的' . $tasks->pluck('restaurant.shop')->unique()->implode('、') . '的任務中');
 
         return back();
     }

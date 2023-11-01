@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             // DefectSeeder::class,
             // ClearDefectSeeder::class,
             // MealSeeder::class,
-            ProjectSeeder::class,
+            // ProjectSeeder::class,
         ]);
     }
 }
