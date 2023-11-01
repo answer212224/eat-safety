@@ -292,6 +292,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="row p-1">
+                                                        <div class="col-3">缺失類別</div>
+                                                        <div class="col-9">
+                                                            {{ $taskHasDefect->defect->category }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row p-1">
                                                         <div class="col-3">忽略扣分</div>
                                                         <div class="col-9">
                                                             {{ $taskHasDefect->is_ignore ? '是' : '否' }}
