@@ -95,27 +95,27 @@
                                     <td class="bs-tooltip" title="{{ $body['frontTask5S']['area'] }}">
                                         {{ $body['frontTask5S']['count'] }}
                                     </td>
-                                    <td>
+                                    <td class="bs-tooltip" title="中廚">
                                         @if ($body['backTaskChineseKitchen'] !== null)
                                             {{ 100 + $body['backTaskChineseKitchen'] }}
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="bs-tooltip" title="西廚">
                                         @if ($body['backTaskWesternKitchen'] !== null)
                                             {{ 100 + $body['backTaskWesternKitchen'] }}
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="bs-tooltip" title="日廚">
                                         @if ($body['backTaskJapaneseKitchen'] !== null)
                                             {{ 100 + $body['backTaskJapaneseKitchen'] }}
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="bs-tooltip" title="西點">
                                         @if ($body['backTaskPastryKitchen'] !== null)
                                             {{ 100 + $body['backTaskPastryKitchen'] }}
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="bs-tooltip" title="洗碗區">
                                         @if ($body['backTaskUndecidedKitchen'] !== null)
                                             {{ 100 + $body['backTaskUndecidedKitchen'] }}
                                         @endif

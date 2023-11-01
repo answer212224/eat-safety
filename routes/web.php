@@ -171,6 +171,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
                 Route::post('/{restaurant}/workspace', [RestaurantController::class, 'storeWorkspace'])->name('restaurant-workspace-store');
                 // 工作站編輯
                 Route::post('workspace/update', [RestaurantController::class, 'updateWorkspace'])->name('restaurant-workspace-update');
+                // 工作站排序更新
+                Route::post('workspace/sort', [RestaurantController::class, 'sortWorkspace'])->name('restaurant-workspace-sort');
 
                 // 門市的食安圖表
                 Route::get('/{restaurant}/chart', [RestaurantController::class, 'chart'])->name('restaurant-chart');

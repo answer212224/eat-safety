@@ -23,7 +23,7 @@ class RowDataController extends Controller
             $yearMonth = today();
         }
 
-        // N+1 問題
+        // N+1 問題 restaurantBackWorkspaces.ststus = 1
         $tasks = Task::query()->with(['restaurant.restaurantWorkspaces' => function ($query) {
             $query->where('status', 1);
         }, 'restaurant.restaurantBackWorkspaces' => function ($query) {
@@ -67,15 +67,15 @@ class RowDataController extends Controller
 
         // 合併群組
         $tableHeader = array_merge($tableHeader, $distinctGroups);
-        // 廚區1~15
-        for ($i = 1; $i <= 15; $i++) {
+        // 廚區1~16
+        for ($i = 1; $i <= 16; $i++) {
             $tableHeader[] = '廚區' . $i;
         }
-        // 5s區站1~15
-        for ($i = 1; $i <= 15; $i++) {
+        // 5s區站1~16
+        for ($i = 1; $i <= 16; $i++) {
             $tableHeader[] = '5S區站' . $i;
         }
-        // 廚區分數1~4
+        // 廚區分數1~5
         for ($i = 1; $i <= 5; $i++) {
             $tableHeader[] = '廚區分數' . $i;
         }
@@ -138,7 +138,7 @@ class RowDataController extends Controller
             // 將$defectGroupsCount轉成array
             $distinctGroupsCount = $distinctGroupsCount->toArray();
 
-            // 取得內場區域(area不是廚務部和外場)
+            // 取得內場各區站
             $restaurantBackWorkspaces = $task->restaurant->restaurantBackWorkspaces;
 
             $backArea = $restaurantBackWorkspaces->pluck('area');
@@ -156,8 +156,8 @@ class RowDataController extends Controller
                 ];
             });
 
-            // backTaskNot5S補滿14個 不夠的補0
-            $backTaskNot5S = $backTaskNot5S->pad(14, 0);
+            // backTaskNot5S補滿15個 不夠的補0
+            $backTaskNot5S = $backTaskNot5S->pad(15, 0);
 
             // 外場不是5S的缺失count
             $frontTaskNot5S = [
@@ -181,8 +181,8 @@ class RowDataController extends Controller
                 ];
             });
 
-            // backTask5S補滿14個 不夠的補0
-            $backTask5S = $backTask5S->pad(14, 0);
+            // backTask5S補滿15個 不夠的補0
+            $backTask5S = $backTask5S->pad(15, 0);
 
             // 計算外場5S總數
             $frontTask5STotal = $frontTask->whereIn('defect.category', ['5S'])->count();
@@ -228,10 +228,9 @@ class RowDataController extends Controller
             // 取得日廚區站的id
             $restaurantJapaneseKitchenWorkspaces = $task->restaurant->restaurantJapaneseKitchenWorkspaces->pluck('id');
             // 取得西點區站的id
-            $restaurantPastryKitchenWorkspace = optional($task->restaurant->restaurantPastryKitchenWorkspace)->id;
-            // 取得未定區站的id
-            $restaurantUndecidedKitchenWorkspace = optional($task->restaurant->restaurantUndecidedKitchenWorkspace)->id;
-
+            $restaurantPastryKitchenWorkspaces = $task->restaurant->restaurantPastryKitchenWorkspaces->pluck('id');
+            // 取得洗碗區站的id
+            $restaurantWashingAreaWorkspaces = $task->restaurant->restaurantWashingAreaWorkspaces->pluck('id');
             // 判斷是否有中廚區站
             if ($restaurantChineseKitchenWorkspaces->isEmpty()) {
                 $backTaskChineseKitchen = null;
@@ -272,11 +271,11 @@ class RowDataController extends Controller
             }
 
             // 判斷是否有西點區站
-            if (!$restaurantPastryKitchenWorkspace) {
+            if ($restaurantPastryKitchenWorkspaces->isEmpty()) {
                 $backTaskPastryKitchen = null;
             } else {
                 // 計算西點區站的總分
-                $backTaskPastryKitchen = $backTask->where('restaurant_workspace_id', $restaurantPastryKitchenWorkspace)->sum(function ($item) {
+                $backTaskPastryKitchen = $backTask->whereIn('restaurant_workspace_id', $restaurantPastryKitchenWorkspaces)->sum(function ($item) {
                     // 只計算需要扣分的缺失
                     if (!$item->is_ignore) {
                         return $item->defect->deduct_point;
@@ -284,18 +283,19 @@ class RowDataController extends Controller
                 });
             }
 
-            // 判斷是否有未定區站
-            if (!$restaurantUndecidedKitchenWorkspace) {
+            // 判斷是否有洗碗區區站
+            if ($restaurantWashingAreaWorkspaces->isEmpty()) {
                 $backTaskUndecidedKitchen = null;
             } else {
-                // 計算未定區站的總分
-                $backTaskUndecidedKitchen = $backTask->where('restaurant_workspace_id', $restaurantUndecidedKitchenWorkspace)->sum(function ($item) {
+                // 計算洗碗區區站的總分
+                $backTaskUndecidedKitchen = $backTask->whereIn('restaurant_workspace_id', $restaurantWashingAreaWorkspaces)->sum(function ($item) {
                     // 只計算需要扣分的缺失
                     if (!$item->is_ignore) {
                         return $item->defect->deduct_point;
                     }
                 });
             }
+
             // 取得內場專案查核description
             $backProjectsDescriptions = $task->backProjects->pluck('description');
             // 取得外場專案查核description
@@ -338,7 +338,6 @@ class RowDataController extends Controller
                 'backTaskPastryKitchen' => $backTaskPastryKitchen,
                 'backTaskUndecidedKitchen' => $backTaskUndecidedKitchen,
                 'backTask5STotal' =>  $backTask5STotal,
-                'backTask5STotal' => $backTask5STotal,
                 'frontTask5STotal' => $frontTask5STotal,
                 'backCloseDefectCount' => $backCloseDefectCount,
                 'backCloseDefectCountDescrptions' => $backCloseDefectCountDescrptions,
@@ -409,7 +408,7 @@ class RowDataController extends Controller
             '分數',
         ];
 
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 16; $i++) {
             $tableHeader[] = '廚區' . $i;
         }
 
@@ -448,8 +447,8 @@ class RowDataController extends Controller
                 ];
             });
 
-            // backTask補滿14個 不夠的補0
-            $backTask = $backTask->pad(14, 0);
+            // backTask補滿15個 不夠的補0
+            $backTask = $backTask->pad(15, 0);
 
             // 取得外場
             $frontTask = $task->taskHasClearDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('restaurantWorkspace');

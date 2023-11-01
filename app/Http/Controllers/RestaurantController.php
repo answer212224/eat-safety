@@ -68,7 +68,7 @@ class RestaurantController extends Controller
 
         $workspace->save();
 
-        alert()->success('更新成功', '更新工作區成功');
+        alert()->success('更新成功', '更新區站名稱為' . $area . '成功');
 
         return back();
     }
@@ -82,6 +82,23 @@ class RestaurantController extends Controller
         $workspace = RestaurantWorkspace::find($workspace_id);
 
         $workspace->status = $status == 'true' ? 1 : 0;
+
+        $workspace->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '更新成功',
+        ]);
+    }
+
+    // sortWorkspace
+    public function sortWorkspace(Request $request)
+    {
+        $workspace_id = $request->input('workspace_id');
+
+        $workspace = RestaurantWorkspace::find($workspace_id);
+
+        $workspace->sort = $request->input('sort');
 
         $workspace->save();
 

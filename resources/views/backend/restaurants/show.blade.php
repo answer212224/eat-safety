@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    </div>
+
     <!-- /BREADCRUMB -->
 
     <div class="row layout-top-spacing">
@@ -52,6 +52,8 @@
                 <table id="zero-config" class="table dt-table-hover" style="width:100%">
                     <thead>
                         <tr>
+                            <th>排序</th>
+                            <th>新排序</th>
                             <th>區站</th>
                             <th>上下線</th>
                             <th>類別代碼</th>
@@ -63,6 +65,12 @@
 
                         @foreach ($restaurant->restaurantWorkspaces as $workspaces)
                             <tr>
+                                <td>{{ $workspaces->sort }}</td>
+                                {{-- input number --}}
+                                <td>
+                                    <input type="number" class="form-control" value="{{ $workspaces->sort }}"
+                                        style="width: 70px;">
+                                </td>
                                 <td>{{ $workspaces->area }}</td>
                                 {{-- checkbox --}}
                                 <td>
@@ -91,6 +99,7 @@
         </div>
 
     </div>
+
 
 
     <!-- Modal -->
@@ -174,14 +183,19 @@
                 "lengthMenu": [7, 10, 20, 50],
                 "pageLength": 10,
                 "order": [
-                    [2, "asc"]
+                    [0, "asc"]
                 ],
+
             });
         </script>
         {{-- 更新狀態 --}}
         <script>
             $(document).ready(function() {
-                $('input[type="checkbox"]').click(function() {
+                // checkbox的click 事件 在datatable換頁時 會抓不到事件
+                // tbody內的checkbox
+                //
+                // 用on的方式
+                $('#zero-config').on('click', 'input[type="checkbox"]', function() {
                     // 要有權限才能操作
                     @if (auth()->user()->can('update-restaurant'))
                         // 有權限才能操作
@@ -212,12 +226,12 @@
 
         {{-- 更新 --}}
         <script>
-            // 按下編輯按鈕
-            $('.btn-edit').click(function() {
+            // 按下編輯按鈕 改用on
+            $('#zero-config').on('click', '.btn-edit', function() {
                 // 取得按鈕上的data-id
                 var id = $(this).attr('data-id');
                 // 取得區站名稱
-                var area = $(this).parent().parent().parent().find('td').eq(0).text();
+                var area = $(this).parent().parent().parent().find('td').eq(2).text();
                 // 將區站名稱放入input
                 $('#editModal input[name="area"]').val(area);
                 // 將workspace_id放入input
@@ -225,6 +239,41 @@
 
             });
         </script>
+        {{-- 更新排序 --}}
+        <script>
+            $(document).ready(function() {
+                // 改用on
+                $('#zero-config').on('change', 'input[type="number"]', function() {
+                    // 要有權限才能操作
+                    @if (auth()->user()->can('update-restaurant'))
+                        var id = $(this).parent().parent().find('td').eq(6).find('button').attr('data-id');
+                        var sort = $(this).val();
+                        var url = "{{ route('restaurant-workspace-sort') }}";
+
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                workspace_id: id,
+                                sort: sort,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                // 重整頁面
+                                location.reload();
+                            }
+                        });
+                    @else
+                        alert('沒有權限');
+                        return false;
+                    @endif
+
+                });
+            });
+        </script>
+
+
+
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>
