@@ -22,9 +22,13 @@ class TaskController extends Controller
     public function list()
     {
         $title = '任務清單';
+
         $tasks = optional(auth()->user()->tasks)->load('users');
         if (!empty($tasks)) {
-            $tasks = $tasks->sortByDesc('id');
+            // 任務根據最接近今天的日期排序
+            $tasks = $tasks->sortBy(function ($task) {
+                return abs(Carbon::parse($task->task_date)->diffInDays(Carbon::today()));
+            });
         } elseif (auth()->user()->can('view-all-task')) {
             $tasks = Task::all()->load('users');
         } else {
@@ -417,12 +421,12 @@ class TaskController extends Controller
             $task->task_date = Carbon::parse($task->task_date);
 
             // 任務底下的缺失按照區站kitchen分類
-            $defectsGroup = $task->taskHasDefects->where('restaurantWorkspace.category_value', '!=', 'outside')->groupBy('restaurantWorkspace.kitchen');
+            $defectsGroup = $task->taskHasDefects->where('restaurantWorkspace.area', '!=', '外場')->groupBy('restaurantWorkspace.kitchen');
 
 
             // 取得缺失群組底下扣分
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum('defect.deduct_point');
+                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum('defect.deduct_point');
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -481,14 +485,14 @@ class TaskController extends Controller
             $task->task_date = Carbon::parse($task->task_date);
 
             // 任務底下的缺失按照區站kitchen分類
-            $defectsGroup = $task->taskHasClearDefects->where('restaurantWorkspace.category_value', '!=', 'outside')->groupBy('restaurantWorkspace.kitchen');
+            $defectsGroup = $task->taskHasClearDefects->where('restaurantWorkspace.area', '!=', '外場')->groupBy('restaurantWorkspace.kitchen');
 
             // 取得缺失群組底下扣分和數量
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum(function ($item) {
+                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum(function ($item) {
                     return $item->clearDefect->deduct_point * $item->amount;
                 });
-                $defects->amount = $defects->where('is_ignore', 0)->where('restaurantWorkspace.category_value', '!=', 'outside')->sum('amount');
+                $defects->amount = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum('amount');
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -536,7 +540,7 @@ class TaskController extends Controller
         if ($task->category == '食安及5S') {
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             // 只取得外場的缺失
-            $defects = $task->taskHasDefects->where('restaurantWorkspace.category_value', 'outside');
+            $defects = $task->taskHasDefects->where('restaurantWorkspace.area', '外場');
             // 將圖片轉成base64
             $defects->transform(function ($item) {
                 if (!empty($item->images)) {
@@ -589,7 +593,7 @@ class TaskController extends Controller
         } else {
             $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
             // 只取得外場的缺失
-            $defects = $task->taskHasClearDefects->where('restaurantWorkspace.category_value', 'outside');
+            $defects = $task->taskHasClearDefects->where('restaurantWorkspace.area', '外場');
             // 將圖片轉成base64
             $defects->transform(function ($item) {
                 if (!empty($item->images)) {
