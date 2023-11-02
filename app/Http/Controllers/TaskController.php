@@ -27,7 +27,7 @@ class TaskController extends Controller
         if (!empty($tasks)) {
             // 任務根據最接近今天的日期排序
             $tasks = $tasks->sortBy(function ($task) {
-                return abs(Carbon::parse($task->task_date)->diffInDays(Carbon::today()));
+                return abs(Carbon::parse($task->task_date)->diffInDays(now()));
             });
         } elseif (auth()->user()->can('view-all-task')) {
             $tasks = Task::all()->load('users');
