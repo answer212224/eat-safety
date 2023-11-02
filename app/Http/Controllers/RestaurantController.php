@@ -348,11 +348,13 @@ class RestaurantController extends Controller
         $yearMonth = $request->yearMonth ? Carbon::create($request->yearMonth) : Carbon::now();
         $selectBrands = $request->selectBrands ? $request->selectBrands : [];
 
-        $restaurants = Restaurant::where('status', 1);
+        $restaurants = Restaurant::where('status', 1)->get();
 
-        $brands = $restaurants->get()->pluck('brand');
+        $brands = $restaurants->pluck('brand');
 
-        $restaurants = $restaurants->whereIn('brand', $selectBrands)->get();
+        if (count($selectBrands) > 0) {
+            $restaurants = $restaurants->whereIn('brand', $selectBrands);
+        }
 
         $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($yearMonth) {
             $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month);
