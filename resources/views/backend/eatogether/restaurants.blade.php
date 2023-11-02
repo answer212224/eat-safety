@@ -15,6 +15,14 @@
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/widgets/modules-widgets.scss'])
 
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
+        @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
+        @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
+
+        {{-- flatpickr --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
+
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -28,60 +36,24 @@
                 <div class="card-body">
                     <form action="" method="get">
                         <div class="row">
-                            <div class="col-5">
-                                {{-- 年份篩選select  --}}
-                                <div class="form-group">
-                                    <select class="form-select" id="year" name="year">
-                                        <option value="" {{ request()->year == '' ? 'selected' : '' }}>全部</option>
-                                        <option value="2023" {{ request()->year == '2023' ? 'selected' : '' }}>2023
-                                        </option>
-                                        <option value="2024" {{ request()->year == '2024' ? 'selected' : '' }}>2024
-                                        </option>
-                                        <option value="2025" {{ request()->year == '2025' ? 'selected' : '' }}>2025
-                                        </option>
-                                        <option value="2026" {{ request()->year == '2026' ? 'selected' : '' }}>2026
-                                        </option>
-                                        <option value="2027" {{ request()->year == '2027' ? 'selected' : '' }}>2027
-                                        </option>
-                                    </select>
-                                </div>
+                            <div class="col-md-2">
+                                {{-- yearMonth --}}
+                                <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
+                                    placeholder="" value="{{ $yearMonth }}" id="yearMonth">
                             </div>
-                            {{-- 月份篩選select  --}}
-                            <div class="col-5">
-                                <div class="form-group">
-                                    <select class="form-select" name="month" id="month">
-                                        {{-- 假如resquest()->month = value selected --}}
-                                        <option value="" {{ request()->month == '' ? 'selected' : '' }}>全部
-                                        </option>
-                                        <option value="1" {{ request()->month == '1' ? 'selected' : '' }}>一月
-                                        </option>
-                                        <option value="2" {{ request()->month == '2' ? 'selected' : '' }}>二月
-                                        </option>
-                                        <option value="3" {{ request()->month == '3' ? 'selected' : '' }}>三月
-                                        </option>
-                                        <option value="4" {{ request()->month == '4' ? 'selected' : '' }}>四月
-                                        </option>
-                                        <option value="5" {{ request()->month == '5' ? 'selected' : '' }}>五月
-                                        </option>
-                                        <option value="6" {{ request()->month == '6' ? 'selected' : '' }}>六月
-                                        </option>
-                                        <option value="7" {{ request()->month == '7' ? 'selected' : '' }}>七月
-                                        </option>
-                                        <option value="8" {{ request()->month == '8' ? 'selected' : '' }}>八月
-                                        </option>
-                                        <option value="9" {{ request()->month == '9' ? 'selected' : '' }}>九月
-                                        </option>
-                                        <option value="10" {{ request()->month == '10' ? 'selected' : '' }}>十月
-                                        </option>
-                                        <option value="11" {{ request()->month == '11' ? 'selected' : '' }}>十一月
-                                        </option>
-                                        <option value="12" {{ request()->month == '12' ? 'selected' : '' }}>十二月
-                                        </option>
-                                    </select>
-                                </div>
+                            <div class="col-md-8">
+                                {{-- brands --}}
+                                <select class="form-control" name="selectBrands[]" multiple autocomplete="off"
+                                    id="select-brands">
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand }}"
+                                            @if (in_array($brand, $selectBrands)) selected @endif>
+                                            {{ $brand }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <div class="col-2 ">
+                            <div class="col-md-2 ">
                                 <button type="submit" class="btn btn-primary w-100 h-100" id="search">篩選</button>
                             </div>
                         </div>
@@ -114,6 +86,12 @@
     <x-slot:footerFiles>
 
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        {{-- flatpickr --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+        {{-- monthSelectPlugin  cdn --}}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
+        <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
 
         <script>
             var options = {
@@ -126,7 +104,9 @@
                 }],
                 chart: {
                     type: 'bar',
-                    height: '3600',
+                    @if ($restaurants->count() > 10)
+                        height: '{{ $restaurants->count() * 50 }}px',
+                    @endif
                 },
                 plotOptions: {
                     bar: {
@@ -160,6 +140,30 @@
 
             var chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
+        </script>
+
+
+        <script>
+            // flatpickr
+            flatpickr(".yearMonth", {
+                "locale": "zh_tw",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M/Y",
+
+                    }),
+                ],
+
+            });
+            new TomSelect("#select-brands", {
+
+            });
+
+            new TomSelect("#select-shops", {
+
+            });
         </script>
 
     </x-slot>

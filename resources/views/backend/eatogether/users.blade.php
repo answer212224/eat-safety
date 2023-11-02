@@ -107,7 +107,9 @@
                 }],
                 chart: {
                     type: 'bar',
-                    height: '1200',
+                    @if (count($users) > 10)
+                        height: {{ count($users) * 50 }},
+                    @endif
                 },
                 plotOptions: {
                     bar: {

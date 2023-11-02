@@ -345,33 +345,20 @@ class RestaurantController extends Controller
      */
     public function eatogether(Request $request)
     {
-        $year = $request->input('year');
-        $month = $request->input('month');
+        $yearMonth = $request->yearMonth ? Carbon::create($request->yearMonth) : Carbon::now();
+        $selectBrands = $request->selectBrands ? $request->selectBrands : [];
 
+        $restaurants = Restaurant::where('status', 1);
 
-        $restaurants = Restaurant::where('status', 1)->get();
+        $brands = $restaurants->get()->pluck('brand');
 
-        if ($year && $month) {
-            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($year, $month) {
-                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($year, $month) {
-                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-            }]);
-        } else if ($year) {
-            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($year) {
-                $query->whereYear('created_at', $year);
-            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($year) {
-                $query->whereYear('created_at', $year);
-            }]);
-        } else if ($month) {
-            $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($month) {
-                $query->whereMonth('created_at', $month);
-            }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($month) {
-                $query->whereMonth('created_at', $month);
-            }]);
-        } else {
-            $restaurants->load(['restaurantWorkspaces.taskHasDefects', 'restaurantWorkspaces.taskHasClearDefects']);
-        }
+        $restaurants = $restaurants->whereIn('brand', $selectBrands)->get();
+
+        $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($yearMonth) {
+            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month);
+        }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($yearMonth) {
+            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month);
+        }]);
 
         // 計算各門市的食安缺失數量 key = 門市brand+shop
         $defectsCount = $restaurants->map(function ($restaurant, $key) {
@@ -391,11 +378,16 @@ class RestaurantController extends Controller
             ];
         });
 
+        $yearMonth = $yearMonth->format('Y-m');
 
         return view('backend.eatogether.restaurants', [
             'title' => '集團全部門市統計',
             'defectsCount' => $defectsCount,
             'clearDefectsCount' => $clearDefectsCount,
+            'yearMonth' => $yearMonth,
+            'brands' => $brands,
+            'selectBrands' => $selectBrands,
+            'restaurants' => $restaurants,
         ]);
     }
 }
