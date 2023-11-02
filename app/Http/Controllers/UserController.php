@@ -145,12 +145,19 @@ class UserController extends Controller
     public function eatogether(Request $request)
     {
         $yearMonth = $request->yearMonth ? Carbon::create($request->yearMonth) : Carbon::now();
-
+        $selectUsers = $request->selectUsers ? $request->selectUsers : [];
 
         $yearMonth = Carbon::create($yearMonth);
 
+        $allusers = User::whereIn('status', [0, 1])->get();
+
         // 取得狀態為在職的同仁和狀態是試用期的同仁
-        $users = User::where('status', 0)->orWhere('status', 1)->get();
+        $users = User::whereIn('status', [0, 1]);
+        if (count($selectUsers) > 0) {
+            $users = $users->whereIn('id', $selectUsers);
+        }
+
+        $users = $users->get();
 
         $users->each(function ($user) use ($yearMonth) {
             $user->load('taskHasDefects', 'taskHasClearDefects', 'tasks');
@@ -204,6 +211,8 @@ class UserController extends Controller
             'title' => "{$yearMonth} 平均缺失數",
             'users' => $users,
             'yearMonth' => $yearMonth,
+            'selectUsers' => $selectUsers,
+            'allusers' => $allusers,
         ]);
     }
 }

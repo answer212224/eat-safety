@@ -15,6 +15,10 @@
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/widgets/modules-widgets.scss'])
 
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
+        @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
+        @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
+
         {{-- flatpickr --}}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
@@ -33,13 +37,24 @@
                     <form action="" method="get">
 
                         <div class="row">
-                            <label for="yearMonthe" class="col-md-1 col-form-label col-form-label-sm">稽核月份:</label>
-                            <div class="col-md-6">
+
+                            <div class="col-md-2">
                                 {{-- yearMonth篩選 --}}
                                 <input type="text" class="form-control form-control-sm yearMonth" name="yearMonth"
                                     placeholder="" value="{{ $yearMonth }}" id="yearMonth">
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
+                                {{-- 同仁篩選 --}}
+                                <select class="form-control" name="selectUsers[]" multiple autocomplete="off"
+                                    id="select-users">
+                                    @foreach ($allusers as $user)
+                                        <option value="{{ $user->id }}"
+                                            @if (in_array($user->id, $selectUsers)) selected @endif>
+                                            {{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
                                 {{-- 篩選月份 --}}
                                 <button class="btn btn-primary w-100" type="submit">查看</button>
                             </div>
@@ -138,6 +153,13 @@
 
                     }),
                 ],
+
+            });
+        </script>
+
+        <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
+        <script>
+            new TomSelect("#select-users", {
 
             });
         </script>
