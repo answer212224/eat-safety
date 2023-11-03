@@ -44,7 +44,7 @@
                     <br />
                     @foreach ($defectsGroup as $key => $items)
                         {{ $key }}：{{ 100 + $items->sum }}分
-                        @if ($key == '中廚' || $key == '西廚' || $key == '日廚')
+                        @if ($key == '中廚' || $key == '西廚' || $key == '日廚' || $key == '西點')
                             （
                             @foreach ($items->group as $area => $item)
                                 {{ Str::substr($area, 2) }}：{{ $item->count() }}項

@@ -23,6 +23,8 @@ class RestaurantWorkspace extends Model
             return '西廚';
         } elseif (Str::contains($this->area, '日廚')) {
             return '日廚';
+        } elseif (Str::contains($this->area, '西點')) {
+            return '西點';
         } else {
             return $this->area;
         }
