@@ -142,71 +142,78 @@ class UserController extends Controller
      * 集團所有同仁的統計 計算每位同仁的該月缺失平均數
      * eatogether
      */
+    /**
+     * Calculate the average defect count for each user in a given month.
+     *
+     * @param Request $request The HTTP request object.
+     * @return \Illuminate\View\View The view displaying the average defect count for each user.
+     */
     public function eatogether(Request $request)
     {
+        // Retrieve the year and month from the request, or use the current date
         $yearMonth = $request->yearMonth ? Carbon::create($request->yearMonth) : Carbon::now();
+
+        // Retrieve the selected users from the request, or use an empty array
         $selectUsers = $request->selectUsers ? $request->selectUsers : [];
 
+        // Create a Carbon instance for the year and month
         $yearMonth = Carbon::create($yearMonth);
 
-        $allusers = User::whereIn('status', [0, 1])->get();
+        // Retrieve all users with status 0 or 1
+        $statuses = auth()->user()->hasRole('super-admin') ? [0, 1, 8] : [0, 1];
+        $allusers = User::whereIn('status', $statuses)->get();
+        $users = User::whereIn('status', $statuses);
 
-        // 取得狀態為在職的同仁和狀態是試用期的同仁
-        $users = User::whereIn('status', [0, 1]);
+        // Filter users by selected user IDs, if any
         if (count($selectUsers) > 0) {
             $users = $users->whereIn('id', $selectUsers);
         }
 
+        // Retrieve the filtered users
         $users = $users->get();
 
+        // Calculate the defect count and clear defect count for each user
         $users->each(function ($user) use ($yearMonth) {
             $user->load('taskHasDefects', 'taskHasClearDefects', 'tasks');
+
+            // Filter taskHasDefects by the specified year and month
             $defectCount = $user->taskHasDefects->filter(function ($taskHasDefect) use ($yearMonth) {
                 return $taskHasDefect->created_at->year == $yearMonth->year && $taskHasDefect->created_at->month == $yearMonth->month;
             })->count();
+
+            // Filter taskHasClearDefects by the specified year and month
             $clearDefectCount = $user->taskHasClearDefects->filter(function ($taskHasClearDefect) use ($yearMonth) {
                 return $taskHasClearDefect->created_at->year == $yearMonth->year && $taskHasClearDefect->created_at->month == $yearMonth->month;
             })->count();
 
-
+            // Assign the defect count and clear defect count to the user
             $user->defectCount = $defectCount;
             $user->clearDefectCount = $clearDefectCount;
 
-            // 先去取得同仁該月份的所有任務
+            // Retrieve tasks for the specified year and month
             $tasks = $user->tasks->filter(function ($task) use ($yearMonth) {
                 $task->task_date = Carbon::create($task->task_date);
                 return $task->task_date->year == $yearMonth->year && $task->task_date->month == $yearMonth->month;
             });
-            // 計算分類為食安食安及55的任務數量
+
+            // Calculate the food safety count and clean count
             $foodSafetyCount = $tasks->filter(function ($task) {
                 return $task->category == '食安及5S';
             })->count();
 
-            // 計算分類為清潔檢查的任務數量
             $cleanCount = $tasks->filter(function ($task) {
                 return $task->category == '清潔檢查';
             })->count();
 
-            // 計算該月缺失平均數
-            // DivisionByZeroError
-            if ($foodSafetyCount == 0) {
-                $user->defectAverage = 0;
-            } else {
-                $user->defectAverage = $defectCount / $foodSafetyCount;
-                // 取得小數後1位
-                $user->defectAverage = round($user->defectAverage, 1);
-            }
-            if ($cleanCount == 0) {
-                $user->clearDefectAverage = 0;
-            } else {
-                $user->clearDefectAverage = $clearDefectCount / $cleanCount;
-                // 取得小數後1位
-                $user->clearDefectAverage = round($user->clearDefectAverage, 1);
-            }
+            // Calculate the defect average and clear defect average
+            $user->defectAverage = $foodSafetyCount == 0 ? 0 : round($defectCount / $foodSafetyCount, 1);
+            $user->clearDefectAverage = $cleanCount == 0 ? 0 : round($clearDefectCount / $cleanCount, 1);
         });
 
+        // Format the year and month as 'Y-m'
         $yearMonth = $yearMonth->format('Y-m');
 
+        // Return the view with the necessary data
         return view('backend.eatogether.users', [
             'title' => "{$yearMonth} 平均缺失數",
             'users' => $users,
