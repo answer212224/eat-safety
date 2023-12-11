@@ -77,7 +77,7 @@
                                         <td>{{ date('Y-m', strtotime($meal->effective_date)) }}</td>
                                         <td>{{ $task->task_date }}</td>
                                         <td>{{ $meal->brand }}</td>
-                                        <td>{{ $meal->shop }}</td>
+                                        <td>{{ $meal->shop ?? $task->restaurant->shop }}</td>
                                         <td>{{ $meal->category }}</td>
                                         <td>{{ $meal->chef }}</td>
                                         <td>{{ $meal->workspace }}</td>
