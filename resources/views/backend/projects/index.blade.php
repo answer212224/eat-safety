@@ -62,7 +62,7 @@
                             @endrole
                             @can('update-project')
                                 <th>狀態</th>
-                                <th class="text-end">動作</th>
+                                {{-- <th class="text-end">動作</th> --}}
                             @endcan
                         </tr>
                     </thead>
@@ -85,10 +85,10 @@
                                     <td>
                                         <livewire:switch-project-status :project="$project" />
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <a href="{{ route('project-edit', ['project' => $project]) }}"
                                             class="badge badge-light-primary">編輯</a>
-                                    </td>
+                                    </td> --}}
                                 @endcan
                             </tr>
                         @endforeach

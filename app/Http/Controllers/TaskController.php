@@ -307,6 +307,7 @@ class TaskController extends Controller
         $task->projects()->sync($request->projects);
         $task->meals()->sync($request->meals);
         $task->update([
+            'task_date' => $request->task_date,
             'status' => $request->status,
         ]);
 
