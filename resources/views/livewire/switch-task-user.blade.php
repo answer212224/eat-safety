@@ -28,7 +28,10 @@
                         <span class="badge badge-dark mb-1">
                             {{ $meal->name }}
                             @if ($meal->pivot->is_taken)
-                                <span class="badge badge-success">完成</span>
+                                <span class="badge badge-success">有帶</span>
+                            @endif
+                            @if ($meal->pivot->memo != null)
+                                <span class="badge badge-secondary">{{ $meal->pivot->memo }}</span>
                             @endif
                         </span>
                     @endforeach

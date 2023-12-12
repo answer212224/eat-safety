@@ -95,6 +95,10 @@ class TaskController extends Controller
 
         $data = $request->all();
 
+        $task->meals()->update([
+            'is_taken' => false,
+        ]);
+
         if (!empty($data['is_takens'])) {
             $task->meals()->updateExistingPivot($data['is_takens'], [
                 'is_taken' => true,

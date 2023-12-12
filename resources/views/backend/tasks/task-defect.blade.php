@@ -207,11 +207,19 @@
 
                     <div class="row mb-4">
                         <div class="col-xxl-12 mb-4">
-                            <p>
-                                @foreach ($task->meals as $meal)
-                                    {{ $meal->name }}#{{ $meal->pivot->memo }}。
-                                @endforeach
-                            </p>
+
+                            @foreach ($task->meals as $meal)
+                                <span class="badge badge-pill badge-dark m-1">{{ $meal->name }}
+                                    @if ($meal->pivot->is_taken)
+                                        <span class="badge badge-success">有帶</span>
+                                    @endif
+                                    @if ($meal->pivot->memo != null)
+                                        <span class="badge badge-pill badge-secondary">{{ $meal->pivot->memo }}
+                                        </span>
+                                    @endif
+                                </span>
+                            @endforeach
+
                         </div>
 
                     </div>
@@ -220,9 +228,16 @@
 
                     <div class="row mb-4">
                         <div class="col-xxl-12">
-                            <p class="">
-                                {{ $task->projects->pluck('description')->implode('。') }}
-                            </p>
+
+                            @foreach ($task->projects as $project)
+                                <span
+                                    class="badge badge-pill badge-dark m-1">{{ $project->name }}：{{ $project->description }}
+                                    @if ($project->pivot->is_checked)
+                                        <span class="badge badge-success">完成</span>
+                                    @endif
+                                </span>
+                            @endforeach
+
                         </div>
 
                     </div>
