@@ -22,7 +22,7 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">資料</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('meal-index') }}">同仁資料</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('user-index') }}">同仁資料</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
@@ -82,7 +82,6 @@
                 <div class="statbox widget box box-shadow">
                     <div class="widget-content widget-content-area">
                         <button type="submit" class="btn btn-outline-success w-100 mb-3">更新</button>
-                        <a class="btn btn-outline-dark w-100" href="{{ url()->previous() }}">上一頁</a>
                     </div>
                 </div>
             </div>
