@@ -162,7 +162,7 @@
                 <div class="modal-content">
 
                     <div class="modal-header" id="permissionModalModalLabel">
-                        <h5 class="modal-title">新增角色</b></h5>
+                        <h5 class="modal-title">新增權限</b></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

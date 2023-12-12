@@ -44,15 +44,7 @@ class UserController extends Controller
     {
         $employees = SysPerson::getEmployees();
         User::upsert($employees->toArray(), ['uid'], ['name', 'email', 'department', 'department_serial', 'password', 'status']);
-        $users = User::all();
-        $users->each(function ($user) {
-            if ($user->hasRole('super-admin') || $user->hasRole('admin')) {
-            } else if ($user->status == 0 || $user->status == 1) {
-                $user->assignRole('auditor');
-            } else {
-                $user->removeRole('auditor');
-            }
-        });
+
 
         alert()->success('使用者資料更新成功', '成功');
         return back();
@@ -62,15 +54,6 @@ class UserController extends Controller
     {
         $employees = SysPerson::getEmployees();
         User::upsert($employees->toArray(), ['uid'], ['name', 'email', 'department', 'department_serial', 'password', 'status']);
-        $users = User::all();
-        $users->each(function ($user) {
-            if ($user->hasRole('super-admin') || $user->hasRole('admin')) {
-            } else if ($user->status == 0 || $user->status == 1 || $user->status == 3) {
-                $user->assignRole('auditor');
-            } else {
-                $user->removeRole('auditor');
-            }
-        });
 
         Log::info("使用者資料更新成功");
     }
