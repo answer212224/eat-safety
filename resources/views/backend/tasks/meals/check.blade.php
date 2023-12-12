@@ -42,6 +42,7 @@
 
 
                             <h6 class="card-subtitle mb-2 text-muted">編號: {{ $meal->qno }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">廚別: {{ $meal->chef }}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">區站: {{ $meal->workspace }}</h6>
                             <div class="card-text">
                                 <div class="form-check form-switch form-check-inline">
@@ -68,7 +69,8 @@
                 <div class="card">
                     <div class="card-body">
                         <button type="submit" class="btn btn-success w-100 mb-3">提交</button>
-                        <a href="{{route('task-meal-export',['task' => $task])}}" class="btn btn-dark w-100 mb-3">採樣單下載</a>
+                        <a href="{{ route('task-meal-export', ['task' => $task]) }}"
+                            class="btn btn-dark w-100 mb-3">採樣單下載</a>
                         <a href="{{ route('task-list') }}" class="btn btn-dark w-100">上一頁</a>
                     </div>
                 </div>
