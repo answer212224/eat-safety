@@ -119,7 +119,8 @@
                 var calendarsEvents = {
                     "食安及5S": 'primary',
                     "清潔檢查": 'warning',
-                    "餐點採樣": 'success'
+                    "餐點採樣": 'success',
+                    "食安及5S複稽": 'danger',
                 }
 
                 // Calendar AddEvent fn.

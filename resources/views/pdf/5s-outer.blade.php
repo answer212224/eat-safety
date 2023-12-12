@@ -64,6 +64,19 @@
                     <td colspan="3" align="">缺失分類</td>
                     <td colspan="9" align="">{{ $defects->first()->defect->group }}</td>
                 </tr>
+
+                {{-- 缺失類別 --}}
+                <tr>
+                    <td colspan="3" align="">缺失類別</td>
+                    <td colspan="9" align="">{{ $defects->first()->defect->category }}</td>
+                </tr>
+
+                {{-- 原始扣分 --}}
+                <tr>
+                    <td colspan="3" align="">原始扣分</td>
+                    <td colspan="9" align="">{{ $defects->first()->defect->deduct_point }}</td>
+                </tr>
+
                 <tr>
                     <td colspan="3" align="">報告呈現說明</td>
                     <td colspan="9" align="">{{ $defects->first()->defect->report_description }}</td>
@@ -104,6 +117,19 @@
                     <td colspan="3" align="">缺失分類</td>
                     <td colspan="9" align="">{{ $item->defect->group }}</td>
                 </tr>
+
+                {{-- 缺失類別 --}}
+                <tr>
+                    <td colspan="3" align="">缺失類別</td>
+                    <td colspan="9" align="">{{ $item->defect->category }}</td>
+                </tr>
+
+                {{-- 原始扣分 --}}
+                <tr>
+                    <td colspan="3" align="">原始扣分</td>
+                    <td colspan="9" align="">{{ $item->defect->deduct_point }}</td>
+                </tr>
+
                 <tr>
                     <td colspan="3" align="">報告呈現說明</td>
                     <td colspan="9" align="">{{ $item->defect->report_description }}</td>

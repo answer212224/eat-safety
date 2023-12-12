@@ -21,6 +21,13 @@
                     <label class="form-check-label" for="rPersonal">餐點採樣</label>
                 </div>
             </div>
+            {{-- 食安及5S複稽 --}}
+            <div class="n-chk">
+                <div class="form-check form-check-danger form-check-inline">
+                    <input class="form-check-input" type="radio" name="category" value="食安及5S複稽" id="re">
+                    <label class="form-check-label" for="re">食安及5S複稽</label>
+                </div>
+            </div>
 
         </div>
 
@@ -100,7 +107,7 @@
         {{-- 採樣checkbox end --}}
     </div>
 
-    @if ($category == '食安及5S')
+    @if ($category == '食安及5S' || $category == '食安及5S複稽')
         <div class="row my-3">
             <div class="col-md-12">
                 <div class="form-check form-switch form-check-inline form-switch-warning">

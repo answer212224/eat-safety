@@ -70,6 +70,12 @@
                                 <a class="dropdown-item"
                                     href="{{ route('task-defect-owner', ['task' => $task]) }}">查看食安缺失</a>
                             @endif
+                            @if ($task->category == '食安及5S複稽')
+                                <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">食安複稽</a>
+
+                                <a class="dropdown-item"
+                                    href="{{ route('task-defect-owner', ['task' => $task]) }}">查看食安缺失</a>
+                            @endif
                             @if ($task->category == '清潔檢查')
                                 <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">清潔檢查</a>
 
@@ -85,7 +91,7 @@
                                     專案查核</a>
                             @endif
                         @endif
-                        @if ($task->category == '食安及5S')
+                        @if ($task->category == '食安及5S' || $task->category == '食安及5S複稽')
                             <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                                 主管食安核對</a>
                         @elseif($task->category == '清潔檢查')
@@ -95,7 +101,7 @@
                             <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                                 餐點採樣核對</a>
                         @endif
-                        @if ($task->status == 'completed' && $task->category != '餐點採樣')
+                        @if ($task->category != '餐點採樣')
                             <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="dropdown-item"
                                 target="_blank">內場稽核報告下載
                             </a>

@@ -70,6 +70,7 @@
                     <table id="html5-extension" class="table dt-table-hover" style="width:100%">
                         <thead>
                             <tr>
+                                <th>任務種類</th>
                                 <th>缺失分類</th>
                                 <th>子項目</th>
                                 <th>缺失類別</th>
@@ -87,6 +88,7 @@
                         <tbody>
                             @foreach ($defectRecords as $defectRecord)
                                 <tr>
+                                    <td>{{ $defectRecord->task->category }}</td>
                                     <td>{{ $defectRecord->defect->group }}</td>
                                     <td>{{ $defectRecord->defect->title }}</td>
                                     <td>{{ $defectRecord->defect->category }}</td>
@@ -158,7 +160,7 @@
                 "pageLength": 10,
                 //新到舊
                 "order": [
-                    [11, "desc"]
+                    [12, "desc"]
                 ],
             });
 

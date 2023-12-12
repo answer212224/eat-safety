@@ -115,6 +115,15 @@
                                                 <label class="form-check-label" for="rtravel">餐點採樣</label>
                                             </div>
                                         </div>
+                                        {{-- 食安及5S複稽 --}}
+                                        <div class="n-chk">
+                                            <div class="form-check form-check-danger form-check-inline">
+                                                <input class="form-check-input" type="radio" name="category"
+                                                    disabled @if ($task->category == '食安及5S複稽') checked @endif
+                                                    value="食安及5S複稽" id="re">
+                                                <label class="form-check-label" for="re">食安及5S複稽</label>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>

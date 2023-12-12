@@ -372,7 +372,7 @@ class TaskController extends Controller
     public function innerReport(Task $task)
     {
         ini_set('memory_limit', '256M');
-        if ($task->category == '食安及5S') {
+        if ($task->category == '食安及5S' || $task->category == '食安及5S複稽') {
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             // 將所有圖片轉成base64
             $task->taskHasDefects->transform(function ($item) {
@@ -509,7 +509,7 @@ class TaskController extends Controller
         $defectsFlat = $defectsGroup->flatten(2);
 
 
-        if ($task->category == '食安及5S') {
+        if ($task->category == '食安及5S' || $task->category == '食安及5S複稽') {
             $view = \View::make('pdf.5s-inner', compact('task', 'defectsGroup', 'defectsFlat'));
         } else {
             $view = \View::make('pdf.clear-inner', compact('task', 'defectsGroup', 'defectsFlat'));

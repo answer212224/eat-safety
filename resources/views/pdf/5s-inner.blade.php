@@ -14,7 +14,7 @@
     <div class="header">
         <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt=""
             style="width: 50px">
-        <span>食安及5S內場稽核報告</span>
+        <span>{{ $task->category }}</span>
     </div>
     <div class="table">
         <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
@@ -77,6 +77,16 @@
                     <td colspan="9" align="">{{ $defectsFlat->first()->defect->group }}</td>
                 </tr>
                 <tr>
+                    <td colspan="3" align="">缺失類別
+                    </td>
+                    <td colspan="9" align="">{{ $defectsFlat->first()->defect->category }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">原始扣分
+                    </td>
+                    <td colspan="9" align="">{{ $defectsFlat->first()->defect->deduct_point }}</td>
+                </tr>
+                <tr>
                     <td colspan="3" align="">報告呈現說明</td>
                     <td colspan="9" align="">{{ $defectsFlat->first()->defect->report_description }}</td>
                 </tr>
@@ -115,6 +125,16 @@
                     <td colspan="3" align="">缺失分類
                     </td>
                     <td colspan="9" align="">{{ $item->defect->group }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">缺失類別
+                    </td>
+                    <td colspan="9" align="">{{ $item->defect->category }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="">原始扣分
+                    </td>
+                    <td colspan="9" align="">{{ $item->defect->deduct_point }}</td>
                 </tr>
                 <tr>
                     <td colspan="3" align="">報告呈現說明</td>
