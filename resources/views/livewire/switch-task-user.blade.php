@@ -63,6 +63,7 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right d-icon-menu " aria-labelledby="elementDrodpown">
+
                         @if ($task->status != 'completed')
                             @if ($task->category == '食安及5S')
                                 <a class="dropdown-item" href="{{ route('task-create', ['task' => $task]) }}">食安稽核</a>
@@ -82,24 +83,24 @@
                                 <a class="dropdown-item"
                                     href="{{ route('task-clear-defect-owner', ['task' => $task]) }}">查看清檢缺失</a>
                             @endif
-                            @if ($task->meals->count() > 0)
-                                <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
-                                    餐點採樣</a>
-                            @endif
-                            @if ($task->projects->count() > 0)
-                                <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
-                                    專案查核</a>
-                            @endif
+
                         @endif
+
+                        @if ($task->meals->count() > 0)
+                            <a class="dropdown-item" href="{{ route('task-meal-check', ['task' => $task]) }}">
+                                餐點採樣</a>
+                        @endif
+                        @if ($task->projects->count() > 0)
+                            <a class="dropdown-item" href="{{ route('task-project-check', ['task' => $task]) }}">
+                                專案查核</a>
+                        @endif
+
                         @if ($task->category == '食安及5S' || $task->category == '食安及5S複稽')
                             <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
                                 主管食安核對</a>
                         @elseif($task->category == '清潔檢查')
                             <a class="dropdown-item" href="{{ route('task-clear-defect-show', ['task' => $task]) }}">
                                 主管清檢核對</a>
-                        @elseif($task->category == '餐點採樣')
-                            <a class="dropdown-item" href="{{ route('task-defect-show', ['task' => $task]) }}">
-                                餐點採樣核對</a>
                         @endif
                         @if ($task->category != '餐點採樣')
                             <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="dropdown-item"

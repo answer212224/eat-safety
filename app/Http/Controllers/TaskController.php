@@ -95,10 +95,6 @@ class TaskController extends Controller
 
         $data = $request->all();
 
-        $task->meals()->update([
-            'is_taken' => false,
-        ]);
-
         if (!empty($data['is_takens'])) {
             $task->meals()->updateExistingPivot($data['is_takens'], [
                 'is_taken' => true,
@@ -111,6 +107,15 @@ class TaskController extends Controller
                     'memo' => $memo,
                 ]);
             }
+        }
+
+        if ($task->category == '餐點採樣') {
+            $task->update([
+                'status' => 'completed',
+            ]);
+            $task->taskUsers()->update([
+                'is_completed' => true,
+            ]);
         }
 
         alert()->success('採樣完畢', '採樣成功');
