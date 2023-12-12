@@ -25,14 +25,24 @@
                 <p class="note-description">
                     <strong>採樣</strong> <u>{{ $task->meals->count() }}</u> <strong>項:</strong>
                     @foreach ($task->meals as $meal)
-                        <span class="badge badge-dark mb-1">{{ $meal->name }}</span>
+                        <span class="badge badge-dark mb-1">
+                            {{ $meal->name }}
+                            @if ($meal->pivot->is_taken)
+                                <span class="badge badge-success">完成</span>
+                            @endif
+                        </span>
                     @endforeach
                 </p>
                 <hr>
                 <p class="note-description">
                     <strong>專案</strong> <u>{{ $task->projects->count() }}</u> <strong>項:</strong>
                     @foreach ($task->projects as $project)
-                        <span class="badge badge-dark mb-1">{{ $project->name }}：{{ $project->description }}</span>
+                        <span class="badge badge-dark mb-1">
+                            {{ $project->name }}：{{ $project->description }}
+                            @if ($project->pivot->is_checked)
+                                <span class="badge badge-success">完成</span>
+                            @endif
+                        </span>
                     @endforeach
                 </p>
             </div>
