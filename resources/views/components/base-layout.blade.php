@@ -21,6 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>{{ $pageTitle }}</title>
     <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/images/favicon.ico') }}" />
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite(['resources/scss/layouts/modern-light-menu/light/loader.scss'])
     @vite(['resources/layouts/modern-light-menu/loader.js'])
 
@@ -63,13 +64,11 @@
         $isAltMenu || Request::routeIs('collapsibleMenu') ? true : false,
     'error' => Request::routeIs('404') ? true : false,
     'maintanence' => Request::routeIs('maintenance') ? true : false,
-]) @if ($scrollspy == 1)
-    {{ $scrollspyConfig }}
+])
+    @if ($scrollspy == 1) {{ $scrollspyConfig }}
 @else
-    {{ '' }}
-    @endif @if (Request::routeIs('fullWidth'))
-        layout="full-width"
-    @endif >
+    {{ '' }} @endif
+    @if (Request::routeIs('fullWidth')) layout="full-width" @endif>
 
     <!-- BEGIN LOADER -->
     <x-layout-loader />

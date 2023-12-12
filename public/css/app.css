@@ -1,0 +1,4 @@
+.form-control:disabled:not(.flatpickr-input), .form-control[readonly]:not(.flatpickr-input)
+{
+    color: #000!important;
+}
