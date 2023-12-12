@@ -24,8 +24,9 @@
         <label for="description">稽核標準</label>
         <select class="form-select" wire:model="description" name="defect_id" id="inputSelect" required>
             <option value="">請選擇...</option>
-            @foreach ($defects as $key => $defect)
-                <option value="{{ $key }}">{{ $defect }}</option>
+            @foreach ($defects as $defect)
+                <option value="{{ $defect->id }}">{{ $defect->description }} ({{ $defect->category }})
+                    ({{ $defect->deduct_point }})</option>
             @endforeach
         </select>
     </div>

@@ -39,7 +39,7 @@ class DefectSelect extends Component
         $distinByGroupsTitles = Defect::getDistinctTitlesByGroup($this->group, $latestDefect)->pluck('title');
 
         // 取得所有不重複的群組下的標題下的描述
-        $defects = Defect::getDescriptionWhereByGroupAndTitle($this->group, $this->title, $latestDefect)->pluck('description', 'id');
+        $defects = Defect::getDescriptionWhereByGroupAndTitle($this->group, $this->title, $latestDefect);
 
         return view('livewire.defect-select', compact('distinctGroups', 'distinByGroupsTitles', 'defects'));
     }
