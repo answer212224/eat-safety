@@ -75,13 +75,14 @@
                                 <th>子項目</th>
                                 <th>缺失類別</th>
                                 <th>報告呈現</th>
-                                <th>扣分</th>
+                                <th>原始扣分</th>
                                 <th>門市</th>
                                 <th>工作站</th>
                                 <th>稽核人員</th>
                                 <th>備註</th>
-                                <th>不扣分</th>
-                                <th>改善</th>
+                                <th>忽略扣分</th>
+                                <th>未達扣分標準</th>
+                                <th>建議事項</th>
                                 <th>建立時間</th>
                             </tr>
                         </thead>
@@ -100,7 +101,8 @@
                                     <td>{{ $defectRecord->user->name }}</td>
                                     <td>{{ $defectRecord->memo }}</td>
                                     <td>{{ $defectRecord->is_ignore ? '是' : '' }}</td>
-                                    <td>{{ $defectRecord->is_impoved ? '是' : '' }}</td>
+                                    <td>{{ $defectRecord->is_not_reach_deduct_standard ? '是' : '' }}</td>
+                                    <td>{{ $defectRecord->is_suggestion ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->created_at }}</td>
                                 </tr>
                             @endforeach
@@ -160,7 +162,8 @@
                 "pageLength": 10,
                 //新到舊
                 "order": [
-                    [12, "desc"]
+                    [13, "desc"]
+
                 ],
             });
 
