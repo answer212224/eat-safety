@@ -31,172 +31,253 @@
 
     <div class="row">
         <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            @foreach ($defectsGroup as $defects)
+            @foreach ($defectsGroup as $workspaceDefects)
                 <a class="btn btn-outline-secondary my-1 d-grid gap-2" data-bs-toggle="collapse"
-                    href="#collapseExample{{ $defects[0]->id }}" aria-expanded="true">
-                    {{ $defects[0]->restaurantWorkspace->area }}
+                    href="#collapseExample{{ $workspaceDefects->first()->first()->id }}" aria-expanded="true">
+                    {{ $workspaceDefects->first()->first()->restaurantWorkspace->area }}
                 </a>
-                <div class="collapse my-1" id="collapseExample{{ $defects[0]->id }}">
-                    @foreach ($defects as $taskHasDefect)
-                        <div class="card style-2 mb-4">
-                            @if ($task->category == '清潔檢查')
-                                <div class="card-body px-0 pb-0">
-                                    <div class="row p-1">
-                                        <div class="col-3">照片</div>
-                                        <div class="col-9">
-                                            @foreach ($taskHasDefect->images as $image)
-                                                <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1"
-                                                    alt="...">
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">主項目</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->clearDefect->main_item }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">次項目</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->clearDefect->sub_item }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">數量</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->amount }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">缺失說明</div>
-                                        <div class="col-9">
-                                            @if ($taskHasDefect->description == null)
-                                                無
-                                            @else
-                                                {{-- array to string --}}
-                                                @foreach ($taskHasDefect->description as $description)
-                                                    {{ $description }}
+                <div class="collapse my-1" id="collapseExample{{ $workspaceDefects->first()->first()->id }}">
+                    @foreach ($workspaceDefects as $taskHasDefectGroup)
+                        @foreach ($taskHasDefectGroup as $taskHasDefect)
+                            <div class="card style-2 mb-4">
+                                @if ($task->category == '清潔檢查')
+                                    <div class="card-body px-0 pb-0">
+                                        <div class="row p-1">
+                                            <div class="col-3">照片</div>
+                                            <div class="col-9">
+                                                @foreach ($taskHasDefect->images as $image)
+                                                    <img src="{{ asset('storage/' . $image) }}"
+                                                        class="card-img-top my-1" alt="...">
                                                 @endforeach
-                                            @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">扣分(計分方式: -2 * 數量)</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                        <div class="row p-1">
+                                            <div class="col-3">主項目</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->clearDefect->main_item }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">忽略扣分</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                        <div class="row p-1">
+                                            <div class="col-3">次項目</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->clearDefect->sub_item }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">稽核人員</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->user->name }}
+                                        <div class="row p-1">
+                                            <div class="col-3">數量</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->amount }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">建立時間</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->created_at }}
+                                        <div class="row p-1">
+                                            <div class="col-3">缺失說明</div>
+                                            <div class="col-9">
+                                                @if ($taskHasDefect->description == null)
+                                                    無
+                                                @else
+                                                    {{-- array to string --}}
+                                                    @foreach ($taskHasDefect->description as $description)
+                                                        {{ $description }}
+                                                    @endforeach
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">備註</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->memo }}
+                                        <div class="row p-1">
+                                            <div class="col-3">原始扣分(計分方式: -2 * 數量)</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3"></div>
-                                        <div class="col-9">
-                                            <a
-                                                href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
-                                                <button class="btn btn-primary">編輯</button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="card-body px-0 pb-0">
-                                    <div class="row p-1">
-                                        <div class="col-3">照片</div>
-                                        <div class="col-9">
-                                            @foreach ($taskHasDefect->images as $image)
-                                                <img src="{{ asset('storage/' . $image) }}" class="card-img-top my-1"
-                                                    alt="...">
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">缺失分類</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->defect->group }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">子項目</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->defect->title }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">稽核標準</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->defect->description }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">扣分</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->defect->deduct_point }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">忽略扣分</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->is_ignore ? '是' : '否' }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">稽核人員</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->user->name }}
-                                        </div>
-                                    </div>
-                                    <div class="row p-1">
-                                        <div class="col-3">建立時間</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->created_at }}
-                                        </div>
-                                    </div>
 
-                                    <div class="row p-1">
-                                        <div class="col-3">備註</div>
-                                        <div class="col-9">
-                                            {{ $taskHasDefect->memo }}
+                                        <div class="row p-1">
+                                            <div class="col-3">實際扣分</div>
+                                            <div class="col-9">
+                                                @if ($taskHasDefect->is_ignore || $taskHasDefect->is_not_reach_deduct_standard || $taskHasDefect->is_suggestion)
+                                                    0 @if ($taskHasDefect->is_ignore)
+                                                        (忽略扣分)
+                                                    @endif
+                                                    @if ($taskHasDefect->is_not_reach_deduct_standard)
+                                                        (未達扣分標準)
+                                                    @endif
+                                                    @if ($taskHasDefect->is_suggestion)
+                                                        (建議事項)
+                                                    @endif
+                                                @else
+                                                    {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3">忽略扣分</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">未達扣分標準</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_not_reach_deduct_standard ? '是' : '否' }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">建議事項</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_suggestion ? '是' : '否' }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3">稽核人員</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->user->name }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">建立時間</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->created_at }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">備註</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->memo }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3"></div>
+                                            <div class="col-9">
+                                                <a
+                                                    href="{{ route('task-clear-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                                    <button class="btn btn-primary">編輯</button>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                    {{-- 編輯 --}}
-                                    {{-- <a href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}"> --}}
-                                    <div class="row p-1">
-                                        <div class="col-3"></div>
-                                        <div class="col-9">
-                                            <a
-                                                href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
-                                                <button class="btn btn-primary">編輯</button>
-                                            </a>
+                                @else
+                                    <div class="card-body px-0 pb-0">
+                                        <div class="row p-1">
+                                            <div class="col-3">照片</div>
+                                            <div class="col-9">
+                                                @foreach ($taskHasDefect->images as $image)
+                                                    <img src="{{ asset('storage/' . $image) }}"
+                                                        class="card-img-top my-1" alt="...">
+                                                @endforeach
+                                            </div>
                                         </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">缺失分類</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->defect->group }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">子項目</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->defect->title }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">稽核標準</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->defect->description }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">缺失類別</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->defect->category }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">原始扣分</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->defect->deduct_point }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">實際扣分</div>
+                                            <div class="col-9">
+                                                @if (
+                                                    $taskHasDefect->is_ignore ||
+                                                        $taskHasDefect->is_not_reach_deduct_standard ||
+                                                        $taskHasDefect->is_suggestion ||
+                                                        $taskHasDefect->is_repeat)
+                                                    0 @if ($taskHasDefect->is_ignore)
+                                                        (忽略扣分)
+                                                    @endif
+                                                    @if ($taskHasDefect->is_not_reach_deduct_standard)
+                                                        (未達扣分標準)
+                                                    @endif
+                                                    @if ($taskHasDefect->is_suggestion)
+                                                        (建議事項)
+                                                    @endif
+                                                    @if ($taskHasDefect->is_repeat)
+                                                        (重複)
+                                                    @endif
+                                                @else
+                                                    {{ $taskHasDefect->defect->deduct_point }}
+                                                @endif
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3">忽略扣分</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3">未達扣分標準</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_not_reach_deduct_standard ? '是' : '否' }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">建議事項</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->is_suggestion ? '是' : '否' }}
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">稽核人員</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->user->name }}
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row p-1">
+                                            <div class="col-3">建立時間</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->created_at }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3">備註</div>
+                                            <div class="col-9">
+                                                {{ $taskHasDefect->memo }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-1">
+                                            <div class="col-3"></div>
+                                            <div class="col-9">
+                                                <a
+                                                    href="{{ route('task-defect-edit', ['taskHasDefect' => $taskHasDefect]) }}">
+                                                    <button class="btn btn-primary">編輯</button>
+                                                </a>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-
-                                </div>
-                            @endif
-                        </div>
+                                @endif
+                            </div>
+                        @endforeach
                     @endforeach
                 </div>
             @endforeach

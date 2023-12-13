@@ -38,13 +38,13 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">食安分數</td>
-                <td colspan="10" align="center">{{ 100 + $defects->sum }}</td>
+                <td colspan="10" align="center">{{ 100 + $sum }}</td>
             </tr>
             <tr>
                 <td colspan="1" align="center">各站分數及缺失數</td>
                 <td colspan="11" align="left">
                     <br />
-                    外場：{{ 100 + $defects->sum }}分，缺失數 {{ $defects->count() }} 項
+                    外場：{{ 100 + $sum }}分，缺失數 {{ $defects->count() }} 項
                 </td>
             </tr>
             {{-- 顯示第一個defects --}}
@@ -56,7 +56,7 @@
                 <tr>
                     @foreach ($defects->first()->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
                         </td>
                     @endforeach
                 </tr>
@@ -74,7 +74,20 @@
                 {{-- 原始扣分 --}}
                 <tr>
                     <td colspan="3" align="">原始扣分</td>
-                    <td colspan="9" align="">{{ $defects->first()->defect->deduct_point }}</td>
+                    <td colspan="3" align="">{{ $defects->first()->defect->deduct_point }}</td>
+                    <td colspan="3" align="">實際扣分</td>
+                    <td colspan="3" align="">
+                        @if (
+                            $defects->first()->is_ignore ||
+                                $defects->first()->is_not_reach_deduct_standard ||
+                                $defects->first()->is_suggestion ||
+                                $defects->first()->is_repeat)
+                            0
+                        @else
+                            {{ $defects->first()->defect->deduct_point }}
+                        @endif
+                    </td>
+
                 </tr>
 
                 <tr>
@@ -87,6 +100,15 @@
                         {{ $defects->first()->memo }}
                         @if ($defects->first()->is_ignore)
                             <span style="color: red">（忽略扣分）</span>
+                        @endif
+                        @if ($defects->first()->is_not_reach_deduct_standard)
+                            <span style="color: red">（未達扣分標準）</span>
+                        @endif
+                        @if ($defects->first()->is_suggestion)
+                            <span style="color: red">（建議事項）</span>
+                        @endif
+                        @if ($defects->first()->is_repeat)
+                            <span style="color: red">（重複缺失）</span>
                         @endif
                     </td>
                 </tr>
@@ -109,7 +131,7 @@
                 <tr>
                     @foreach ($item->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
                         </td>
                     @endforeach
                 </tr>
@@ -127,7 +149,15 @@
                 {{-- 原始扣分 --}}
                 <tr>
                     <td colspan="3" align="">原始扣分</td>
-                    <td colspan="9" align="">{{ $item->defect->deduct_point }}</td>
+                    <td colspan="3" align="">{{ $item->defect->deduct_point }}</td>
+                    <td colspan="3" align="">實際扣分</td>
+                    <td colspan="3" align="">
+                        @if ($item->is_ignore || $item->is_not_reach_deduct_standard || $item->is_suggestion || $item->is_repeat)
+                            0
+                        @else
+                            {{ $item->defect->deduct_point }}
+                        @endif
+                    </td>
                 </tr>
 
                 <tr>
@@ -140,6 +170,15 @@
                         {{ $item->memo }}
                         @if ($item->is_ignore)
                             <span style="color: red">（忽略扣分）</span>
+                        @endif
+                        @if ($item->is_not_reach_deduct_standard)
+                            <span style="color: red">（未達扣分標準）</span>
+                        @endif
+                        @if ($item->is_suggestion)
+                            <span style="color: red">（建議事項）</span>
+                        @endif
+                        @if ($item->is_repeat)
+                            <span style="color: red">（重複缺失）</span>
                         @endif
                     </td>
                 </tr>

@@ -430,13 +430,39 @@ class TaskController extends Controller
 
             $task->task_date = Carbon::parse($task->task_date);
 
+            // 重複的缺失is_repeat = 1
+            $task->taskHasDefects->transform(function ($item) {
+                $item->is_repeat = 1;
+                return $item;
+            });
+            // 依照站台分類
+            $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+            // 再依照缺失分類
+            $defectsGroup = $defectsGroup->map(function ($item, $key) {
+                return $item->groupBy('defect.id');
+            });
+
+
+            // 區站.缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+            $defectsGroup = $defectsGroup->map(function ($item, $key) {
+                $item = $item->map(function ($item, $key) {
+
+                    $item->first()->is_repeat = 0;
+
+                    return $item;
+                });
+                return $item;
+            });
+
             // 任務底下的缺失按照區站kitchen分類
             $defectsGroup = $task->taskHasDefects->where('restaurantWorkspace.area', '!=', '外場')->groupBy('restaurantWorkspace.kitchen');
 
 
-            // 取得缺失群組底下扣分
+            // 取得缺失群組底下扣分 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum('defect.deduct_point');
+                $defects->sum = $defects->where('is_ignore', 0)->where('is_not_reach_deduct_standard', 0)->where('is_suggestion', 0)->where('is_repeat', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum(function ($item) {
+                    return $item->defect->deduct_point;
+                });
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -497,12 +523,20 @@ class TaskController extends Controller
             // 任務底下的缺失按照區站kitchen分類
             $defectsGroup = $task->taskHasClearDefects->where('restaurantWorkspace.area', '!=', '外場')->groupBy('restaurantWorkspace.kitchen');
 
-            // 取得缺失群組底下扣分和數量
+            // 取得缺失群組底下扣分和數量 排除is_ignore = 1 和 is_not_reach_deduct_standard = 1 和 is_suggestion = 1
             $defectsGroup->transform(function ($defects) {
-                $defects->sum = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum(function ($item) {
-                    return $item->clearDefect->deduct_point * $item->amount;
-                });
-                $defects->amount = $defects->where('is_ignore', 0)->where('restaurantWorkspace.area', '!=', '外場')->sum('amount');
+                $defects->sum = $defects->where('is_ignore', 0)
+                    ->where('is_not_reach_deduct_standard', 0)
+                    ->where('is_suggestion', 0)
+                    ->where('restaurantWorkspace.area', '!=', '外場')
+                    ->sum(function ($item) {
+                        return $item->clearDefect->deduct_point * $item->amount;
+                    });
+                $defects->amount = $defects->where('is_ignore', 0)
+                    ->where('is_not_reach_deduct_standard', 0)
+                    ->where('is_suggestion', 0)
+                    ->where('restaurantWorkspace.area', '!=', '外場')
+                    ->sum('amount');
                 return $defects;
             });
             // 缺失群組底下的缺失再依照restaurant_workspace_id分類
@@ -516,7 +550,16 @@ class TaskController extends Controller
 
         // defectsGroup flat
         $defectsFlat = $defectsGroup->flatten(2);
-
+        // 重新排序 defectsFlat.defect.category = 重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
+        $defectsFlat = $defectsFlat->sortBy(function ($item) {
+            if ($item->defect && $item->defect->category == '重大缺失') {
+                return 1;
+            } elseif ($item->is_suggestion == 1 || $item->is_repeat == 1 || $item->is_not_reach_deduct_standard == 1 || $item->is_ignore == 1) {
+                return 3;
+            } else {
+                return 2;
+            }
+        });
 
         if ($task->category == '食安及5S' || $task->category == '食安及5S複稽') {
             $view = \View::make('pdf.5s-inner', compact('task', 'defectsGroup', 'defectsFlat'));
@@ -547,7 +590,7 @@ class TaskController extends Controller
      */
     public function outerReport(Task $task)
     {
-        if ($task->category == '食安及5S') {
+        if ($task->category == '食安及5S' || $task->category == '食安及5S複稽') {
             $task->load('taskHasDefects.defect', 'taskHasDefects.user', 'taskHasDefects.restaurantWorkspace');
             // 只取得外場的缺失
             $defects = $task->taskHasDefects->where('restaurantWorkspace.area', '外場');
@@ -596,10 +639,26 @@ class TaskController extends Controller
                 return $item;
             });
 
+            // 重複的缺失is_repeat = 1
+            $defects->transform(function ($item) {
+                $item->is_repeat = 1;
+                return $item;
+            });
 
+            // 依照defect_id分類
+            $defectsGroup = $defects->groupBy('defect_id');
+            // 缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+            $defectsGroup = $defectsGroup->map(function ($item, $key) {
+                $item->first()->is_repeat = 0;
+                return $item;
+            });
 
             $task->task_date = Carbon::parse($task->task_date);
-            $defects->sum = $defects->where('is_ignore', 0)->sum('defect.deduct_point');
+
+            // 取得缺失群組底下扣分 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+            $sum = $defects->where('is_ignore', 0)->where('is_not_reach_deduct_standard', 0)->where('is_suggestion', 0)->where('is_repeat', 0)->sum(function ($item) {
+                return $item->defect->deduct_point;
+            });
         } else {
             $task->load('taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'taskHasClearDefects.restaurantWorkspace');
             // 只取得外場的缺失
@@ -649,21 +708,32 @@ class TaskController extends Controller
                 return $item;
             });
 
+
             $task->task_date = Carbon::parse($task->task_date);
-            $defects->sum = $defects->where('is_ignore', 0)->sum(function ($item) {
+            // 取得缺失群組底下扣分 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+            $sum = $defects->where('is_ignore', 0)->where('is_not_reach_deduct_standard', 0)->where('is_suggestion', 0)->sum(function ($item) {
                 return $item->clearDefect->deduct_point * $item->amount;
             });
         }
 
-        // 取得缺失總扣分，排除忽略扣分
+        // 重新排序 defects.defect.category = 重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
+        $defects = $defects->sortBy(function ($item) {
+            if ($item->defect && $item->defect->category == '重大缺失') {
+                return 1;
+            } elseif ($item->is_suggestion == 1 || $item->is_repeat == 1 || $item->is_not_reach_deduct_standard == 1 || $item->is_ignore == 1) {
+                return 3;
+            } else {
+                return 2;
+            }
+        });
 
 
         $filename = $task->restaurant->brand_code . $task->restaurant->shop . $task->category . '_外場_' . $task->task_date . '.pdf';
 
-        if ($task->category == '食安及5S') {
-            $view = \View::make('pdf.5s-outer', compact('task', 'defects'));
+        if ($task->category == '食安及5S' || $task->category == '食安及5S複稽') {
+            $view = \View::make('pdf.5s-outer', compact('task', 'defects', 'sum'));
         } else {
-            $view = \View::make('pdf.clear-outer', compact('task', 'defects'));
+            $view = \View::make('pdf.clear-outer', compact('task', 'defects', 'sum'));
         }
 
         $html = $view->render();

@@ -60,6 +60,25 @@
         </label>
     </div>
 
+    {{-- 未達扣分標準 --}}
+    <div class="form-check form-check-danger form-check-inline">
+        <input class="form-check-input" type="checkbox" id="is_not_reach_deduct_standard"
+            name="is_not_reach_deduct_standard" @if ($taskHasDefect && $taskHasDefect->is_not_reach_deduct_standard) checked @endif>
+        <label class="form-check-label" for="is_not_reach_deduct_standard">
+            未達扣分標準
+        </label>
+    </div>
+
+
+    {{-- 是否為建議事項 --}}
+    <div class="form-check form-check-danger form-check-inline">
+        <input class="form-check-input" type="checkbox" id="is_suggestion" name="is_suggestion"
+            @if ($taskHasDefect && $taskHasDefect->is_suggestion) checked @endif>
+        <label class="form-check-label" for="is_suggestion">
+            建議事項
+        </label>
+    </div>
+
 
 </div>
 

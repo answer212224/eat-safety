@@ -100,6 +100,8 @@ class DefectController extends Controller
             'restaurant_workspace_id' => $request->workspace,
             'images' => $images,
             'is_ignore' => $request->is_ignore ? 1 : 0,
+            'is_not_reach_deduct_standard' => $request->is_not_reach_deduct_standard ? 1 : 0,
+            'is_suggestion' => $request->is_suggestion ? 1 : 0,
             'memo' => $request->memo,
         ]);
         alert()->success('成功', '缺失已新增');
@@ -180,6 +182,8 @@ class DefectController extends Controller
             'is_ignore' => $request->is_ignore ? 1 : 0,
             'amount' => $request->demo3_21,
             'memo' => $request->memo,
+            'is_not_reach_deduct_standard' => $request->is_not_reach_deduct_standard ? 1 : 0,
+            'is_suggestion' => $request->is_suggestion ? 1 : 0,
         ]);
 
         alert()->success('成功', '缺失已新增');
@@ -202,8 +206,27 @@ class DefectController extends Controller
             return back();
         }
 
-        // 將缺失依照站台分類
+        $task->taskHasDefects->transform(function ($item) {
+            $item->is_repeat = 1;
+            return $item;
+        });
+        // 依照站台分類
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+        // 再依照缺失分類
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            return $item->groupBy('defect.id');
+        });
+
+        // 區站.缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            $item = $item->map(function ($item, $key) {
+
+                $item->first()->is_repeat = 0;
+
+                return $item;
+            });
+            return $item;
+        });
 
         return view('backend.tasks.task-defect', [
             'task' => $task,
@@ -214,26 +237,6 @@ class DefectController extends Controller
 
     public function clearShow(Task $task)
     {
-        // 檢查是否有餐點未採樣，如未採樣則判斷是否有原因
-        $isMealAllTaken = $task->meals->every(function ($value, $key) {
-            return $value->pivot->is_taken == 1 || $value->pivot->memo != null;
-        });
-
-        if (!$isMealAllTaken) {
-            alert()->warning('請確認', '尚有餐點未採樣，請說明原因後再進行下一步');
-            return back();
-        }
-
-        // 檢查是否有專案未檢查
-        $isProjectAllChecked = $task->projects->every(function ($value, $key) {
-            return $value->pivot->is_checked == 1;
-        });
-
-        if (!$isProjectAllChecked) {
-            alert()->warning('請確認', '尚有專案未檢查，請等待完成後再進行下一步');
-            return back();
-        }
-
         // 檢查是否有稽核員未完成稽核
         $isComplete = $task->taskUsers->pluck('is_completed');
         $isComplete = $isComplete->every(function ($value, $key) {
@@ -247,6 +250,22 @@ class DefectController extends Controller
 
         // 將缺失依照站台分類
         $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
+        // 再依照缺失分類
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            return $item->groupBy('clearDefect.id');
+        });
+
+        // 區站.缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            $item = $item->map(function ($item, $key) {
+
+                $item->first()->is_repeat = 0;
+
+                return $item;
+            });
+            return $item;
+        });
+
 
         return view('backend.tasks.task-defect', [
             'task' => $task,
@@ -295,6 +314,9 @@ class DefectController extends Controller
             'restaurant_workspace_id' => $request->workspace,
             'is_ignore' => $request->is_ignore ? 1 : 0,
             'memo' => $request->memo,
+            'is_not_reach_deduct_standard' => $request->is_not_reach_deduct_standard ? 1 : 0,
+            'is_suggestion' => $request->is_suggestion ? 1 : 0,
+            'updated_at' => now(),
         ]);
 
         alert()->success('成功', '食安缺失已更新');
@@ -316,6 +338,9 @@ class DefectController extends Controller
             'is_ignore' => $request->is_ignore ? 1 : 0,
             'amount' => $request->demo3_21,
             'memo' => $request->memo,
+            'updated_at' => now(),
+            'is_not_reach_deduct_standard' => $request->is_not_reach_deduct_standard ? 1 : 0,
+            'is_suggestion' => $request->is_suggestion ? 1 : 0,
         ]);
 
         alert()->success('成功', '清檢缺失已更新');
@@ -338,7 +363,7 @@ class DefectController extends Controller
         return redirect()->route('task-list');
     }
 
-    // 稽核員查看食安缺失
+    // 稽核員查看食安缺失(本來只要看自己 現在要看全部)
     public function owner(Task $task)
     {
         $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
@@ -348,7 +373,27 @@ class DefectController extends Controller
             return back();
         }
 
-        $defectsGroup = $task->taskHasDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
+        $task->taskHasDefects->transform(function ($item) {
+            $item->is_repeat = 1;
+            return $item;
+        });
+        // 依照站台分類
+        $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
+        // 再依照缺失分類
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            return $item->groupBy('defect.id');
+        });
+
+        // 區站.缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            $item = $item->map(function ($item, $key) {
+
+                $item->first()->is_repeat = 0;
+
+                return $item;
+            });
+            return $item;
+        });
 
         return view('backend.tasks.task-defect', [
             'task' => $task,
@@ -366,7 +411,29 @@ class DefectController extends Controller
             return back();
         }
 
-        $defectsGroup = $task->taskHasClearDefects->where('user_id', auth()->user()->id)->groupBy('restaurant_workspace_id');
+        $task->taskHasClearDefects->transform(function ($item) {
+            $item->is_repeat = 1;
+            return $item;
+        });
+
+        // 依照站台分類
+        $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
+        // 再依照缺失分類
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            return $item->groupBy('clear_defect.id');
+        });
+
+        // 區站.缺失分類只有一個is_repeat = 0 兩個以上 is_repeat = 1 並且只取一個 is_repeat = 0
+        $defectsGroup = $defectsGroup->map(function ($item, $key) {
+            $item = $item->map(function ($item, $key) {
+
+                $item->first()->is_repeat = 0;
+
+                return $item;
+            });
+            return $item;
+        });
+
 
         return view('backend.tasks.task-defect', [
             'task' => $task,

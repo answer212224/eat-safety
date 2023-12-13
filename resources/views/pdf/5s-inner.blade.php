@@ -67,7 +67,7 @@
                 <tr>
                     @foreach ($defectsFlat->first()->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
                         </td>
                     @endforeach
                 </tr>
@@ -84,8 +84,23 @@
                 <tr>
                     <td colspan="3" align="">原始扣分
                     </td>
-                    <td colspan="9" align="">{{ $defectsFlat->first()->defect->deduct_point }}</td>
+                    <td colspan="3" align="">{{ $defectsFlat->first()->defect->deduct_point }}</td>
+                    <td colspan="3" align="">實際扣分
+                    </td>
+                    <td colspan="3" align="">
+                        @if (
+                            $defectsFlat->first()->is_ignore ||
+                                $defectsFlat->first()->is_not_reach_deduct_standard ||
+                                $defectsFlat->first()->is_suggestion ||
+                                $defectsFlat->first()->is_repeat)
+                            0
+                        @else
+                            {{ $defectsFlat->first()->defect->deduct_point }}
+                        @endif
+                    </td>
+
                 </tr>
+
                 <tr>
                     <td colspan="3" align="">報告呈現說明</td>
                     <td colspan="9" align="">{{ $defectsFlat->first()->defect->report_description }}</td>
@@ -96,6 +111,15 @@
                         {{ $defectsFlat->first()->memo }}
                         @if ($defectsFlat->first()->is_ignore)
                             <span style="color: red">（忽略扣分）</span>
+                        @endif
+                        @if ($defectsFlat->first()->is_not_reach_deduct_standard)
+                            <span style="color: red">（未達扣分標準）</span>
+                        @endif
+                        @if ($defectsFlat->first()->is_suggestion)
+                            <span style="color: red">（建議事項）</span>
+                        @endif
+                        @if ($defectsFlat->first()->is_repeat)
+                            <span style="color: red">（重複缺失）</span>
                         @endif
                     </td>
                 </tr>
@@ -117,7 +141,7 @@
                 <tr>
                     @foreach ($item->images as $image)
                         <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="200px">
+                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
                         </td>
                     @endforeach
                 </tr>
@@ -134,8 +158,18 @@
                 <tr>
                     <td colspan="3" align="">原始扣分
                     </td>
-                    <td colspan="9" align="">{{ $item->defect->deduct_point }}</td>
+                    <td colspan="3" align="">{{ $item->defect->deduct_point }}</td>
+                    <td colspan="3" align="">實際扣分
+                    </td>
+                    <td colspan="3" align="">
+                        @if ($item->is_ignore || $item->is_not_reach_deduct_standard || $item->is_suggestion || $item->is_repeat)
+                            0
+                        @else
+                            {{ $item->defect->deduct_point }}
+                        @endif
+                    </td>
                 </tr>
+
                 <tr>
                     <td colspan="3" align="">報告呈現說明</td>
                     <td colspan="9" align="">{{ $item->defect->report_description }}</td>
@@ -146,6 +180,15 @@
                         {{ $item->memo }}
                         @if ($item->is_ignore)
                             <span style="color: red">（忽略扣分）</span>
+                        @endif
+                        @if ($item->is_not_reach_deduct_standard)
+                            <span style="color: red">（未達扣分標準）</span>
+                        @endif
+                        @if ($item->is_suggestion)
+                            <span style="color: red">（建議事項）</span>
+                        @endif
+                        @if ($item->is_repeat)
+                            <span style="color: red">（重複缺失）</span>
                         @endif
                     </td>
                 </tr>
