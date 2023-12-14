@@ -242,6 +242,15 @@
             @if (Request::routeIs('task-defect-show') || Request::routeIs('task-clear-defect-show'))
                 <div class="widget-content widget-content-area blog-create-section mt-4">
 
+                    {{-- 分數 --}}
+                    <div class="row mb-4">
+                        <div class="col-xxl-12">
+                            <h5 class="mb-4">{{ $task->category }}分數: {{ 100 + $totalScore }}</h5>
+
+
+                        </div>
+                    </div>
+                    <hr />
                     <h5 class="mb-4">採樣 {{ $task->meals->count() }} 項: </h5>
 
                     <div class="row mb-4">
@@ -304,9 +313,7 @@
                                 <input type="text" name="inner_manager" value="{{ $task->inner_manager }}"
                                     class="form-control" id="formGroupExampleInput2" placeholder="" required>
                             </div>
-
                             <button type="submit" class="btn btn-success w-100">核對完成</button>
-
                         </form>
                     </div>
                 </div>

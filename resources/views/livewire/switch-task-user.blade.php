@@ -117,10 +117,10 @@
                         @endif
                         @if ($task->category != '餐點採樣')
                             <a href="{{ route('task-inner-report', ['task' => $task]) }}" class="dropdown-item"
-                                target="_blank">內場稽核報告下載
+                                target="_blank">內場稽核報告
                             </a>
                             <a href="{{ route('task-outer-report', ['task' => $task]) }}" class="dropdown-item"
-                                target="_blank">外場稽核報告下載
+                                target="_blank">外場稽核報告
                             </a>
                         @endif
 

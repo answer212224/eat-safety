@@ -219,13 +219,21 @@ class DefectController extends Controller
             return back();
         }
 
+        // 計算分數 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+        $totalScore = 0;
+        foreach ($task->taskHasDefects as $defect) {
+            if ($defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
+                $totalScore += $defect->defect->deduct_point;
+            }
+        }
         // 依照站台分類
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
 
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'defectsGroup' => $defectsGroup,
-            'title' => '主管食安核對缺失'
+            'title' => '主管食安核對缺失',
+            'totalScore' => $totalScore,
         ]);
     }
 
@@ -243,13 +251,23 @@ class DefectController extends Controller
             return back();
         }
 
+
+        // 計算分數 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+        $totalScore = 0;
+        foreach ($task->taskHasClearDefects as $defect) {
+            if ($defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
+                $totalScore += $defect->clearDefect->deduct_point;
+            }
+        }
+
         // 將缺失依照站台分類
         $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
 
         return view('backend.tasks.task-defect', [
             'task' => $task,
             'defectsGroup' => $defectsGroup,
-            'title' => '主管清檢核對缺失'
+            'title' => '主管清檢核對缺失',
+            'totalScore' => $totalScore,
         ]);
     }
 
