@@ -52,11 +52,15 @@ class RestaurantWorkspace extends Model
     }
 
     /**
-     * 取得is_ignore = 0 的資料
+     * 取得is_ignore = 0 ,is_not_reach_deduct_standard = 0, is_suggestion = 0, is_repeat=0 的資料
      */
     public function taskHasDefectsNotIgnore()
     {
-        return $this->hasMany(TaskHasDefect::class)->where('is_ignore', 0);
+        return $this->hasMany(TaskHasDefect::class)
+            ->where('is_ignore', 0)
+            ->where('is_not_reach_deduct_standard', 0)
+            ->where('is_suggestion', 0)
+            ->where('is_repeat', 0);
     }
 
     /**
@@ -68,10 +72,13 @@ class RestaurantWorkspace extends Model
     }
 
     /**
-     * 取得is_ignore = 0 的資料
+     * 取得is_ignore = 0 ,is_not_reach_deduct_standard = 0, is_suggestion = 0 的資料
      */
     public function taskHasClearDefectsNotIgnore()
     {
-        return $this->hasMany(TaskHasClearDefect::class)->where('is_ignore', 0);
+        return $this->hasMany(TaskHasClearDefect::class)
+            ->where('is_ignore', 0)
+            ->where('is_not_reach_deduct_standard', 0)
+            ->where('is_suggestion', 0);
     }
 }

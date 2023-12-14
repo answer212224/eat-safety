@@ -94,14 +94,10 @@
                                         class="badge badge-primary">
                                         食安缺失
                                     </a>
-                                    {{-- 清檢圖表 --}}
-                                    <a href="{{ route('restaurant-clear-chart', ['restaurant' => $restaurant]) }}"
-                                        class="badge badge-info">
-                                        清檢圖表
-                                    </a>
                                     <a href="{{ route('restaurant-clear-defects', ['restaurant' => $restaurant]) }}"
                                         class="badge badge-info">
                                         清檢缺失
+                                    </a>
                                 </td>
 
 
