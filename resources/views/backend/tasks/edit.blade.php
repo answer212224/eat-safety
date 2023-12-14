@@ -1,4 +1,4 @@
-<x-base-layout :scrollspy="true">
+<x-base-layout :scrollspy="false">
     <x-slot:pageTitle>
         {{ $title }}
     </x-slot:pageTitle>
@@ -20,33 +20,12 @@
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot:headerFiles>
     <!-- END GLOBAL MANDATORY STYLES -->
-    <x-slot:scrollspyConfig>
-        data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100"
-    </x-slot>
 
-    <div class="page-meta">
-        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">稽核任務</a></li>
-                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('task-assign') }}">稽核行事曆</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
-            </ol>
-        </nav>
-    </div>
-
-
-    <div id="navSection" data-bs-spy="affix" class="nav sidenav">
-        <div class="sidenav-content">
-            <a href="#Task" class="active nav-link">稽核任務</a>
-            <a href="#Defect" class="nav-link">稽核缺失</a>
-            <a href="#Action" class="nav-link">操作</a>
-        </div>
-    </div>
     <form action="{{ route('task-update', ['task' => $task]) }}" method="post" id="formput">
         @method('put')
         @csrf
         <div class="row layout-top-spacing">
-            <div id="Task" class="col-lg-12 layout-spacing">
+            <div id="Task" class="col-lg-8">
                 <div class="statbox widget box box-shadow">
                     <div class="widget-header">
 
@@ -118,9 +97,9 @@
                                         {{-- 食安及5S複稽 --}}
                                         <div class="n-chk">
                                             <div class="form-check form-check-danger form-check-inline">
-                                                <input class="form-check-input" type="radio" name="category"
-                                                    disabled @if ($task->category == '食安及5S複稽') checked @endif
-                                                    value="食安及5S複稽" id="re">
+                                                <input class="form-check-input" type="radio" name="category" disabled
+                                                    @if ($task->category == '食安及5S複稽') checked @endif value="食安及5S複稽"
+                                                    id="re">
                                                 <label class="form-check-label" for="re">食安及5S複稽</label>
                                             </div>
                                         </div>
@@ -171,30 +150,6 @@
                                     <input type="text" name="end_time" class="form-control" disabled
                                         value="{{ $task->end_at }}">
                                 </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="form-label">內場分數</label>
-                                    <input type="text" value="{{ 100 + $backScore }}" class="form-control"
-                                        disabled>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="form-label">外場分數</label>
-                                    <input type="text" value="{{ 100 + $frontScore }}" class="form-control"
-                                        disabled>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="form-label">外場主管</label>
-                                    <input type="text" value="{{ $task->outer_manager }}" class="form-control"
-                                        disabled>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="form-label">內場主管</label>
-                                    <input type="text" value="{{ $task->inner_manager }}" class="form-control"
-                                        disabled>
-                                </div>
                             </div>
 
                             <div class="col-lg-6 col-12 ">
@@ -243,181 +198,7 @@
                 </div>
             </div>
 
-            <div id="Defect" class="col-lg-12 layout-spacing mt-4">
-                <div class="statbox widget box box-shadow">
-                    <div class="widget-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>稽核缺失</h4>
-                            </div>
-
-
-                        </div>
-                    </div>
-                    <div class="widget-content widget-content-area">
-
-                        <div class="row">
-                            @foreach ($defectsGroup as $defects)
-                                <a class="btn btn-outline-secondary my-1 d-grid gap-2" data-bs-toggle="collapse"
-                                    href="#collapseExample{{ $defects[0]->id }}" aria-expanded="true">
-                                    {{ $defects[0]->restaurantWorkspace->area }}
-                                </a>
-                                <div class="collapse show my-1" id="collapseExample{{ $defects[0]->id }}">
-                                    @foreach ($defects as $taskHasDefect)
-                                        <div class="card style-2 mb-4">
-                                            @if ($task->category == '食安及5S')
-                                                <div class="card-body px-0 pb-0">
-                                                    <div class="row p-1">
-                                                        <div class="col-3">照片</div>
-                                                        <div class="col-9">
-                                                            @foreach ($taskHasDefect->images as $image)
-                                                                <img src="{{ asset('storage/' . $image) }}"
-                                                                    class="card-img-top my-1" alt="...">
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">缺失分類</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->defect->group }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">子項目</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->defect->title }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">稽核標準</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->defect->description }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">扣分</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->defect->deduct_point }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">缺失類別</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->defect->category }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">忽略扣分</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->is_ignore ? '是' : '否' }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">稽核人員</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->user->name }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">建立時間</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->created_at }}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row p-1">
-                                                        <div class="col-3">備註</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->memo }}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            @else
-                                                <div class="card-body px-0 pb-0">
-                                                    <div class="row p-1">
-                                                        <div class="col-3">照片</div>
-                                                        <div class="col-9">
-                                                            @foreach ($taskHasDefect->images as $image)
-                                                                <img src="{{ asset('storage/' . $image) }}"
-                                                                    class="card-img-top my-1" alt="...">
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">主項目</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->clearDefect->main_item }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">次項目</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->clearDefect->sub_item }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">數量</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->amount }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">缺失說明</div>
-                                                        <div class="col-9">
-                                                            @if ($taskHasDefect->description == null)
-                                                                無
-                                                            @else
-                                                                {{-- array to string --}}
-                                                                @foreach ($taskHasDefect->description as $description)
-                                                                    {{ $description }}
-                                                                @endforeach
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">扣分(計分方式: -2 * 數量)</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->clearDefect->deduct_point * $taskHasDefect->amount }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">忽略扣分</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->is_ignore ? '是' : '否' }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">稽核人員</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->user->name }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">建立時間</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->created_at }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row p-1">
-                                                        <div class="col-3">備註</div>
-                                                        <div class="col-9">
-                                                            {{ $taskHasDefect->memo }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="Action" class="col-lg-12 layout-spacing mt-4">
+            <div id="Action" class="col-lg-4">
                 <div class="statbox widget box box-shadow">
                     <div class="widget-header">
                         <div class="row">
@@ -430,15 +211,15 @@
                     <div class="widget-content widget-content-area">
                         <div class="row">
                             @can('update-task')
-                                <a class="btn btn-primary mb-3" onclick="checkTask({{ $task->id }})">更新</a>
+                                <a class="btn btn-success mb-3" onclick="checkTask({{ $task->id }})">更新</a>
                             @endcan
 
-                            @if ($task->status == 'completed' && $task->category != '餐點採樣')
+                            @if ($task->category != '餐點採樣')
                                 <a href="{{ route('task-inner-report', ['task' => $task]) }}"
-                                    class="btn btn-info mb-3" target="_blank">內場稽核報告下載
+                                    class="btn btn-info mb-3" target="_blank">內場稽核報告
                                 </a>
                                 <a href="{{ route('task-outer-report', ['task' => $task]) }}"
-                                    class="btn btn-info mb-3" target="_blank">外場稽核報告下載
+                                    class="btn btn-info mb-3" target="_blank">外場稽核報告
                                 </a>
                             @endif
 

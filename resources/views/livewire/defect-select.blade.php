@@ -67,5 +67,14 @@
         </label>
     </div>
 
+    {{-- 是否為重複缺失 --}}
+    <div class="form-check form-check-danger form-check-inline">
+        <input class="form-check-input" type="checkbox" id="is_repeat" name="is_repeat"
+            @if ($taskHasDefect && $taskHasDefect->is_repeat) checked @endif>
+        <label class="form-check-label" for="is_repeat">
+            重複缺失
+        </label>
+    </div>
+
 
 </div>
