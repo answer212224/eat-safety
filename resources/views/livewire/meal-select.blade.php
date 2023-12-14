@@ -107,7 +107,7 @@
         {{-- 採樣checkbox end --}}
     </div>
 
-    @if ($category == '食安及5S' || $category == '食安及5S複稽')
+    @if ($category == '食安及5S' || $category == '食安及5S複稽' || $category == '清潔檢查')
         <div class="row my-3">
             <div class="col-md-12">
                 <div class="form-check form-switch form-check-inline form-switch-warning">
