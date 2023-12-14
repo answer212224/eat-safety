@@ -142,31 +142,27 @@ class UserController extends Controller
         // Create a Carbon instance for the year and month
         $yearMonth = Carbon::create($yearMonth);
 
-        // Retrieve all users with status 0 or 1
-        $statuses = auth()->user()->hasRole('super-admin') ? [0, 1, 8] : [0, 1];
-        $allusers = User::whereIn('status', $statuses)->get();
-        $users = User::whereIn('status', $statuses);
+        // role has 
+        $allusers = User::role('auditor')->get();
 
-        // Filter users by selected user IDs, if any
-        if (count($selectUsers) > 0) {
-            $users = $users->whereIn('id', $selectUsers);
-        }
-
-        // Retrieve the filtered users
-        $users = $users->get();
+        $users = User::role('auditor')->with('tasks')->get();
 
         // Calculate the defect count and clear defect count for each user
         $users->each(function ($user) use ($yearMonth) {
             $user->load('taskHasDefects', 'taskHasClearDefects', 'tasks');
 
-            // Filter taskHasDefects by the specified year and month
+            // Filter taskHasDefects by the specified year and month or is_ignore = 1 ,is_not_reach_deduct_standard = 1, is_suggestion = 1, is_repeat=1
             $defectCount = $user->taskHasDefects->filter(function ($taskHasDefect) use ($yearMonth) {
                 return $taskHasDefect->created_at->year == $yearMonth->year && $taskHasDefect->created_at->month == $yearMonth->month;
+            })->filter(function ($taskHasDefect) {
+                return $taskHasDefect->is_ignore == 0 && $taskHasDefect->is_not_reach_deduct_standard == 0 && $taskHasDefect->is_suggestion == 0 && $taskHasDefect->is_repeat == 0;
             })->count();
 
-            // Filter taskHasClearDefects by the specified year and month
+            // Filter taskHasClearDefects by the specified year and month or is_ignore = 1 ,is_not_reach_deduct_standard = 1, is_suggestion = 1
             $clearDefectCount = $user->taskHasClearDefects->filter(function ($taskHasClearDefect) use ($yearMonth) {
                 return $taskHasClearDefect->created_at->year == $yearMonth->year && $taskHasClearDefect->created_at->month == $yearMonth->month;
+            })->filter(function ($taskHasClearDefect) {
+                return $taskHasClearDefect->is_ignore == 0 && $taskHasClearDefect->is_not_reach_deduct_standard == 0 && $taskHasClearDefect->is_suggestion == 0;
             })->count();
 
             // Assign the defect count and clear defect count to the user

@@ -83,6 +83,7 @@
                                 <th>忽略扣分</th>
                                 <th>未達扣分標準</th>
                                 <th>建議事項</th>
+                                <th>重複缺失</th>
                                 <th>建立時間</th>
                             </tr>
                         </thead>
@@ -103,6 +104,7 @@
                                     <td>{{ $defectRecord->is_ignore ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->is_not_reach_deduct_standard ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->is_suggestion ? '是' : '' }}</td>
+                                    <td>{{ $defectRecord->is_repeat ? '是' : '' }}</td>
                                     <td>{{ $defectRecord->created_at }}</td>
                                 </tr>
                             @endforeach
