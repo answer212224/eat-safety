@@ -95,15 +95,35 @@
                             </div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-3">扣分</div>
+                            <div class="col-3">原始扣分</div>
                             <div class="col-9">
                                 {{ $taskHasDefect->defect->deduct_point }}
                             </div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-3">忽略扣分</div>
+                            <div class="col-3">實際扣分</div>
                             <div class="col-9">
-                                {{ $taskHasDefect->is_ignore ? '是' : '否' }}
+                                @if (
+                                    $taskHasDefect->is_ignore ||
+                                        $taskHasDefect->is_not_reach_deduct_standard ||
+                                        $taskHasDefect->is_suggestion ||
+                                        $taskHasDefect->is_repeat)
+                                    0 @if ($taskHasDefect->is_ignore)
+                                        (忽略扣分)
+                                    @endif
+                                    @if ($taskHasDefect->is_not_reach_deduct_standard)
+                                        (未達扣分標準)
+                                    @endif
+                                    @if ($taskHasDefect->is_suggestion)
+                                        (建議事項)
+                                    @endif
+                                    @if ($taskHasDefect->is_repeat)
+                                        (重複)
+                                    @endif
+                                @else
+                                    {{ $taskHasDefect->defect->deduct_point }}
+                                @endif
+
                             </div>
                         </div>
                         <div class="row p-1">

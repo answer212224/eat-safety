@@ -96,9 +96,32 @@
                             </div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-3">扣分(計分方式: -2 * 數量)</div>
+                            <div class="col-3">原始扣分</div>
                             <div class="col-9">
                                 {{ $taskHasClearDefect->clearDefect->deduct_point * $taskHasClearDefect->amount }}
+                            </div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-3">實際扣分</div>
+                            <div class="col-9">
+                                @if (
+                                    $taskHasClearDefect->is_ignore ||
+                                        $taskHasClearDefect->is_not_reach_deduct_standard ||
+                                        $taskHasClearDefect->is_suggestion)
+                                    0
+                                    @if ($taskHasClearDefect->is_ignore)
+                                        (忽略扣分)
+                                    @endif
+                                    @if ($taskHasClearDefect->is_not_reach_deduct_standard)
+                                        (未達扣分標準)
+                                    @endif
+                                    @if ($taskHasClearDefect->is_suggestion)
+                                        (建議事項)
+                                    @endif
+                                @else
+                                    {{ $taskHasClearDefect->clearDefect->deduct_point * $taskHasClearDefect->amount }}
+                                @endif
+
                             </div>
                         </div>
                         <div class="row p-1">

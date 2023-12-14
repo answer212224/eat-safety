@@ -357,9 +357,13 @@ class RestaurantController extends Controller
         }
 
         $restaurants->load(['restaurantWorkspaces.taskHasDefects' => function ($query) use ($yearMonth) {
-            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month);
+            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month)
+                // is_ignore = 1 ,is_not_reach_deduct_standard = 1, is_suggestion = 1, is_repeat=1
+                ->where('is_ignore', 0)->where('is_not_reach_deduct_standard', 0)->where('is_suggestion', 0)->where('is_repeat', 0);
         }, 'restaurantWorkspaces.taskHasClearDefects' => function ($query) use ($yearMonth) {
-            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month);
+            $query->whereYear('created_at', $yearMonth->year)->whereMonth('created_at', $yearMonth->month)
+                // is_ignore = 1 ,is_not_reach_deduct_standard = 1, is_suggestion = 1
+                ->where('is_ignore', 0)->where('is_not_reach_deduct_standard', 0)->where('is_suggestion', 0);
         }]);
 
         // 計算各門市的食安缺失數量 key = 門市brand+shop
