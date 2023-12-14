@@ -245,9 +245,8 @@
                     {{-- 分數 --}}
                     <div class="row mb-4">
                         <div class="col-xxl-12">
-                            <h5 class="mb-4">{{ $task->category }}分數: {{ 100 + $totalScore }}</h5>
-
-
+                            <h5 class="mb-4">{{ $task->category }}內場分數: {{ 100 + $totalInnerScore }}</h5>
+                            <h5 class="mb-4">{{ $task->category }}外場分數: {{ 100 + $totalOuterScore }}</h5>
                         </div>
                     </div>
                     <hr />

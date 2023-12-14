@@ -206,7 +206,7 @@ class DefectController extends Controller
     // 主管食安核對缺失 使用同一個view 回傳不同的資料
     public function show(Task $task)
     {
-        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects']);
+        $task = $task->load(['taskHasDefects.defect', 'taskHasDefects.user', 'meals', 'projects', 'taskHasDefects.restaurantWorkspace']);
 
         // 檢查是否有稽核員未完成稽核
         $isComplete = $task->taskUsers->pluck('is_completed');
@@ -219,13 +219,24 @@ class DefectController extends Controller
             return back();
         }
 
-        // 計算分數 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
-        $totalScore = 0;
+        // 計算內場分數 taskHasDefects.taskHasDefects where area not like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+        $totalInnerScore = 0;
         foreach ($task->taskHasDefects as $defect) {
-            if ($defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
-                $totalScore += $defect->defect->deduct_point;
+            if ($defect->restaurantWorkspace->area != '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
+                $totalInnerScore += $defect->defect->deduct_point;
             }
         }
+
+        // 計算外場分數 taskHasDefects.taskHasDefects where area like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+        $totalOuterScore = 0;
+        foreach ($task->taskHasDefects as $defect) {
+            if ($defect->restaurantWorkspace->area == '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
+                $totalOuterScore += $defect->defect->deduct_point;
+            }
+        }
+
         // 依照站台分類
         $defectsGroup = $task->taskHasDefects->groupBy('restaurant_workspace_id');
 
@@ -233,12 +244,14 @@ class DefectController extends Controller
             'task' => $task,
             'defectsGroup' => $defectsGroup,
             'title' => '主管食安核對缺失',
-            'totalScore' => $totalScore,
+            'totalInnerScore' => $totalInnerScore,
+            'totalOuterScore' => $totalOuterScore,
         ]);
     }
 
     public function clearShow(Task $task)
     {
+        $task->load(['taskHasClearDefects.clearDefect', 'taskHasClearDefects.user', 'meals', 'projects', 'taskHasClearDefects.restaurantWorkspace']);
         // 檢查是否有稽核員未完成稽核
         $isComplete = $task->taskUsers->pluck('is_completed');
 
@@ -251,14 +264,24 @@ class DefectController extends Controller
             return back();
         }
 
-
-        // 計算分數 is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
-        $totalScore = 0;
+        // 計算內場分數 taskHasDefects.taskHasDefects where area not like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+        $totalInnerScore = 0;
         foreach ($task->taskHasClearDefects as $defect) {
-            if ($defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
-                $totalScore += $defect->clearDefect->deduct_point;
+            if ($defect->restaurantWorkspace->area != '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
+                $totalInnerScore += $defect->clearDefect->deduct_point * $defect->amount;
             }
         }
+
+        // 計算外場分數 taskHasDefects.taskHasDefects where area like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+        $totalOuterScore = 0;
+        foreach ($task->taskHasClearDefects as $defect) {
+            if ($defect->restaurantWorkspace->area == '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
+                $totalOuterScore += $defect->clearDefect->deduct_point * $defect->amount;
+            }
+        }
+
 
         // 將缺失依照站台分類
         $defectsGroup = $task->taskHasClearDefects->groupBy('restaurant_workspace_id');
@@ -267,7 +290,8 @@ class DefectController extends Controller
             'task' => $task,
             'defectsGroup' => $defectsGroup,
             'title' => '主管清檢核對缺失',
-            'totalScore' => $totalScore,
+            'totalInnerScore' => $totalInnerScore,
+            'totalOuterScore' => $totalOuterScore,
         ]);
     }
 
