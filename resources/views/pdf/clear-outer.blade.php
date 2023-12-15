@@ -47,19 +47,44 @@
                     外場：{{ 100 + $sum }}分，缺失數 {{ $defects->count() }} 項
                 </td>
             </tr>
-            {{-- 顯示第一個defects --}}
-            @if ($defects->first())
+        </table>
+        {{-- 顯示第一個defects --}}
+        @if ($defects->first())
+            <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
                 <tr>
                     <td colspan="12" align="center" style="background-color:bisque">
                         {{ $defects->first()->restaurantWorkspace->area }}</td>
                 </tr>
                 <tr>
-                    @foreach ($defects->first()->images as $image)
-                        <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
-                        </td>
-                    @endforeach
+                    <td colspan="6" style="text-align: center">
+                        @isset($defects->first()->images[0])
+                            <img src="data:image/png;base64,{{ $defects->first()->images[0] }}" alt="test"
+                                width="150px">
+                        @endisset
+                    </td>
+                    <td colspan="6" style="text-align: center">
+                        @isset($defects->first()->images[1])
+                            <img src="data:image/png;base64,{{ $defects->first()->images[1] }}" alt="test"
+                                width="150px">
+                        @endisset
+                    </td>
                 </tr>
+                @isset($defects->first()->images[2])
+                    <tr>
+                        <td colspan="6" style="text-align: center">
+                            @isset($defects->first()->images[2])
+                                <img src="data:image/png;base64,{{ $defects->first()->images[2] }}" alt="test"
+                                    width="150px">
+                            @endisset
+                        </td>
+                        <td colspan="6" style="text-align: center">
+                            @isset($defects->first()->images[3])
+                                <img src="data:image/png;base64,{{ $defects->first()->images[3] }}" alt="test"
+                                    width="150px">
+                            @endisset
+                        </td>
+                    </tr>
+                @endisset
                 <tr>
                     <td colspan="3" align="">主項目</td>
                     <td colspan="9" align="">{{ $defects->first()->clearDefect->main_item }}</td>
@@ -112,29 +137,47 @@
                         @endif
                     </td>
                 </tr>
-            @endif
-        </table>
-        @if ($defects->count() > 1)
-            {{-- 換頁 --}}
+            </table>
             <div style="page-break-after:always"></div>
-            {{-- 換頁 --}}
         @endif
 
         {{-- 忽略第一個defects --}}
         @foreach ($defects->skip(1) as $item)
             <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">
-
                 <tr>
                     <td colspan="12" align="center" style="background-color:bisque">
                         {{ $item->restaurantWorkspace->area }}</td>
                 </tr>
                 <tr>
-                    @foreach ($item->images as $image)
-                        <td colspan="6" style="text-align: center">
-                            <img src="data:image/png;base64,{{ $image }}" alt="test" width="150px">
-                        </td>
-                    @endforeach
+                    <td colspan="6" style="text-align: center">
+                        @isset($item->images[0])
+                            <img src="data:image/png;base64,{{ $item->images[0] }}"
+                                width="{{ count($item->images) >= 3 ? '80px' : '150px' }}" alt="test">
+                        @endisset
+                    </td>
+                    <td colspan="6" style="text-align: center">
+                        @isset($item->images[1])
+                            <img src="data:image/png;base64,{{ $item->images[1] }}" alt="test"
+                                width="{{ count($item->images) >= 3 ? '80px' : '150px' }}">
+                        @endisset
+                    </td>
                 </tr>
+                @isset($item->images[2])
+                    <tr>
+                        <td colspan="6" style="text-align: center">
+                            @isset($item->images[2])
+                                <img src="data:image/png;base64,{{ $item->images[2] }}" alt="test"
+                                    width="{{ count($item->images) >= 3 ? '80px' : '150px' }}">
+                            @endisset
+                        </td>
+                        <td colspan="6" style="text-align: center">
+                            @isset($item->images[3])
+                                <img src="data:image/png;base64,{{ $item->images[3] }}" alt="test"
+                                    width="{{ count($item->images) >= 3 ? '80px' : '150px' }}">
+                            @endisset
+                        </td>
+                    </tr>
+                @endisset
                 <tr>
                     <td colspan="3" align="">主項目</td>
                     <td colspan="9" align="">{{ $item->clearDefect->main_item }}</td>
@@ -190,9 +233,7 @@
             </table>
             {{-- 每兩次換頁，如果是最後一個就不要 --}}
             @if ($loop->iteration % 2 == 0 && !$loop->last)
-                {{-- 換頁 --}}
                 <div style="page-break-after:always"></div>
-                {{-- 換頁 --}}
             @endif
         @endforeach
     </div>

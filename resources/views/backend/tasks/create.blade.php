@@ -115,7 +115,7 @@
                                     <label for="filepond">上傳照片</label>
                                     {{-- 限制圖片 --}}
                                     <input type="file" class="file-upload-multiple" name="filepond[]" multiple
-                                        data-allow-reorder="true" data-max-file-size="4MB" data-max-files="2"
+                                        data-allow-reorder="true" data-max-file-size="4MB" data-max-files="4"
                                         id="filepond">
                                 </div>
 
