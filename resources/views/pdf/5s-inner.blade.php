@@ -14,7 +14,7 @@
     <div class="header">
         <img src="https://foodsafety.feastogether.com.tw/build/assets/logoWithText.1dcdeb88.png" alt=""
             style="width: 50px">
-        <span>{{ $task->category }}</span>
+        <span>{{ $task->category }}內場稽核報告</span>
     </div>
     <div class="table">
         <table border="1" width="100%" height="100%" style="padding: 2px;margin-top: 10px;">

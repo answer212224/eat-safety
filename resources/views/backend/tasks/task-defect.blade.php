@@ -193,7 +193,7 @@
                                                     (建議事項)
                                                 @endif
                                                 @if ($taskHasDefect->is_repeat)
-                                                    (重複)
+                                                    (重複缺失)
                                                 @endif
                                             @else
                                                 {{ $taskHasDefect->defect->deduct_point }}
