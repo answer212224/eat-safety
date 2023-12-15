@@ -86,12 +86,9 @@
                     <td colspan="9" align="">{{ $defectsFlat->first()->amount }}</td>
                 </tr>
                 <tr>
-                    {{-- 原始扣分 --}}
-                    <td colspan="3" align="">原始扣分</td>
-                    <td colspan="3" align="">{{ $defectsFlat->first()->amount * -2 }}</td>
                     {{-- 實際扣分 --}}
                     <td colspan="3" align="">實際扣分</td>
-                    <td colspan="3" align="">
+                    <td colspan="9" align="">
                         @if (
                             $defectsFlat->first()->is_ignore ||
                                 $defectsFlat->first()->is_not_reach_deduct_standard ||
@@ -164,12 +161,9 @@
                     <td colspan="9" align="">{{ $item->amount }}</td>
                 </tr>
                 <tr>
-                    {{-- 原始扣分 --}}
-                    <td colspan="3" align="">原始扣分</td>
-                    <td colspan="3" align="">{{ $item->amount * -2 }}</td>
                     {{-- 實際扣分 --}}
                     <td colspan="3" align="">實際扣分</td>
-                    <td colspan="3" align="">
+                    <td colspan="9" align="">
                         @if ($item->is_ignore || $item->is_not_reach_deduct_standard || $item->is_suggestion)
                             0
                         @else
