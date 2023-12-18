@@ -145,7 +145,12 @@ class UserController extends Controller
         // role has 
         $allusers = User::role('auditor')->get();
 
-        $users = User::role('auditor')->with('tasks')->get();
+        if ($selectUsers) {
+            $users = User::role('auditor')->whereIn('id', $selectUsers)->with('tasks')->get();
+        } else {
+            $users = User::role('auditor')->with('tasks')->get();
+        }
+
 
         // Calculate the defect count and clear defect count for each user
         $users->each(function ($user) use ($yearMonth) {
