@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ChartController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ClearDefectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealController;
@@ -14,6 +14,8 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RowDataController;
 use App\Http\Controllers\TaskMealController;
+use App\Http\Controllers\V2\TaskController as V2TaskController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -229,6 +231,59 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
         });
     });
 });
+
+Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function () {
+    Route::prefix('app')->group(function () {
+        Route::prefix('task')->group(function () {
+            // 稽核任務v2
+            Route::get('/index', [V2TaskController::class, 'index'])->name('v2.app.tasks.index');
+            // 新增食安缺失頁面v2
+            Route::get('/{task}/defect/create', [V2TaskController::class, 'createDefect'])->name('v2.app.tasks.defect.create');
+            // 新增清檢缺失頁面v2
+            Route::get('/{task}/clear-defect/create', [V2TaskController::class, 'createClearDefect'])->name('v2.app.tasks.clear-defect.create');
+            // 食安稽核紀錄頁面v2
+            Route::get('/{task}/defect/edit', [V2TaskController::class, 'editDefect'])->name('v2.app.tasks.defect.edit');
+            // 清檢稽核紀錄頁面v2
+            Route::get('/{task}/clear-defect/edit', [V2TaskController::class, 'editClearDefect'])->name('v2.app.tasks.clear-defect.edit');
+        });
+    });
+});
+
+Route::prefix('api')->middleware(['auth'])->group(function () {
+    // 取得使用者的任務列表
+    Route::get('/user/tasks', [ApiController::class, 'getUserTasks'])->name('api.user.tasks');
+    // 修改使用者的任務狀態
+    Route::put('/user/tasks/{task}', [ApiController::class, 'updateUserTaskStatus'])->name('api.user.tasks.update');
+    // 修改任務的多筆專案是否查核
+    Route::put('/tasks/{task}/projects', [ApiController::class, 'updateTaskProjectStatus'])->name('api.user.tasks.projects.update');
+    // 修改任務的多筆採樣是否帶回和備註
+    Route::put('/tasks/{task}/meals', [ApiController::class, 'updateTaskMealStatus'])->name('api.user.tasks.meals.update');
+    // 取得任務相關的資料
+    Route::get('/tasks/{task}', [ApiController::class, 'getTask'])->name('api.user.tasks.get');
+    // 取得該月啟用的食安缺失條文
+    Route::get('/defects/active', [ApiController::class, 'getActiveDefects'])->name('api.defects.active');
+    // 取得該月啟用的清檢缺失條文
+    Route::get('/clear-defects/active', [ApiController::class, 'getActiveClearDefects'])->name('api.clear-defects.active');
+    // 取得該任務食安缺失資料依照區站分類
+    Route::get('/tasks/{task}/defects', [ApiController::class, 'getTaskDefects'])->name('api.tasks.defects');
+    // 取得該任務清檢缺失資料依照區站分類
+    Route::get('/tasks/{task}/clear-defects', [ApiController::class, 'getTaskClearDefects'])->name('api.tasks.clear-defects');
+    // 更新任務的食安缺失資料
+    Route::put('/tasks/defects/{taskHasDefect}', [ApiController::class, 'updateTaskDefect'])->name('api.tasks.defects.update');
+    // 更新任務的清檢缺失資料
+    Route::put('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'updateTaskClearDefect'])->name('api.tasks.clear-defects.update');
+    // 主管核對簽名 /api/tasks/${this.taskItem.id}/boss
+    Route::put('/tasks/{task}/boss', [ApiController::class, 'updateTaskBoss'])->name('api.tasks.boss.update');
+    // 取得食安內外場扣分
+    Route::get('/tasks/{task}/defect/score', [ApiController::class, 'getTaskScore'])->name('api.tasks.defect.score');
+    // 取得清檢內外場扣分
+    Route::get('/tasks/{task}/clear-defect/score', [ApiController::class, 'getTaskClearScore'])->name('api.tasks.clear-defect.score');
+    // 刪除任務的食安缺失資料
+    Route::delete('/tasks/defects/{taskHasDefect}', [ApiController::class, 'deleteTaskDefect'])->name('api.tasks.defects.delete');
+    // 刪除任務的清檢缺失資料
+    Route::delete('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'deleteTaskClearDefect'])->name('api.tasks.clear-defects.delete');
+});
+
 
 Route::prefix('pos')->group(function () {
     // 門市資料upsert

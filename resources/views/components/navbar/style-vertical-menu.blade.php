@@ -8,7 +8,9 @@
 
 --}}
 
-<div class="header-container {{ $classes }}">
+
+
+<div class="header-container {{ $classes }}" style="z-index: 100">
     <header class="header navbar navbar-expand-sm expand-header">
 
         <a href="javascript:void(0);" class="sidebarCollapse">

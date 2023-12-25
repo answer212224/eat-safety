@@ -93,9 +93,10 @@
             @endcan
 
             @can('view-task')
-                <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
+                <li class="menu {{ Request::is('*/app/task/*') || Request::is('*/app/task') ? 'active' : '' }}">
                     <a href="#task" data-bs-toggle="collapse"
-                        aria-expanded="{{ Request::is('*/app/task/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        aria-expanded="{{ Request::is('*/app/task/*') || Request::is('*/app/task') ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
                         <div class="">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -137,11 +138,19 @@
                                 : '' }}">
                             <a href="{{ route('task-list') }}"> 稽核任務列表 </a>
                         </li>
+                        {{-- 任務列表v2 --}}
+                        <li class="{{ Request::routeIs('v2.app.tasks.index') ||
+                        Request::routeIs('v2.app.tasks.defect.create') ||
+                        Request::routeIs('v2.app.tasks.defect.edit') ||
+                        Request::routeIs('v2.app.tasks.clear-defect.create') ||
+                        Request::routeIs('v2.app.tasks.clear-defect.edit')
+                            ? 'active'
+                            : '' }}"
+                            class="d-none">
+                            <a href="{{ route('v2.app.tasks.index') }}"> 稽核任務列表v2 </a>
+                        </li>
+
                     </ul>
-
-
-
-
                 </li>
             @endcan
 

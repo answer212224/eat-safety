@@ -35,4 +35,12 @@ class TaskHasClearDefect extends Model
     {
         return $this->belongsTo(RestaurantWorkspace::class);
     }
+
+    // 多一個 attr images_url 可以直接取得圖片網址
+    public function getImagesUrlAttribute()
+    {
+        return collect($this->images)->map(function ($image) {
+            return asset('storage/' . $image);
+        });
+    }
 }

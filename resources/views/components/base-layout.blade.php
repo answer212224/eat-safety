@@ -23,12 +23,18 @@
     <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/images/favicon.ico') }}" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite(['resources/scss/layouts/modern-light-menu/light/loader.scss'])
-    @vite(['resources/layouts/modern-light-menu/loader.js'])
-
+    {{-- @vite(['resources/layouts/modern-light-menu/loader.js']) --}}
+    <link rel="stylesheet" href="{{ asset('css/vuetify.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/materialdesignicons.min.css') }}">
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}">
     @vite(['resources/scss/light/assets/main.scss', 'resources/scss/dark/assets/main.scss'])
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
     @livewireStyles
 
     @if (
@@ -71,7 +77,7 @@
     @if (Request::routeIs('fullWidth')) layout="full-width" @endif>
 
     <!-- BEGIN LOADER -->
-    <x-layout-loader />
+    {{-- <x-layout-loader /> --}}
     <!--  END LOADER -->
 
     {{--
@@ -161,7 +167,10 @@
         <script src="{{ asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
         <script src="{{ asset('plugins/mousetrap/mousetrap.min.js') }}"></script>
         <script src="{{ asset('plugins/waves/waves.min.js') }}"></script>
-        <script src="{{ asset('plugins/highlight/highlight.pack.js') }}"></script>
+        {{-- <script src="{{ asset('plugins/highlight/highlight.pack.js') }}"></script> --}}
+        <script src="{{ asset('js/vue.js') }}"></script>
+        <script src="{{ asset('js/vuetify.js') }}"></script>
+        <script src="{{ asset('js/axios.js') }}"></script>
         @if ($scrollspy == 1)
             @vite(['resources/assets/js/scrollspyNav.js'])
         @endif
