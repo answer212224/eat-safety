@@ -66,10 +66,12 @@
                                                 <v-chip v-for="meal in task.meals" :key="meal.id" label
                                                     color="blue-grey darken-3" class="ma-1" dark
                                                     @click="mealDialog = true; taskItem = task">
+                                                    <v-icon small left>mdi-food</v-icon>
                                                     @{{ meal.name }}
                                                     <v-chip v-show="meal.pivot.is_taken" class="ml-1" small label
                                                         color="success" dark>
-                                                        帶回
+                                                        <v-icon small>mdi-check</v-icon>
+
                                                     </v-chip>
                                                     <v-chip v-show="meal.pivot.memo" class="ml-1" small label
                                                         color="purple darken-4" dark>
@@ -84,10 +86,11 @@
                                                 <v-chip v-for="project in task.projects" :key="project.id" label
                                                     class="ma-1" color="blue-grey darken-3" dark
                                                     @click="projectDialog = true; taskItem = task">
+                                                    <v-icon small left>mdi-clipboard-check-outline</v-icon>
                                                     @{{ project.name }}:@{{ project.description }}
                                                     <v-chip v-show="project.pivot.is_checked" class="ml-1" small label
                                                         color="success" dark>
-                                                        查核
+                                                        <v-icon small>mdi-check</v-icon>
                                                     </v-chip>
                                                 </v-chip>
                                             </div>
@@ -227,6 +230,13 @@
                         <v-card>
                             <v-card-title>
                                 <span class="headline">餐點採樣</span>
+                                <v-spacer></v-spacer>
+                                {{-- 採樣單excel --}}
+                                <v-btn color="blue darken-1" text small target="_blank"
+                                    :href="taskItem && `/v1/app/task/${taskItem.id}/meal/export`">
+                                    <v-icon left>mdi-file-excel</v-icon>
+                                    採樣單
+                                </v-btn>
                             </v-card-title>
 
                             <v-card-text>
