@@ -103,32 +103,53 @@ class RowDataController extends Controller
 
         $tablebodys = [];
 
+
+
         foreach ($tasks as $task) {
 
             // 將$task->task_date轉成Carbon格式 取月份
             $taskMonth = Carbon::create($task->task_date)->format('n月');
+
+            // 取得內場缺失(排除不扣分的缺失)
+            $backTask = $task->taskHasDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->whereIn('restaurant_workspace_id', $task->restaurant->restaurantBackWorkspaces->pluck('id'))
+                ->load('defect');
+
             // 計算該任務底下餐廳工作區是內場的分數
-            $backTask = $task->taskHasDefects->whereIn('restaurant_workspace_id', $task->restaurant->restaurantBackWorkspaces->pluck('id'))->load('defect');
             $backScore = $backTask->sum(function ($item) {
-                // 只計算需要扣分的缺失
-                if (!$item->is_ignore) {
-                    return $item->defect->deduct_point;
-                }
+                return $item->defect->deduct_point;
             });
+
+            // 取得外場缺失(排除不扣分的缺失)
+            $frontTask = $task->taskHasDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('defect');
 
             // 計算該任務底下餐廳工作區是外場的分數
-            $frontTask = $task->taskHasDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('defect');
             $frontScore = $frontTask->sum(function ($item) {
-                // 只計算需要扣分的缺失
-                if (!$item->is_ignore) {
-                    return $item->defect->deduct_point;
-                }
+                return $item->defect->deduct_point;
             });
 
+
+
             // 計算distinctGroups缺失數量
-            $defectGroupsCount = $task->taskHasDefects->load('defect')->groupBy('defect.group')->map(function ($item) {
-                return $item->count();
-            });
+            $defectGroupsCount = $task->taskHasDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->load('defect')
+                ->groupBy('defect.group')
+                ->map(function ($item) {
+                    return $item->count();
+                });
 
             // 依照$distinctGroups順序取得缺失數量，沒有的話補
             $distinctGroupsCount = collect($distinctGroups)->map(function ($item) use ($defectGroupsCount) {
@@ -418,12 +439,13 @@ class RowDataController extends Controller
             // 將$task->task_date轉成Carbon格式 取年月份
             $taskMonth = Carbon::create($task->task_date)->format('Y年n月');
             // 計算分數
-            $score = $task->taskHasClearDefects->sum(function ($item) {
-                // 只計算需要扣分的缺失
-                if (!$item->is_ignore) {
+            $score = $task->taskHasClearDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->sum(function ($item) {
                     return $item->amount * -2;
-                }
-            });
+                });
             $score = 100 + $score;
 
             // 取得內場各區站
@@ -432,7 +454,12 @@ class RowDataController extends Controller
             $backAreaId = $restaurantBackWorkspaces->pluck('id');
 
             // 取得內場taskHasClearDefects
-            $backTask = $task->taskHasClearDefects->whereIn('restaurant_workspace_id', $backAreaId->toArray())->load('restaurantWorkspace');
+            $backTask = $task->taskHasClearDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->whereIn('restaurant_workspace_id', $backAreaId->toArray())
+                ->load('restaurantWorkspace');
 
             // 計算各區站數量
             $backTask = $backTask->groupBy('restaurantWorkspace.area')->map(function ($item) {
@@ -451,7 +478,12 @@ class RowDataController extends Controller
             $backTask = $backTask->pad(15, 0);
 
             // 取得外場
-            $frontTask = $task->taskHasClearDefects->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('restaurantWorkspace');
+            $frontTask = $task->taskHasClearDefects
+                ->where('is_ignore', false)
+                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_suggestion', false)
+                ->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)
+                ->load('restaurantWorkspace');
             $frontTask = [
                 'area' => '外場',
                 'count' => $frontTask->sum('amount')
