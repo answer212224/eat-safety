@@ -14,6 +14,32 @@ use App\Models\TaskHasClearDefect;
 
 class ApiController extends Controller
 {
+    // 取得所有任務(根據使用者權限)
+    public function getTasks(Request $request)
+    {
+        $status = $request->input('status');
+        // 如果有 view-all-task 的權限，才可以看到所有的任務
+
+        if (auth()->user()->can('view-all-task')) {
+            $tasks = Task::with(['restaurant', 'users', 'meals', 'projects'])
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->get();
+        } else {
+            $tasks = auth()->user()->tasks()->with(['restaurant', 'users', 'meals', 'projects'])
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->get();
+        }
+
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $tasks,
+        ]);
+    }
     // 取得該使用者的任務列表
     public function getUserTasks(Request $request)
     {
@@ -223,6 +249,7 @@ class ApiController extends Controller
             'inner_manager' => $request->input('inner_manager'),
             'outer_manager' => $request->input('outer_manager'),
             'status' => 'completed',
+            'end_at' => now(),
         ]);
 
         return response()->json([

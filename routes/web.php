@@ -245,11 +245,16 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/{task}/defect/edit', [V2TaskController::class, 'editDefect'])->name('v2.app.tasks.defect.edit');
             // 清檢稽核紀錄頁面v2
             Route::get('/{task}/clear-defect/edit', [V2TaskController::class, 'editClearDefect'])->name('v2.app.tasks.clear-defect.edit');
+
+            // 任務行事曆
+            Route::get('/calendar', [V2TaskController::class, 'calendar'])->name('v2.app.tasks.calendar');
         });
     });
 });
 
 Route::prefix('api')->middleware(['auth'])->group(function () {
+    // 取得所有任務(根據使用者權限)
+    Route::get('/tasks', [ApiController::class, 'getTasks'])->name('api.tasks');
     // 取得使用者的任務列表
     Route::get('/user/tasks', [ApiController::class, 'getUserTasks'])->name('api.user.tasks');
     // 修改使用者的任務狀態

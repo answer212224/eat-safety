@@ -124,6 +124,10 @@
                             <a href="{{ route('task-assign') }}"> 稽核行事曆 </a>
                         </li>
 
+                        <li class="{{ Request::routeIs('v2.app.tasks.calendar') ? 'active' : '' }}">
+                            <a href="{{ route('v2.app.tasks.calendar') }}"> 稽核行事曆 v.2</a>
+                        </li>
+
                         <li
                             class="{{ Request::routeIs('task-list') ||
                             Request::routeIs('task-create') ||
@@ -147,7 +151,7 @@
                             ? 'active'
                             : '' }}"
                             class="d-none">
-                            <a href="{{ route('v2.app.tasks.index') }}"> 稽核任務列表v2 </a>
+                            <a href="{{ route('v2.app.tasks.index') }}"> 稽核任務列表 v.2 </a>
                         </li>
 
                     </ul>

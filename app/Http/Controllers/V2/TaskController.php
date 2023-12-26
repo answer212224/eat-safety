@@ -18,6 +18,10 @@ class TaskController extends Controller
     // 新增食安缺失頁面
     public function createDefect(Task $task)
     {
+        // 一進頁面更新任務開始時間
+        $task->update([
+            'start_at' => now(),
+        ]);
         return view('v2.app.tasks.create-defect', [
             'task' => $task,
             'title' => '新增食安缺失',
@@ -48,6 +52,14 @@ class TaskController extends Controller
         return view('v2.app.tasks.edit-clear-defect', [
             'task' => $task,
             'title' => '清檢稽核紀錄',
+        ]);
+    }
+
+    // 行事曆頁面
+    public function calendar()
+    {
+        return view('v2.app.tasks.calendar', [
+            'title' => '行事曆',
         ]);
     }
 }

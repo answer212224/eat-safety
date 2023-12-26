@@ -20,7 +20,7 @@
                         </v-col>
                     </v-row>
                     {{-- 預加載 --}}
-                    <v-row v-if="loading">
+                    <v-row v-show="loading">
                         <v-col cols="12" sm="4" v-for="n in 6" :key="n">
                             <template>
                                 <v-sheet class="pa-3">
@@ -30,7 +30,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row class="d-flex">
+                    <v-row v-show="!loading">
                         <v-col cols="12" sm="4" v-for="task in tasks" :key="task.id">
                             <v-lazy :options="{ threshold: 0.3 }" transition="fade-transition" class="my-4">
                                 <v-card>
@@ -68,11 +68,10 @@
                                                     @click="mealDialog = true; taskItem = task">
                                                     <v-icon small left>mdi-food</v-icon>
                                                     @{{ meal.name }}
-                                                    <v-chip v-show="meal.pivot.is_taken" class="ml-1" small label
-                                                        color="success" dark>
-                                                        <v-icon small>mdi-check</v-icon>
-
-                                                    </v-chip>
+                                                    <v-icon v-show="meal.pivot.is_taken" class="ml-1" small
+                                                        color="success">
+                                                        mdi-check
+                                                    </v-icon>
                                                     <v-chip v-show="meal.pivot.memo" class="ml-1" small label
                                                         color="purple darken-4" dark>
                                                         @{{ meal.pivot.memo }}
@@ -88,10 +87,10 @@
                                                     @click="projectDialog = true; taskItem = task">
                                                     <v-icon small left>mdi-clipboard-check-outline</v-icon>
                                                     @{{ project.name }}:@{{ project.description }}
-                                                    <v-chip v-show="project.pivot.is_checked" class="ml-1" small label
-                                                        color="success" dark>
-                                                        <v-icon small>mdi-check</v-icon>
-                                                    </v-chip>
+                                                    <v-icon v-show="project.pivot.is_checked" class="ml-1" small
+                                                        color="success">
+                                                        mdi-check
+                                                    </v-icon>
                                                 </v-chip>
                                             </div>
                                         </v-row>
@@ -102,15 +101,30 @@
                                                     @{{ task.restaurant.brand + ' ' + task.restaurant.shop }}</span>
                                             </div>
                                             <div class="subtitle-2 col-12 col-sm-6">
+                                                <v-icon small color="teal darken-2">mdi-calendar</v-icon>
+                                                <span class="text--primary">
+                                                    @{{ task.task_date }}
+                                                </span>
+                                            </div>
+                                            <div class="subtitle-2 col-12 col-sm-6">
                                                 <v-icon small color="teal darken-2">mdi-account</v-icon>
                                                 <span class="text--primary">
                                                     @{{ task.users.map(user => user.name).join(', ') }}
                                                 </span>
                                             </div>
+
+                                        </v-row>
+                                        <v-row>
                                             <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-calendar</v-icon>
+                                                <v-icon small color="teal darken-2">mdi-timer-play-outline</v-icon>
                                                 <span class="text--primary">
-                                                    @{{ task.task_date }}
+                                                    @{{ task.start_at }}
+                                                </span>
+                                            </div>
+                                            <div class="subtitle-2 col-12 col-sm-6">
+                                                <v-icon small color="teal darken-2">mdi-timer-off-outline</v-icon>
+                                                <span class="text--primary">
+                                                    @{{ task.end_at }}
                                                 </span>
                                             </div>
                                         </v-row>
