@@ -253,8 +253,24 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
 });
 
 Route::prefix('api')->middleware(['auth'])->group(function () {
+    // 取得有權限 execute-task 的使用者
+    Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
+    // 取得餐廳
+    Route::get('/restaurants', [ApiController::class, 'getRestaurants'])->name('api.restaurants');
+    // 取得該月份該餐聽的餐點
+    Route::get('/restaurants/meals', [ApiController::class, 'getRestaurantMeals'])->name('api.restaurants.meals');
+    // 取得啟用的專案
+    Route::get('/projects/active', [ApiController::class, 'getActiveProjects'])->name('api.projects.active');
     // 取得所有任務(根據使用者權限)
     Route::get('/tasks', [ApiController::class, 'getTasks'])->name('api.tasks');
+    // 儲存任務
+    Route::post('/tasks', [ApiController::class, 'storeTask'])->name('api.tasks.store');
+    // 更新任務
+    Route::put('/tasks/{task}', [ApiController::class, 'updateTask'])->name('api.tasks.update');
+    // 刪除任務
+    Route::delete('/tasks/{task}', [ApiController::class, 'deleteTask'])->name('api.tasks.delete');
+    // 取得該月未指派到的餐廳
+    Route::get('/restaurants/unassigned', [ApiController::class, 'getUnassignedRestaurants'])->name('api.restaurants.unassigned');
     // 取得使用者的任務列表
     Route::get('/user/tasks', [ApiController::class, 'getUserTasks'])->name('api.user.tasks');
     // 修改使用者的任務狀態

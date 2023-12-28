@@ -20,13 +20,15 @@
                                 返回列表
                             </v-btn>
                         </v-col>
-                        <v-col cols="6" class="text-right">
-                            {{-- 跳轉到新增缺失 --}}
-                            <v-btn color="primary" text href="{{ route('v2.app.tasks.defect.create', $task->id) }}">
-                                新增缺失
-                                <v-icon right>mdi-arrow-right</v-icon>
-                            </v-btn>
-                        </v-col>
+                        @if ($task->task_date == date('Y-m-d'))
+                            <v-col cols="6" class="text-right">
+                                {{-- 跳轉到新增缺失 --}}
+                                <v-btn color="primary" text href="{{ route('v2.app.tasks.defect.create', $task->id) }}">
+                                    新增缺失
+                                    <v-icon right>mdi-arrow-right</v-icon>
+                                </v-btn>
+                            </v-col>
+                        @endif
                     </v-row>
 
                     <v-row>
