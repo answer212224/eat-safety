@@ -20,7 +20,8 @@
                                 返回列表
                             </v-btn>
                         </v-col>
-                        @if ($task->task_date == date('Y-m-d'))
+                        {{-- task_date 轉成 carban 格式 在看是否是不是今天 --}}
+                        @if (Carbon\Carbon::parse($task->task_date)->isToday())
                             <v-col cols="6" class="text-right">
                                 {{-- 跳轉到新增缺失 --}}
                                 <v-btn color="primary" text href="{{ route('v2.app.tasks.defect.create', $task->id) }}">
