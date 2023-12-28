@@ -269,6 +269,8 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::put('/tasks/{task}', [ApiController::class, 'updateTask'])->name('api.tasks.update');
     // 刪除任務
     Route::delete('/tasks/{task}', [ApiController::class, 'deleteTask'])->name('api.tasks.delete');
+    // 匯入任務
+    Route::post('/tasks/import', [ApiController::class, 'importTasks'])->name('api.tasks.import');
     // 取得該月未指派到的餐廳
     Route::get('/restaurants/unassigned', [ApiController::class, 'getUnassignedRestaurants'])->name('api.restaurants.unassigned');
     // 取得使用者的任務列表

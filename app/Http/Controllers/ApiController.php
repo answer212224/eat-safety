@@ -10,10 +10,12 @@ use App\Models\User;
 use App\Models\Defect;
 use App\Models\Project;
 use App\Models\Restaurant;
+use App\Imports\TaskImport;
 use App\Models\ClearDefect;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
 use App\Models\TaskHasClearDefect;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ApiController extends Controller
 {
@@ -164,6 +166,22 @@ class ApiController extends Controller
             'status' => 'success',
             'data' => $task,
         ]);
+    }
+
+    // 匯入任務
+    public function importTasks(Request $request)
+    {
+        try {
+            Excel::import(new TaskImport, $request->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     // 取得該月未被指派到的餐廳

@@ -22,14 +22,6 @@
                         <v-col>
                             <v-sheet height="64">
                                 <v-toolbar flat>
-                                    <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-                                        Today
-                                    </v-btn>
-                                    <v-btn fab text small color="grey darken-2" @click="showNotAssign">
-                                        <v-icon small>
-                                            mdi-eye
-                                        </v-icon>
-                                    </v-btn>
                                     <v-btn fab text small color="grey darken-2" @click="prev">
                                         <v-icon small>
                                             mdi-chevron-left
@@ -44,7 +36,19 @@
                                         @{{ $refs.calendar.title }}
                                     </v-toolbar-title>
                                     <v-spacer></v-spacer>
-
+                                    <v-btn fab small color="primary" @click="showNotAssign" class="mr-2">
+                                        <v-icon small>
+                                            mdi-eye
+                                        </v-icon>
+                                    </v-btn>
+                                    @can('import-task')
+                                        <v-btn fab small color="primary" @click="importDialog = true;importFile=null"
+                                            class="mr-2">
+                                            <v-icon small>
+                                                mdi-calendar-import
+                                            </v-icon>
+                                        </v-btn>
+                                    @endcan
                                     @can('create-task')
                                         <v-btn fab small color="primary" @click="dialog = true">
                                             <v-icon small>
@@ -269,6 +273,32 @@
                         </v-card>
                     </v-dialog>
 
+                    <v-dialog v-model="importDialog" max-width="500px">
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">匯入任務</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-file-input v-model="importFile" label="選擇檔案" dense
+                                            :loading="loading" accept=".xlsx">
+                                        </v-file-input>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="importDialog = false">取消</v-btn>
+                                <v-btn color="blue darken-1" text @click="importTask" :disabled="!importFile">
+                                    匯入
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
 
                 </v-container>
             </v-main>
@@ -308,6 +338,8 @@
                     editedIndex: -1,
                     notAssignDialog: false,
                     notAssign: [],
+                    importDialog: false,
+                    importFile: null,
                 }),
 
                 methods: {
@@ -318,9 +350,7 @@
                         this.type = 'day'
                     },
 
-                    setToday() {
-                        this.focus = ''
-                    },
+
                     prev() {
                         this.$refs.calendar.prev()
                     },
@@ -328,7 +358,6 @@
                         this.$refs.calendar.next()
                     },
 
-                    // TODO
                     showNotAssign() {
 
                         axios.get('/api/restaurants/unassigned', {
@@ -534,7 +563,31 @@
                         this.editedIndex = -1
                     },
 
+                    importTask() {
+                        this.loading = true
+                        const formData = new FormData()
+                        formData.append('file', this.importFile)
 
+                        axios.post('/api/tasks/import', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            })
+                            .then((res) => {
+                                if (res.data.status == 'success') {
+                                    alert('匯入成功')
+                                } else {
+                                    alert(res.data.message)
+                                }
+
+                                this.importDialog = false
+                                this.updateRange()
+                                this.loading = false
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
                 },
 
                 watch: {
