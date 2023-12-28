@@ -257,11 +257,14 @@
                 methods: {
                     getDefects() {
                         this.loading = true;
-                        axios.get(`/api/tasks/{{ $task->id }}/clear-defects`).then((res) => {
-                            this.taskDefects = res.data.data;
-                            this.tabs = Object.keys(this.taskDefects);
-                            this.loading = false;
-                        });
+                        axios.get(`/api/tasks/{{ $task->id }}/clear-defects`)
+                            .then((res) => {
+                                this.taskDefects = res.data.data;
+                                this.tabs = Object.keys(this.taskDefects);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
                     },
 
                     getActiveDefects() {
@@ -274,10 +277,14 @@
 
                     // 取得食安內外場扣分
                     getTaskScore() {
+                        this.loading = true;
                         axios.get(`/api/tasks/{{ $task->id }}/clear-defect/score`).then((res) => {
                             this.totalInnerScore = res.data.data.inner_score;
                             this.totalOuterScore = res.data.data.outer_score;
+                        }).finally(() => {
+                            this.loading = false;
                         });
+
                     },
 
                     openDialog(taskDefect) {
@@ -295,24 +302,26 @@
                         this.dialog = false;
                         this.loading = true;
                         axios.put(`/api/tasks/clear-defects/${this.editedItem.id}`, {
-                            clear_defect_id: this.editedItem.clear_defect_id,
-                            amount: this.editedItem.amount,
-                            is_ignore: this.editedItem.is_ignore,
-                            is_not_reach_deduct_standard: this.editedItem.is_not_reach_deduct_standard,
-                            is_suggestion: this.editedItem.is_suggestion,
-                            memo: this.editedItem.memo,
-                        }).then((res) => {
-                            if (res.data.status == 'success') {
-                                this.getDefects();
-                                this.getTaskScore();
-                                // 將tab設定為編輯前的tab
+                                clear_defect_id: this.editedItem.clear_defect_id,
+                                amount: this.editedItem.amount,
+                                is_ignore: this.editedItem.is_ignore,
+                                is_not_reach_deduct_standard: this.editedItem.is_not_reach_deduct_standard,
+                                is_suggestion: this.editedItem.is_suggestion,
+                                memo: this.editedItem.memo,
+                            })
+                            .then((res) => {
+                                if (res.data.status == 'success') {
+                                    this.getDefects();
+                                    this.getTaskScore();
+                                    // 將tab設定為編輯前的tab               
+                                    alert('編輯成功');
+                                } else {
+                                    alert('編輯失敗');
+                                }
+                            })
+                            .finally(() => {
                                 this.loading = false;
-                                alert('編輯成功');
-                            } else {
-                                this.loading = false;
-                                alert('編輯失敗');
-                            }
-                        });
+                            });
                     },
 
                     // 刪除
@@ -322,17 +331,18 @@
                             return;
                         }
                         this.loading = true;
-                        axios.delete(`/api/tasks/clear-defects/${taskDefect.id}`).then((res) => {
-                            if (res.data.status == 'success') {
-                                this.getDefects();
-                                this.getTaskScore();
+                        axios.delete(`/api/tasks/clear-defects/${taskDefect.id}`)
+                            .then((res) => {
+                                if (res.data.status == 'success') {
+                                    this.getDefects();
+                                    this.getTaskScore();
+                                    alert('刪除成功');
+                                } else {
+                                    alert('刪除失敗');
+                                }
+                            }).finally(() => {
                                 this.loading = false;
-                                alert('刪除成功');
-                            } else {
-                                this.loading = false;
-                                alert('刪除失敗');
-                            }
-                        });
+                            });
                     },
                 },
 

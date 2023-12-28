@@ -265,23 +265,30 @@
                         axios.get(`/api/tasks/{{ $task->id }}/defects`).then((res) => {
                             this.taskDefects = res.data.data;
                             this.tabs = Object.keys(this.taskDefects);
+                        }).finally(() => {
                             this.loading = false;
                         });
                     },
 
                     getActiveDefects() {
+                        this.loading = true;
                         axios.get(`/api/defects/active`).then((res) => {
                             this.activeDefects = res.data.data;
                             // 將缺失條文的key值轉成陣列
                             this.groups = Object.keys(this.activeDefects);
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
 
                     // 取得食安內外場扣分
                     getTaskScore() {
+                        loading = true;
                         axios.get(`/api/tasks/{{ $task->id }}/defect/score`).then((res) => {
                             this.totalInnerScore = res.data.data.inner_score;
                             this.totalOuterScore = res.data.data.outer_score;
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
 
@@ -297,6 +304,7 @@
                         this.getDefects();
                         this.getTaskScore();
                     },
+
                     save() {
                         this.dialog = false;
                         this.loading = true;
@@ -311,13 +319,12 @@
                             if (res.data.status == 'success') {
                                 this.getDefects();
                                 this.getTaskScore();
-                                // 將tab設定為編輯前的tab
-                                this.loading = false;
                                 alert('編輯成功');
                             } else {
-                                this.loading = false;
                                 alert('編輯失敗');
                             }
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
 
@@ -331,12 +338,12 @@
                             if (res.data.status == 'success') {
                                 this.getDefects();
                                 this.getTaskScore();
-                                this.loading = false;
                                 alert('刪除成功');
                             } else {
-                                this.loading = false;
                                 alert('刪除失敗');
                             }
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
                 },
