@@ -15,6 +15,10 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
+                    {{-- loading --}}
+                    <v-overlay :value="loading">
+                        <v-progress-circular indeterminate size="64"></v-progress-circular>
+                    </v-overlay>
                     <v-row class="d-flex justify-space-between align-center">
                         <v-col cols="6">
                             {{-- 跳轉到列表 --}}
@@ -197,7 +201,7 @@
                     restaurant_workspaces: [],
                     active_clear_defects: [],
                     main_defects: [],
-
+                    loading: false,
                 },
 
                 methods: {
@@ -217,15 +221,23 @@
 
                     // getTask
                     getTask() {
+                        this.loading = true;
                         axios.get(`/api/tasks/{{ $task->id }}`).then((res) => {
                             this.restaurant_workspaces = res.data.data.restaurant.restaurant_workspaces;
+                        }).catch((err) => {
+                            console.log(err);
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
                     getActiveClearDefects() {
+                        this.loading = true;
                         axios.get(`/api/clear-defects/active`).then((res) => {
                             this.active_clear_defects = res.data.data;
                             // 將缺失條文的key值轉成陣列
                             this.main_defects = Object.keys(this.active_clear_defects);
+                        }).finally(() => {
+                            this.loading = false;
                         });
                     },
 
@@ -245,17 +257,17 @@
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginImageExifOrientation,
-                FilePondPluginFileValidateSize
-                // FilePondPluginImageEdit
+                FilePondPluginFileValidateSize,
+                FilePondPluginFileValidateType
             );
 
             const pond = FilePond.create(inputElement, {
                 allowImagePreview: true,
                 allowMultiple: true,
                 allowReorder: true,
+                acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg'],
                 maxFiles: 4,
                 maxFileSize: '4MB',
-                acceptedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
                 labelIdle: '將圖片拖曳至此或點擊此處上傳',
                 server: {
                     url: "/filepond/api",

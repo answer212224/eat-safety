@@ -15,6 +15,10 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
+                    {{-- loading --}}
+                    <v-overlay :value="loading">
+                        <v-progress-circular indeterminate size="64"></v-progress-circular>
+                    </v-overlay>
                     <v-row class="d-flex justify-space-between align-center">
                         <v-col cols="6">
                             {{-- 跳轉到列表 --}}
@@ -194,6 +198,7 @@
                     groups: [],
                     titles: [],
                     descriptions: [],
+                    loading: false,
                 },
 
                 methods: {
@@ -213,18 +218,28 @@
 
                     // getTask
                     getTask() {
-                        axios.get(`/api/tasks/{{ $task->id }}`).then((res) => {
-                            this.task = res.data.data;
-                            this.restaurant_workspaces = res.data.data.restaurant.restaurant_workspaces;
-                        });
+                        this.loading = true;
+                        axios.get(`/api/tasks/{{ $task->id }}`)
+                            .then((res) => {
+                                this.task = res.data.data;
+                                this.restaurant_workspaces = res.data.data.restaurant.restaurant_workspaces;
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
+
                     },
 
                     getActiveDefects() {
-                        axios.get(`/api/defects/active`).then((res) => {
-                            this.defects = res.data.data;
-                            // 將缺失條文的key值轉成陣列
-                            this.groups = Object.keys(this.defects);
-                        });
+                        this.loading = true;
+                        axios.get(`/api/defects/active`)
+                            .then((res) => {
+                                this.defects = res.data.data;
+                                // 將缺失條文的key值轉成陣列
+                                this.groups = Object.keys(this.defects);
+                            }).finally(() => {
+                                this.loading = false;
+                            });
                     },
 
                 },
@@ -253,8 +268,8 @@
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginImageExifOrientation,
-                FilePondPluginFileValidateSize
-                // FilePondPluginImageEdit
+                FilePondPluginFileValidateSize,
+                FilePondPluginFileValidateType
             );
 
             const pond = FilePond.create(inputElement, {

@@ -371,14 +371,17 @@
                             })
                             .then(response => {
                                 this.tasks = response.data.data
-                                this.loading = false
                             })
                             .catch(error => {
                                 console.log(error)
                             })
+                            .finally(() => {
+                                this.loading = false
+                            })
                     },
 
                     changeStatus(taskId, isCompleted) {
+                        this.loading = true
                         axios.put(`/api/user/tasks/${taskId}`, {
                                 is_completed: isCompleted
                             })
@@ -387,6 +390,9 @@
                             })
                             .catch(error => {
                                 console.log(error)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
                     // save multiple project is_checked
@@ -401,13 +407,16 @@
                                 } else {
                                     alert('儲存失敗')
                                 }
-                                this.loading = false
+
                                 this.projectDialog = false
                                 this.taskItem = null
                                 this.getTasks()
                             })
                             .catch(error => {
                                 console.log(error)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -432,6 +441,9 @@
                             .catch(error => {
                                 console.log(error)
                             })
+                            .finally(() => {
+                                this.loading = false
+                            })
                     },
 
                     // save boss
@@ -454,6 +466,9 @@
                             })
                             .catch(error => {
                                 console.log(error)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
                 },
