@@ -101,8 +101,11 @@ class ApiController extends Controller
             $task->meals()->attach($meal['id']);
         }
 
-        foreach ($projects as $project) {
-            $task->projects()->attach($project['id']);
+        // 如果是餐點採樣，就不用指派專案
+        if ($category != '餐點採樣') {
+            foreach ($projects as $project) {
+                $task->projects()->attach($project['id']);
+            }
         }
 
         return response()->json([
@@ -138,9 +141,12 @@ class ApiController extends Controller
             $task->meals()->attach($meal['id']);
         }
 
-        $task->projects()->sync([]);
-        foreach ($projects as $project) {
-            $task->projects()->attach($project['id']);
+        // 如果是餐點採樣，就不用指派專案
+        if ($category != '餐點採樣') {
+            $task->projects()->sync([]);
+            foreach ($projects as $project) {
+                $task->projects()->attach($project['id']);
+            }
         }
 
         return response()->json([
@@ -167,9 +173,9 @@ class ApiController extends Controller
         $date = Carbon::create($date);
 
         $restaurants = Restaurant::where('status', true)->whereDoesntHave('tasks', function ($query) use ($date) {
-                $query->whereYear('task_date', $date->format('Y'))
-                    ->whereMonth('task_date', $date->format('m'));
-            })->get();
+            $query->whereYear('task_date', $date->format('Y'))
+                ->whereMonth('task_date', $date->format('m'));
+        })->get();
 
         return response()->json([
             'status' => 'success',

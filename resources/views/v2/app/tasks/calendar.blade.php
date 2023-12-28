@@ -238,8 +238,7 @@
                                 <v-btn color="blue darken-1" text @click="save"
                                     :disabled="!editedItem.category || !editedItem.date || !editedItem
                                         .time || !editedItem.users ||
-                                        !editedItem.restaurant || !editedItem.meals || !
-                                        editedItem.projects">
+                                        !editedItem.restaurant">
                                     儲存
                                 </v-btn>
                             </v-card-actions>
@@ -298,8 +297,7 @@
                         '食安及5S複稽': 'error',
                     },
                     editedItem: {
-                        date: new Date().toISOString().substr(0, 10),
-                        time: new Date().toISOString().substr(11, 2) + ':00',
+
                     },
                     selectDateOpen: false,
                     selectTimeOpen: false,
