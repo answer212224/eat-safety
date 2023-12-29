@@ -136,6 +136,18 @@
                                         </v-card-text>
                                         <v-divider></v-divider>
                                         <v-card-actions>
+                                            {{-- 內場報告 --}}
+                                            <v-btn text color="blue darken-1"
+                                                :href="'/v1/app/task/' + selectedEvent.id + '/inner-report'"
+                                                target="_blank">
+                                                內場報告
+                                            </v-btn>
+                                            {{-- 外場報告 --}}
+                                            <v-btn text color="blue darken-1"
+                                                :href="'/v1/app/task/' + selectedEvent.id + '/outer-report'"
+                                                target="_blank">
+                                                內場報告
+                                            </v-btn>
                                             <v-spacer></v-spacer>
                                             @can('delete-task')
                                                 <v-btn text color="red darken-1" @click="remove(selectedEvent.id)">
@@ -175,7 +187,8 @@
                                             min-width="auto">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field v-model="editedItem.date" label="日期"
-                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                                    v-on="on">
                                                 </v-text-field>
                                             </template>
                                             <v-date-picker v-model="editedItem.date" scrollable locale="zh-tw">
