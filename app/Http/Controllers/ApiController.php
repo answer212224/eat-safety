@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\Restaurant;
 use App\Imports\TaskImport;
 use App\Models\ClearDefect;
+use App\Imports\MealsImport;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
 use App\Models\TaskHasClearDefect;
@@ -530,5 +531,73 @@ class ApiController extends Controller
             'status' => 'success',
             'data' => $taskHasClearDefect,
         ]);
+    }
+
+    public function getMeals()
+    {
+        $meals = Meal::all();
+        $meals = $meals->map(function ($meal) {
+            $meal->effective_date = Carbon::create($meal->effective_date)->format('Y-m');
+            return $meal;
+        });
+        return response()->json([
+            'status' => 'success',
+            'data' => $meals,
+        ]);
+    }
+
+    public function storeMeal(Request $request)
+    {
+        // carbon effective_date
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $meal = Meal::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
+    public function updateMeal(Meal $meal, Request $request)
+    {
+        // carbon effective_date
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $meal->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
+    public function deleteMeal(Meal $meal)
+    {
+        $meal->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
+    public function importMeals()
+    {
+        try {
+            Excel::import(new MealsImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

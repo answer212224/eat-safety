@@ -15,6 +15,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RowDataController;
 use App\Http\Controllers\TaskMealController;
 use App\Http\Controllers\V2\TaskController as V2TaskController;
+use App\Http\Controllers\V2\MealController as V2MealController;
 
 
 /*
@@ -245,9 +246,14 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/{task}/defect/edit', [V2TaskController::class, 'editDefect'])->name('v2.app.tasks.defect.edit');
             // 清檢稽核紀錄頁面v2
             Route::get('/{task}/clear-defect/edit', [V2TaskController::class, 'editClearDefect'])->name('v2.app.tasks.clear-defect.edit');
-
             // 任務行事曆
             Route::get('/calendar', [V2TaskController::class, 'calendar'])->name('v2.app.tasks.calendar');
+        });
+    });
+    Route::prefix('data')->group(function () {
+        Route::prefix('table')->group(function () {
+            // 採樣資料庫v2
+            Route::get('/meals', [V2MealController::class, 'index'])->name('v2.data.table.meals.index');
         });
     });
 });
@@ -305,6 +311,16 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::delete('/tasks/defects/{taskHasDefect}', [ApiController::class, 'deleteTaskDefect'])->name('api.tasks.defects.delete');
     // 刪除任務的清檢缺失資料
     Route::delete('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'deleteTaskClearDefect'])->name('api.tasks.clear-defects.delete');
+    // 取得採樣資料庫資料
+    Route::get('/meals', [ApiController::class, 'getMeals'])->name('api.meals');
+    // 新增採樣資料庫資料
+    Route::post('/meals', [ApiController::class, 'storeMeal'])->name('api.meals.store');
+    // 更新採樣資料庫資料
+    Route::put('/meals/{meal}', [ApiController::class, 'updateMeal'])->name('api.meals.update');
+    // 刪除採樣資料庫資料
+    Route::delete('/meals/{meal}', [ApiController::class, 'deleteMeal'])->name('api.meals.delete');
+    // 匯入採樣資料庫資料
+    Route::post('/meals/import', [ApiController::class, 'importMeals'])->name('api.meals.import');
 });
 
 

@@ -189,9 +189,13 @@
                     </a>
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/data/table/*') ? 'show' : '' }}"
                         id="table" data-bs-parent="#accordionExample">
-                        <li class="{{ Request::routeIs('meal-index') || Request::routeIs('meal-edit') ? 'active' : '' }}">
+                        {{-- <li class="{{ Request::routeIs('meal-index') || Request::routeIs('meal-edit') ? 'active' : '' }}">
                             <a href="{{ route('meal-index') }}"> 採樣資料庫 </a>
+                        </li> --}}
+                        <li class="{{ Request::routeIs('v2.data.table.meals.index') ? 'active' : '' }} ">
+                            <a href="{{ route('v2.data.table.meals.index') }}"> 採樣資料庫 v.2</a>
                         </li>
+
                         <li
                             class="{{ Request::routeIs('project-index') || Request::routeIs('project-edit') ? 'active' : '' }}">
                             <a href="{{ route('project-index') }}"> 專案資料庫 </a>
