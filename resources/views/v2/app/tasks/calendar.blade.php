@@ -146,7 +146,7 @@
                                             <v-btn text color="blue darken-1"
                                                 :href="'/v1/app/task/' + selectedEvent.id + '/outer-report'"
                                                 target="_blank">
-                                                內場報告
+                                                外場報告
                                             </v-btn>
                                             <v-spacer></v-spacer>
                                             @can('delete-task')
