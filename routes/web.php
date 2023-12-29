@@ -253,7 +253,11 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
     Route::prefix('data')->group(function () {
         Route::prefix('table')->group(function () {
             // 採樣資料庫v2
-            Route::get('/meals', [V2MealController::class, 'index'])->name('v2.data.table.meals.index');
+            Route::get('/meals', [V2MealController::class, 'table'])->name('v2.data.table.meals.index');
+        });
+        Route::prefix('record')->group(function () {
+            // 採樣紀錄v2
+            Route::get('/meals', [V2MealController::class, 'record'])->name('v2.data.record.meals.index');
         });
     });
 });
@@ -321,6 +325,8 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::delete('/meals/{meal}', [ApiController::class, 'deleteMeal'])->name('api.meals.delete');
     // 匯入採樣資料庫資料
     Route::post('/meals/import', [ApiController::class, 'importMeals'])->name('api.meals.import');
+    // 取得採樣紀錄資料
+    Route::get('/meal-records', [ApiController::class, 'getMealRecords'])->name('api.meal-records');
 });
 
 

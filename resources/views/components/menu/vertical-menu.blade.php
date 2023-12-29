@@ -249,9 +249,14 @@
 
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/data/record/*') ? 'show' : '' }}"
                         id="record" data-bs-parent="#accordionExample">
-                        @can('view-record-meal')
+                        {{-- @can('view-record-meal')
                             <li class="{{ Request::routeIs('task-meals') ? 'active' : '' }}">
                                 <a href="{{ route('task-meals') }}"> 稽核採樣紀錄 </a>
+                            </li>
+                        @endcan --}}
+                        @can('view-record-meal')
+                            <li class="{{ Request::routeIs('v2.data.record.meals.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.record.meals.index') }}"> 採樣紀錄 v.2 </a>
                             </li>
                         @endcan
                         @can('view-record-defect')

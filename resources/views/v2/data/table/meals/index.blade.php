@@ -307,7 +307,13 @@
                                 }
                             })
                             .then(response => {
-                                alert('匯入成功')
+                                if (response.data.status == 'error') {
+                                    alert(response.data.message)
+                                    return
+                                } else {
+                                    alert('匯入成功')
+                                }
+
                                 this.importDialog = false
                                 this.getMeals()
                             })
@@ -316,6 +322,8 @@
                             })
                             .finally(() => {
                                 this.loading = false
+                                this.file = null
+                                this.importDialog = false
                             })
                     }
 

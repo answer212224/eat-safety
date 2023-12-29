@@ -593,4 +593,48 @@ class ApiController extends Controller
             ]);
         }
     }
+
+    // 取得所有任務有包含餐點的
+    public function getMealRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+        $tasks = Task::whereHas('meals', function ($query) use ($month) {
+            $query->whereYear('effective_date', $month->format('Y'))
+                ->whereMonth('effective_date', $month->format('m'));
+        })->with(['restaurant', 'meals'])->get();
+
+        $mealRecords = [];
+
+        foreach ($tasks as $task) {
+            foreach ($task->meals as $meal) {
+                $mealRecords[] = [
+                    'task_id' => $task->id,
+                    'task_date' => $task->task_date,
+                    'restaurant_id' => $task->restaurant_id,
+                    'restaurant_brand' => $task->restaurant->brand,
+                    'restaurant_shop' => $task->restaurant->shop,
+                    'meal_id' => $meal->id,
+                    'meal_name' => $meal->name,
+                    'meal_sid' => $meal->sid,
+                    'meal_effective_month' => Carbon::create($meal->effective_date)->format('Y-m'),
+                    'meal_category' => $meal->category,
+                    'meal_chef' => $meal->chef,
+                    'meal_workspace' => $meal->workspace,
+                    'meal_qno' => $meal->qno,
+                    'meal_note' => $meal->note,
+                    'meal_item' => $meal->item,
+                    'meal_items' => $meal->items,
+                    'is_taken' => $meal->pivot->is_taken,
+                    'memo' => $meal->pivot->memo,
+                ];
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $mealRecords,
+        ]);
+    }
 }
