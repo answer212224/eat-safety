@@ -161,7 +161,7 @@
                     search: '',
                     dialog: false,
                     headers: [{
-                            text: '啟月月份',
+                            text: '啟用月份',
                             value: 'effective_date'
                         },
                         {
