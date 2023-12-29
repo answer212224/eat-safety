@@ -136,14 +136,13 @@
                                         </v-card-text>
                                         <v-divider></v-divider>
                                         <v-card-actions>
-                                            {{-- 內場報告 --}}
-                                            <v-btn text color="blue darken-1"
+                                            <v-btn text color="blue darken-1" v-show="selectedEvent.category!=='餐點採樣'"
                                                 :href="'/v1/app/task/' + selectedEvent.id + '/inner-report'"
                                                 target="_blank">
                                                 內場報告
                                             </v-btn>
-                                            {{-- 外場報告 --}}
-                                            <v-btn text color="blue darken-1"
+
+                                            <v-btn text color="blue darken-1" v-show="selectedEvent.category!=='餐點採樣'"
                                                 :href="'/v1/app/task/' + selectedEvent.id + '/outer-report'"
                                                 target="_blank">
                                                 外場報告
