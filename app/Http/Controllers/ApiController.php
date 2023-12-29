@@ -172,17 +172,10 @@ class ApiController extends Controller
     // 匯入任務
     public function importTasks(Request $request)
     {
-        try {
-            Excel::import(new TaskImport, $request->file('file'));
-            return response()->json([
-                'status' => 'success',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        Excel::import(new TaskImport, $request->file('file'));
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 
     // 取得該月未被指派到的餐廳

@@ -557,10 +557,9 @@
                             .catch((err) => {
                                 console.log(err)
                             })
-
-                        this.selectedOpen = false
-                        this.editedItem = {}
-                        this.editedIndex = -1
+                            .finally(() => {
+                                this.selectedOpen = false
+                            })
                     },
 
                     importTask() {
@@ -579,13 +578,13 @@
                                 } else {
                                     alert(res.data.message)
                                 }
-
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message)
+                            }).finally(() => {
                                 this.importDialog = false
                                 this.updateRange()
                                 this.loading = false
-                            })
-                            .catch((err) => {
-                                console.log(err)
                             })
                     },
                 },

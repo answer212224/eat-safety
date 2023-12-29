@@ -404,23 +404,18 @@
                             .then(response => {
                                 if (response.data.status === 'success') {
                                     alert('儲存成功')
-                                } else {
-                                    alert('儲存失敗')
                                 }
-
+                            })
+                            .catch(error => {
+                                alert(error.response.data.message)
+                            })
+                            .finally(() => {
                                 this.projectDialog = false
                                 this.taskItem = null
                                 this.getTasks()
                             })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                            .finally(() => {
-                                this.loading = false
-                            })
                     },
 
-                    // save multiple meal is_taken and memo
                     saveMealIsTaken() {
                         this.loading = true
                         axios.put(`/api/tasks/${this.taskItem.id}/meals`, {
@@ -429,24 +424,20 @@
                             .then(response => {
                                 if (response.data.status === 'success') {
                                     alert('儲存成功')
-                                } else {
-                                    alert('儲存失敗')
                                 }
+
+                            })
+                            .catch(error => {
+                                alert(error.response.data.message)
+                            })
+                            .finally(() => {
                                 this.loading = false
                                 this.mealDialog = false
                                 this.taskItem = null
                                 this.getTasks()
-
-                            })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                            .finally(() => {
-                                this.loading = false
                             })
                     },
 
-                    // save boss
                     saveBoss() {
                         this.loading = true
                         axios.put(`/api/tasks/${this.taskItem.id}/boss`, {
@@ -456,19 +447,16 @@
                             .then(response => {
                                 if (response.data.status === 'success') {
                                     alert('簽核成功')
-                                } else {
-                                    alert('簽核失敗')
                                 }
+                            })
+                            .catch(error => {
+                                alert(error.response.data.message)
+                            })
+                            .finally(() => {
                                 this.loading = false
                                 this.approvalDialog = false
                                 this.taskItem = null
                                 this.getTasks()
-                            })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                            .finally(() => {
-                                this.loading = false
                             })
                     },
                 },
