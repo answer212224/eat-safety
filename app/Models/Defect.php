@@ -17,18 +17,27 @@ class Defect extends Model
         return $this->hasMany(TaskHasDefect::class);
     }
 
-    public static function getDistinctGroups(Carbon $latestDefect)
+    public static function getDistinctGroups()
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->select('group')->distinct()->get();
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $activeDate = self::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        return self::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->select('group')->distinct()->get();
     }
 
-    public static function getDistinctTitlesByGroup($group, Carbon $latestDefect)
+    public static function getDistinctTitlesByGroup($group)
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('group', $group)->select('title')->distinct()->get();
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $activeDate = self::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        return self::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->where('group', $group)->select('title')->distinct()->get();
     }
 
-    public static function getDescriptionWhereByGroupAndTitle($group, $title, Carbon $latestDefect)
+    public static function getDescriptionWhereByGroupAndTitle($group, $title)
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('group', $group)->where('title', $title)->get();
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $activeDate = self::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        return self::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->where('group', $group)->where('title', $title)->get();
     }
 }

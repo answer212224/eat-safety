@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ClearDefect extends Model
 {
@@ -11,13 +12,19 @@ class ClearDefect extends Model
 
     protected $guarded = [];
 
-    public static function getDistinctMainItems($latestDefect)
+    public static function getDistinctMainItems()
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->distinct()->get(['main_item']);
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $activeDate = self::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        return self::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->distinct()->get(['main_item']);
     }
 
-    public static function getsubItemsByMainItem($mainItem, $latestDefect)
+    public static function getsubItemsByMainItem($mainItem)
     {
-        return self::whereYear('effective_date', $latestDefect)->whereMonth('effective_date', $latestDefect)->where('main_item', $mainItem)->get();
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $activeDate = self::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        return self::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->where('main_item', $mainItem)->get();
     }
 }
