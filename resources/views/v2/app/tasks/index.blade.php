@@ -52,7 +52,8 @@
                                         <v-switch
                                             v-model="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot.is_completed"
                                             inset color="success" :loading="loading"
-                                            :disabled="task.status == 'completed' || task.task_date < '{{ now()->toDateString() }}'"
+                                            :disabled="task.status == 'completed' || task.task_date >
+                                                '{{ now()->toDateTimestring() }}'"
                                             @change="changeStatus(task.id, task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
                                                 .is_completed)"
                                             :label="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
