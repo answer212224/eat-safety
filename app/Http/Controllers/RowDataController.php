@@ -38,18 +38,9 @@ class RowDataController extends Controller
         // 只取得已完成的任務和食安及5S的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
 
-        // 取得最新生效的缺失條文日期
-        try {
-            $latestDefectDate = Defect::whereYear('effective_date', '<=', $yearMonth)->whereMonth('effective_date', '<=', $yearMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
-        } catch (\Exception $e) {
-            alert()->error('啟動月份' . $yearMonth->format('Y年m月') . '沒有可用的食安缺失條文');
-            return redirect()->back();
-        }
 
-        // 轉換成 Carbon 格式
-        $latestDefectDate = Carbon::create($latestDefectDate);
         // 取得所有不重複的群組
-        $distinctGroups = Defect::getDistinctGroups($latestDefectDate);
+        $distinctGroups = Defect::getDistinctGroups();
         $distinctGroups = $distinctGroups->pluck('group')->toArray();
 
         // table header
@@ -411,17 +402,6 @@ class RowDataController extends Controller
 
         // 只取得已完成的任務和清潔檢查的缺失
         $tasks = $tasks->where('status', 'completed')->where('category', '清潔檢查')->get();
-
-        // 取得最新生效的缺失條文日期
-        try {
-            $latestDefectDate = ClearDefect::whereYear('effective_date', '<=', $yearMonth)->whereMonth('effective_date', '<=', $yearMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
-        } catch (\Exception $e) {
-            alert()->error('啟動月份' . $yearMonth->format('Y年m月') . '沒有可用的清潔檢查缺失條文');
-            return redirect()->back();
-        }
-
-        // 轉換成 Carbon 格式
-        $latestDefectDate = Carbon::create($latestDefectDate);
 
         // table header
         $tableHeader = [
