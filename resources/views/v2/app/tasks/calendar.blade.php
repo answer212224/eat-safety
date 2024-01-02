@@ -61,7 +61,7 @@
                             <v-sheet height="auto">
                                 <v-calendar ref="calendar" v-model="focus" color="primary" :events="events"
                                     type="month" @click:event="showEvent" event-overlap-mode="column"
-                                    :event-more="false" @change="updateRange" locale="zh-tw">
+                                    :event-more="false" locale="zh-tw">
                                 </v-calendar>
                                 <v-menu v-model="selectedOpen" :close-on-content-click="false"
                                     :activator="selectedElement" offset-y>
@@ -612,7 +612,7 @@
 
 
                 mounted() {
-                    this.$refs.calendar.checkChange()
+                    this.updateRange()
                     this.getExecuteTaskUsers()
                     this.getRestaurants()
                 },
