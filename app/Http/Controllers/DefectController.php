@@ -546,11 +546,11 @@ class DefectController extends Controller
 
             // dateEnd +1 day
             $dateEnd = date('Y-m-d', strtotime($dateEnd . ' +1 day'));
-            $defectRecords = TaskHasDefect::with('defect', 'task', 'restaurantWorkspace.restaurant')
+            $defectRecords = TaskHasDefect::with('defect', 'task', 'restaurantWorkspace.restaurant', 'user')
                 ->whereBetween('created_at', [$dateStart, $dateEnd])
                 ->get();
         } else {
-            $defectRecords = TaskHasDefect::with('defect', 'task', 'restaurantWorkspace.restaurant')->get();
+            $defectRecords = TaskHasDefect::with('defect', 'task', 'restaurantWorkspace.restaurant', 'user')->get();
         }
 
 
