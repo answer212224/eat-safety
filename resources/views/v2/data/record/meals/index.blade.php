@@ -41,11 +41,7 @@
                                                             v-on="on" class="mr-2"></v-text-field>
                                                     </template>
                                                     <v-date-picker v-model="month" type="month" scrollable
-                                                        :locale="locale">
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                                                        <v-btn text color="primary"
-                                                            @click="$refs.menu.save(month)">OK</v-btn>
+                                                        :locale="locale" @input="$refs.menu.save(month)">
                                                     </v-date-picker>
                                                 </v-menu>
 
