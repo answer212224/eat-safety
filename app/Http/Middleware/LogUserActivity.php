@@ -22,8 +22,8 @@ class LogUserActivity
             'url' => $request->fullUrl(),
             'method' => $request->method(),
             'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'user_id' => $request->user() ? $request->user()->id : null,
+            // 'user_agent' => $request->userAgent(),
+            // 'user_id' => $request->user() ? $request->user()->id : null,
             'user_name' => $request->user() ? $request->user()->name : 'Guest',
         ]);
         return $next($request);

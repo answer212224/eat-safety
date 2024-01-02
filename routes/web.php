@@ -265,7 +265,7 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
     });
 });
 
-Route::prefix('api')->middleware(['auth'])->group(function () {
+Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function () {
     // 取得有權限 execute-task 的使用者
     Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
     // 取得餐廳
