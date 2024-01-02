@@ -438,6 +438,10 @@ class DefectController extends Controller
         $taskHasDefect = TaskHasDefect::with('defect')
             ->whereYear('created_at', $yearMonth->year)
             ->whereMonth('created_at', $yearMonth->month)
+            ->where('is_ignore', 0)
+            ->where('is_not_reach_deduct_standard', 0)
+            ->where('is_suggestion', 0)
+            ->where('is_repeat', 0)
             ->get();
         // taskHasDefect 使用 defect.group 分類
         $defectGroupByGroup = $taskHasDefect->groupBy('defect.group');

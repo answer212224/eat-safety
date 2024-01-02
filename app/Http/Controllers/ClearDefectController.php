@@ -34,6 +34,9 @@ class ClearDefectController extends Controller
         $taskHasDefect = TaskHasClearDefect::with('clearDefect')
             ->whereYear('created_at', $yearMonth->year)
             ->whereMonth('created_at', $yearMonth->month)
+            ->where('is_ignore', 0)
+            ->where('is_not_reach_deduct_standard', 0)
+            ->where('is_suggestion', 0)
             ->get();
 
         // taskHasDefect 使用 clearDefect.main_item 分類
