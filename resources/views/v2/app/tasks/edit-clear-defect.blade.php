@@ -262,28 +262,42 @@
                                 this.taskDefects = res.data.data;
                                 this.tabs = Object.keys(this.taskDefects);
                             })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
                             .finally(() => {
                                 this.loading = false;
                             });
                     },
 
                     getActiveDefects() {
-                        axios.get(`/api/clear-defects/active`).then((res) => {
-                            this.activeDefects = res.data.data;
-                            // 將缺失條文的key值轉成陣列
-                            this.main_defects = Object.keys(this.activeDefects);
-                        });
+                        axios.get(`/api/clear-defects/active`)
+                            .then((res) => {
+                                this.activeDefects = res.data.data;
+                                // 將缺失條文的key值轉成陣列
+                                this.main_defects = Object.keys(this.activeDefects);
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
                     },
 
                     // 取得食安內外場扣分
                     getTaskScore() {
                         this.loading = true;
                         axios.get(`/api/tasks/{{ $task->id }}/clear-defect/score`).then((res) => {
-                            this.totalInnerScore = res.data.data.inner_score;
-                            this.totalOuterScore = res.data.data.outer_score;
-                        }).finally(() => {
-                            this.loading = false;
-                        });
+                                this.totalInnerScore = res.data.data.inner_score;
+                                this.totalOuterScore = res.data.data.outer_score;
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
 
                     },
 
@@ -318,6 +332,10 @@
                                 } else {
                                     alert('編輯失敗');
                                 }
+
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
                             })
                             .finally(() => {
                                 this.loading = false;
@@ -340,7 +358,11 @@
                                 } else {
                                     alert('刪除失敗');
                                 }
-                            }).finally(() => {
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
                                 this.loading = false;
                             });
                     },

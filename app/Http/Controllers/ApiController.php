@@ -328,8 +328,9 @@ class ApiController extends Controller
     // 取得該月啟用的食安缺失條文
     public function getActiveDefects()
     {
-        // 取得最新生效的缺陷日期
-        $activeDate = Defect::whereYear('effective_date', '<=', today())->whereMonth('effective_date', '<=', today())->orderBy('effective_date', 'desc')->first()->effective_date;
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+
+        $activeDate = Defect::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
         $activeDate = Carbon::create($activeDate);
         $defects = Defect::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->get();
 
@@ -347,8 +348,9 @@ class ApiController extends Controller
     // 取得該月啟用的清檢缺失條文
     public function getActiveClearDefects()
     {
-        // 取得最新生效的缺陷日期
-        $activeDate = ClearDefect::whereYear('effective_date', '<=', today())->whereMonth('effective_date', '<=', today())->orderBy('effective_date', 'desc')->first()->effective_date;
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+
+        $activeDate = ClearDefect::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
         $activeDate = Carbon::create($activeDate);
         $defects = ClearDefect::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->get();
 

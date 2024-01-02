@@ -265,9 +265,12 @@
                         axios.get(`/api/tasks/{{ $task->id }}/defects`).then((res) => {
                             this.taskDefects = res.data.data;
                             this.tabs = Object.keys(this.taskDefects);
+                        }).catch((err) => {
+                            alert(err.response.data.message);
                         }).finally(() => {
                             this.loading = false;
                         });
+
                     },
 
                     getActiveDefects() {
@@ -276,6 +279,8 @@
                             this.activeDefects = res.data.data;
                             // 將缺失條文的key值轉成陣列
                             this.groups = Object.keys(this.activeDefects);
+                        }).catch((err) => {
+                            alert(err.response.data.message);
                         }).finally(() => {
                             this.loading = false;
                         });
@@ -287,6 +292,8 @@
                         axios.get(`/api/tasks/{{ $task->id }}/defect/score`).then((res) => {
                             this.totalInnerScore = res.data.data.inner_score;
                             this.totalOuterScore = res.data.data.outer_score;
+                        }).catch((err) => {
+                            alert(err.response.data.message);
                         }).finally(() => {
                             this.loading = false;
                         });
@@ -312,7 +319,8 @@
                             defect_id: this.editedItem.defect_id,
                             memo: this.editedItem.memo,
                             is_ignore: this.editedItem.is_ignore,
-                            is_not_reach_deduct_standard: this.editedItem.is_not_reach_deduct_standard,
+                            is_not_reach_deduct_standard: this.editedItem
+                                .is_not_reach_deduct_standard,
                             is_suggestion: this.editedItem.is_suggestion,
                             is_repeat: this.editedItem.is_repeat,
                         }).then((res) => {
@@ -323,6 +331,8 @@
                             } else {
                                 alert('編輯失敗');
                             }
+                        }).catch((err) => {
+                            alert(err.response.data.message);
                         }).finally(() => {
                             this.loading = false;
                         });
@@ -335,16 +345,20 @@
                         }
                         this.loading = true;
                         axios.delete(`/api/tasks/defects/${taskDefect.id}`).then((res) => {
-                            if (res.data.status == 'success') {
-                                this.getDefects();
-                                this.getTaskScore();
-                                alert('刪除成功');
-                            } else {
-                                alert('刪除失敗');
-                            }
-                        }).finally(() => {
-                            this.loading = false;
-                        });
+                                if (res.data.status == 'success') {
+                                    this.getDefects();
+                                    this.getTaskScore();
+                                    alert('刪除成功');
+                                } else {
+                                    alert('刪除失敗');
+                                }
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
                     },
                 },
 
