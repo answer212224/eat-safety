@@ -14,13 +14,6 @@
                     <v-row>
                         <v-col cols="12">
                             <v-card>
-
-
-
-
-
-
-
                                 <v-card-text>
                                     <v-data-table :headers="headers" :items="mealRecords" :search="search"
                                         sort-by="meal_effective_month" sort-desc dense :loading="loading">
@@ -28,9 +21,6 @@
                                             <v-toolbar flat>
                                                 <v-toolbar-title>{{ $title }}</v-toolbar-title>
                                                 <v-spacer></v-spacer>
-                                                {{-- search --}}
-                                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
-                                                    single-line hide-details class="mr-2"></v-text-field>
                                                 {{-- 月分篩選 --}}
                                                 <v-menu ref="menu" v-model="menu" :return-value.sync="month"
                                                     :close-on-content-click="false" transition="scale-transition"
@@ -44,6 +34,10 @@
                                                         :locale="locale" @input="$refs.menu.save(month)">
                                                     </v-date-picker>
                                                 </v-menu>
+                                                {{-- search --}}
+                                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
+                                                    single-line hide-details class="mr-2"></v-text-field>
+
 
 
                                                 {{-- 匯出 --}}
