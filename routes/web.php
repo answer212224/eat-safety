@@ -16,6 +16,7 @@ use App\Http\Controllers\RowDataController;
 use App\Http\Controllers\TaskMealController;
 use App\Http\Controllers\V2\TaskController as V2TaskController;
 use App\Http\Controllers\V2\MealController as V2MealController;
+use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 
 
 /*
@@ -254,6 +255,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
         Route::prefix('table')->group(function () {
             // 採樣資料庫v2
             Route::get('/meals', [V2MealController::class, 'table'])->name('v2.data.table.meals.index');
+            // 專案資料庫v2
+            Route::get('/projects', [V2ProjectController::class, 'table'])->name('v2.data.table.projects.index');
         });
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
@@ -327,6 +330,14 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::post('/meals/import', [ApiController::class, 'importMeals'])->name('api.meals.import');
     // 取得採樣紀錄資料
     Route::get('/meal-records', [ApiController::class, 'getMealRecords'])->name('api.meal-records');
+    // 取得專案資料庫資料
+    Route::get('/projects', [ApiController::class, 'getProjects'])->name('api.projects');
+    // 取得月份的專案缺失資料
+    Route::get('/project-defects', [ApiController::class, 'getProjectDefects'])->name('api.projects.defects');
+    // 新增專案資料庫資料
+    Route::post('/projects', [ApiController::class, 'storeProject'])->name('api.projects.store');
+    // 更新專案資料庫資料
+    Route::put('/projects/{project}', [ApiController::class, 'updateProject'])->name('api.projects.update');
 });
 
 

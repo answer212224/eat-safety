@@ -637,4 +637,54 @@ class ApiController extends Controller
             'data' => $mealRecords,
         ]);
     }
+
+    // 取得專案資料
+    public function getProjects()
+    {
+        $projects = Project::all();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $projects,
+        ]);
+    }
+
+    // 取得月份的專案缺失資料
+    public function getProjectDefects()
+    {
+        $month = request()->input('month');
+        $month = Carbon::create($month);
+
+        $defects = Defect::whereYear('effective_date', $month->format('Y'))
+            ->whereMonth('effective_date', $month->format('m'))
+            ->where('category', '專案查核')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
+    // 新增專案
+    public function storeProject(Request $request)
+    {
+        $project = Project::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $project,
+        ]);
+    }
+
+    // 更新專案
+    public function updateProject(Project $project, Request $request)
+    {
+        $project->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $project,
+        ]);
+    }
 }

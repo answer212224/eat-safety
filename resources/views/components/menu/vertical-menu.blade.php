@@ -196,9 +196,12 @@
                             <a href="{{ route('v2.data.table.meals.index') }}"> 採樣資料庫 v.2</a>
                         </li>
 
-                        <li
+                        {{-- <li
                             class="{{ Request::routeIs('project-index') || Request::routeIs('project-edit') ? 'active' : '' }}">
                             <a href="{{ route('project-index') }}"> 專案資料庫 </a>
+                        </li> --}}
+                        <li class="{{ Request::routeIs('v2.data.table.projects.index') ? 'active' : '' }}">
+                            <a href="{{ route('v2.data.table.projects.index') }}"> 專案資料庫 v.2</a>
                         </li>
                         <li
                             class="{{ Request::routeIs('defect-index') || Request::routeIs('defect-chart') ? 'active' : '' }}">
