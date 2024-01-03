@@ -194,14 +194,16 @@
                                     </v-col>
                                     <v-col cols="12" sm="12" md="6">
                                         <v-menu ref="selectTimeOpen" v-model="selectTimeOpen"
-                                            transition="scale-transition" offset-y min-width="auto">
+                                            transition="scale-transition" offset-y min-width="auto"
+                                            :close-on-content-click="false">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field v-model="editedItem.time" label="時間"
                                                     prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs"
                                                     v-on="on">
                                                 </v-text-field>
                                             </template>
-                                            <v-time-picker v-model="editedItem.time" :allowed-minutes="allowedStep">
+                                            <v-time-picker v-model="editedItem.time" :allowed-minutes="allowedStep"
+                                                locale="zh-tw">
                                             </v-time-picker>
                                         </v-menu>
                                     </v-col>
