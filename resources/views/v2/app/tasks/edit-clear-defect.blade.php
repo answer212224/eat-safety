@@ -140,6 +140,16 @@
                                                         <v-textarea label="備註" v-model="taskDefect.memo" readonly
                                                             rows="2"></v-textarea>
                                                     </v-col>
+                                                    {{-- 稽核員 --}}
+                                                    <v-col cols="12">
+                                                        <v-text-field label="稽核員" v-model="taskDefect.user.name"
+                                                            readonly dense></v-text-field>
+                                                    </v-col>
+                                                    {{-- 稽核日期 --}}
+                                                    <v-col cols="12">
+                                                        <v-text-field label="稽核時間" v-model="taskDefect.created_at"
+                                                            readonly dense></v-text-field>
+                                                    </v-col>
 
                                                 </v-row>
 
@@ -197,8 +207,8 @@
                                                 color="red"></v-checkbox>
                                         </v-col>
                                         <v-col cols="6">
-                                            <v-checkbox v-model="editedItem.is_not_reach_deduct_standard" label="未達扣分標準"
-                                                color="red"></v-checkbox>
+                                            <v-checkbox v-model="editedItem.is_not_reach_deduct_standard"
+                                                label="未達扣分標準" color="red"></v-checkbox>
                                         </v-col>
                                         <v-col cols="6">
                                             <v-checkbox v-model="editedItem.is_suggestion" label="建議事項"
@@ -367,7 +377,6 @@
                             });
                     },
                 },
-
 
                 mounted() {
                     this.getDefects();

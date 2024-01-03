@@ -366,7 +366,7 @@ class ApiController extends Controller
     // 取得該任務食安缺失資料依照區站分類
     public function getTaskDefects(Task $task)
     {
-        $defects = $task->load('taskHasDefects.restaurantWorkspace', 'taskHasDefects.defect')->taskHasDefects
+        $defects = $task->load('taskHasDefects.restaurantWorkspace', 'taskHasDefects.defect', 'taskHasDefects.user')->taskHasDefects
             ->each(function ($defect) {
                 $defect->append('images_url');
             })
@@ -381,7 +381,7 @@ class ApiController extends Controller
     // 取得該任務清檢缺失資料依照區站分類
     public function getTaskClearDefects(Task $task)
     {
-        $defects = $task->load('taskHasClearDefects.restaurantWorkspace', 'taskHasClearDefects.clearDefect')->taskHasClearDefects
+        $defects = $task->load('taskHasClearDefects.restaurantWorkspace', 'taskHasClearDefects.clearDefect', 'taskHasClearDefects.user')->taskHasClearDefects
             ->each(function ($defect) {
                 $defect->append('images_url');
             })

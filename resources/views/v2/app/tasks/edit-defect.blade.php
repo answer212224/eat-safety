@@ -144,6 +144,16 @@
                                                         <v-textarea label="備註" v-model="taskDefect.memo" readonly
                                                             rows="2"></v-textarea>
                                                     </v-col>
+                                                    {{-- 稽核員 --}}
+                                                    <v-col cols="12">
+                                                        <v-text-field label="稽核員" v-model="taskDefect.user.name"
+                                                            readonly></v-text-field>
+                                                    </v-col>
+                                                    {{-- 稽核日期 --}}
+                                                    <v-col cols="12">
+                                                        <v-text-field label="稽核時間" v-model="taskDefect.created_at"
+                                                            readonly></v-text-field>
+                                                    </v-col>
                                                 </v-row>
 
                                             </v-card-text>
