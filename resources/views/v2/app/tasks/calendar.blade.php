@@ -450,7 +450,7 @@
                         this.editedItem = event
                     },
 
-                    allowedStep: m => m % 10 === 0,
+                    allowedStep: m => m % 30 === 0,
 
                     getExecuteTaskUsers() {
                         axios.get('/api/users/execute-task')
