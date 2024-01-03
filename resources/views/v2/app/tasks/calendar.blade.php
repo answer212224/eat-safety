@@ -411,7 +411,7 @@
                         this.events = []
                         this.loading = true
                         // 取得任務資料
-                        axios.get('/api/tasks/')
+                        axios.get('/api/tasks')
                             .then((res) => {
                                 res.data.data.forEach((item) => {
                                     this.events.push({
@@ -433,11 +433,13 @@
                                         restaurant: item.restaurant,
                                     })
                                 })
-                                this.loading = false
 
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -456,7 +458,10 @@
                                 this.users = res.data.data
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -469,10 +474,13 @@
                             })
                             .then((res) => {
                                 this.restaurants = res.data.data
-                                loading = false
+
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -493,11 +501,15 @@
                                 loading = false
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
                     getActiveProjects() {
+                        loading = true
                         axios.get('/api/projects/active')
                             .then((res) => {
                                 this.projects = res.data.data
@@ -506,7 +518,10 @@
                                 }
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -566,7 +581,7 @@
                                 this.updateRange()
                             })
                             .catch((err) => {
-                                console.log(err)
+                                alert(err.response.data.message)
                             })
                             .finally(() => {
                                 this.selectedOpen = false
