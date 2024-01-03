@@ -59,9 +59,8 @@
                                 <v-form v-model="valid">
                                     <v-row>
                                         <v-col cols="12" sm="6">
-                                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
-                                                transition="scale-transition" offset-y max-width="290px"
-                                                min-width="290px">
+                                            <v-menu ref="menu" v-model="menu" transition="scale-transition" offset-y
+                                                max-width="290px" min-width="290px">
                                                 <template v-slot:activator="{ on }">
                                                     <v-text-field v-model="editedItem.effective_date" label="啟動月份"
                                                         prepend-icon="mdi-calendar" readonly v-on="on"
@@ -69,10 +68,8 @@
                                                 </template>
                                                 <v-date-picker v-model="editedItem.effective_date" no-title scrollable
                                                     type="month" locale="zh-TW" locale="zh-TW">
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                                                    <v-btn text color="primary"
-                                                        @click="$refs.menu.save(editedItem.effective_date)">OK</v-btn>
+
+
                                                 </v-date-picker>
                                             </v-menu>
                                         </v-col>

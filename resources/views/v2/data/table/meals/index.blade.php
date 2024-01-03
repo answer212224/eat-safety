@@ -68,8 +68,18 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.effective_date" label="啟月月份"
-                                                    :rules="[v => !!v || '啟月月份必需填寫']"></v-text-field>
+                                                <v-menu ref="menu" v-model="menu" transition="scale-transition"
+                                                    offset-y max-width="290px" min-width="290px">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-text-field v-model="editedItem.effective_date" label="啟用月份"
+                                                            prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                                            v-on="on" :rules="[v => !!v || '啟用月份必需填寫']">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="editedItem.effective_date" no-title
+                                                        scrollable type="month" locale="zh-tw">
+                                                    </v-date-picker>
+                                                </v-menu>
                                             </v-col>
                                             <v-col cols="12" sm="6" md="4">
                                                 <v-text-field v-model="editedItem.sid" label="品牌店代碼"
@@ -219,6 +229,7 @@
                     valid: false,
                     importDialog: false,
                     file: null,
+                    menu: false,
 
                 },
                 methods: {

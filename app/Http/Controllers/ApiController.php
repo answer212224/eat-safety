@@ -561,7 +561,7 @@ class ApiController extends Controller
     {
         // carbon effective_date
         $request->merge([
-            ' ' => Carbon::create($request->input('effective_date')),
+            'effective_date' => Carbon::create($request->input('effective_date')),
         ]);
 
         $meal->update($request->all());
