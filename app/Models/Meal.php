@@ -13,11 +13,6 @@ class Meal extends Model
 
     protected $guarded = [];
 
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format('Y-m');
-    }
-
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);

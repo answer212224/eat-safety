@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DefectsImport;
 use PDO;
 use Carbon\Carbon;
 use App\Models\Meal;
@@ -543,7 +544,7 @@ class ApiController extends Controller
 
     public function storeMeal(Request $request)
     {
-        // carbon effective_date
+
         $request->merge([
             'effective_date' => Carbon::create($request->input('effective_date')),
         ]);
@@ -560,7 +561,7 @@ class ApiController extends Controller
     {
         // carbon effective_date
         $request->merge([
-            'effective_date' => Carbon::create($request->input('effective_date')),
+            ' ' => Carbon::create($request->input('effective_date')),
         ]);
 
         $meal->update($request->all());
@@ -688,5 +689,77 @@ class ApiController extends Controller
             'status' => 'success',
             'data' => $project,
         ]);
+    }
+
+    // 取得食安缺失資料
+    public function getDefects()
+    {
+        $defects = Defect::all();
+        $defects = $defects->map(function ($defect) {
+            $defect->effective_date = Carbon::create($defect->effective_date)->format('Y-m');
+            return $defect;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
+    // 新增食安缺失資料
+    public function storeDefect(Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect = Defect::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
+    // 更新食安缺失資料
+    public function updateDefect(Defect $defect, Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
+    // 刪除食安缺失資料
+    public function deleteDefect(Defect $defect)
+    {
+        $defect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
+    // 匯入食安缺失資料
+    public function importDefects()
+    {
+        try {
+            Excel::import(new DefectsImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

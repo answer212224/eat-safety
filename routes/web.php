@@ -17,6 +17,7 @@ use App\Http\Controllers\TaskMealController;
 use App\Http\Controllers\V2\TaskController as V2TaskController;
 use App\Http\Controllers\V2\MealController as V2MealController;
 use App\Http\Controllers\V2\ProjectController as V2ProjectController;
+use App\Http\Controllers\V2\DefectController as V2DefectController;
 
 
 /*
@@ -257,6 +258,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/meals', [V2MealController::class, 'table'])->name('v2.data.table.meals.index');
             // 專案資料庫v2
             Route::get('/projects', [V2ProjectController::class, 'table'])->name('v2.data.table.projects.index');
+            // 食安缺失資料庫v2
+            Route::get('/defects', [V2DefectController::class, 'table'])->name('v2.data.table.defects.index');
         });
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
@@ -338,8 +341,17 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::post('/projects', [ApiController::class, 'storeProject'])->name('api.projects.store');
     // 更新專案資料庫資料
     Route::put('/projects/{project}', [ApiController::class, 'updateProject'])->name('api.projects.update');
+    // 取得食安缺失資料庫資料
+    Route::get('/defects', [ApiController::class, 'getDefects'])->name('api.defects');
+    // 新增食安缺失資料庫資料
+    Route::post('/defects', [ApiController::class, 'storeDefect'])->name('api.defects.store');
+    // 更新食安缺失資料庫資料
+    Route::put('/defects/{defect}', [ApiController::class, 'updateDefect'])->name('api.defects.update');
+    // 刪除食安缺失資料庫資料
+    Route::delete('/defects/{defect}', [ApiController::class, 'deleteDefect'])->name('api.defects.delete');
+    // 匯入食安缺失資料庫資料
+    Route::post('/defects/import', [ApiController::class, 'importDefects'])->name('api.defects.import');
 });
-
 
 Route::prefix('pos')->group(function () {
     // 門市資料upsert

@@ -203,10 +203,14 @@
                         <li class="{{ Request::routeIs('v2.data.table.projects.index') ? 'active' : '' }}">
                             <a href="{{ route('v2.data.table.projects.index') }}"> 專案資料庫 v.2</a>
                         </li>
-                        <li
+                        {{-- <li
                             class="{{ Request::routeIs('defect-index') || Request::routeIs('defect-chart') ? 'active' : '' }}">
                             <a href="{{ route('defect-index') }}"> 食安缺失資料庫 </a>
+                        </li> --}}
+                        <li class="{{ Request::routeIs('v2.data.table.defects.index') ? 'active' : '' }}">
+                            <a href="{{ route('v2.data.table.defects.index') }}"> 食安資料庫 v.2</a>
                         </li>
+
                         <li
                             class="{{ Request::routeIs('clear-defect-index') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
                             <a href="{{ route('clear-defect-index') }}"> 清檢缺失資料庫 </a>
