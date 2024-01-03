@@ -63,8 +63,7 @@
                                     type="month" @click:event="showEvent" event-overlap-mode="column"
                                     :event-more="false" locale="zh-tw">
                                 </v-calendar>
-                                <v-menu v-model="selectedOpen" :close-on-content-click="false"
-                                    :activator="selectedElement" offset-y>
+                                <v-menu v-model="selectedOpen" :activator="selectedElement" offset-y>
                                     <v-card>
                                         <v-toolbar :color="selectedEvent.color" dark>
                                             @can('update-task')
@@ -182,8 +181,7 @@
                                 <v-row>
                                     <v-col cols="12" sm="12" md="6">
                                         <v-menu ref="selectDateOpen" v-model="selectDateOpen"
-                                            :close-on-content-click="false" transition="scale-transition" offset-y
-                                            min-width="auto">
+                                            transition="scale-transition" offset-y min-width="auto">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field v-model="editedItem.date" label="日期"
                                                     prepend-icon="mdi-calendar" readonly v-bind="attrs"
@@ -196,8 +194,7 @@
                                     </v-col>
                                     <v-col cols="12" sm="12" md="6">
                                         <v-menu ref="selectTimeOpen" v-model="selectTimeOpen"
-                                            :close-on-content-click="false" transition="scale-transition" offset-y
-                                            min-width="auto">
+                                            transition="scale-transition" offset-y min-width="auto">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field v-model="editedItem.time" label="時間"
                                                     prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs"
