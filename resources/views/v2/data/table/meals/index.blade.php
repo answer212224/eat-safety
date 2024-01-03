@@ -67,7 +67,7 @@
                                 <v-form ref="form" v-model="valid">
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-menu ref="menu" v-model="menu" transition="scale-transition"
                                                     offset-y max-width="290px" min-width="290px">
                                                     <template v-slot:activator="{ on, attrs }">
@@ -81,46 +81,57 @@
                                                     </v-date-picker>
                                                 </v-menu>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.sid" label="品牌店代碼"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '品牌店代碼必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.brand" label="品牌"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '品牌必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.shop" label="店別"></v-text-field>
+                                            <v-col cols="12" sm="6">
+                                                <v-text-field v-model="editedItem.shop" label="店別"
+                                                    prepend-icon="mdi-tag"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.category" label="類別"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '類別必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.chef" label="廚別"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '廚別必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.workspace" label="區站"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '區站必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.qno" label="編號"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '編號必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.name" label="名稱"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '名稱必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.note" label="備註"></v-text-field>
+                                            <v-col cols="12" sm="6">
+                                                <v-text-field v-model="editedItem.note" label="備註"
+                                                    prepend-icon="mdi-tag"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.item" label="檢項"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '檢項必需填寫']"></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6">
                                                 <v-text-field v-model="editedItem.items" label="檢樣項目"
+                                                    prepend-icon="mdi-tag"
                                                     :rules="[v => !!v || '檢樣項目必需填寫']"></v-text-field>
                                             </v-col>
                                         </v-row>

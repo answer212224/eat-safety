@@ -63,12 +63,13 @@
                                         {{-- 專案名稱 --}}
                                         <v-col cols="12" sm="6">
                                             <v-text-field v-model="editedItem.name" :rules="[v => !!v || '請輸入專案名稱']"
-                                                label="專案名稱" required></v-text-field>
+                                                prepend-icon="mdi-format-list-bulleted-type" label="專案名稱"
+                                                required></v-text-field>
                                         </v-col>
                                         {{-- 專案狀態 --}}
                                         <v-col cols="12" sm="6">
                                             <v-select v-model="editedItem.status" :items="statusItems" label="專案狀態"
-                                                required></v-select>
+                                                prepend-icon="mdi-format-list-bulleted-type" required></v-select>
                                         </v-col>
 
                                         {{-- 專案月份 --}}
@@ -90,7 +91,8 @@
                                         {{-- (內外場)食安缺失子項目 --}}
                                         <v-col cols="12" sm="6" v-if="editedIndex == -1">
                                             <v-select v-model="editedItem.description" :items="projectDefects"
-                                                label="食安缺失子項目" required :rules="[v => !!v || '請選擇食安缺失子項目']">
+                                                prepend-icon="mdi-format-list-bulleted-type" label="食安缺失子項目" required
+                                                :rules="[v => !!v || '請選擇食安缺失子項目']">
                                         </v-col>
                                     </v-row>
                                 </v-form>

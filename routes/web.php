@@ -18,6 +18,7 @@ use App\Http\Controllers\V2\TaskController as V2TaskController;
 use App\Http\Controllers\V2\MealController as V2MealController;
 use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\DefectController as V2DefectController;
+use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
 
 
 /*
@@ -260,6 +261,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/projects', [V2ProjectController::class, 'table'])->name('v2.data.table.projects.index');
             // 食安缺失資料庫v2
             Route::get('/defects', [V2DefectController::class, 'table'])->name('v2.data.table.defects.index');
+            // 清檢缺失資料庫v2
+            Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.table.clear-defects.index');
         });
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
@@ -351,6 +354,16 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::delete('/defects/{defect}', [ApiController::class, 'deleteDefect'])->name('api.defects.delete');
     // 匯入食安缺失資料庫資料
     Route::post('/defects/import', [ApiController::class, 'importDefects'])->name('api.defects.import');
+    // 取得清檢缺失資料庫資料
+    Route::get('/clear-defects', [ApiController::class, 'getClearDefects'])->name('api.clear-defects');
+    // 新增清檢缺失資料庫資料
+    Route::post('/clear-defects', [ApiController::class, 'storeClearDefect'])->name('api.clear-defects.store');
+    // 更新清檢缺失資料庫資料
+    Route::put('/clear-defects/{clearDefect}', [ApiController::class, 'updateClearDefect'])->name('api.clear-defects.update');
+    // 刪除清檢缺失資料庫資料
+    Route::delete('/clear-defects/{clearDefect}', [ApiController::class, 'deleteClearDefect'])->name('api.clear-defects.delete');
+    // 匯入清檢缺失資料庫資料
+    Route::post('/clear-defects/import', [ApiController::class, 'importClearDefects'])->name('api.clear-defects.import');
 });
 
 Route::prefix('pos')->group(function () {

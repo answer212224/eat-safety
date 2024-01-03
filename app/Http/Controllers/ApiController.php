@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\DefectsImport;
 use PDO;
 use Carbon\Carbon;
 use App\Models\Meal;
@@ -16,6 +15,8 @@ use App\Models\ClearDefect;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
+use App\Imports\DefectsImport;
+use App\Imports\ClearDefectImport;
 use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -752,6 +753,78 @@ class ApiController extends Controller
     {
         try {
             Excel::import(new DefectsImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    // 取得清檢缺失資料
+    public function getClearDefects()
+    {
+        $defects = ClearDefect::all();
+        $defects = $defects->map(function ($defect) {
+            $defect->effective_date = Carbon::create($defect->effective_date)->format('Y-m');
+            return $defect;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
+    // 新增清檢缺失資料
+    public function storeClearDefect(Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect = ClearDefect::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
+    // 更新清檢缺失資料
+    public function updateClearDefect(ClearDefect $clearDefect, Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $clearDefect->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $clearDefect,
+        ]);
+    }
+
+    // 刪除清檢缺失資料
+    public function deleteClearDefect(ClearDefect $clearDefect)
+    {
+        $clearDefect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $clearDefect,
+        ]);
+    }
+
+    // 匯入清檢缺失資料
+    public function importClearDefects()
+    {
+        try {
+            Excel::import(new ClearDefectImport, request()->file('file'));
             return response()->json([
                 'status' => 'success',
             ]);

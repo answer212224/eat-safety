@@ -74,35 +74,16 @@
                                             </v-menu>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="editedItem.group" label="分類"
+                                            <v-text-field v-model="editedItem.main_item" label="主項目"
                                                 prepend-icon="mdi-format-list-bulleted-type"
-                                                :rules="[v => !!v || '分類必須填寫']" required></v-text-field>
+                                                :rules="[v => !!v || '主項目必須填寫']" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="editedItem.title" label="子項目" required
+                                            <v-text-field v-model="editedItem.sub_item" label="次項目"
                                                 prepend-icon="mdi-format-list-bulleted-type"
-                                                :rules="[v => !!v || '子項目必須填寫']"></v-text-field>
+                                                :rules="[v => !!v || '次項目必須填寫']" required></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" sm="6">
-                                            <v-text-field v-model="editedItem.category" label="類別" required
-                                                prepend-icon="mdi-format-list-bulleted-type"
-                                                :rules="[v => !!v || '類別必須填寫']"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" sm="6">
-                                            <v-text-field v-model="editedItem.deduct_point" label="扣分" required
-                                                prepend-icon="mdi-minus-circle-outline" type="number"
-                                                :rules="[v => !!v || '扣分必須填寫', v => v <= 0 || '扣分必須小於0']"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-textarea v-model="editedItem.description" label="稽核標準" required
-                                                prepend-icon="mdi-format-list-bulleted-type" rows="2"
-                                                :rules="[v => !!v || '稽核標準必須填寫']"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-textarea v-model="editedItem.report_description" label="報告呈現說明" required
-                                                prepend-icon="mdi-format-list-bulleted-type" rows="2"
-                                                :rules="[v => !!v || '報告呈現說明必須填寫']"></v-text-field>
-                                        </v-col>
+
                                     </v-row>
                                 </v-form>
                             </v-container>
@@ -161,29 +142,14 @@
                             value: 'effective_date',
                         },
                         {
-                            text: '分類',
-                            value: 'group'
+                            text: '主項目',
+                            value: 'main_item',
                         },
                         {
-                            text: '子項目',
-                            value: 'title',
+                            text: '次項目',
+                            value: 'sub_item',
                         },
-                        {
-                            text: '類別',
-                            value: 'category',
-                        },
-                        {
-                            text: '扣分',
-                            value: 'deduct_point'
-                        },
-                        {
-                            text: '稽核標準',
-                            value: 'description',
-                        },
-                        {
-                            text: '報告呈現說明',
-                            value: 'report_description',
-                        },
+
                         {
                             text: '操作',
                             value: 'actions',
@@ -193,21 +159,13 @@
                     editedIndex: -1,
                     editedItem: {
                         effective_date: '',
-                        group: '',
-                        title: '',
-                        category: '',
-                        deduct_point: '',
-                        description: '',
-                        report_description: '',
+                        main_item: '',
+                        sub_item: '',
                     },
                     defaultItem: {
                         effective_date: '',
-                        group: '',
-                        title: '',
-                        category: '',
-                        deduct_point: '',
-                        description: '',
-                        report_description: '',
+                        main_item: '',
+                        sub_item: '',
                     },
                     dialog: false,
                     formTitle: '',
@@ -221,12 +179,12 @@
                 methods: {
                     getDefects() {
                         this.loading = true;
-                        axios.get('/api/defects')
+                        axios.get('/api/clear-defects')
                             .then(response => {
                                 this.defects = response.data.data;
                             })
                             .catch(error => {
-                                console.log(error);
+                                alert(error.response.data.message);
                             })
                             .finally(() => {
                                 this.loading = false;
@@ -249,7 +207,7 @@
 
                     save() {
                         if (this.editedIndex > -1) {
-                            axios.put('/api/defects/' + this.editedItem.id, this.editedItem)
+                            axios.put('/api/clear-defects/' + this.editedItem.id, this.editedItem)
                                 .then(response => {
                                     this.getDefects();
                                 })
@@ -260,7 +218,7 @@
                                     this.loading = false;
                                 });
                         } else {
-                            axios.post('/api/defects', this.editedItem)
+                            axios.post('/api/clear-defects', this.editedItem)
                                 .then(response => {
                                     this.getDefects();
                                 })
@@ -280,7 +238,7 @@
                             return;
                         }
                         this.loading = true;
-                        axios.delete('/api/defects/' + item.id)
+                        axios.delete('/api/clear-defects/' + item.id)
                             .then(response => {
                                 this.getDefects();
                             })
@@ -296,7 +254,7 @@
                         const formData = new FormData();
                         formData.append('file', this.file);
                         this.loading = true;
-                        axios.post('/api/defects/import', formData, {
+                        axios.post('/api/clear-defects/import', formData, {
                                 headers: {
                                     'Content-Type': 'multipart/form-data'
                                 }
