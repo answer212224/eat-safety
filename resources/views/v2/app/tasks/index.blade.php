@@ -374,7 +374,7 @@
                                 this.tasks = response.data.data
                             })
                             .catch(error => {
-                                console.log(error)
+                                alert(error.response.data.message)
                             })
                             .finally(() => {
                                 this.loading = false
@@ -390,7 +390,7 @@
                                 this.getTasks()
                             })
                             .catch(error => {
-                                console.log(error)
+                                alert(error.response.data.message)
                             })
                             .finally(() => {
                                 this.loading = false
@@ -403,9 +403,7 @@
                                 projects: this.taskItem.projects
                             })
                             .then(response => {
-                                if (response.data.status === 'success') {
-                                    alert('儲存成功')
-                                }
+
                             })
                             .catch(error => {
                                 alert(error.response.data.message)
@@ -423,9 +421,6 @@
                                 meals: this.taskItem.meals
                             })
                             .then(response => {
-                                if (response.data.status === 'success') {
-                                    alert('儲存成功')
-                                }
 
                             })
                             .catch(error => {
@@ -446,9 +441,7 @@
                                 outer_manager: this.taskItem.outer_manager
                             })
                             .then(response => {
-                                if (response.data.status === 'success') {
-                                    alert('簽核成功')
-                                }
+
                             })
                             .catch(error => {
                                 alert(error.response.data.message)
