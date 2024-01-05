@@ -255,6 +255,7 @@ class ApiController extends Controller
     public function updateUserTaskStatus(Task $task, Request $request)
     {
         $is_completed = $request->input('is_completed');
+
         $task->users()->updateExistingPivot(auth()->user()->id, [
             'is_completed' => $is_completed,
         ]);
@@ -266,6 +267,12 @@ class ApiController extends Controller
         } else {
             $task->update([
                 'status' => 'processing',
+            ]);
+        }
+
+        if ($task->category == '餐點採樣') {
+            $task->update([
+                'status' => 'completed',
             ]);
         }
 
