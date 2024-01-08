@@ -260,13 +260,16 @@
                                         <v-col cols="12" sm="6"
                                             v-for="meal in (taskItem && taskItem.meals)" :key="meal.id">
                                             <span class="subtitle-2">@{{ meal.qno }} @{{ meal.name }}
-                                                @{{ meal.chef }} @{{ meal.workspace }}</span>
+                                                @{{ meal.chef }} @{{ meal.workspace }}
+                                            </span>
                                             <v-switch v-model="meal.pivot.is_taken" inset color="success"
                                                 :loading="loading" :label="meal.pivot.is_taken ? '已帶回' : '未帶回'">
-
                                             </v-switch>
                                             <v-text-field v-model="meal.pivot.memo" label="備註"
                                                 dense></v-text-field>
+                                            {{-- meal.note --}}
+                                            <span class="subtitle-2">備忘錄: @{{ meal.note }}</span>
+
                                         </v-col>
                                     </v-row>
                                 </v-container>
