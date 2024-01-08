@@ -19,6 +19,10 @@
                         </v-col>
                     </v-row>
                     <v-row class="fill-height" v-show="!loading">
+                        {{-- type --}}
+                        <v-col cols="12" sm="12" md="12">
+                            <v-select v-model="type" :items="['month', 'day']" label="顯示模式"></v-select>
+                        </v-col>
                         <v-col>
                             <v-sheet height="64">
                                 <v-toolbar flat>
@@ -60,8 +64,9 @@
                             </v-sheet>
                             <v-sheet height="auto">
                                 <v-calendar ref="calendar" v-model="focus" color="primary" :events="events"
-                                    type="month" @click:event="showEvent" event-overlap-mode="column"
-                                    :event-more="false" locale="zh-tw">
+                                    :type="type" @click:event="showEvent" event-overlap-mode="stack"
+                                    :event-more="false" locale="zh-tw" :event-overlap-threshold="1"
+                                    :interval-count="0">
                                 </v-calendar>
                                 <v-menu v-model="selectedOpen" :activator="selectedElement" offset-y>
                                     <v-card>
@@ -78,27 +83,30 @@
                                         </v-toolbar>
                                         <v-card-text>
                                             <v-row>
+                                                {{-- 類別 --}}
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-icon left color="teal darken-2" small>mdi-tag</v-icon>
+                                                    <span class="text--primary">
+                                                        @{{ selectedEvent.category }}</span>
+                                                </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-icon left color="teal darken-2" small>mdi-calendar</v-icon>
                                                     <span class="text--primary">
-                                                        @{{ selectedEvent.start }}</span>
+                                                        @{{ selectedEvent.date }} @{{ selectedEvent.time }}</span>
 
                                                 </v-col>
-
                                                 {{-- 地點 --}}
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-icon left color="teal darken-2" small>mdi-map-marker</v-icon>
                                                     <span class="text--primary">
                                                         @{{ selectedEvent.brand }} @{{ selectedEvent.shop }}</span>
                                                 </v-col>
-
-                                                <v-col cols="12" sm="12" md="12">
+                                                <v-col cols="12" sm="12" md="6">
                                                     <v-icon left color="teal darken-2" small>mdi-account</v-icon>
                                                     <span class="text--primary" v-for="user in selectedEvent.users">
                                                         @{{ user.name }}</span>
 
                                                 </v-col>
-
                                                 <v-col cols="12">
                                                     <v-icon left color="teal darken-2" small>mdi-food</v-icon>
                                                     <v-chip v-for="meal in selectedEvent.meals" class="ma-1"
@@ -329,6 +337,7 @@
                     selectedElement: null,
                     selectedOpen: false,
                     events: [],
+                    type: 'month',
                     loading: false,
                     dialog: false,
                     categories: {
@@ -354,14 +363,6 @@
                 }),
 
                 methods: {
-                    viewDay({
-                        date
-                    }) {
-                        this.focus = date
-                        this.type = 'day'
-                    },
-
-
                     prev() {
                         this.$refs.calendar.prev()
                     },
@@ -417,13 +418,15 @@
                                     this.events.push({
                                         id: item.id,
                                         name: item.restaurant.brand_code + item
-                                            .restaurant.shop,
+                                            .restaurant.shop + item.task_date.split(' ')[1] + item
+                                            .users.map(
+                                                user => user.name).join(','),
                                         brand: item.restaurant.brand_code,
                                         shop: item.restaurant.shop,
                                         users: item.users,
                                         meals: item.meals,
                                         projects: item.projects,
-                                        start: item.task_date,
+                                        start: item.task_date.split(' ')[0],
                                         end_at: item.end_at,
                                         start_at: item.start_at,
                                         color: this.categories[item.category],

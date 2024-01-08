@@ -65,12 +65,14 @@ class ApiController extends Controller
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
+                ->orderBy('task_date')
                 ->get();
         } else {
             $tasks = auth()->user()->tasks()->with(['restaurant', 'users', 'meals', 'projects'])
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
+                ->orderBy('task_date')
                 ->get();
         }
 
