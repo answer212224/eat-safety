@@ -302,6 +302,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::put('/tasks/{task}/meals', [ApiController::class, 'updateTaskMealStatus'])->name('api.user.tasks.meals.update');
     // 取得任務相關的資料
     Route::get('/tasks/{task}', [ApiController::class, 'getTask'])->name('api.user.tasks.get');
+    // 取得該任務的餐廳所有區站 getRestaurantsWorkSpaces
+    Route::get('/restaurants/work-spaces', [ApiController::class, 'getRestaurantsWorkSpaces'])->name('api.restaurants-workspaces');
     // 取得該月啟用的食安缺失條文
     Route::get('/defects/active', [ApiController::class, 'getActiveDefects'])->name('api.defects.active');
     // 取得該月啟用的清檢缺失條文

@@ -8,6 +8,10 @@
         <link rel="stylesheet" href="{{ asset('plugins/filepond/FilePondPluginImagePreview.min.css') }}">
         @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
         @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('plugins/tomSelect/tom-select.default.min.css') }}">
+        @vite(['resources/scss/light/plugins/tomSelect/custom-tomSelect.scss'])
+        @vite(['resources/scss/dark/plugins/tomSelect/custom-tomSelect.scss'])
     </x-slot:headerFiles>
 
 
@@ -124,6 +128,19 @@
                                                                 :rules="[v => v != null || '請選擇子項目']">
                                                             </v-select>
                                                         </v-col>
+                                                        {{-- 缺失說明複選 --}}
+                                                        <v-col cols="12" sm="12">
+                                                            <label>缺失說明複選</label>
+                                                            <select id="select-state" name="description[]" multiple
+                                                                placeholder="選擇缺失或自行輸入(可複選)" autocomplete="off"
+                                                                required>
+                                                                <option value="">選擇缺失或自行輸入(可複選)</option>
+                                                                <option value="積垢不潔">積垢不潔</option>
+                                                                <option value="積塵">積塵</option>
+                                                                <option value="留有食渣">留有食渣</option>
+                                                                <option value="留有病媒屍體">留有病媒屍體</option>
+                                                            </select>
+                                                        </v-col>
                                                         {{-- 數量 --}}
                                                         <v-col cols="12" sm="12">
                                                             <v-text-field v-model="selectedAmount" label="數量"
@@ -153,7 +170,8 @@
                                                                 value="1" color="red darken-3"></v-checkbox>
                                                         </v-col>
                                                         <v-col cols="12">
-                                                            <v-textarea label="備註" name="memo"></v-textarea>
+                                                            <v-textarea label="備註" name="memo"
+                                                                rows="2"></v-textarea>
                                                         </v-col>
                                                     </v-row>
                                                 </v-card-text>
@@ -188,6 +206,7 @@
         <script src="{{ asset('plugins/filepond/FilePondPluginImageResize.min.js') }}"></script>
         <script src="{{ asset('plugins/filepond/FilePondPluginImageTransform.min.js') }}"></script>
         <script src="{{ asset('plugins/filepond/filepondPluginFileValidateSize.min.js') }}"></script>
+        <script src="{{ asset('plugins/tomSelect/tom-select.base.js') }}"></script>
         <script>
             new Vue({
                 el: '#app',
@@ -278,6 +297,12 @@
                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                 },
+            });
+
+            new TomSelect("#select-state", {
+                persist: false,
+                createOnBlur: true,
+                create: true
             });
         </script>
     </x-slot:footerFiles>

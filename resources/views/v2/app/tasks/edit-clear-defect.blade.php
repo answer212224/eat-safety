@@ -136,6 +136,16 @@
                                                         <v-text-field label="數量" v-model="taskDefect.amount"
                                                             readonly dense></v-text-field>
                                                     </v-col>
+                                                    {{-- 缺失說明 --}}
+                                                    <v-col cols="12">
+                                                        <v-chip-group>
+                                                            <v-chip color="primary" text dark small label
+                                                                v-for="description in taskDefect.description"
+                                                                :key="description">
+                                                                @{{ description }}
+                                                            </v-chip>
+                                                        </v-chip-group>
+                                                    </v-col>
                                                     <v-col cols="12">
                                                         <v-textarea label="備註" v-model="taskDefect.memo" readonly
                                                             rows="2"></v-textarea>
@@ -177,6 +187,12 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
+                                        {{-- 區站 --}}
+                                        <v-col cols="12">
+                                            <v-select label="區站" v-model="editedItem.restaurant_workspace_id"
+                                                :items="workSpaces" item-text="area" item-value="id"
+                                                dense></v-select>
+                                        </v-col>
                                         <v-col cols="12">
                                             {{-- 主項目 --}}
                                             <v-select label="主項目" v-model="editedItem.clear_defect.main_item"
@@ -188,6 +204,7 @@
                                                 :items="activeDefects[editedItem.clear_defect.main_item]"
                                                 item-text="sub_item" item-value="id" dense></v-select>
                                         </v-col>
+
                                         <v-col cols="12">
                                             {{-- 數量 --}}
                                             <v-text-field v-model="editedItem.amount" label="數量" type="number"
@@ -199,6 +216,12 @@
                                                     mdi-minus
                                                 </v-icon>
                                             </v-text-field>
+                                        </v-col>
+
+                                        {{-- 缺失說明 --}}
+                                        <v-col cols="12">
+                                            <v-combobox label="缺失說明" v-model="editedItem.description"
+                                                :items="items" dense multiple chips></v-combobox>
                                         </v-col>
 
                                         {{-- 忽略扣分 未達扣分標準 建議事項 --}}
@@ -239,7 +262,6 @@
     </div>
 
     <x-slot:footerFiles>
-
         <script>
             new Vue({
                 el: '#app',
@@ -251,6 +273,14 @@
                     tabs: [],
                     loading: false,
                     dialog: false,
+                    workSpaces: [],
+                    items: [
+                        '積垢不潔',
+                        '積塵',
+                        '留有食渣',
+                        '留有病媒屍體',
+                    ],
+
                     editedItem: {
                         clear_defect: {
 
@@ -258,7 +288,6 @@
                     },
                     activeDefects: [],
                     main_defects: [],
-
                     totalInnerScore: 0,
                     totalOuterScore: 0,
 
@@ -286,6 +315,23 @@
                                 this.activeDefects = res.data.data;
                                 // 將缺失條文的key值轉成陣列
                                 this.main_defects = Object.keys(this.activeDefects);
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
+                    },
+
+                    getRestaurantsWorkSpaces() {
+                        axios.get(`/api/restaurants/work-spaces`, {
+                                params: {
+                                    restaurant_id: {{ $task->restaurant_id }}
+                                }
+                            })
+                            .then((res) => {
+                                this.workSpaces = res.data.data.restaurant_workspaces;
                             })
                             .catch((err) => {
                                 alert(err.response.data.message);
@@ -326,8 +372,10 @@
                         this.dialog = false;
                         this.loading = true;
                         axios.put(`/api/tasks/clear-defects/${this.editedItem.id}`, {
+                                restaurant_workspace_id: this.editedItem.restaurant_workspace_id,
                                 clear_defect_id: this.editedItem.clear_defect_id,
                                 amount: this.editedItem.amount,
+                                description: this.editedItem.description,
                                 is_ignore: this.editedItem.is_ignore,
                                 is_not_reach_deduct_standard: this.editedItem.is_not_reach_deduct_standard,
                                 is_suggestion: this.editedItem.is_suggestion,
@@ -382,9 +430,9 @@
                     this.getDefects();
                     this.getActiveDefects();
                     this.getTaskScore();
+                    this.getRestaurantsWorkSpaces();
                 },
-
-            })
+            });
         </script>
     </x-slot:footerFiles>
 </x-base-layout>

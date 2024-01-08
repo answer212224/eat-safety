@@ -334,6 +334,19 @@ class ApiController extends Controller
         ]);
     }
 
+    // getRestaurantsWorkSpaces
+    public function getRestaurantsWorkSpaces(Request $request)
+    {
+        $restaurant_id = $request->input('restaurant_id');
+
+        $restaurant = Restaurant::with('restaurantWorkspaces')->find($restaurant_id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $restaurant,
+        ]);
+    }
+
     // 取得該月啟用的食安缺失條文
     public function getActiveDefects()
     {
@@ -425,9 +438,11 @@ class ApiController extends Controller
     public function updateTaskClearDefect(TaskHasClearDefect $taskHasClearDefect, Request $request)
     {
         $taskHasClearDefect->update([
+            'restaurant_workspace_id' => $request->input('restaurant_workspace_id'),
             'clear_defect_id' => $request->input('clear_defect_id'),
             'memo' => $request->input('memo'),
             'amount' => $request->input('amount'),
+            'description' => $request->input('description'),
             'is_ignore' => $request->input('is_ignore'),
             'is_not_reach_deduct_standard' => $request->input('is_not_reach_deduct_standard'),
             'is_suggestion' => $request->input('is_suggestion'),
