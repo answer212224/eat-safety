@@ -180,6 +180,12 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
+                                        {{-- 區站 --}}
+                                        <v-col cols="12">
+                                            <v-select label="區站" v-model="editedItem.restaurant_workspace_id"
+                                                :items="workSpaces" item-text="area" item-value="id"
+                                                dense></v-select>
+                                        </v-col>
                                         <v-col cols="12">
                                             <v-select label="缺失分類" :items="groups"
                                                 v-model="editedItem.defect.group">
@@ -259,6 +265,7 @@
                     tabs: [],
                     loading: false,
                     dialog: false,
+                    workSpaces: [],
                     editedItem: {
                         defect: {},
                     },
@@ -309,6 +316,23 @@
                         });
                     },
 
+                    getRestaurantsWorkSpaces() {
+                        axios.get(`/api/restaurants/work-spaces`, {
+                                params: {
+                                    restaurant_id: {{ $task->restaurant_id }}
+                                }
+                            })
+                            .then((res) => {
+                                this.workSpaces = res.data.data.restaurant_workspaces;
+                            })
+                            .catch((err) => {
+                                alert(err.response.data.message);
+                            })
+                            .finally(() => {
+                                this.loading = false;
+                            });
+                    },
+
                     openDialog(taskDefect) {
                         this.editedItem = taskDefect;
                         this.dialog = true;
@@ -326,6 +350,7 @@
                         this.dialog = false;
                         this.loading = true;
                         axios.put(`/api/tasks/defects/${this.editedItem.id}`, {
+                            restaurant_workspace_id: this.editedItem.restaurant_workspace_id,
                             defect_id: this.editedItem.defect_id,
                             memo: this.editedItem.memo,
                             is_ignore: this.editedItem.is_ignore,
@@ -385,6 +410,7 @@
                     this.getDefects();
                     this.getActiveDefects();
                     this.getTaskScore();
+                    this.getRestaurantsWorkSpaces();
                 },
 
             })

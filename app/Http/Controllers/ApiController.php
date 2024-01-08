@@ -419,6 +419,7 @@ class ApiController extends Controller
     public function updateTaskDefect(TaskHasDefect $taskHasDefect, Request $request)
     {
         $taskHasDefect->update([
+            'restaurant_workspace_id' => $request->input('restaurant_workspace_id'),
             'defect_id' => $request->input('defect_id'),
             'memo' => $request->input('memo'),
             'is_ignore' => $request->input('is_ignore'),
