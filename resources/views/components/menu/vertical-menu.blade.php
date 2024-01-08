@@ -119,16 +119,16 @@
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
                         id="task" data-bs-parent="#accordionExample">
 
-                        <li
+                        {{-- <li
                             class="{{ Request::routeIs('task-assign') || Request::routeIs('task-edit') ? 'active' : '' }}">
                             <a href="{{ route('task-assign') }}"> 稽核行事曆 </a>
-                        </li>
+                        </li> --}}
 
                         <li class="{{ Request::routeIs('v2.app.tasks.calendar') ? 'active' : '' }}">
                             <a href="{{ route('v2.app.tasks.calendar') }}"> 稽核行事曆 v.2</a>
                         </li>
 
-                        <li
+                        {{-- <li
                             class="{{ Request::routeIs('task-list') ||
                             Request::routeIs('task-create') ||
                             Request::routeIs('task-defect-show') ||
@@ -141,7 +141,7 @@
                                 ? 'active'
                                 : '' }}">
                             <a href="{{ route('task-list') }}"> 稽核任務列表 </a>
-                        </li>
+                        </li> --}}
                         {{-- 任務列表v2 --}}
                         <li class="{{ Request::routeIs('v2.app.tasks.index') ||
                         Request::routeIs('v2.app.tasks.defect.create') ||
