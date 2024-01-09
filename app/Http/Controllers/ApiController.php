@@ -166,6 +166,12 @@ class ApiController extends Controller
     public function deleteTask(Task $task)
     {
         $task->delete();
+        $task->users()->detach();
+        $task->meals()->detach();
+        $task->projects()->detach();
+        // 刪除任務的缺失
+        $task->taskHasDefects()->delete();
+
 
         return response()->json([
             'status' => 'success',
