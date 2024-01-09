@@ -171,6 +171,8 @@ class ApiController extends Controller
         $task->projects()->detach();
         // 刪除任務的缺失
         $task->taskHasDefects()->delete();
+        // 刪除任務的清檢缺失
+        $task->taskHasClearDefects()->delete();
 
 
         return response()->json([
