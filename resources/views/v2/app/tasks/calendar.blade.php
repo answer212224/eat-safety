@@ -21,7 +21,7 @@
                     <v-row class="fill-height" v-show="!loading">
                         {{-- type --}}
                         <v-col cols="12" sm="12" md="12">
-                            <v-select v-model="type" :items="['month', 'day']" label="顯示模式"></v-select>
+                            <v-select v-model="type" :items="['month', 'day', '4day']" label="顯示模式"></v-select>
                         </v-col>
                         <v-col>
                             <v-sheet height="64">
