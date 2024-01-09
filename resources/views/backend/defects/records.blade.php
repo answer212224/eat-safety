@@ -90,12 +90,12 @@
                         <tbody>
                             @foreach ($defectRecords as $defectRecord)
                                 <tr>
-                                    <td>{{ $defectRecord->task->category }}</td>
-                                    <td>{{ $defectRecord->defect->group }}</td>
-                                    <td>{{ $defectRecord->defect->title }}</td>
-                                    <td>{{ $defectRecord->defect->category }}</td>
-                                    <td>{{ $defectRecord->defect->report_description }}</td>
-                                    <td>{{ $defectRecord->defect->deduct_point }}</td>
+                                    <td>{{ optional($defectRecord->task)->category }}</td>
+                                    <td>{{ optional($defectRecord->defect)->group }}</td>
+                                    <td>{{ optional($defectRecord->defect)->title }}</td>
+                                    <td>{{ optional($defectRecord->defect)->category }}</td>
+                                    <td>{{ optional($defectRecord->defect)->report_description }}</td>
+                                    <td>{{ optional($defectRecord->defect)->deduct_point }}</td>
                                     <td>{{ $defectRecord->restaurantWorkspace->restaurant->brand }}{{ $defectRecord->restaurantWorkspace->restaurant->shop }}
                                     </td>
                                     <td>{{ $defectRecord->restaurantWorkspace->area }}</td>
