@@ -106,7 +106,7 @@ class RowDataController extends Controller
                 ->where('is_ignore', false)
                 ->where('is_not_reach_deduct_standard', false)
                 ->where('is_suggestion', false)
-                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_repeat', false)
                 ->whereIn('restaurant_workspace_id', $task->restaurant->restaurantBackWorkspaces->pluck('id'))
                 ->load('defect');
 
@@ -120,7 +120,7 @@ class RowDataController extends Controller
                 ->where('is_ignore', false)
                 ->where('is_not_reach_deduct_standard', false)
                 ->where('is_suggestion', false)
-                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_repeat', false)
                 ->where('restaurant_workspace_id', $task->restaurant->restaurantFrontWorkspace->id)->load('defect');
 
             // 計算該任務底下餐廳工作區是外場的分數
@@ -135,7 +135,7 @@ class RowDataController extends Controller
                 ->where('is_ignore', false)
                 ->where('is_not_reach_deduct_standard', false)
                 ->where('is_suggestion', false)
-                ->where('is_not_reach_deduct_standard', false)
+                ->where('is_repeat', false)
                 ->load('defect')
                 ->groupBy('defect.group')
                 ->map(function ($item) {
