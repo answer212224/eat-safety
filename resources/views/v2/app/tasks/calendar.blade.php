@@ -54,7 +54,7 @@
                                         </v-btn>
                                     @endcan
                                     @can('create-task')
-                                        <v-btn fab small color="primary" @click="dialog = true">
+                                        <v-btn fab small color="primary" @click="openDialog">
                                             <v-icon small>
                                                 mdi-plus
                                             </v-icon>
@@ -168,7 +168,7 @@
                     </v-row>
 
 
-                    <v-dialog v-model="dialog" max-width="500px" persistent>
+                    <v-dialog v-model="dialog" max-width="500px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline" v-if="editedIndex === -1">新增任務</span>
@@ -450,7 +450,7 @@
                         this.editedIndex = this.events.indexOf(event)
                         this.selectedOpen = false
                         this.dialog = true
-                        this.editedItem = event
+                        this.editedItem = structuredClone(event)
                     },
 
                     allowedStep: m => m % 30 === 0,
@@ -565,6 +565,21 @@
                         }
                         this.dialog = false
                         this.editedItem = {}
+                    },
+
+                    openDialog(item) {
+                        this.dialog = true
+                        this.editedIndex = -1
+                        this.editedItem = {
+                            date: this.focus,
+                            time: '09:00',
+                            users: [],
+                            restaurant: null,
+                            meals: [],
+                            projects: [],
+                            category: '食安及5S',
+                        }
+
                     },
 
                     close() {
