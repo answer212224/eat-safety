@@ -32,180 +32,179 @@
 
                     <v-row v-show="!loading">
                         <v-col cols="12" sm="4" v-for="task in tasks" :key="task.id">
-                            <v-lazy :options="{ threshold: 0.3 }" transition="fade-transition" class="my-4">
-                                <v-card>
-                                    <v-card-title>
-                                        @{{ task.category }}
-                                        <v-chip v-if="task.status === 'pending'" label color="purple darken-4" dark
-                                            small class="ml-2">未稽核
-                                        </v-chip>
-                                        <v-chip v-if="task.status === 'processing'" label color="warning" dark small
-                                            class="ml-2">稽核中
-                                        </v-chip>
-                                        <v-chip v-if="task.status === 'pending_approval'" label color="red darken-4"
-                                            dark small class="ml-2">待核對
-                                        </v-chip>
-                                        <v-chip v-if="task.status === 'completed'" label color="success" dark small
-                                            class="ml-2">已完成
-                                        </v-chip>
-                                        <v-spacer></v-spacer>
-                                        <v-switch
-                                            v-model="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot.is_completed"
-                                            inset color="success" :loading="loading"
-                                            :disabled="task.status == 'completed' || task.task_date >
-                                                '{{ now()->toDateTimestring() }}'"
-                                            @change="changeStatus(task.id, task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
+
+                            <v-card>
+                                <v-card-title>
+                                    @{{ task.category }}
+                                    <v-chip v-if="task.status === 'pending'" label color="purple darken-4" dark small
+                                        class="ml-2">未稽核
+                                    </v-chip>
+                                    <v-chip v-if="task.status === 'processing'" label color="warning" dark small
+                                        class="ml-2">稽核中
+                                    </v-chip>
+                                    <v-chip v-if="task.status === 'pending_approval'" label color="red darken-4" dark
+                                        small class="ml-2">待核對
+                                    </v-chip>
+                                    <v-chip v-if="task.status === 'completed'" label color="success" dark small
+                                        class="ml-2">已完成
+                                    </v-chip>
+                                    <v-spacer></v-spacer>
+                                    <v-switch
+                                        v-model="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot.is_completed"
+                                        inset color="success" :loading="loading"
+                                        :disabled="task.status == 'completed' || task.task_date >
+                                            '{{ now()->toDateTimestring() }}'"
+                                        @change="changeStatus(task.id, task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
                                                 .is_completed)"
-                                            :label="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
-                                                .is_completed ? '完成' : '未完成'">
-                                        </v-switch>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-row>
-                                            <div class="subtitle-2">
-                                                採樣@{{ task.meals.length }}項:
-                                                <v-chip v-for="meal in task.meals" :key="meal.id" label
-                                                    color="blue-grey darken-3" class="ma-1" dark
-                                                    @click="mealDialog = true; taskItem = task">
-                                                    <v-icon small left>mdi-food</v-icon>
-                                                    @{{ meal.name }}
-                                                    <v-icon v-show="meal.pivot.is_taken" class="ml-1" small
-                                                        color="success">
-                                                        mdi-check
-                                                    </v-icon>
-                                                    <v-chip v-show="meal.pivot.memo" class="ml-1" small label
-                                                        color="purple darken-4" dark>
-                                                        @{{ meal.pivot.memo }}
-                                                    </v-chip>
+                                        :label="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
+                                            .is_completed ? '完成' : '未完成'">
+                                    </v-switch>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-row>
+                                        <div class="subtitle-2">
+                                            採樣@{{ task.meals.length }}項:
+                                            <v-chip v-for="meal in task.meals" :key="meal.id" label
+                                                color="blue-grey darken-3" class="ma-1" dark
+                                                @click="openMealDialog(task)">
+                                                <v-icon small left>mdi-food</v-icon>
+                                                @{{ meal.name }}
+                                                <v-icon v-show="meal.pivot.is_taken" class="ml-1" small
+                                                    color="success">
+                                                    mdi-check
+                                                </v-icon>
+                                                <v-chip v-show="meal.pivot.memo" class="ml-1" small label
+                                                    color="purple darken-4" dark>
+                                                    @{{ meal.pivot.memo }}
                                                 </v-chip>
+                                            </v-chip>
 
-                                            </div>
-                                            <v-divider class="text--secondary"></v-divider>
-                                            <div class="subtitle-2">
-                                                專案@{{ task.projects.length }}項:
-                                                <v-chip v-for="project in task.projects" :key="project.id" label
-                                                    class="ma-1" color="blue-grey darken-3" dark
-                                                    @click="projectDialog = true; taskItem = task">
-                                                    <v-icon small left>mdi-clipboard-check-outline</v-icon>
-                                                    @{{ project.name }}:@{{ project.description }}
-                                                    <v-icon v-show="project.pivot.is_checked" class="ml-1" small
-                                                        color="success">
-                                                        mdi-check
-                                                    </v-icon>
-                                                </v-chip>
-                                            </div>
-                                        </v-row>
-                                        <v-row>
-                                            <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-map-marker</v-icon>
-                                                <span class="text--primary">
-                                                    @{{ task.restaurant.brand + ' ' + task.restaurant.shop }}</span>
-                                            </div>
-                                            <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-calendar</v-icon>
-                                                <span class="text--primary">
-                                                    @{{ task.task_date }}
-                                                </span>
-                                            </div>
-                                            <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-account</v-icon>
-                                                <span class="text--primary">
-                                                    @{{ task.users.map(user => user.name).join(', ') }}
-                                                </span>
-                                            </div>
+                                        </div>
+                                        <v-divider class="text--secondary"></v-divider>
+                                        <div class="subtitle-2">
+                                            專案@{{ task.projects.length }}項:
+                                            <v-chip v-for="project in task.projects" :key="project.id" label
+                                                class="ma-1" color="blue-grey darken-3" dark
+                                                @click="openProjectDialog(task)">
+                                                <v-icon small left>mdi-clipboard-check-outline</v-icon>
+                                                @{{ project.name }}
+                                                <v-icon v-show="project.pivot.is_checked" class="ml-1" small
+                                                    color="success">
+                                                    mdi-check
+                                                </v-icon>
+                                            </v-chip>
+                                        </div>
+                                    </v-row>
+                                    <v-row>
+                                        <div class="subtitle-2 col-12 col-sm-6">
+                                            <v-icon small color="teal darken-2">mdi-map-marker</v-icon>
+                                            <span class="text--primary">
+                                                @{{ task.restaurant.brand + ' ' + task.restaurant.shop }}</span>
+                                        </div>
+                                        <div class="subtitle-2 col-12 col-sm-6">
+                                            <v-icon small color="teal darken-2">mdi-calendar</v-icon>
+                                            <span class="text--primary">
+                                                @{{ task.task_date }}
+                                            </span>
+                                        </div>
+                                        <div class="subtitle-2 col-12 col-sm-6">
+                                            <v-icon small color="teal darken-2">mdi-account</v-icon>
+                                            <span class="text--primary">
+                                                @{{ task.users.map(user => user.name).join(', ') }}
+                                            </span>
+                                        </div>
 
-                                        </v-row>
-                                        <v-row>
-                                            <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-timer-play-outline</v-icon>
-                                                <span class="text--primary">
-                                                    @{{ task.start_at }}
-                                                </span>
-                                            </div>
-                                            <div class="subtitle-2 col-12 col-sm-6">
-                                                <v-icon small color="teal darken-2">mdi-timer-off-outline</v-icon>
-                                                <span class="text--primary">
-                                                    @{{ task.end_at }}
-                                                </span>
-                                            </div>
-                                        </v-row>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-menu v-if="task.category !== '餐點採樣'" :close-on-content-click="false"
-                                            origin="center center" transition="scale-transition" top left>
-                                            <template v-slot:activator="{ on, attrs }">
-                                                <v-btn color="blue darken-1" text v-bind="attrs" v-on="on">
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </template>
-                                            <v-list>
-                                                <v-list-group prepend-icon="mdi-file-document-edit-outline">
-                                                    <template v-slot:activator>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title>稽核相關</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </template>
-                                                    {{-- 新增食安缺失頁面 --}}
-                                                    <v-list-item :href="`/v2/app/task/${task.id}/defect/create`"
-                                                        v-show="task.category === '食安及5S' || task.category === '食安及5S複稽'"
-                                                        :disabled="!(new Date(task.task_date).toISOString().substring(0, 10) ==
-                                                            '{{ now()->toDateString() }}')">
-                                                        <v-list-item-title>新增食安缺失</v-list-item-title>
-                                                    </v-list-item>
-                                                    {{-- 食安稽核紀錄 --}}
-                                                    <v-list-item :href="`/v2/app/task/${task.id}/defect/edit`"
-                                                        v-show="task.category === '食安及5S' || task.category === '食安及5S複稽'">
-                                                        <v-list-item-title>食安稽核紀錄</v-list-item-title>
-                                                    </v-list-item>
-                                                    {{-- 新增清檢缺失頁面 --}}
-                                                    <v-list-item :href="`/v2/app/task/${task.id}/clear-defect/create`"
-                                                        v-show="task.category === '清潔檢查'"
-                                                        :disabled="!(new Date(task.task_date).toISOString().substring(0, 10) ==
-                                                            '{{ now()->toDateString() }}')">
-                                                        <v-list-item-title>新增清檢缺失</v-list-item-title>
-                                                    </v-list-item>
-                                                    {{-- 清檢稽核紀錄 --}}
-                                                    <v-list-item :href="`/v2/app/task/${task.id}/clear-defect/edit`"
-                                                        v-show="task.category === '清潔檢查'">
-                                                        <v-list-item-title>清檢稽核紀錄</v-list-item-title>
-                                                    </v-list-item>
-                                                    {{-- 主管簽核 --}}
-                                                    <v-list-item @click="approvalDialog = true; taskItem = task"
-                                                        :disabled="task.status !== 'pending_approval'">
-                                                        <v-list-item-title>主管簽核</v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list-group>
+                                    </v-row>
+                                    <v-row>
+                                        <div class="subtitle-2 col-12 col-sm-6">
+                                            <v-icon small color="teal darken-2">mdi-timer-play-outline</v-icon>
+                                            <span class="text--primary">
+                                                @{{ task.start_at }}
+                                            </span>
+                                        </div>
+                                        <div class="subtitle-2 col-12 col-sm-6">
+                                            <v-icon small color="teal darken-2">mdi-timer-off-outline</v-icon>
+                                            <span class="text--primary">
+                                                @{{ task.end_at }}
+                                            </span>
+                                        </div>
+                                    </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-menu v-if="task.category !== '餐點採樣'" :close-on-content-click="false"
+                                        origin="center center" transition="scale-transition" top left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-btn color="blue darken-1" text v-bind="attrs" v-on="on">
+                                                <v-icon>mdi-dots-vertical</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-group prepend-icon="mdi-file-document-edit-outline">
+                                                <template v-slot:activator>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>稽核相關</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </template>
+                                                {{-- 新增食安缺失頁面 --}}
+                                                <v-list-item :href="`/v2/app/task/${task.id}/defect/create`"
+                                                    v-show="task.category === '食安及5S' || task.category === '食安及5S複稽'"
+                                                    :disabled="!(new Date(task.task_date).toISOString().substring(0, 10) ==
+                                                        '{{ now()->toDateString() }}')">
+                                                    <v-list-item-title>新增食安缺失</v-list-item-title>
+                                                </v-list-item>
+                                                {{-- 食安稽核紀錄 --}}
+                                                <v-list-item :href="`/v2/app/task/${task.id}/defect/edit`"
+                                                    v-show="task.category === '食安及5S' || task.category === '食安及5S複稽'">
+                                                    <v-list-item-title>食安稽核紀錄</v-list-item-title>
+                                                </v-list-item>
+                                                {{-- 新增清檢缺失頁面 --}}
+                                                <v-list-item :href="`/v2/app/task/${task.id}/clear-defect/create`"
+                                                    v-show="task.category === '清潔檢查'"
+                                                    :disabled="!(new Date(task.task_date).toISOString().substring(0, 10) ==
+                                                        '{{ now()->toDateString() }}')">
+                                                    <v-list-item-title>新增清檢缺失</v-list-item-title>
+                                                </v-list-item>
+                                                {{-- 清檢稽核紀錄 --}}
+                                                <v-list-item :href="`/v2/app/task/${task.id}/clear-defect/edit`"
+                                                    v-show="task.category === '清潔檢查'">
+                                                    <v-list-item-title>清檢稽核紀錄</v-list-item-title>
+                                                </v-list-item>
+                                                {{-- 主管簽核 --}}
+                                                <v-list-item @click="openApprovalDialog(task)"
+                                                    :disabled="task.status !== 'pending_approval'">
+                                                    <v-list-item-title>主管簽核</v-list-item-title>
+                                                </v-list-item>
+                                            </v-list-group>
 
-                                                <v-list-group prepend-icon="mdi-file-pdf-box">
-                                                    <template v-slot:activator>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title>報告相關</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </template>
-                                                    {{-- 內場報告 --}}
-                                                    <v-list-item :href="`/v1/app/task/${task.id}/inner-report`"
-                                                        target="_blank">
-                                                        <v-list-item-title>內場報告</v-list-item-title>
-                                                    </v-list-item>
-                                                    {{-- 外場報告 --}}
-                                                    <v-list-item :href="`/v1/app/task/${task.id}/outer-report`"
-                                                        target="_blank">
-                                                        <v-list-item-title>外場報告</v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list-group>
+                                            <v-list-group prepend-icon="mdi-file-pdf-box">
+                                                <template v-slot:activator>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>報告相關</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </template>
+                                                {{-- 內場報告 --}}
+                                                <v-list-item :href="`/v1/app/task/${task.id}/inner-report`"
+                                                    target="_blank">
+                                                    <v-list-item-title>內場報告</v-list-item-title>
+                                                </v-list-item>
+                                                {{-- 外場報告 --}}
+                                                <v-list-item :href="`/v1/app/task/${task.id}/outer-report`"
+                                                    target="_blank">
+                                                    <v-list-item-title>外場報告</v-list-item-title>
+                                                </v-list-item>
+                                            </v-list-group>
 
-                                            </v-list>
-                                        </v-menu>
-                                    </v-card-actions>
+                                        </v-list>
+                                    </v-menu>
+                                </v-card-actions>
 
-                                </v-card>
-                            </v-lazy>
+                            </v-card>
                         </v-col>
                     </v-row>
 
                     {{-- project 狀態切換和 diolog --}}
-                    <v-dialog v-model="projectDialog" max-width="500px" persistent>
+                    <v-dialog v-model="projectDialog" max-width="500px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">專案查核</span>
@@ -214,12 +213,11 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6"
-                                            v-for="project in (taskItem && taskItem.projects)" :key="project.id">
+                                        <v-col cols="12" sm="6" v-for="project in taskItem.projects"
+                                            :key="project.id">
                                             <span
                                                 class="subtitle-2">@{{ project.name }}@{{ project.description }}</span>
                                             <v-switch v-model="project.pivot.is_checked" inset color="success"
-                                                :loading="loading"
                                                 :label="project.pivot.is_checked ? '已查核' : '未查核'">
                                             </v-switch>
                                         </v-col>
@@ -232,8 +230,7 @@
                                 <v-btn color="blue darken-1" text @click="saveProjectIsChecked">
                                     儲存
                                 </v-btn>
-                                <v-btn color="blue darken-1" text
-                                    @click="projectDialog = false;taskItem = null;getTasks()">
+                                <v-btn color="blue darken-1" text @click="close">
                                     取消
                                 </v-btn>
                             </v-card-actions>
@@ -241,7 +238,7 @@
                     </v-dialog>
 
                     {{-- meal 狀態和備註修改 dialog --}}
-                    <v-dialog v-model="mealDialog" max-width="500px" persistent>
+                    <v-dialog v-model="mealDialog" max-width="500px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">餐點採樣</span>
@@ -257,8 +254,8 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6"
-                                            v-for="meal in (taskItem && taskItem.meals)" :key="meal.id">
+                                        <v-col cols="12" sm="6" v-for="meal in taskItem.meals"
+                                            :key="meal.id">
                                             <span class="subtitle-2">@{{ meal.qno }} @{{ meal.name }}
                                                 @{{ meal.chef }} @{{ meal.workspace }}
                                             </span>
@@ -279,10 +276,10 @@
                                 <v-btn color="blue darken-1" text @click="saveMealIsTaken">
                                     儲存
                                 </v-btn>
-                                <v-btn color="blue darken-1" text
-                                    @click="mealDialog = false;taskItem = null;getTasks()">
+                                <v-btn color="blue darken-1" text @click="close">
                                     取消
                                 </v-btn>
+
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -299,13 +296,11 @@
                                     <v-row>
                                         {{-- 內場主管 --}}
                                         <v-col cols="12" sm="6">
-                                            <v-text-field label="內場主管" dense
-                                                v-model="taskItem && taskItem.inner_manager">
+                                            <v-text-field label="內場主管" dense v-model="taskItem.inner_manager">
                                         </v-col>
                                         {{-- 外場主管 --}}
                                         <v-col cols="12" sm="6">
-                                            <v-text-field label="外場主管" dense
-                                                v-model="taskItem && taskItem.outer_manager">
+                                            <v-text-field label="外場主管" dense v-model="taskItem.outer_manager">
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -315,10 +310,7 @@
                                 <v-btn color="blue darken-1" text @click="saveBoss">
                                     儲存
                                 </v-btn>
-                                <v-btn color="blue darken-1" text
-                                    @click="approvalDialog = false;taskItem = null;getTasks()">
-                                    取消
-                                </v-btn>
+
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -360,7 +352,12 @@
                     status: null,
                     loading: false,
                     projectDialog: false,
-                    taskItem: null,
+                    taskItem: {
+                        projects: [],
+                        meals: [],
+                        inner_manager: '',
+                        outer_manager: '',
+                    },
                     mealDialog: false,
                     approvalDialog: false,
                 },
@@ -399,7 +396,29 @@
                                 this.loading = false
                             })
                     },
-                    // save multiple project is_checked
+
+                    openProjectDialog(task) {
+                        this.projectDialog = true
+                        this.taskItem = structuredClone(task)
+                    },
+
+                    openMealDialog(task) {
+                        this.mealDialog = true
+                        this.taskItem = structuredClone(task)
+                    },
+
+                    openApprovalDialog(task) {
+                        this.approvalDialog = true
+                        this.taskItem = structuredClone(task)
+                    },
+
+                    close() {
+                        this.projectDialog = false
+                        this.mealDialog = false
+                        this.approvalDialog = false
+                        this.taskItem = {}
+                    },
+
                     saveProjectIsChecked() {
                         this.loading = true
                         axios.put(`/api/tasks/${this.taskItem.id}/projects`, {
@@ -412,8 +431,8 @@
                                 alert(error.response.data.message)
                             })
                             .finally(() => {
-                                this.projectDialog = false
-                                this.taskItem = null
+                                this.loading = false
+                                this.close()
                                 this.getTasks()
                             })
                     },
@@ -431,8 +450,7 @@
                             })
                             .finally(() => {
                                 this.loading = false
-                                this.mealDialog = false
-                                this.taskItem = null
+                                this.close()
                                 this.getTasks()
                             })
                     },
@@ -451,8 +469,7 @@
                             })
                             .finally(() => {
                                 this.loading = false
-                                this.approvalDialog = false
-                                this.taskItem = null
+                                this.close()
                                 this.getTasks()
                             })
                     },
