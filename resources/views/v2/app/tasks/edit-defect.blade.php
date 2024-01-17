@@ -172,7 +172,7 @@
                     </template>
 
                     {{-- 編輯dialog --}}
-                    <v-dialog v-model="dialog" max-width="500px" persistent>
+                    <v-dialog v-model="dialog" max-width="500px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">編輯缺失</span>
@@ -334,7 +334,7 @@
                     },
 
                     openDialog(taskDefect) {
-                        this.editedItem = taskDefect;
+                        this.editedItem = structuredClone(taskDefect);
                         this.dialog = true;
                         this.titles = Object.keys(this.activeDefects[this.editedItem.defect.group]);
                     },
@@ -362,7 +362,6 @@
                             if (res.data.status == 'success') {
                                 this.getDefects();
                                 this.getTaskScore();
-                                alert('編輯成功');
                             } else {
                                 alert('編輯失敗');
                             }
