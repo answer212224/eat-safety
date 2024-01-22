@@ -64,35 +64,20 @@
                                     <v-row>
                                         <div class="subtitle-2">
                                             採樣@{{ task.meals.length }}項:
-                                            <v-chip v-for="meal in task.meals" :key="meal.id" label
-                                                color="blue-grey darken-3" class="ma-1" dark
+                                            <v-btn v-if="task.meals.length > 0" small color="blue darken-3" dark
                                                 @click="openMealDialog(task)">
-                                                <v-icon small left>mdi-food</v-icon>
-                                                @{{ meal.name }}
-                                                <v-icon v-show="meal.pivot.is_taken" class="ml-1" small
-                                                    color="success">
-                                                    mdi-check
-                                                </v-icon>
-                                                <v-chip v-show="meal.pivot.memo" class="ml-1" small label
-                                                    color="purple darken-4" dark>
-                                                    @{{ meal.pivot.memo }}
-                                                </v-chip>
-                                            </v-chip>
-
+                                                <v-icon left>mdi-food-apple-outline</v-icon>
+                                                採樣
+                                            </v-btn>
                                         </div>
                                         <v-divider class="text--secondary"></v-divider>
                                         <div class="subtitle-2">
                                             專案@{{ task.projects.length }}項:
-                                            <v-chip v-for="project in task.projects" :key="project.id" label
-                                                class="ma-1" color="blue-grey darken-3" dark
+                                            <v-btn v-if="task.projects.length > 0" small color="blue darken-3" dark
                                                 @click="openProjectDialog(task)">
-                                                <v-icon small left>mdi-clipboard-check-outline</v-icon>
-                                                @{{ project.name }}
-                                                <v-icon v-show="project.pivot.is_checked" class="ml-1" small
-                                                    color="success">
-                                                    mdi-check
-                                                </v-icon>
-                                            </v-chip>
+                                                <v-icon left>mdi-file-document-edit-outline</v-icon>
+                                                專案
+                                            </v-btn>
                                         </div>
                                     </v-row>
                                     <v-row>
@@ -215,8 +200,7 @@
                                     <v-row>
                                         <v-col cols="12" sm="6" v-for="project in taskItem.projects"
                                             :key="project.id">
-                                            <span
-                                                class="subtitle-2">@{{ project.name }}@{{ project.description }}</span>
+                                            <span class="subtitle-2">@{{ project.name }}@{{ project.description }}</span>
                                             <v-switch v-model="project.pivot.is_checked" inset color="success"
                                                 :label="project.pivot.is_checked ? '已查核' : '未查核'">
                                             </v-switch>
@@ -262,7 +246,7 @@
                                             <v-switch v-model="meal.pivot.is_taken" inset color="success"
                                                 :loading="loading" :label="meal.pivot.is_taken ? '已帶回' : '未帶回'">
                                             </v-switch>
-                                            <v-text-field v-model="meal.pivot.memo" label="備註"
+                                            <v-text-field v-model.lazy="meal.pivot.memo" label="備註"
                                                 dense></v-text-field>
                                             {{-- meal.note --}}
                                             <span class="subtitle-2">備忘錄: @{{ meal.note }}</span>
@@ -483,7 +467,6 @@
 
                 mounted() {
                     this.getTasks()
-
                 },
 
             })
