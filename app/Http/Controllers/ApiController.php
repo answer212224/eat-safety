@@ -242,6 +242,7 @@ class ApiController extends Controller
     public function getUserTasks(Request $request)
     {
         $status = $request->input('status');
+        $limit = $request->input('limit');
         // status 有才要過濾
         $tasks = auth()->user()->tasks()->with(['restaurant', 'users', 'meals', 'projects'])
             ->when($status, function ($query, $status) {
@@ -253,7 +254,8 @@ class ApiController extends Controller
             return abs(Carbon::parse($task->task_date)->diffInMinutes(now()));
         });
 
-        $tasks = $tasks->values()->all();
+        // 重新排序 分頁
+        $tasks = $tasks->values()->forPage(1, $limit);
 
         return response()->json([
             'status' => 'success',

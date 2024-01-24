@@ -31,8 +31,8 @@
                     </v-row>
 
                     <v-row v-show="!loading">
+                        {{-- 只顯示前6個 往下滑動會自動加載 --}}
                         <v-col cols="12" sm="4" v-for="task in tasks" :key="task.id">
-
                             <v-card>
                                 <v-card-title>
                                     @{{ task.category }}
@@ -183,8 +183,15 @@
                                         </v-list>
                                     </v-menu>
                                 </v-card-actions>
-
                             </v-card>
+                        </v-col>
+
+                        {{-- 加載更多 --}}
+                        <v-col cols="12" v-if="tasks.length > 0">
+                            <v-btn block color="blue darken-1" text @click="limit+=3" :disabled="loading">
+                                <v-icon left>mdi-chevron-down</v-icon>
+                                加載更多
+                            </v-btn>
                         </v-col>
                     </v-row>
 
@@ -243,14 +250,14 @@
                                             <span class="subtitle-2">@{{ meal.qno }} @{{ meal.name }}
                                                 @{{ meal.chef }} @{{ meal.workspace }}
                                             </span>
-                                            <v-switch v-model="meal.pivot.is_taken" inset color="success"
+                                            <v-switch v-model.lazy="meal.pivot.is_taken" inset color="success"
                                                 :loading="loading" :label="meal.pivot.is_taken ? '已帶回' : '未帶回'">
                                             </v-switch>
                                             <v-text-field v-model.lazy="meal.pivot.memo" label="備註"
                                                 dense></v-text-field>
                                             {{-- meal.note --}}
                                             <span class="subtitle-2">備忘錄: @{{ meal.note }}</span>
-
+                                            <v-divider></v-divider>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -269,7 +276,7 @@
                     </v-dialog>
 
                     {{-- 主管簽核 dialog --}}
-                    <v-dialog v-model="approvalDialog" max-width="500px" persistent>
+                    <v-dialog v-model="approvalDialog" max-width="500px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">主管簽核</span>
@@ -280,11 +287,11 @@
                                     <v-row>
                                         {{-- 內場主管 --}}
                                         <v-col cols="12" sm="6">
-                                            <v-text-field label="內場主管" dense v-model="taskItem.inner_manager">
+                                            <v-text-field label="內場主管" dense v-model.lazy="taskItem.inner_manager">
                                         </v-col>
                                         {{-- 外場主管 --}}
                                         <v-col cols="12" sm="6">
-                                            <v-text-field label="外場主管" dense v-model="taskItem.outer_manager">
+                                            <v-text-field label="外場主管" dense v-model.lazy="taskItem.outer_manager">
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -333,6 +340,7 @@
                         },
                     ],
                     tasks: [],
+                    limit: 6,
                     status: null,
                     loading: false,
                     projectDialog: false,
@@ -351,7 +359,8 @@
                         this.loading = true
                         axios.get("/api/user/tasks", {
                                 params: {
-                                    status: this.status
+                                    status: this.status,
+                                    limit: this.limit
                                 }
                             })
                             .then(response => {
@@ -461,6 +470,10 @@
 
                 watch: {
                     status() {
+                        this.getTasks()
+                    },
+
+                    limit() {
                         this.getTasks()
                     }
                 },
