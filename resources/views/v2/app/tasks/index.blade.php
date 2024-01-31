@@ -251,7 +251,7 @@
                                                 @{{ meal.chef }} @{{ meal.workspace }}
                                             </span>
                                             <v-switch v-model.lazy="meal.pivot.is_taken" inset color="success"
-                                                :loading="loading" :label="meal.pivot.is_taken ? '已帶回' : '未帶回'">
+                                                :loading="loading" :label="meal.pivot.is_taken ? '已取' : '未取'">
                                             </v-switch>
                                             <v-text-field v-model.lazy="meal.pivot.memo" label="備註"
                                                 dense></v-text-field>
