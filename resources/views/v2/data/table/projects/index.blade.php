@@ -12,40 +12,34 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-card>
-                                <v-card-text>
-                                    <v-data-table :items="projects" :loading="loading" class="elevation-1"
-                                        item-key="id" :search="search" :headers="headers" sort-by="id"
-                                        sort-desc>
-                                        <template v-slot:top>
-                                            <v-toolbar flat>
-                                                <v-toolbar-title>{{ $title }}</v-toolbar-title>
+                            <v-data-table :items="projects" :loading="loading" class="elevation-1" item-key="id"
+                                :search="search" :headers="headers" sort-by="id" sort-desc fixed-header
+                                height="calc(100vh - 250px)">
+                                <template v-slot:top>
+                                    <v-toolbar flat>
+                                        <v-toolbar-title>{{ $title }}</v-toolbar-title>
 
-                                                <v-divider class="mx-4" inset vertical></v-divider>
-                                                <v-spacer></v-spacer>
-                                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
-                                                    single-line hide-details class="mr-2"></v-text-field>
-                                                @can('create-project')
-                                                    <v-btn color="primary" dark class="mb-2" fab small
-                                                        @click="editItem(-1)">
-                                                        <v-icon>mdi-plus</v-icon>
-                                                    </v-btn>
-                                                @endcan
-                                            </v-toolbar>
-                                        </template>
-                                        <template v-slot:item.status="{ item }">
-                                            <v-chip color="success" small dark v-if="item.status">啟用</v-chip>
-                                            <v-chip color="error" small dark v-else>停用</v-chip>
-                                        </template>
-                                        <template v-slot:item.actions="{ item }">
-                                            @can('update-project')
-                                                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                                            @endcan
+                                        <v-divider class="mx-4" inset vertical></v-divider>
+                                        <v-spacer></v-spacer>
+                                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
+                                            single-line hide-details class="mr-2"></v-text-field>
+                                        @can('create-project')
+                                            <v-btn color="primary" dark class="mb-2" fab small @click="editItem(-1)">
+                                                <v-icon>mdi-plus</v-icon>
+                                            </v-btn>
+                                        @endcan
+                                    </v-toolbar>
+                                </template>
+                                <template v-slot:item.status="{ item }">
+                                    <v-chip color="success" small dark v-if="item.status">啟用</v-chip>
+                                    <v-chip color="error" small dark v-else>停用</v-chip>
+                                </template>
+                                <template v-slot:item.actions="{ item }">
+                                    @can('update-project')
+                                        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                                    @endcan
 
-                                        </template>
-
-                                </v-card-text>
-                            </v-card>
+                                </template>
                         </v-col>
                     </v-row>
                 </v-container>

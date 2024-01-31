@@ -12,7 +12,8 @@
                 <v-container>
                     {{-- data table --}}
                     <v-data-table :headers="header" :items="defects" :loading="loading"
-                        class="elevation-1" dense :search="search" sort-by="effective_date" sort-desc>
+                        class="elevation-1" :search="search" sort-by="effective_date" sort-desc fixed-header
+                        height="calc(100vh - 250px)">
                         <template v-slot:top>
                             <v-toolbar flat>
                                 <v-toolbar-title>{{ $title }}</v-toolbar-title>

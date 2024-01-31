@@ -13,49 +13,44 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-card>
-                                <v-card-text>
-                                    <v-data-table :headers="headers" :items="mealRecords" :search="search"
-                                        sort-by="meal_effective_month" sort-desc :loading="loading"
-                                        height="calc(100vh - 250px)" fixed-header>
-                                        <template v-slot:top>
-                                            <v-toolbar flat>
-                                                <v-toolbar-title>{{ $title }}</v-toolbar-title>
-                                                <v-spacer></v-spacer>
-                                                {{-- 月分篩選 --}}
-                                                <v-menu ref="menu" v-model="menu" :return-value.sync="month"
-                                                    :close-on-content-click="false" transition="scale-transition"
-                                                    offset-y max-width="290px" min-width="auto">
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-text-field v-model="month" label="月份" hide-details
-                                                            append-icon="mdi-calendar" readonly v-bind="attrs"
-                                                            v-on="on" class="mr-2"></v-text-field>
-                                                    </template>
-                                                    <v-date-picker v-model="month" type="month" scrollable
-                                                        :locale="locale" @input="$refs.menu.save(month)">
-                                                    </v-date-picker>
-                                                </v-menu>
-                                                {{-- search --}}
-                                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
-                                                    single-line hide-details class="mr-2"></v-text-field>
+                            <v-data-table class="elevation-1" :headers="headers" :items="mealRecords"
+                                :search="search" sort-desc :loading="loading" sort-by="task_date"
+                                height="calc(100vh - 250px)" fixed-header>
+                                <template v-slot:top>
+                                    <v-toolbar flat>
+                                        <v-toolbar-title>{{ $title }}</v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        {{-- 月分篩選 --}}
+                                        <v-menu ref="menu" v-model="menu" :return-value.sync="month"
+                                            :close-on-content-click="false" transition="scale-transition" offset-y
+                                            max-width="290px" min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="month" label="月份" hide-details
+                                                    append-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"
+                                                    class="mr-2"></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="month" type="month" scrollable
+                                                :locale="locale" @input="$refs.menu.save(month)">
+                                            </v-date-picker>
+                                        </v-menu>
+                                        {{-- search --}}
+                                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
+                                            single-line hide-details class="mr-2"></v-text-field>
 
 
 
-                                                {{-- 匯出 --}}
-                                                <v-btn fab small color="primary" @click="exportExcel">
-                                                    <v-icon>mdi-file-excel</v-icon>
-                                                </v-btn>
-                                            </v-toolbar>
+                                        {{-- 匯出 --}}
+                                        <v-btn fab small color="primary" @click="exportExcel">
+                                            <v-icon>mdi-file-excel</v-icon>
+                                        </v-btn>
+                                    </v-toolbar>
 
-                                        </template>
-                                        <template v-slot:item.is_taken="{ item }">
-                                            <v-chip v-if="item.is_taken" color="green" dark small>已取</v-chip>
-                                            <v-chip v-else color="red" dark small>未取</v-chip>
-
-                                        </template>
-                                    </v-data-table>
-                                </v-card-text>
-                            </v-card>
+                                </template>
+                                <template v-slot:item.is_taken="{ item }">
+                                    <v-chip v-if="item.is_taken" color="green" dark small>已取</v-chip>
+                                    <v-chip v-else color="red" dark small>未取</v-chip>
+                                </template>
+                            </v-data-table>
                         </v-col>
                     </v-row>
                 </v-container>
