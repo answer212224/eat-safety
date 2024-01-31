@@ -210,7 +210,7 @@
                                 '備註': meal_note,
                                 '檢項': meal_item,
                                 '檢驗項目': meal_items,
-                                '是否已取': is_taken,
+                                '是否已取': is_taken ? '已取' : '未取',
                                 '原因': memo
                             }))
                         );
