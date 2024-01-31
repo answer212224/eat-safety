@@ -45,7 +45,7 @@
                                             mdi-eye
                                         </v-icon>
                                     </v-btn>
-                                    @can('import-task')
+                                    @can('import-data')
                                         <v-btn fab small color="primary" @click="importDialog = true;importFile=null"
                                             class="mr-2">
                                             <v-icon small>
