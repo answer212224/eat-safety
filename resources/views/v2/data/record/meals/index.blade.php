@@ -16,7 +16,8 @@
                             <v-card>
                                 <v-card-text>
                                     <v-data-table :headers="headers" :items="mealRecords" :search="search"
-                                        sort-by="meal_effective_month" sort-desc dense :loading="loading">
+                                        sort-by="meal_effective_month" sort-desc :loading="loading"
+                                        height="calc(100vh - 250px)" fixed-header>
                                         <template v-slot:top>
                                             <v-toolbar flat>
                                                 <v-toolbar-title>{{ $title }}</v-toolbar-title>
@@ -45,6 +46,11 @@
                                                     <v-icon>mdi-file-excel</v-icon>
                                                 </v-btn>
                                             </v-toolbar>
+
+                                        </template>
+                                        <template v-slot:item.is_taken="{ item }">
+                                            <v-chip v-if="item.is_taken" color="green" dark small>已取</v-chip>
+                                            <v-chip v-else color="red" dark small>未取</v-chip>
 
                                         </template>
                                     </v-data-table>
@@ -116,6 +122,11 @@
                             align: 'start',
                             sortable: true,
                             value: 'meal_qno'
+                        },
+                        {
+                            text: '名稱',
+                            sortable: true,
+                            value: 'meal_name'
                         },
                         {
                             text: '備註',
