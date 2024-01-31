@@ -35,7 +35,7 @@
                     <form action="{{ route('pos-user-upsert') }}" method="post">
                         @csrf
                         @method('put')
-                        <span>AM 06:30 自動更新</span>
+                        {{-- <span>AM 06:30 自動更新</span> --}}
                         @can('update-user')
                             <button class="btn btn-sm btn-rounded btn-success">更新</button>
                         @endcan
@@ -64,7 +64,7 @@
                             <th>電子信箱</th>
                             <th>部門</th>
                             <th>角色</th>
-                            <th>狀態</th>
+                            {{-- <th>狀態</th> --}}
                             <th>更新時間</th>
                             <th></th>
                             @can('update-user')
@@ -84,7 +84,7 @@
                                 <td><span class="badge badge-dark bs-tooltip"
                                         title="{{ $user->getPermissionsViaRoles()->pluck('name')->implode('、') }}">{{ $user->getRoleNames()->implode('、') }}</span>
                                 </td>
-                                <td>
+                                {{-- <td>
                                     @switch($user->status)
                                         @case(0)
                                             <span class="badge badge-danger">試用</span>
@@ -114,7 +114,7 @@
                                             <span class="badge badge-light-primary">永不</span>
                                         @break
                                     @endswitch
-                                </td>
+                                </td> --}}
                                 <td class="text-end">{{ $user->updated_at }}</td>
                                 <td>
                                     {{-- 統計 --}}
