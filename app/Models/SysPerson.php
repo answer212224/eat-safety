@@ -15,7 +15,8 @@ class SysPerson extends Model
 
     public static function getEmployees()
     {
-        $users = SysPerson::where('department_id', 1400)->get();
+        // where department_id like 14%
+        $users = SysPerson::where('department_id', 'like', '14%')->get();
 
         $users->transform(function ($user) {
             return [
