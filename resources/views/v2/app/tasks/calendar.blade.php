@@ -17,11 +17,8 @@
                             <v-select v-model="type" :items="['month', 'day', '4day']" label="顯示模式"
                                 :loading="loading">
                         </v-col>
-                        <v-col cols="12" v-show="loading">
-                            <v-skeleton-loader type="table" transition="scale-transition" elevation="2"
-                                height="600px" class="mb-2"></v-skeleton-loader>
-                        </v-col>
-                        <v-col cols="12" v-show="!loading">
+
+                        <v-col cols="12">
                             <v-sheet height="64">
                                 <v-toolbar flat>
                                     <v-btn fab text small color="grey darken-2" @click="prev">
@@ -456,6 +453,8 @@
                     },
 
                     editEvent(event) {
+                        this.getExecuteTaskUsers()
+                        this.getRestaurants()
                         this.editedIndex = this.events.indexOf(event)
                         this.selectedOpen = false
                         this.dialog = true
