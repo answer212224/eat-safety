@@ -12,18 +12,16 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
-                    <v-row v-show="loading">
-                        <v-col cols="12">
-                            <v-skeleton-loader type="table" transition="scale-transition" elevation="2" height="600px"
-                                class="mb-2"></v-skeleton-loader>
+                    <v-row class="fill-height">
+                        <v-col cols="12" sm="12" md="6">
+                            <v-select v-model="type" :items="['month', 'day', '4day']" label="顯示模式"
+                                :loading="loading">
                         </v-col>
-                    </v-row>
-                    <v-row class="fill-height" v-show="!loading">
-                        {{-- type --}}
-                        <v-col cols="12" sm="12" md="12">
-                            <v-select v-model="type" :items="['month', 'day', '4day']" label="顯示模式"></v-select>
+                        <v-col cols="12" v-show="loading">
+                            <v-skeleton-loader type="table" transition="scale-transition" elevation="2"
+                                height="600px" class="mb-2"></v-skeleton-loader>
                         </v-col>
-                        <v-col>
+                        <v-col cols="12" v-show="!loading">
                             <v-sheet height="64">
                                 <v-toolbar flat>
                                     <v-btn fab text small color="grey darken-2" @click="prev">
@@ -271,23 +269,30 @@
                     <v-dialog v-model="notAssignDialog" max-width="500px">
                         <v-card>
                             <v-card-title>
-                                <span class="headline">未排任務 - 共 @{{ notAssign.length }} 筆</span>
+                                {{-- 2024年01月 --}}
+                                <span class="headline mx-auto">@{{ focus.split('-')[0] }}年@{{ focus.split('-')[1] }}月
+                                    共@{{ notAssign.length }}間分店未排稽核任務
+                                </span>
                             </v-card-title>
 
                             <v-card-text>
-                                <v-row>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <v-list>
-                                            <v-list-item v-for="item in notAssign" :key="item.id">
-                                                <v-list-item-content>
-                                                    <v-list-item-title>
-                                                        @{{ item.brand_code }} @{{ item.shop }}
-                                                    </v-list-item-title>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-col>
-                                </v-row>
+
+
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="4" v-for="item in notAssign" :key="item.id">
+                                            <v-card hover>
+                                                <v-card-text>
+                                                    <v-icon left>mdi-store</v-icon>
+                                                    @{{ item.brand_code }}<v-spacer></v-spacer>
+                                                    @{{ item.shop }}
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+
+
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -360,6 +365,7 @@
                     notAssign: [],
                     importDialog: false,
                     importFile: null,
+                    loading: false,
                 }),
 
                 methods: {
@@ -371,7 +377,7 @@
                     },
 
                     showNotAssign() {
-
+                        this.loading = true
                         axios.get('/api/restaurants/unassigned', {
                                 params: {
                                     date: this.focus,
@@ -384,6 +390,9 @@
                             })
                             .catch((err) => {
                                 console.log(err)
+                            })
+                            .finally(() => {
+                                this.loading = false
                             })
                     },
 
@@ -456,6 +465,7 @@
                     allowedStep: m => m % 30 === 0,
 
                     getExecuteTaskUsers() {
+                        this.loading = true
                         axios.get('/api/users/execute-task')
                             .then((res) => {
                                 this.users = res.data.data
@@ -469,7 +479,7 @@
                     },
 
                     getRestaurants() {
-                        loading = true
+                        this.loading = true
                         axios.get('/api/restaurants', {
                                 params: {
                                     is_group_by_brand_code: true,
@@ -501,7 +511,7 @@
                                 if (this.editedIndex === -1) {
                                     this.editedItem.meals = this.meals
                                 }
-                                loading = false
+                                this.loading = false
                             })
                             .catch((err) => {
                                 alert(err.response.data.message)
@@ -512,7 +522,7 @@
                     },
 
                     getActiveProjects() {
-                        loading = true
+                        this.loading = true
                         axios.get('/api/projects/active')
                             .then((res) => {
                                 this.projects = res.data.data
@@ -568,6 +578,8 @@
                     },
 
                     openDialog(item) {
+                        this.getExecuteTaskUsers()
+                        this.getRestaurants()
                         this.dialog = true
                         this.editedIndex = -1
                         this.editedItem = {
@@ -645,8 +657,7 @@
 
                 mounted() {
                     this.updateRange()
-                    this.getExecuteTaskUsers()
-                    this.getRestaurants()
+
                 },
 
             });
