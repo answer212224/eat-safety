@@ -19,6 +19,7 @@ use App\Http\Controllers\V2\MealController as V2MealController;
 use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\DefectController as V2DefectController;
 use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
+use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
 
 
 /*
@@ -263,6 +264,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/defects', [V2DefectController::class, 'table'])->name('v2.data.table.defects.index');
             // 清檢缺失資料庫v2
             Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.table.clear-defects.index');
+            // 門市資料庫v2
+            Route::get('/restaurants', [V2RestaurantController::class, 'table'])->name('v2.data.table.restaurants.index');
         });
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
@@ -276,6 +279,12 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
     // 取得餐廳
     Route::get('/restaurants', [ApiController::class, 'getRestaurants'])->name('api.restaurants');
+    // 從pos餐廳更新餐廳和工作區站
+    Route::put('/restaurants/upsert', [PosDepartmentController::class, 'ajaxUpsert']);
+    // 新增單個工作區站
+    Route::post('restaurant/{restaurant}/restaurant-workspaces', [ApiController::class, 'storeRestaurantWorkspace']);
+    // 更新單個工作區站
+    Route::put('restaurant-workspaces/{restaurantWorkspace}', [ApiController::class, 'updateRestaurantWorkspace']);
     // 取得該月份該餐聽的餐點
     Route::get('/restaurants/meals', [ApiController::class, 'getRestaurantMeals'])->name('api.restaurants.meals');
     // 取得啟用的專案

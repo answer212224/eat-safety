@@ -220,10 +220,14 @@
                             <a href="{{ route('v2.data.table.clear-defects.index') }}"> 清檢資料庫 v.2</a>
                         </li>
 
-                        <li
+                        {{-- <li
                             class="{{ Request::routeIs('restaurant-index') || Request::routeIs('restaurant-workspace') || Request::routeIs('restaurant-defects') || Request::routeIs('restaurant-clear-defects') || Request::routeIs('restaurant-chart') || Request::routeIs('restaurant-clear-chart') ? 'active' : '' }}">
                             <a href="{{ route('restaurant-index') }}"> 門市資料庫 </a>
+                        </li> --}}
+                        <li class="{{ Request::routeIs('v2.data.table.restaurants.index') ? 'active' : '' }}">
+                            <a href="{{ route('v2.data.table.restaurants.index') }}"> 門市資料庫 v.2</a>
                         </li>
+
                         <li
                             class="{{ Request::routeIs('user-index') || Request::routeIs('user-edit') || Request::routeIs('user-show') || Request::routeIs('user-chart') ? 'active' : '' }}">
                             <a href="{{ route('user-index') }}"> 同仁資料庫 </a>

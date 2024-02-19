@@ -27,6 +27,21 @@ class PosDepartmentController extends Controller
         return back();
     }
 
+    public function ajaxUpsert()
+    {
+        $posDepartments = PosDepartment::getRestaurants()->toArray();
+
+        Restaurant::upsert($posDepartments, ['sid'], ['brand', 'brand_code', 'shop', 'location', 'status']);
+
+        $restaurants = Restaurant::get();
+
+        foreach ($restaurants as $restaurant) {
+            self::update($restaurant);
+        }
+
+        return response()->json(['message' => '更新門市資料成功']);
+    }
+
     /**
      * 區站更新流程
      * 1. 透過品牌代碼取得category_type為workstation_in_type的資料

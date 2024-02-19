@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Imports\ClearDefectImport;
+use App\Models\RestaurantWorkspace;
 use App\Models\TaskHasClearDefect;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -39,12 +40,13 @@ class ApiController extends Controller
         $is_group_by_brand = $request->input('is_group_by_brand');
         $is_group_by_brand_code = $request->input('is_group_by_brand_code');
 
+
         if ($is_group_by_brand) {
             $restaurants = Restaurant::with('restaurantWorkspaces')->where('status', true)->get()->groupBy('brand');
         } else if ($is_group_by_brand_code) {
             $restaurants = Restaurant::with('restaurantWorkspaces')->where('status', true)->get()->groupBy('brand_code');
         } else {
-            $restaurants = Restaurant::with('restaurantWorkspaces')->where('status', true)->get();
+            $restaurants = Restaurant::with('restaurantWorkspaces')->get();
         }
 
 
@@ -53,6 +55,29 @@ class ApiController extends Controller
             'data' => $restaurants,
         ]);
     }
+
+    // storeRestaurantWorkspace
+    public function storeRestaurantWorkspace(Restaurant $restaurant, Request $request)
+    {
+        $restaurant->restaurantWorkspaces()->create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $restaurant->restaurantWorkspaces,
+        ]);
+    }
+
+    // updateRestaurantWorkspace
+    public function updateRestaurantWorkspace(RestaurantWorkspace $restaurantWorkspace, Request $request)
+    {
+        $restaurantWorkspace->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $restaurantWorkspace,
+        ]);
+    }
+
 
     // 取得所有任務(根據使用者權限)
     public function getTasks(Request $request)
