@@ -10,46 +10,39 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
-                    <v-row>
-                        <v-col cols="12">
-                            <v-data-table :items="meals" :loading="loading" class="elevation-1" item-key="id"
-                                :search="search" :headers="headers" height="calc(100vh - 250px)"
-                                sort-by="effective_date" sort-desc fixed-header>
-                                <template v-slot:top>
-                                    <v-toolbar flat>
-                                        <v-toolbar-title>{{ $title }}</v-toolbar-title>
+                    <v-toolbar color="primary darken-2" dark>
+                        @can('create-meal')
+                            <v-btn icon @click="dialog = true;editedIndex = -1">
+                                <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        @endcan
 
-                                        <v-divider class="mx-4" inset vertical></v-divider>
-                                        <v-spacer></v-spacer>
-                                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search"
-                                            single-line hide-details class="mr-2"></v-text-field>
+                        <v-toolbar-title>{{ $title }}</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line
+                            hide-details></v-text-field>
+                        @can('import-data')
+                            <v-btn icon @click="importDialog = true">
+                                <v-icon>mdi-file-import</v-icon>
+                            </v-btn>
+                        @endcan
+                    </v-toolbar>
+                    <v-data-table :items="meals" :loading="loading" class="elevation-1" item-key="id"
+                        :search="search" :headers="headers" height="calc(100vh - 250px)"
+                        sort-by="effective_date" sort-desc fixed-header>
 
-                                        @can('import-data')
-                                            <v-btn fab small color="primary" class="mr-2" @click="importDialog = true">
-                                                <v-icon>mdi-file-import</v-icon>
-                                            </v-btn>
-                                        @endcan
-                                        @can('create-meal')
-                                            <v-btn fab small color="primary" @click="dialog = true;editedIndex = -1">
-                                                <v-icon small>
-                                                    mdi-plus
-                                                </v-icon>
-                                            </v-btn>
-                                        @endcan
-                                    </v-toolbar>
-                                </template>
-                                <template v-slot:item.actions="{ item }">
-                                    @can('update-meal')
-                                        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                                    @endcan
-                                    @can('delete-meal')
-                                        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-                                    @endcan
-                                </template>
-                        </v-col>
-                    </v-row>
+                        <template v-slot:item.actions="{ item }">
+                            @can('update-meal')
+                                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                            @endcan
+                            @can('delete-meal')
+                                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                            @endcan
+                        </template>
+                    </v-data-table>
 
-                    <v-dialog v-model="dialog" max-width="500px" @click:outside="close">
+
+                    <v-dialog v-model="dialog" max-width="800px" @click:outside="close">
                         <v-card>
                             <v-card-title>
                                 <span v-if="editedIndex === -1">新增</span>
@@ -139,7 +132,7 @@
                         </v-card>
                     </v-dialog>
 
-                    <v-dialog v-model="importDialog" max-width="500px">
+                    <v-dialog v-model="importDialog" max-width="800px">
                         <v-card>
                             <v-card-title>
                                 匯入

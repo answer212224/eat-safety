@@ -10,32 +10,33 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
+                    <v-toolbar color="primary darken-2" dark>
+                        @can('create-defect')
+                            <v-btn icon @click="editItem(-1)">
+                                <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        @endcan
+                        <v-toolbar-title>{{ $title }}</v-toolbar-title>
+
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details
+                            class="mr-2"></v-text-field>
+
+                        @can('import-data')
+                            <v-btn icon @click="importDialog = true">
+                                <v-icon>mdi-file-import</v-icon>
+                            </v-btn>
+                        @endcan
+
+
+                    </v-toolbar>
+
                     {{-- data table --}}
                     <v-data-table :headers="header" :items="defects" :loading="loading"
                         class="elevation-1" :search="search" sort-by="effective_date" sort-desc fixed-header
                         height="calc(100vh - 250px)">
-                        <template v-slot:top>
-                            <v-toolbar flat>
-                                <v-toolbar-title>{{ $title }}</v-toolbar-title>
 
-                                <v-divider class="mx-4" inset vertical></v-divider>
-                                <v-spacer></v-spacer>
-                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line
-                                    hide-details class="mr-2"></v-text-field>
-
-                                @can('import-data')
-                                    <v-btn fab small color="primary" class="mr-2" @click="importDialog = true">
-                                        <v-icon>mdi-file-import</v-icon>
-                                    </v-btn>
-                                @endcan
-
-                                @can('create-defect')
-                                    <v-btn color="primary" dark fab small @click="editItem(-1)">
-                                        <v-icon>mdi-plus</v-icon>
-                                    </v-btn>
-                                @endcan
-                            </v-toolbar>
-                        </template>
                         <template v-slot:item.actions="{ item }">
                             @can('update-defect')
                                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
