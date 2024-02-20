@@ -27,6 +27,10 @@
                         {{-- search --}}
                         <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details
                             class="mr-2"></v-text-field>
+                        {{-- 圖表連結 --}}
+                        <v-btn :href="`{{ route('defect-chart') }}?yearMonth=${month}`" target="_blank" icon>
+                            <v-icon>mdi-chart-bar</v-icon>
+                        </v-btn>
                     </v-toolbar>
                     <v-data-table class="elevation-1" :headers="headers" :items="defectRecords" item-key="id"
                         :search="search" :loading="loading" height="calc(100vh - 250px)" fixed-header>
