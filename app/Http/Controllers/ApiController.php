@@ -895,4 +895,23 @@ class ApiController extends Controller
             ]);
         }
     }
+
+    // getDefectRecords
+    public function getDefectRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+
+        $defectRecords = TaskHasDefect::whereHas('task', function ($query) use ($month) {
+            $query->whereYear('task_date', $month->format('Y'))
+                ->whereMonth('task_date', $month->format('m'));
+        })->with(['task', 'defect', 'restaurantWorkspace', 'user', 'restaurantWorkspace.restaurant'])->get();
+
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defectRecords,
+        ]);
+    }
 }

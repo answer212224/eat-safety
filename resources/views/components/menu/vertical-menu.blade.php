@@ -275,10 +275,15 @@
                                 <a href="{{ route('v2.data.record.meals.index') }}"> 採樣紀錄 v.2 </a>
                             </li>
                         @endcan
-                        @can('view-record-defect')
+                        {{-- @can('view-record-defect')
                             <li
                                 class="{{ Request::routeIs('defect-records') || Request::routeIs('defect-chart') ? 'active' : '' }}">
                                 <a href="{{ route('defect-records') }}"> 食安缺失紀錄 </a>
+                            </li>
+                        @endcan --}}
+                        @can('view-record-defect')
+                            <li class="{{ Request::routeIs('v2.data.record.defects.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.record.defects.index') }}"> 食安缺失紀錄 v.2 </a>
                             </li>
                         @endcan
                         @can('view-record-clear-defect')

@@ -13,4 +13,11 @@ class DefectController extends Controller
             'title' => '食安缺失資料庫',
         ]);
     }
+
+    public function record()
+    {
+        return view('v2.data.record.defects.index', [
+            'title' => '食安缺失紀錄',
+        ]);
+    }
 }
