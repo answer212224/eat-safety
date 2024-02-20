@@ -48,6 +48,7 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
         })->name('barebone');
     });
 
+    // 告知使用者有新版本
     Route::prefix('app')->group(function () {
         Route::prefix('task')->group(function () {
             // 指派稽核任務
@@ -67,7 +68,7 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             // 外場稽核報告下載
             Route::get('{task}/outer-report', [TaskController::class, 'outerReport'])->name('task-outer-report');
             // 稽核任務列表
-            Route::get('/list', [TaskController::class, 'list'])->name('task-list');
+            Route::get('/list', [TaskController::class, 'list'])->name('task-list')->middleware('user.has.new.version');
             // 食安稽核或清檢稽核
             Route::get('/{task}/create', [TaskController::class, 'create'])->name('task-create');
             // 稽核員食安稽核儲存缺失
@@ -273,6 +274,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
             Route::get('/meals', [V2MealController::class, 'record'])->name('v2.data.record.meals.index');
+            // 食安缺失紀錄v2
+            Route::get('/defects', [V2DefectController::class, 'record'])->name('v2.data.record.defects.index');
         });
     });
 });
@@ -378,6 +381,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::delete('/clear-defects/{clearDefect}', [ApiController::class, 'deleteClearDefect'])->name('api.clear-defects.delete');
     // 匯入清檢缺失資料庫資料
     Route::post('/clear-defects/import', [ApiController::class, 'importClearDefects'])->name('api.clear-defects.import');
+    // 取得該月份食安缺失紀錄
+    Route::get('/defect-records', [ApiController::class, 'getDefectRecords'])->name('api.defect-records');
 });
 
 Route::prefix('pos')->group(function () {
