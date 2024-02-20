@@ -11,7 +11,7 @@ class ProjectController extends Controller
     public function table()
     {
         return view('v2.data.table.projects.index', [
-            'title' => '專案資料庫 v2',
+            'title' => '專案資料庫',
 
         ]);
     }

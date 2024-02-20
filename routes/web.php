@@ -20,6 +20,7 @@ use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\DefectController as V2DefectController;
 use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
 use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
+use App\Http\Controllers\V2\UserController as V2UserController;
 
 
 /*
@@ -266,6 +267,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.table.clear-defects.index');
             // 門市資料庫v2
             Route::get('/restaurants', [V2RestaurantController::class, 'table'])->name('v2.data.table.restaurants.index');
+            // 同仁資料庫v2
+            Route::get('/users', [V2UserController::class, 'table'])->name('v2.data.table.users.index');
         });
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
