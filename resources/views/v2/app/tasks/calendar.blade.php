@@ -252,7 +252,6 @@
 
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="close">取消</v-btn>
                                 <v-btn color="blue darken-1" text @click="save"
                                     :disabled="!editedItem.category || !editedItem.date || !editedItem
                                         .time || !editedItem.users ||
@@ -591,13 +590,6 @@
                             category: '食安及5S',
                         }
 
-                    },
-
-                    close() {
-                        this.updateRange()
-                        this.dialog = false
-                        this.editedItem = {}
-                        this.editedIndex = -1
                     },
 
                     remove(id) {
