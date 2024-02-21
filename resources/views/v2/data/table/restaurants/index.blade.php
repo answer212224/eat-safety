@@ -10,11 +10,18 @@
         <v-app v-cloak>
             <v-main class="grey lighten-4">
                 <v-container>
-
                     <v-toolbar color="primary darken-2" dark>
+                        @can('create-restaurant')
+                            <v-btn icon @click="restaurantDialog = true">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-icon v-bind="attrs" v-on="on">mdi-plus</v-icon>
+                                    </template>
+                                    <span>只能新增央廚資料</span>
+                                </v-tooltip>
+                            </v-btn>
+                        @endcan
                         <v-toolbar-title>{{ $title }}</v-toolbar-title>
-
-                        <v-divider class="mx-4" inset vertical></v-divider>
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details
                             class="mr-2"></v-text-field>
@@ -46,11 +53,12 @@
                                     <v-list-item @click="editRestaurant(item)">
                                         <v-list-item-title>區站資料</v-list-item-title>
                                     </v-list-item>
-                                    <v-list-item :href="`/v1/data/table/restaurants/${item.id}/chart`" target="_blank">
+                                    <v-list-item :href="`/v1/data/table/restaurants/${item.id}/chart`" target="_blank"
+                                        v-show="item.brand_code !== 'CTK'">
                                         <v-list-item-title>食安圖表</v-list-item-title>
                                     </v-list-item>
-                                    <v-list-item :href="`/v1/data/table/restaurants/${item.id}/defects`"
-                                        target="_blank">
+                                    <v-list-item :href="`/v1/data/table/restaurants/${item.id}/defects`" target="_blank"
+                                        v-show="item.brand_code !== 'CTK'">
                                         <v-list-item-title>
                                             食安缺失
                                         </v-list-item-title>
@@ -113,7 +121,7 @@
                                                 type="number"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="editedItem.area" label="區域"></v-text-field>
+                                            <v-text-field v-model="editedItem.area" label="區站"></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-form>
@@ -124,6 +132,52 @@
                             <v-btn color="blue darken-1" text @click="save">儲存</v-btn>
                         </v-card-actions>
                     </v-card>
+                </v-dialog>
+
+                {{-- 餐廳新增 --}}
+                <v-dialog v-model="restaurantDialog" max-width="600px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">新增央廚</span>
+                            <v-spacer></v-spacer>
+                            <v-switch v-model="restaurant.status" :label="restaurant.status ? '啟用' : '停用'"
+                                color="success"></v-switch>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-form v-model="valid" ref="form">
+                                    <v-row>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="restaurant.brand_code" label="品牌代碼" readonly>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="restaurant.sid" label="品牌店代碼"
+                                                :rules="[
+                                                    v => !!v || '品牌店代碼為必填',
+                                                    v => v.startsWith('CTK') || '品牌店代碼必須是CTK開頭',
+                                                    v => v.length === 6 || '品牌店代碼必須是6碼',
+                                                
+                                                ]"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="restaurant.brand" label="品牌">
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="restaurant.shop" label="店別"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="restaurant.location" label="區域"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="saveRestaurant">儲存</v-btn>
+                        </v-card-actions>
+                    </v-card>
+
                 </v-dialog>
             </v-main>
         </v-app>
@@ -166,7 +220,7 @@
                             value: 'sort',
                         },
                         {
-                            text: '區域',
+                            text: '區站',
                             value: 'area',
                         },
 
@@ -189,15 +243,23 @@
                         sort: '',
                         area: '',
                         status: '',
-
                     },
 
                     restaurantId: '',
                     title: '',
                     editDialog: false,
+                    restaurant: {
+                        sid: 'CTK000',
+                        brand_code: 'CTK',
+                        brand: '',
+                        shop: '',
+                        location: '',
+                        status: true,
+                    },
+                    restaurantDialog: false,
+                    valid: true,
                 },
                 methods: {
-                    // {"id":1,"sid":"DOR001","brand":"朵頤","brand_code":"DOR","shop":"台北市府店","address":null,"location":"臺北市","status":0,"created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2024-02-19T01:23:26.000000Z","restaurant_workspaces":[{"id":1,"restaurant_id":1,"sort":99,"area":"西廚鐵板熱菜","status":1,"category_value":"DXC301","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":2,"restaurant_id":1,"sort":99,"area":"西廚熱鍋爐台","status":1,"category_value":"DXC302","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":3,"restaurant_id":1,"sort":99,"area":"西廚裁切備料","status":1,"category_value":"DXC303","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":4,"restaurant_id":1,"sort":99,"area":"西廚冷菜西點","status":1,"category_value":"DXC304","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":5,"restaurant_id":1,"sort":99,"area":"火線","status":1,"category_value":"DXC211","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":6,"restaurant_id":1,"sort":99,"area":"非火線","status":1,"category_value":"DXC212","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"},{"id":7,"restaurant_id":1,"sort":99,"area":"外場","status":1,"category_value":"outside","created_at":"2023-08-29T09:46:12.000000Z","updated_at":"2023-08-29T09:46:12.000000Z"}]}
                     getRestaurants() {
                         loading = true
                         axios.get('/api/restaurants')
@@ -272,14 +334,33 @@
                             })
 
 
-                    }
+                    },
 
+                    saveRestaurant() {
+                        this.loading = true
+                        axios.post('/api/restaurants', this.restaurant)
+                            .then(response => {
+                                if (response.data.status === 'success') {
+                                    this.restaurantDialog = false
+                                    this.getRestaurants()
+                                } else {
+                                    alert(response.data.message)
+                                }
+                            })
+                            .catch(error => {
+                                alert(error.response.data.message)
+                            })
+                            .finally(() => {
+                                this.loading = false
+                            })
+                    },
 
                 },
 
                 mounted() {
                     this.getRestaurants()
-                }
+                },
+
             })
         </script>
     </x-slot:footerFiles>

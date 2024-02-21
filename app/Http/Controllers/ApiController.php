@@ -56,6 +56,34 @@ class ApiController extends Controller
         ]);
     }
 
+    // storeRestaurant
+    public function storeRestaurant(Request $request)
+    {
+        // 如果sid有重複就不新增
+        $restaurant = Restaurant::where('sid', $request->input('sid'))->first();
+
+        if ($restaurant) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '品牌店代碼重複',
+            ]);
+        }
+
+        $restaurant = Restaurant::create($request->all());
+
+        // 預設新增一個區站
+        $restaurant->restaurantWorkspaces()->create([
+            'area' => '無',
+            'status' => 1,
+            'category_value' => $restaurant->sid,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $restaurant,
+        ]);
+    }
+
     // storeRestaurantWorkspace
     public function storeRestaurantWorkspace(Restaurant $restaurant, Request $request)
     {

@@ -36,6 +36,7 @@ class PosDepartmentController extends Controller
         $restaurants = Restaurant::get();
 
         foreach ($restaurants as $restaurant) {
+            // 更新區站資料
             self::update($restaurant);
         }
 

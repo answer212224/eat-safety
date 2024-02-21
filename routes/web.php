@@ -285,6 +285,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
     // 取得餐廳
     Route::get('/restaurants', [ApiController::class, 'getRestaurants'])->name('api.restaurants');
+    // 新增餐廳
+    Route::post('/restaurants', [ApiController::class, 'storeRestaurant'])->name('api.restaurants.store');
     // 從pos餐廳更新餐廳和工作區站
     Route::put('/restaurants/upsert', [PosDepartmentController::class, 'ajaxUpsert']);
     // 新增單個工作區站
