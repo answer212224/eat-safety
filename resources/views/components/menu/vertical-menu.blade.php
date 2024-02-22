@@ -274,6 +274,9 @@
                         <li class="{{ Request::routeIs('v2.data.quality.table.defects.index') ? 'active' : '' }} ">
                             <a href="{{ route('v2.data.quality.table.defects.index') }}">(品保)食安條文資料庫</a>
                         </li>
+                        <li class="{{ Request::routeIs('v2.data.quality.table.clear-defects.index') ? 'active' : '' }}">
+                            <a href="{{ route('v2.data.quality.table.clear-defects.index') }}">(品保)清檢條文資料庫</a>
+                        </li>
                     </ul>
                 </li>
             @endcan
