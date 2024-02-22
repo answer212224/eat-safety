@@ -310,13 +310,17 @@ class ApiController extends Controller
         $tasks = $tasks->sortBy(function ($task) {
             return abs(Carbon::parse($task->task_date)->diffInMinutes(now()));
         });
+        // 取得總數
+        $total = $tasks->count();
 
         // 重新排序 分頁
         $tasks = $tasks->values()->forPage(1, $limit);
 
+
         return response()->json([
             'status' => 'success',
             'data' => $tasks,
+            'total' => $total,
         ]);
     }
 

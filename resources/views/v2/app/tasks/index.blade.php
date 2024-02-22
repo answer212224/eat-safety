@@ -177,6 +177,15 @@
                         </v-col>
                     </v-row>
 
+                    <v-row v-show="noMoreData">
+                        <v-col cols="12">
+                            <v-alert type="info" outlined>
+
+                                已無更多資料
+                            </v-alert>
+                        </v-col>
+                    </v-row>
+
                     <v-row v-show="loading">
                         <v-col cols="12">
                             <v-progress-linear indeterminate color="blue darken-1"></v-progress-linear>
@@ -330,6 +339,8 @@
                     ],
                     tasks: [],
                     limit: 6,
+                    total: 0,
+                    noMoreData: false,
                     status: null,
                     loading: false,
                     projectDialog: false,
@@ -341,6 +352,7 @@
                     },
                     mealDialog: false,
                     approvalDialog: false,
+
                 },
 
                 methods: {
@@ -354,6 +366,7 @@
                             })
                             .then(response => {
                                 this.tasks = response.data.data
+                                this.total = response.data.total
                             })
                             .catch(error => {
                                 alert(error.response.data.message)
@@ -478,6 +491,10 @@
                     handleScroll() {
                         if ((window.innerHeight + window.scrollY + 10) >= document.body.offsetHeight) {
                             if (this.loading) return
+                            if (this.limit >= this.total) {
+                                this.noMoreData = true
+                                return
+                            }
                             this.limit += 3
                         }
                     },
