@@ -19,6 +19,7 @@ use App\Http\Controllers\V2\MealController as V2MealController;
 use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\DefectController as V2DefectController;
 use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
+use App\Http\Controllers\V2\QualityDefectController;
 use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
 use App\Http\Controllers\V2\UserController as V2UserController;
 
@@ -252,25 +253,45 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/{task}/defect/edit', [V2TaskController::class, 'editDefect'])->name('v2.app.tasks.defect.edit');
             // 清檢稽核紀錄頁面v2
             Route::get('/{task}/clear-defect/edit', [V2TaskController::class, 'editClearDefect'])->name('v2.app.tasks.clear-defect.edit');
-            // 任務行事曆
+            // 任務行事曆 v2
             Route::get('/calendar', [V2TaskController::class, 'calendar'])->name('v2.app.tasks.calendar');
         });
     });
     Route::prefix('data')->group(function () {
-        Route::prefix('table')->group(function () {
-            // 採樣資料庫v2
-            Route::get('/meals', [V2MealController::class, 'table'])->name('v2.data.table.meals.index');
-            // 專案資料庫v2
-            Route::get('/projects', [V2ProjectController::class, 'table'])->name('v2.data.table.projects.index');
-            // 食安缺失資料庫v2
-            Route::get('/defects', [V2DefectController::class, 'table'])->name('v2.data.table.defects.index');
-            // 清檢缺失資料庫v2
-            Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.table.clear-defects.index');
+        Route::prefix('shared')->group(function () {
             // 門市資料庫v2
-            Route::get('/restaurants', [V2RestaurantController::class, 'table'])->name('v2.data.table.restaurants.index');
-            // 同仁資料庫v2
-            Route::get('/users', [V2UserController::class, 'table'])->name('v2.data.table.users.index');
+            Route::get('/restaurants', [V2RestaurantController::class, 'table'])->name('v2.data.shared.restaurants.index');
+            // 使用者資料庫
+            Route::prefix('users')->group(function () {
+                Route::get('/', [UserController::class, 'index'])->name('v2.data.shared.users.index');
+                Route::get('/{user}/edit', [UserController::class, 'edit']);
+                Route::put('/{user}', [UserController::class, 'update']);
+                Route::get('/{user}/show', [UserController::class, 'show']);
+                Route::get('/{user}/chart', [UserController::class, 'chart']);
+            });
         });
+        // 食安
+        Route::prefix('foodsafety')->group(function () {
+            Route::prefix('table')->group(function () {
+                // 採樣資料庫v2
+                Route::get('/meals', [V2MealController::class, 'table'])->name('v2.data.foodsafety.table.meals.index');
+                // 專案資料庫v2
+                Route::get('/projects', [V2ProjectController::class, 'table'])->name('v2.data.foodsafety.table.projects.index');
+                // 食安條文資料庫v2
+                Route::get('/defects', [V2DefectController::class, 'table'])->name('v2.data.foodsafety.table.defects.index');
+                // 清檢條文資料庫v2
+                Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.foodsafety.table.clear-defects.index');
+            });
+        });
+
+        //品保
+        Route::prefix('quality')->group(function () {
+            Route::prefix('table')->group(function () {
+                // 食安條文資料庫v2
+                Route::get('/defects', [QualityDefectController::class, 'table'])->name('v2.data.quality.table.defects.index');
+            });
+        });
+
         Route::prefix('record')->group(function () {
             // 採樣紀錄v2
             Route::get('/meals', [V2MealController::class, 'record'])->name('v2.data.record.meals.index');
@@ -365,14 +386,24 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::put('/projects/{project}', [ApiController::class, 'updateProject'])->name('api.projects.update');
     // 取得食安缺失資料庫資料
     Route::get('/defects', [ApiController::class, 'getDefects'])->name('api.defects');
+    // 取得品保缺失資料庫資料
+    Route::get('/quality-defects', [ApiController::class, 'getQualityDefects'])->name('api.quality-defects');
     // 新增食安缺失資料庫資料
     Route::post('/defects', [ApiController::class, 'storeDefect'])->name('api.defects.store');
+    // 新增品保缺失資料庫資料
+    Route::post('/quality-defects', [ApiController::class, 'storeQualityDefect'])->name('api.quality-defects.store');
     // 更新食安缺失資料庫資料
     Route::put('/defects/{defect}', [ApiController::class, 'updateDefect'])->name('api.defects.update');
+    // 更新品保缺失資料庫資料
+    Route::put('/quality-defects/{defect}', [ApiController::class, 'updateQualityDefect'])->name('api.quality-defects.update');
     // 刪除食安缺失資料庫資料
     Route::delete('/defects/{defect}', [ApiController::class, 'deleteDefect'])->name('api.defects.delete');
+    // 刪除品保缺失資料庫資料
+    Route::delete('/quality-defects/{defect}', [ApiController::class, 'deleteQualityDefect'])->name('api.quality-defects.delete');
     // 匯入食安缺失資料庫資料
     Route::post('/defects/import', [ApiController::class, 'importDefects'])->name('api.defects.import');
+    // 匯入品保缺失資料庫資料
+    Route::post('/quality-defects/import', [ApiController::class, 'importQualityDefects'])->name('api.quality-defects.import');
     // 取得清檢缺失資料庫資料
     Route::get('/clear-defects', [ApiController::class, 'getClearDefects'])->name('api.clear-defects');
     // 新增清檢缺失資料庫資料

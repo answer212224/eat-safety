@@ -14,12 +14,14 @@ use App\Imports\TaskImport;
 use App\Models\ClearDefect;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
+use App\Models\QualityDefect;
 use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Imports\ClearDefectImport;
-use App\Models\RestaurantWorkspace;
 use App\Models\TaskHasClearDefect;
+use App\Models\RestaurantWorkspace;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\QualityDefectsImport;
 
 class ApiController extends Controller
 {
@@ -780,7 +782,7 @@ class ApiController extends Controller
         ]);
     }
 
-    // 取得食安缺失資料
+    // 取得食安的食安缺失資料
     public function getDefects()
     {
         $defects = Defect::all();
@@ -792,6 +794,21 @@ class ApiController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $defects,
+        ]);
+    }
+
+    // 取得品保的食安缺失資料
+    public function getQualityDefects()
+    {
+        $defect = QualityDefect::all();
+        $defect = $defect->map(function ($defect) {
+            $defect->effective_date = Carbon::create($defect->effective_date)->format('Y-m');
+            return $defect;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
         ]);
     }
 
@@ -810,8 +827,38 @@ class ApiController extends Controller
         ]);
     }
 
+    // 新增品保食安條文資料
+    public function storeQualityDefect(Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect = QualityDefect::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
     // 更新食安缺失資料
     public function updateDefect(Defect $defect, Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
+    // 更新品保食安缺失資料
+    public function updateQualityDefect(QualityDefect $defect, Request $request)
     {
         $request->merge([
             'effective_date' => Carbon::create($request->input('effective_date')),
@@ -836,11 +883,38 @@ class ApiController extends Controller
         ]);
     }
 
+    // 刪除品保食安缺失資料
+    public function deleteQualityDefect(QualityDefect $defect)
+    {
+        $defect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
     // 匯入食安缺失資料
     public function importDefects()
     {
         try {
             Excel::import(new DefectsImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    // 匯入品保食安缺失資料
+    public function importQualityDefects()
+    {
+        try {
+            Excel::import(new QualityDefectsImport, request()->file('file'));
             return response()->json([
                 'status' => 'success',
             ]);
