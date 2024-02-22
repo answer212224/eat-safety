@@ -19,6 +19,7 @@ use App\Http\Controllers\V2\MealController as V2MealController;
 use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\DefectController as V2DefectController;
 use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
+use App\Http\Controllers\V2\QualityClearDefectController;
 use App\Http\Controllers\V2\QualityDefectController;
 use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
 use App\Http\Controllers\V2\UserController as V2UserController;
@@ -287,8 +288,10 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
         //品保
         Route::prefix('quality')->group(function () {
             Route::prefix('table')->group(function () {
-                // 食安條文資料庫v2
+                // 食安條文資料庫
                 Route::get('/defects', [QualityDefectController::class, 'table'])->name('v2.data.quality.table.defects.index');
+                // 清檢條文資料庫
+                Route::get('/clear-defects', [QualityClearDefectController::class, 'table'])->name('v2.data.quality.table.clear-defects.index');
             });
         });
 
@@ -334,6 +337,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::get('/user/tasks', [ApiController::class, 'getUserTasks'])->name('api.user.tasks');
     // 修改使用者的任務狀態
     Route::put('/user/tasks/{task}', [ApiController::class, 'updateUserTaskStatus'])->name('api.user.tasks.update');
+    // 確認此任務是否有任何人員已完成 /api/tasks/${task.id}/is-all-completed
+    Route::get('/tasks/{task}/is-all-completed', [ApiController::class, 'isAllCompleted'])->name('api.tasks.is-all-completed');
     // 修改任務的多筆專案是否查核
     Route::put('/tasks/{task}/projects', [ApiController::class, 'updateTaskProjectStatus'])->name('api.user.tasks.projects.update');
     // 修改任務的多筆採樣是否帶回和備註
@@ -406,14 +411,24 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::post('/quality-defects/import', [ApiController::class, 'importQualityDefects'])->name('api.quality-defects.import');
     // 取得清檢缺失資料庫資料
     Route::get('/clear-defects', [ApiController::class, 'getClearDefects'])->name('api.clear-defects');
+    // 取得品保清檢缺失資料庫資料
+    Route::get('/quality-clear-defects', [ApiController::class, 'getQualityClearDefects'])->name('api.quality-clear-defects');
     // 新增清檢缺失資料庫資料
     Route::post('/clear-defects', [ApiController::class, 'storeClearDefect'])->name('api.clear-defects.store');
+    // 新增品保清檢缺失資料庫資料
+    Route::post('/quality-clear-defects', [ApiController::class, 'storeQualityClearDefect'])->name('api.quality-clear-defects.store');
     // 更新清檢缺失資料庫資料
     Route::put('/clear-defects/{clearDefect}', [ApiController::class, 'updateClearDefect'])->name('api.clear-defects.update');
+    // 更新品保清檢缺失資料庫資料
+    Route::put('/quality-clear-defects/{clearDefect}', [ApiController::class, 'updateQualityClearDefect'])->name('api.quality-clear-defects.update');
     // 刪除清檢缺失資料庫資料
     Route::delete('/clear-defects/{clearDefect}', [ApiController::class, 'deleteClearDefect'])->name('api.clear-defects.delete');
+    // 刪除品保清檢缺失資料庫資料
+    Route::delete('/quality-clear-defects/{clearDefect}', [ApiController::class, 'deleteQualityClearDefect'])->name('api.quality-clear-defects.delete');
     // 匯入清檢缺失資料庫資料
     Route::post('/clear-defects/import', [ApiController::class, 'importClearDefects'])->name('api.clear-defects.import');
+    // 匯入品保清檢缺失資料庫資料
+    Route::post('/quality-clear-defects/import', [ApiController::class, 'importQualityClearDefects'])->name('api.quality-clear-defects.import');
     // 取得該月份食安缺失紀錄
     Route::get('/defect-records', [ApiController::class, 'getDefectRecords'])->name('api.defect-records');
 });
