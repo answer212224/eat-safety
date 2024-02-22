@@ -19,19 +19,10 @@
                                 item-value="value" dense></v-select>
                         </v-col>
                     </v-row>
-                    {{-- 預加載 --}}
-                    <v-row v-show="loading">
-                        <v-col cols="12" sm="4" v-for="n in 6" :key="n">
-                            <template>
-                                <v-sheet class="pa-3">
-                                    <v-skeleton-loader class="mx-auto" type="card"></v-skeleton-loader>
-                                </v-sheet>
-                            </template>
-                        </v-col>
-                    </v-row>
 
-                    <v-row v-show="!loading">
-                        {{-- 只顯示前6個 往下滑動會自動加載 --}}
+
+                    <v-row>
+                        {{-- 一開始只顯示6筆 拉到底再顯示6筆 --}}
                         <v-col cols="12" sm="4" v-for="task in tasks" :key="task.id">
                             <v-card>
                                 <v-card-title>
@@ -51,7 +42,7 @@
                                     <v-spacer></v-spacer>
                                     <v-switch
                                         v-model="task.users.find(user => user.id === {{ auth()->user()->id }}).pivot.is_completed"
-                                        inset color="success" :loading="loading"
+                                        inset color="success"
                                         :disabled="task.status == 'completed' || task.task_date >
                                             '{{ now()->toDateTimestring() }}'"
                                         @change="changeStatus(task.id, task.users.find(user => user.id === {{ auth()->user()->id }}).pivot
@@ -185,13 +176,11 @@
                                 </v-card-actions>
                             </v-card>
                         </v-col>
+                    </v-row>
 
-                        {{-- 加載更多 --}}
-                        <v-col cols="12" v-if="tasks.length > 0">
-                            <v-btn block color="blue darken-1" text @click="limit+=3" :disabled="loading">
-                                <v-icon left>mdi-chevron-down</v-icon>
-                                加載更多
-                            </v-btn>
+                    <v-row v-show="loading">
+                        <v-col cols="12">
+                            <v-progress-linear indeterminate color="blue darken-1"></v-progress-linear>
                         </v-col>
                     </v-row>
 
@@ -217,12 +206,11 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-
-                                <v-btn color="blue darken-1" text @click="saveProjectIsChecked">
-                                    儲存
-                                </v-btn>
                                 <v-btn color="blue darken-1" text @click="close">
                                     取消
+                                </v-btn>
+                                <v-btn color="blue darken-1" text @click="saveProjectIsChecked">
+                                    儲存
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
@@ -251,7 +239,7 @@
                                                 @{{ meal.chef }} @{{ meal.workspace }}
                                             </span>
                                             <v-switch v-model.lazy="meal.pivot.is_taken" inset color="success"
-                                                :loading="loading" :label="meal.pivot.is_taken ? '已取' : '未取'">
+                                                :label="meal.pivot.is_taken ? '已取' : '未取'">
                                             </v-switch>
                                             <v-text-field v-model.lazy="meal.pivot.memo" label="備註"
                                                 dense></v-text-field>
@@ -264,11 +252,13 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="saveMealIsTaken">
-                                    儲存
-                                </v-btn>
+
                                 <v-btn color="blue darken-1" text @click="close">
                                     取消
+                                </v-btn>
+
+                                <v-btn color="blue darken-1" text @click="saveMealIsTaken">
+                                    儲存
                                 </v-btn>
 
                             </v-card-actions>
@@ -466,6 +456,14 @@
                                 this.getTasks()
                             })
                     },
+
+                    handleScroll() {
+                        if ((window.innerHeight + window.scrollY + 10) >= document.body.offsetHeight) {
+                            if (this.loading) return
+                            this.limit += 3
+                        }
+                    },
+
                 },
 
                 watch: {
@@ -475,11 +473,13 @@
 
                     limit() {
                         this.getTasks()
-                    }
+                    },
+
                 },
 
                 mounted() {
                     this.getTasks()
+                    window.addEventListener('scroll', this.handleScroll);
                 },
 
             })
