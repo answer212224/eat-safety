@@ -10,7 +10,7 @@ class DefectController extends Controller
     public function table()
     {
         return view('v2.data.table.defects.index', [
-            'title' => '食安缺失資料庫',
+            'title' => '食安條文資料庫',
         ]);
     }
 

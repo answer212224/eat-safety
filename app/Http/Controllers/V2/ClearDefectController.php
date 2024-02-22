@@ -10,7 +10,7 @@ class ClearDefectController extends Controller
     public function table()
     {
         return view('v2.data.table.clear_defects.index', [
-            'title' => '清檢缺失資料庫',
+            'title' => '清檢條文資料庫',
         ]);
     }
 }
