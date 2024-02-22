@@ -503,7 +503,8 @@
 
                 watch: {
                     status() {
-                        noMoreData = false
+                        this.noMoreData = false
+                        this.limit = 6
                         this.getTasks()
                     },
 
