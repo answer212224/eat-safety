@@ -147,8 +147,7 @@
                                                     <v-list-item-title>清檢稽核紀錄</v-list-item-title>
                                                 </v-list-item>
                                                 {{-- 主管簽核 --}}
-                                                <v-list-item @click="openApprovalDialog(task)"
-                                                    :disabled="task.status !== 'pending_approval'">
+                                                <v-list-item @click="isAllCompleted(task)">
                                                     <v-list-item-title>主管簽核</v-list-item-title>
                                                 </v-list-item>
                                             </v-list-group>
@@ -393,6 +392,25 @@
                     openApprovalDialog(task) {
                         this.approvalDialog = true
                         this.taskItem = structuredClone(task)
+                    },
+                    // 確認此任務所有人員都已完成
+                    isAllCompleted(task) {
+                        axios.get(`/api/tasks/${task.id}/is-all-completed`)
+                            .then(response => {
+                                if (response.data.data) {
+                                    const confirm = window.confirm('確認此任務所有人員都已完成，並進行主管簽核？')
+                                    if (confirm) {
+                                        this.openApprovalDialog(task)
+                                    }
+
+
+                                } else {
+                                    alert('此任務尚有人員未完成')
+                                }
+                            })
+                            .catch(error => {
+                                alert(error.response.data.message)
+                            })
                     },
 
                     close() {

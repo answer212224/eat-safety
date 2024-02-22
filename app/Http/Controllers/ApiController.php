@@ -18,10 +18,12 @@ use App\Models\QualityDefect;
 use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Imports\ClearDefectImport;
+use App\Models\QualityClearDefect;
 use App\Models\TaskHasClearDefect;
 use App\Models\RestaurantWorkspace;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\QualityDefectsImport;
+use App\Imports\QualityClearDefectsImport;
 
 class ApiController extends Controller
 {
@@ -346,6 +348,17 @@ class ApiController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $task,
+        ]);
+    }
+
+    // 確認此任務是否所有人員已完成
+    public function isAllCompleted(Task $task)
+    {
+        $isAllCompleted = $task->users()->wherePivot('is_completed', 0)->count() === 0;
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $isAllCompleted,
         ]);
     }
 
@@ -941,6 +954,21 @@ class ApiController extends Controller
         ]);
     }
 
+    // 取得品保清檢缺失資料
+    public function getQualityClearDefects()
+    {
+        $defects = QualityClearDefect::all();
+        $defects = $defects->map(function ($defect) {
+            $defect->effective_date = Carbon::create($defect->effective_date)->format('Y-m');
+            return $defect;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
     // 新增清檢缺失資料
     public function storeClearDefect(Request $request)
     {
@@ -956,8 +984,38 @@ class ApiController extends Controller
         ]);
     }
 
+    // 新增品保清檢缺失資料
+    public function storeQualityClearDefect(Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $defect = QualityClearDefect::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defect,
+        ]);
+    }
+
     // 更新清檢缺失資料
     public function updateClearDefect(ClearDefect $clearDefect, Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $clearDefect->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $clearDefect,
+        ]);
+    }
+
+    // 更新品保清檢缺失資料
+    public function updateQualityClearDefect(QualityClearDefect $clearDefect, Request $request)
     {
         $request->merge([
             'effective_date' => Carbon::create($request->input('effective_date')),
@@ -982,11 +1040,38 @@ class ApiController extends Controller
         ]);
     }
 
+    // 刪除品保清檢缺失資料
+    public function deleteQualityClearDefect(QualityClearDefect $clearDefect)
+    {
+        $clearDefect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $clearDefect,
+        ]);
+    }
+
     // 匯入清檢缺失資料
     public function importClearDefects()
     {
         try {
             Excel::import(new ClearDefectImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    // 匯入品保清檢缺失資料
+    public function importQualityClearDefects()
+    {
+        try {
+            Excel::import(new QualityClearDefectsImport, request()->file('file'));
             return response()->json([
                 'status' => 'success',
             ]);
