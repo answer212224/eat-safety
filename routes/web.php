@@ -21,6 +21,7 @@ use App\Http\Controllers\V2\DefectController as V2DefectController;
 use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
 use App\Http\Controllers\V2\QualityClearDefectController;
 use App\Http\Controllers\V2\QualityDefectController;
+use App\Http\Controllers\V2\QualityMealController;
 use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
 use App\Http\Controllers\V2\UserController as V2UserController;
 
@@ -288,6 +289,8 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
         //品保
         Route::prefix('quality')->group(function () {
             Route::prefix('table')->group(function () {
+                // 品保採樣資料庫
+                Route::get('/meals', [QualityMealController::class, 'table'])->name('v2.data.quality.table.meals.index');
                 // 食安條文資料庫
                 Route::get('/defects', [QualityDefectController::class, 'table'])->name('v2.data.quality.table.defects.index');
                 // 清檢條文資料庫
@@ -371,14 +374,24 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::delete('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'deleteTaskClearDefect'])->name('api.tasks.clear-defects.delete');
     // 取得採樣資料庫資料
     Route::get('/meals', [ApiController::class, 'getMeals'])->name('api.meals');
+    // 取得品保採樣資料庫資料
+    Route::get('/quality-meals', [ApiController::class, 'getQualityMeals'])->name('api.quality-meals');
     // 新增採樣資料庫資料
     Route::post('/meals', [ApiController::class, 'storeMeal'])->name('api.meals.store');
+    // 新增品保採樣資料庫資料
+    Route::post('/quality-meals', [ApiController::class, 'storeQualityMeal'])->name('api.quality-meals.store');
     // 更新採樣資料庫資料
     Route::put('/meals/{meal}', [ApiController::class, 'updateMeal'])->name('api.meals.update');
+    // 更新品保採樣資料庫資料
+    Route::put('/quality-meals/{meal}', [ApiController::class, 'updateQualityMeal'])->name('api.quality-meals.update');
     // 刪除採樣資料庫資料
     Route::delete('/meals/{meal}', [ApiController::class, 'deleteMeal'])->name('api.meals.delete');
+    // 刪除品保採樣資料庫資料
+    Route::delete('/quality-meals/{meal}', [ApiController::class, 'deleteQualityMeal'])->name('api.quality-meals.delete');
     // 匯入採樣資料庫資料
     Route::post('/meals/import', [ApiController::class, 'importMeals'])->name('api.meals.import');
+    // 匯入品保採樣資料庫資料
+    Route::post('/quality-meals/import', [ApiController::class, 'importQualityMeals'])->name('api.quality-meals.import');
     // 取得採樣紀錄資料
     Route::get('/meal-records', [ApiController::class, 'getMealRecords'])->name('api.meal-records');
     // 取得專案資料庫資料

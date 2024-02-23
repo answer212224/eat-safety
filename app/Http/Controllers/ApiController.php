@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\Restaurant;
 use App\Imports\TaskImport;
 use App\Models\ClearDefect;
+use App\Models\QualityMeal;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
 use App\Models\QualityDefect;
@@ -20,6 +21,7 @@ use App\Imports\DefectsImport;
 use App\Imports\ClearDefectImport;
 use App\Models\QualityClearDefect;
 use App\Models\TaskHasClearDefect;
+use App\Imports\QualityMealsImport;
 use App\Models\RestaurantWorkspace;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\QualityDefectsImport;
@@ -650,6 +652,20 @@ class ApiController extends Controller
         ]);
     }
 
+    // 取得品保的餐點
+    public function getQualityMeals()
+    {
+        $meals = QualityMeal::get();
+        $meals = $meals->map(function ($meal) {
+            $meal->effective_date = Carbon::create($meal->effective_date)->format('Y-m');
+            return $meal;
+        });
+        return response()->json([
+            'status' => 'success',
+            'data' => $meals,
+        ]);
+    }
+
     public function storeMeal(Request $request)
     {
 
@@ -665,7 +681,36 @@ class ApiController extends Controller
         ]);
     }
 
+    public function storeQualityMeal(Request $request)
+    {
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $meal = QualityMeal::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
     public function updateMeal(Meal $meal, Request $request)
+    {
+        // carbon effective_date
+        $request->merge([
+            'effective_date' => Carbon::create($request->input('effective_date')),
+        ]);
+
+        $meal->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
+    public function updateQualityMeal(QualityMeal $meal, Request $request)
     {
         // carbon effective_date
         $request->merge([
@@ -690,10 +735,35 @@ class ApiController extends Controller
         ]);
     }
 
+    public function deleteQualityMeal(QualityMeal $meal)
+    {
+        $meal->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meal,
+        ]);
+    }
+
     public function importMeals()
     {
         try {
             Excel::import(new MealsImport, request()->file('file'));
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function importQualityMeals()
+    {
+        try {
+            Excel::import(new QualityMealsImport, request()->file('file'));
             return response()->json([
                 'status' => 'success',
             ]);

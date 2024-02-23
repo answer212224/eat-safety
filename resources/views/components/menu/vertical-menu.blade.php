@@ -271,6 +271,9 @@
                     </a>
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/data/quality/table/*') ? 'show' : '' }}"
                         id="quality" data-bs-parent="#accordionExample">
+                        <li class="{{ Request::routeIs('v2.data.quality.table.meals.index') ? 'active' : '' }} ">
+                            <a href="{{ route('v2.data.quality.table.meals.index') }}">(品保)採樣資料庫</a>
+                        </li>
                         <li class="{{ Request::routeIs('v2.data.quality.table.defects.index') ? 'active' : '' }} ">
                             <a href="{{ route('v2.data.quality.table.defects.index') }}">(品保)食安條文資料庫</a>
                         </li>
