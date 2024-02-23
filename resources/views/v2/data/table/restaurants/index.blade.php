@@ -53,12 +53,13 @@
                                     <v-list-item @click="editRestaurant(item)">
                                         <v-list-item-title>區站資料</v-list-item-title>
                                     </v-list-item>
+
                                     <v-list-item :href="`/v1/data/table/restaurants/${item.id}/chart`" target="_blank"
-                                        v-show="item.brand_code !== 'CTK'">
+                                        v-if="!item.brand_code.startsWith('CT')">
                                         <v-list-item-title>食安圖表</v-list-item-title>
                                     </v-list-item>
                                     <v-list-item :href="`/v1/data/table/restaurants/${item.id}/defects`" target="_blank"
-                                        v-show="item.brand_code !== 'CTK'">
+                                        v-if="!item.brand_code.startsWith('CT')">
                                         <v-list-item-title>
                                             食安缺失
                                         </v-list-item-title>
@@ -148,25 +149,40 @@
                                 <v-form v-model="valid" ref="form">
                                     <v-row>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="restaurant.brand_code" label="品牌代碼" readonly>
+                                            <v-text-field v-model="restaurant.brand_code" label="品牌代碼"
+                                                :rules="[
+                                                    v => !!v || '品牌代碼為必填',
+                                                    v => v.startsWith('CT') || '品牌代碼必須是CT開頭',
+                                                    v => v.length === 3 || '品牌代碼必須是3碼',
+                                                ]"></v-text-field>
+
                                         </v-col>
                                         <v-col cols="12" sm="6">
                                             <v-text-field v-model="restaurant.sid" label="品牌店代碼"
                                                 :rules="[
                                                     v => !!v || '品牌店代碼為必填',
-                                                    v => v.startsWith('CTK') || '品牌店代碼必須是CTK開頭',
+                                                    v => v.startsWith('CT') || '品牌店代碼必須是CT開頭',
                                                     v => v.length === 6 || '品牌店代碼必須是6碼',
                                                 
                                                 ]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="restaurant.brand" label="品牌">
+                                            <v-text-field v-model="restaurant.brand" label="品牌"
+                                                :rules="[
+                                                    v => !!v || '品牌為必填',
+                                                ]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="restaurant.shop" label="店別"></v-text-field>
+                                            <v-text-field v-model="restaurant.shop" label="店別"
+                                                :rules="[
+                                                    v => !!v || '店別為必填',
+                                                ]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6">
-                                            <v-text-field v-model="restaurant.location" label="區域"></v-text-field>
+                                            <v-text-field v-model="restaurant.location" label="區域"
+                                                :rules="[
+                                                    v => !!v || '區域為必填',
+                                                ]"></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-form>
@@ -174,7 +190,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="saveRestaurant">儲存</v-btn>
+                            <v-btn color="blue darken-1" text @click="saveRestaurant" :disabled="!valid">儲存</v-btn>
                         </v-card-actions>
                     </v-card>
 
@@ -190,6 +206,10 @@
                 vuetify: new Vuetify(),
                 data: {
                     headers: [{
+                            text: '品牌代碼',
+                            value: 'brand_code',
+                        },
+                        {
                             text: '品牌店代碼',
                             value: 'sid',
                         },
