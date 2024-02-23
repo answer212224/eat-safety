@@ -10,9 +10,7 @@
 
 
 <div class="sidebar-wrapper sidebar-theme">
-
     <nav id="sidebar">
-
         <div class="navbar-nav theme-brand flex-row">
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
@@ -38,22 +36,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="profile-info">
-            <div class="user-info">
-                <div class="profile-img">
-                    <img src="{{ Vite::asset('resources/images/delete-user-15.jpeg') }}" alt="avatar">
-                </div>
-                <div class="profile-content">
-                    <h6 class="">{{ auth()->user()->name }}</h6>
-                    <p class="">{{ auth()->user()->uid }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
-
             {{-- APP --}}
             <li class="menu menu-heading">
                 <div class="heading">APP</div>
@@ -91,7 +74,6 @@
                     </ul>
                 </li>
             @endcan
-
             @can('view-task')
                 <li class="menu {{ Request::is('*/app/task/*') || Request::is('*/app/task') ? 'active' : '' }}">
                     <a href="#task" data-bs-toggle="collapse"
@@ -157,12 +139,9 @@
                     </ul>
                 </li>
             @endcan
-
-
             <li class="menu menu-heading">
                 <div class="heading">DATA</div>
             </li>
-
             @can('view-table')
                 {{-- 共用資料庫 --}}
                 <li class="menu {{ Request::is('*/data/shared/*') ? 'active' : '' }}">
@@ -283,11 +262,6 @@
                     </ul>
                 </li>
             @endcan
-
-
-
-
-
             @can('view-record')
                 {{-- 食安紀錄 --}}
                 <li class="menu {{ Request::is('*/data/record/*') ? 'active' : '' }}">
@@ -341,7 +315,6 @@
                     </ul>
                 </li>
             @endcan
-
             @can('view-rowdata')
                 {{-- RowData --}}
                 <li class="menu {{ Request::is('*/data/row-data/*') ? 'active' : '' }}">
