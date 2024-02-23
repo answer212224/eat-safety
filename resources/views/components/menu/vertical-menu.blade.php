@@ -88,7 +88,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            <span>食安稽核任務</span>
+                            <span>食安巡檢</span>
                         </div>
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -100,42 +100,19 @@
                     </a>
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/app/task/*') ? 'show' : '' }}"
                         id="task" data-bs-parent="#accordionExample">
-
-                        {{-- <li
-                            class="{{ Request::routeIs('task-assign') || Request::routeIs('task-edit') ? 'active' : '' }}">
-                            <a href="{{ route('task-assign') }}"> 稽核行事曆 </a>
-                        </li> --}}
-
                         <li class="{{ Request::routeIs('v2.app.tasks.calendar') ? 'active' : '' }}">
-                            <a href="{{ route('v2.app.tasks.calendar') }}">(食安)稽核行事曆</a>
+                            <a href="{{ route('v2.app.tasks.calendar') }}" style="align-items: center;">
+                                巡檢月曆
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
-
-                        {{-- <li
-                            class="{{ Request::routeIs('task-list') ||
-                            Request::routeIs('task-create') ||
-                            Request::routeIs('task-defect-show') ||
-                            Request::routeIs('task-meal-check') ||
-                            Request::routeIs('task-project-check') ||
-                            Request::routeIs('task-defect-edit') ||
-                            Request::routeIs('task-clear-defect-edit') ||
-                            Request::routeIs('task-defect-owner') ||
-                            Request::routeIs('task-clear-defect-owner')
-                                ? 'active'
-                                : '' }}">
-                            <a href="{{ route('task-list') }}"> 稽核任務列表 </a>
-                        </li> --}}
                         {{-- 任務列表v2 --}}
-                        <li class="{{ Request::routeIs('v2.app.tasks.index') ||
-                        Request::routeIs('v2.app.tasks.defect.create') ||
-                        Request::routeIs('v2.app.tasks.defect.edit') ||
-                        Request::routeIs('v2.app.tasks.clear-defect.create') ||
-                        Request::routeIs('v2.app.tasks.clear-defect.edit')
-                            ? 'active'
-                            : '' }}"
-                            class="d-none">
-                            <a href="{{ route('v2.app.tasks.index') }}">(食安)稽核任務列表</a>
+                        <li class="{{ Request::routeIs('v2.app.tasks.index') ? 'active' : '' }}" class="d-none">
+                            <a href="{{ route('v2.app.tasks.index') }}" style="align-items: center;">
+                                巡檢任務
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
-
                     </ul>
                 </li>
             @endcan
@@ -208,17 +185,31 @@
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/data/foodsafety/table/*') ? 'show' : '' }}"
                         id="table" data-bs-parent="#accordionExample">
                         <li class="{{ Request::routeIs('v2.data.foodsafety.table.meals.index') ? 'active' : '' }} ">
-                            <a href="{{ route('v2.data.foodsafety.table.meals.index') }}">(食安)採樣資料庫</a>
+                            <a href="{{ route('v2.data.foodsafety.table.meals.index') }}"
+                                style="align-items: center;">採樣資料庫
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
                         <li class="{{ Request::routeIs('v2.data.foodsafety.table.projects.index') ? 'active' : '' }}">
-                            <a href="{{ route('v2.data.foodsafety.table.projects.index') }}">(食安)專案資料庫</a>
+                            <a href="{{ route('v2.data.foodsafety.table.projects.index') }}"
+                                style="align-items: center;">
+                                專案資料庫
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
                         <li class="{{ Request::routeIs('v2.data.foodsafety.table.defects.index') ? 'active' : '' }}">
-                            <a href="{{ route('v2.data.foodsafety.table.defects.index') }}">(食安)食安條文資料庫</a>
+                            <a href="{{ route('v2.data.foodsafety.table.defects.index') }}" style="align-items: center;">
+                                食安條文資料庫
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
                         <li
                             class="{{ Request::routeIs('v2.data.foodsafety.table.clear-defects.index') ? 'active' : '' }}">
-                            <a href="{{ route('v2.data.foodsafety.table.clear-defects.index') }}">(食安)清檢條文資料庫</a>
+                            <a href="{{ route('v2.data.foodsafety.table.clear-defects.index') }}"
+                                style="align-items: center;">
+                                清檢條文資料庫
+                                <span class="badge badge-light-danger">食安</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -251,13 +242,23 @@
                     <ul class="collapse submenu list-unstyled {{ Request::is('*/data/quality/table/*') ? 'show' : '' }}"
                         id="quality" data-bs-parent="#accordionExample">
                         <li class="{{ Request::routeIs('v2.data.quality.table.meals.index') ? 'active' : '' }} ">
-                            <a href="{{ route('v2.data.quality.table.meals.index') }}">(品保)採樣資料庫</a>
+                            <a href="{{ route('v2.data.quality.table.meals.index') }}" style="align-items: center;">
+                                採樣資料庫
+                                <span class="badge badge-light-success">品保</span>
+                            </a>
                         </li>
                         <li class="{{ Request::routeIs('v2.data.quality.table.defects.index') ? 'active' : '' }} ">
-                            <a href="{{ route('v2.data.quality.table.defects.index') }}">(品保)食安條文資料庫</a>
+                            <a href="{{ route('v2.data.quality.table.defects.index') }}" style="align-items: center;">
+                                食安條文資料庫
+                                <span class="badge badge-light-success">品保</span>
+                            </a>
                         </li>
                         <li class="{{ Request::routeIs('v2.data.quality.table.clear-defects.index') ? 'active' : '' }}">
-                            <a href="{{ route('v2.data.quality.table.clear-defects.index') }}">(品保)清檢條文資料庫</a>
+                            <a href="{{ route('v2.data.quality.table.clear-defects.index') }}"
+                                style="align-items: center;">
+                                清檢條文資料庫
+                                <span class="badge badge-light-success">品保</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -293,25 +294,30 @@
 
                         @can('view-record-meal')
                             <li class="{{ Request::routeIs('v2.data.record.meals.index') ? 'active' : '' }}">
-                                <a href="{{ route('v2.data.record.meals.index') }}">(食安)採樣紀錄</a>
+                                <a href="{{ route('v2.data.record.meals.index') }}" style="align-items: center;">
+                                    採樣紀錄
+                                    <span class="badge badge-light-danger">食安</span>
+                                </a>
                             </li>
                         @endcan
 
                         @can('view-record-defect')
                             <li class="{{ Request::routeIs('v2.data.record.defects.index') ? 'active' : '' }}">
-                                <a href="{{ route('v2.data.record.defects.index') }}">(食安)食安缺失紀錄</a>
+                                <a href="{{ route('v2.data.record.defects.index') }}" style="align-items: center;">
+                                    食安缺失紀錄
+                                    <span class="badge badge-light-danger">食安</span>
+                                </a>
                             </li>
                         @endcan
                         @can('view-record-clear-defect')
                             <li
                                 class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
-                                <a href="{{ route('clear-defect-records') }}"> (食安)清檢缺失紀錄 </a>
+                                <a href="{{ route('clear-defect-records') }}" style="align-items: center;">
+                                    清檢缺失紀錄
+                                    <span class="badge badge-light-danger">食安</span>
+                                </a>
                             </li>
                         @endcan
-                        <li
-                            class="{{ Request::routeIs('restaurant-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }} d-none">
-                            <a href="{{ route('restaurant-records') }}"> 門市缺失紀錄 </a>
-                        </li>
                     </ul>
                 </li>
             @endcan
