@@ -365,7 +365,6 @@ class ApiController extends Controller
     // 匯入任務
     public function importTasks(Request $request)
     {
-        ini_set('memory_limit', '256M');
         Excel::import(new TaskImport, $request->file('file'));
         return response()->json([
             'status' => 'success',
