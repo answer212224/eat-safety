@@ -47,7 +47,7 @@ class ClearDefectImport implements ToCollection
 
         // 如無該月份的缺失紀錄，則可更新該月份的食安缺失資料
         // 刪除該月份的食安缺失資料
-        \App\Models\ClearDefect::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();
+        // \App\Models\ClearDefect::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();
 
         // 新增該月份的食安缺失資料
         foreach ($collection as $item) {

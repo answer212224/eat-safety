@@ -47,7 +47,7 @@ class QualityDefectsImport implements ToCollection
         // }
 
         // 如無該月份的稽核任務，則可更新該月份的食安缺失資料
-        \App\Models\QualityDefect::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();
+        // \App\Models\QualityDefect::whereYear('effective_date', $collection[0]['effective_date'])->whereMonth('effective_date', $collection[0]['effective_date'])->delete();
 
         // 儲存資料
         foreach ($collection as $item) {
