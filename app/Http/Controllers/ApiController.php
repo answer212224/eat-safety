@@ -13,6 +13,7 @@ use App\Models\Restaurant;
 use App\Imports\TaskImport;
 use App\Models\ClearDefect;
 use App\Models\QualityMeal;
+use App\Models\QualityTask;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
 use App\Models\QualityDefect;
@@ -45,14 +46,33 @@ class ApiController extends Controller
     {
         $is_group_by_brand = $request->input('is_group_by_brand');
         $is_group_by_brand_code = $request->input('is_group_by_brand_code');
+        $status = $request->input('status');
+        $is_quality = $request->input('is_quality');
+        $is_food_safety = $request->input('is_food_safety');
+
+        $restaurants = Restaurant::with('restaurantWorkspaces');
+
+        if ($status) {
+            $restaurants = $restaurants->where('status', $status);
+        }
+
+        if ($is_food_safety) {
+            $restaurants = $restaurants->where('brand_code', 'not like', 'CT%');
+        }
+
+        if ($is_quality) {
+            $restaurants = $restaurants->where('brand_code', 'like', 'CT%');
+        }
+
+        $restaurants = $restaurants->get();
 
 
         if ($is_group_by_brand) {
-            $restaurants = Restaurant::with('restaurantWorkspaces')->where('status', true)->get()->groupBy('brand');
-        } else if ($is_group_by_brand_code) {
-            $restaurants = Restaurant::with('restaurantWorkspaces')->where('status', true)->get()->groupBy('brand_code');
-        } else {
-            $restaurants = Restaurant::with('restaurantWorkspaces')->get();
+            $restaurants = $restaurants->groupBy('brand');
+        }
+
+        if ($is_group_by_brand_code) {
+            $restaurants = $restaurants->groupBy('brand_code');
         }
 
 
@@ -142,6 +162,33 @@ class ApiController extends Controller
         ]);
     }
 
+    // getQualityTasks
+    public function getQualityTasks(Request $request)
+    {
+        $status = $request->input('status');
+        // 如果有 view-all-task 的權限，才可以看到所有的任務
+        if (auth()->user()->can('view-all-task')) {
+            $tasks = QualityTask::with(['restaurant', 'users', 'meals'])
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->orderBy('task_date')
+                ->get();
+        } else {
+            $tasks = auth()->user()->qualityTasks()->with(['restaurant', 'users', 'meals'])
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->orderBy('task_date')
+                ->get();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $tasks,
+        ]);
+    }
+
     // 儲存任務
     public function storeTask(Request $request)
     {
@@ -172,6 +219,36 @@ class ApiController extends Controller
             foreach ($projects as $project) {
                 $task->projects()->attach($project['id']);
             }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
+    // 儲存品保任務
+    public function storeQualityTask(Request $request)
+    {
+        $date = $request->input('date');
+        $time = $request->input('time');
+        $users = $request->input('users');
+        $restaurant = $request->input('restaurant');
+        $meals = $request->input('meals');
+        $category = $request->input('category');
+
+        $task = QualityTask::create([
+            'category' => $category,
+            'restaurant_id' => $restaurant['id'],
+            'task_date' => $date . ' ' . $time,
+        ]);
+
+        foreach ($users as $user) {
+            $task->users()->attach($user['id']);
+        }
+
+        foreach ($meals as $meal) {
+            $task->meals()->attach($meal['id']);
         }
 
         return response()->json([
@@ -221,13 +298,45 @@ class ApiController extends Controller
         ]);
     }
 
+    // 更新品保任務
+    public function updateQualityTask(QualityTask $task, Request $request)
+    {
+        $date = $request->input('date');
+        $time = $request->input('time');
+        $users = $request->input('users');
+        $restaurant = $request->input('restaurant');
+        $meals = $request->input('meals');
+        $category = $request->input('category');
+
+        $task->update([
+            'category' => $category,
+            'restaurant_id' => $restaurant['id'],
+            'task_date' => $date . ' ' . $time,
+        ]);
+
+        $task->users()->sync([]);
+        foreach ($users as $user) {
+            $task->users()->attach($user['id']);
+        }
+
+        $task->meals()->sync([]);
+        foreach ($meals as $meal) {
+            $task->meals()->attach($meal['id']);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
     // 刪除任務
     public function deleteTask(Task $task)
     {
-        $task->delete();
         $task->users()->detach();
         $task->meals()->detach();
         $task->projects()->detach();
+        $task->delete();
         // 刪除任務的缺失
         $task->taskHasDefects()->delete();
         // 刪除任務的清檢缺失
@@ -240,9 +349,23 @@ class ApiController extends Controller
         ]);
     }
 
+    // 刪除品保任務
+    public function deleteQualityTask(QualityTask $task)
+    {
+        $task->users()->detach();
+        $task->meals()->detach();
+        $task->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
     // 匯入任務
     public function importTasks(Request $request)
     {
+        ini_set('memory_limit', '256M');
         Excel::import(new TaskImport, $request->file('file'));
         return response()->json([
             'status' => 'success',
@@ -277,6 +400,26 @@ class ApiController extends Controller
 
         // 取得sid是EAT007和brand_code是EAT的餐點
         $meals = Meal::whereIn('sid', [$sid, $brand_code])
+            ->whereYear('effective_date', $date->format('Y'))
+            ->whereMonth('effective_date', $date->format('m'))->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $meals,
+        ]);
+    }
+
+    // getRestaurantQualityMeals
+    public function getRestaurantQualityMeals(Request $request)
+    {
+        $date = $request->input('date');
+        $sid = $request->input('sid');
+        $brand_code = $request->input('brand_code');
+
+        $date = Carbon::create($date);
+
+        // 取得sid是EAT007和brand_code是EAT的餐點
+        $meals = QualityMeal::whereIn('sid', [$sid, $brand_code])
             ->whereYear('effective_date', $date->format('Y'))
             ->whereMonth('effective_date', $date->format('m'))->get();
 
