@@ -480,7 +480,9 @@
                         this.loading = true
                         axios.get('/api/restaurants', {
                                 params: {
-                                    is_group_by_brand_code: true,
+                                    is_group_by_brand_code: 1,
+                                    is_food_safety: 1,
+                                    status: 1,
                                 }
                             })
                             .then((res) => {
@@ -638,6 +640,8 @@
 
                 watch: {
                     'editedItem.restaurant': function() {
+                        this.editedItem.meals = []
+                        this.editedItem.projects = []
                         if (this.editedItem.restaurant && this.editedItem.date) {
                             this.getMeals()
                             this.getActiveProjects()
