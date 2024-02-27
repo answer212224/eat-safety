@@ -35,8 +35,8 @@ class RowDataController extends Controller
 
         $tasks = $tasks->whereYear('task_date', $yearMonth)->whereMonth('task_date', $yearMonth);
 
-        // 只取得已完成的任務和食安及5S的缺失
-        $tasks = $tasks->where('status', 'completed')->where('category', '食安及5S')->get();
+        // 只取得已完成的任務和[食安及5S或食安及5S復稽]
+        $tasks = $tasks->where('status', 'completed')->whereIn('category', ['食安及5S', '食安及5S複稽'])->get();
 
 
         // 取得所有不重複的群組
