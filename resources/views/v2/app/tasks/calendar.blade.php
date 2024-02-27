@@ -73,11 +73,25 @@
                                             @endcan
                                             <v-toolbar-title>
                                                 @{{ selectedEvent.name }}
+
                                             </v-toolbar-title>
 
                                         </v-toolbar>
                                         <v-card-text>
                                             <v-row>
+                                                {{-- 狀態 --}}
+                                                {{-- pending', 'processing', 'pending_approval', 'completed' --}}
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-icon left color="teal darken-2" small>mdi-check</v-icon>
+                                                    <span v-if="selectedEvent.status==='pending'"
+                                                        class="text--primary">未稽核</span>
+                                                    <span v-if="selectedEvent.status==='processing'"
+                                                        class="text--primary">稽核中</span>
+                                                    <span v-if="selectedEvent.status==='pending_approval'"
+                                                        class="text--primary">待審核</span>
+                                                    <span v-if="selectedEvent.status==='completed'"
+                                                        class="text--primary">已完成</span>
+                                                </v-col>
                                                 {{-- 類別 --}}
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-icon left color="teal darken-2" small>mdi-tag</v-icon>
@@ -439,6 +453,7 @@
                                         time: item.task_date.split(' ')[1],
                                         category: item.category,
                                         restaurant: item.restaurant,
+                                        status: item.status,
                                     })
                                 })
 
