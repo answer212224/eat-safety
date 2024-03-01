@@ -59,3 +59,7 @@ php artisan permission:assign-role-to-user role_name user_name
 -   [laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
 -   [Sopamo/laravel-filepond](https://github.com/Sopamo/laravel-filepond)
 
+## License
+-   [MIT](https://opensource.org/licenses/MIT)
+```
+
