@@ -525,6 +525,12 @@
                                 this.meals = res.data.data
                                 if (this.editedIndex === -1) {
                                     this.editedItem.meals = this.meals
+                                } else {
+                                    this.editedItem.meals = this.editedItem.meals.filter((item) => {
+                                        return this.meals.some((meal) => {
+                                            return meal.id === item.id
+                                        })
+                                    })
                                 }
                                 this.loading = false
                             })
@@ -655,13 +661,13 @@
 
                 watch: {
                     'editedItem.restaurant': function() {
-                        this.editedItem.meals = []
-                        this.editedItem.projects = []
                         if (this.editedItem.restaurant && this.editedItem.date) {
                             this.getMeals()
                             this.getActiveProjects()
+
                         }
                     },
+
                 },
 
 
