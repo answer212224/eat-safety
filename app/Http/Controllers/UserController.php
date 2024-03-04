@@ -142,7 +142,7 @@ class UserController extends Controller
         // Create a Carbon instance for the year and month
         $yearMonth = Carbon::create($yearMonth);
 
-        // role has 
+        // role has
         $allusers = User::role('auditor')->get();
 
         if ($selectUsers) {
@@ -182,7 +182,7 @@ class UserController extends Controller
 
             // Calculate the food safety count and clean count
             $foodSafetyCount = $tasks->filter(function ($task) {
-                return $task->category == '食安及5S';
+                return $task->category == '食安及5S' || $task->category == '食安及5S複稽';
             })->count();
 
             $cleanCount = $tasks->filter(function ($task) {
