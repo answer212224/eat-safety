@@ -146,6 +146,6 @@ class MealController extends Controller
             return $item;
         });
 
-        return (new MealsExport($meals))->download('餐點採樣.xlsx');
+        return (new MealsExport($meals))->download("$task->task_date" . "_採樣.xlsx");
     }
 }
