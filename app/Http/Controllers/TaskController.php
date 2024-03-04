@@ -503,9 +503,9 @@ class TaskController extends Controller
 
         // defectsGroup flat
         $defectsFlat = $defectsGroup->flatten(2);
-        // 重新排序 defectsFlat.defect.category = 重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
+        // 重新排序 defectsFlat.defect.category = 重大缺失或食安重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
         $defectsFlat = $defectsFlat->sortBy(function ($item) {
-            if ($item->defect && $item->defect->category == '重大缺失') {
+            if ($item->defect && $item->defect->category == '重大缺失' || $item->defect->category == '食安重大缺失') {
                 return 1;
             } elseif ($item->is_suggestion == 1 || $item->is_repeat == 1 || $item->is_not_reach_deduct_standard == 1 || $item->is_ignore == 1) {
                 return 3;
@@ -663,9 +663,9 @@ class TaskController extends Controller
                 });
         }
 
-        // 重新排序 defects.defect.category = 重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
+        // 重新排序 defects.defect.category = 重大缺失或食安重大缺失 排第一個, is_suggestion = 1 和 is_repeat = 1 和 is_not_reach_deduct_standard = 1 和 is_ignore = 1 排最後
         $defects = $defects->sortBy(function ($item) {
-            if ($item->defect && $item->defect->category == '重大缺失') {
+            if ($item->defect && $item->defect->category == '重大缺失' || $item->defect->category == '食安重大缺失') {
                 return 1;
             } elseif ($item->is_suggestion == 1 || $item->is_repeat == 1 || $item->is_not_reach_deduct_standard == 1 || $item->is_ignore == 1) {
                 return 3;
