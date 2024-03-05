@@ -224,13 +224,13 @@ class RowDataController extends Controller
             }
 
             // 內場重大缺失總數
-            $backMajorDefectCount = $backTask->where('defect.category', '重大缺失')->count();
+            $backMajorDefectCount = $backTask->where('defect.group', '重大缺失')->count();
             // 內場重大缺失標準
-            $backMajorDefectCountDescrptions = $backTask->where('defect.category', '重大缺失')->pluck('defect.report_description')->toArray();
+            $backMajorDefectCountDescrptions = $backTask->where('defect.group', '重大缺失')->pluck('defect.report_description')->toArray();
             // 外場重大缺失總數
-            $frontMajorDefectCount = $frontTask->where('defect.category', '重大缺失')->count();
+            $frontMajorDefectCount = $frontTask->where('defect.group', '重大缺失')->count();
             // 外場重大缺失標準
-            $frontMajorDefectCountDescrptions = $frontTask->where('defect.category', '重大缺失')->pluck('defect.report_description')->toArray();
+            $frontMajorDefectCountDescrptions = $frontTask->where('defect.group', '重大缺失')->pluck('defect.report_description')->toArray();
 
 
             // 取得中廚區站的id
