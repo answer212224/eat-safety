@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Task::class);
     }
 
+    public function qualityTasks(): BelongsToMany
+    {
+        return $this->belongsToMany(QualityTask::class);
+    }
+
     public function taskUsers()
     {
         return $this->hasMany(TaskUser::class);
@@ -63,7 +68,7 @@ class User extends Authenticatable
         return $this->hasMany(TaskHasDefect::class);
     }
 
-    /** 
+    /**
      * hasMany TaskHasClearDefect
      */
     public function taskHasClearDefects()

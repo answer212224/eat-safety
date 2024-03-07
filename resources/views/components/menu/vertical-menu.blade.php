@@ -8,7 +8,6 @@
 
 --}}
 
-
 <div class="sidebar-wrapper sidebar-theme">
     <nav id="sidebar">
         <div class="navbar-nav theme-brand flex-row">
@@ -22,7 +21,7 @@
                     </a>
                 </div>
                 <div class="nav-item theme-text">
-                    <a href="/" class="nav-link">食安巡檢平台</a>
+                    <a href="/" class="nav-link">巡檢平台</a>
                 </div>
             </div>
             <div class="nav-item sidebar-toggle">
@@ -36,6 +35,19 @@
                 </div>
             </div>
         </div>
+        <div class="profile-info">
+            <div class="user-info">
+                <div class="profile-img">
+                    <img src="{{ Vite::asset('resources/images/delete-user-15.jpeg') }}" alt="avatar">
+                </div>
+                <div class="profile-content">
+                    <h6 class="">{{ auth()->user()->name }}</h6>
+                    <p class="">{{ auth()->user()->uid }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
             {{-- APP --}}
             <li class="menu menu-heading">
@@ -75,7 +87,7 @@
                 </li>
             @endcan
             @can('view-task')
-                <li class="menu {{ Request::is('*/app/task/*') || Request::is('*/app/task') ? 'active' : '' }}">
+                <li class="menu {{ Request::is('*/app/task/*') ? 'active' : '' }}">
                     <a href="#task" data-bs-toggle="collapse"
                         aria-expanded="{{ Request::is('*/app/task/*') || Request::is('*/app/task') ? 'true' : 'false' }}"
                         class="dropdown-toggle">
@@ -115,6 +127,48 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="menu {{ Request::is('*/app/quality-task/*') ? 'active' : '' }}">
+                    <a href="#quality-task" data-bs-toggle="collapse"
+                        aria-expanded="{{ Request::is('*/app/quality-task/*') ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-calendar">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span>品保巡檢</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ Request::is('*/app/quality-task/*') ? 'show' : '' }}"
+                        id="quality-task" data-bs-parent="#accordionExample">
+                        <li class="{{ Request::routeIs('v2.app.quality-tasks.calendar') ? 'active' : '' }}">
+                            <a href="{{ route('v2.app.quality-tasks.calendar') }}" style="align-items: center;">
+                                巡檢月曆
+                                <span class="badge badge-light-success">品保</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ Request::routeIs('v2.app.quality-tasks.index') ? 'active' : '' }}">
+                            <a href="{{ route('v2.app.quality-tasks.index') }}" style="align-items: center;">
+                                巡檢任務
+                                <span class="badge badge-light-success">品保</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
             @endcan
             <li class="menu menu-heading">
                 <div class="heading">DATA</div>
@@ -149,7 +203,7 @@
                         </li>
 
                         <li class="{{ Request::routeIs('v2.data.shared.users.index') ? 'active' : '' }}">
-                            <a href="{{ route('v2.data.shared.users.index') }}">使用者資料庫</a>
+                            <a href="{{ route('v2.data.shared.users.index') }}">同仁資料庫</a>
                         </li>
                     </ul>
 
@@ -243,7 +297,7 @@
                         id="quality" data-bs-parent="#accordionExample">
                         <li class="{{ Request::routeIs('v2.data.quality.table.meals.index') ? 'active' : '' }} ">
                             <a href="{{ route('v2.data.quality.table.meals.index') }}" style="align-items: center;">
-                                採樣資料庫
+                                食材/成品採樣資料庫
                                 <span class="badge badge-light-success">品保</span>
                             </a>
                         </li>
@@ -265,9 +319,10 @@
             @endcan
             @can('view-record')
                 {{-- 食安紀錄 --}}
-                <li class="menu {{ Request::is('*/data/record/*') ? 'active' : '' }}">
+                <li class="menu {{ Request::is('*/data/foodsafety/record/*') ? 'active' : '' }}">
                     <a href="#record" data-bs-toggle="collapse"
-                        aria-expanded="{{ Request::is('*/data/record/*') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        aria-expanded="{{ Request::is('*/data/foodsafety/record/*') ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
                         <div class="">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -289,12 +344,11 @@
                         </div>
                     </a>
 
-                    <ul class="collapse submenu list-unstyled {{ Request::is('*/data/record/*') ? 'show' : '' }}"
+                    <ul class="collapse submenu list-unstyled {{ Request::is('*/data/foodsafety/record/*') ? 'show' : '' }}"
                         id="record" data-bs-parent="#accordionExample">
-
                         @can('view-record-meal')
-                            <li class="{{ Request::routeIs('v2.data.record.meals.index') ? 'active' : '' }}">
-                                <a href="{{ route('v2.data.record.meals.index') }}" style="align-items: center;">
+                            <li class="{{ Request::routeIs('v2.data.foodsafety.record.meals.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.foodsafety.record.meals.index') }}" style="align-items: center;">
                                     採樣紀錄
                                     <span class="badge badge-light-danger">食安</span>
                                 </a>
@@ -302,25 +356,86 @@
                         @endcan
 
                         @can('view-record-defect')
-                            <li class="{{ Request::routeIs('v2.data.record.defects.index') ? 'active' : '' }}">
-                                <a href="{{ route('v2.data.record.defects.index') }}" style="align-items: center;">
-                                    食安缺失紀錄
+                            <li class="{{ Request::routeIs('v2.data.foodsafety.record.defects.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.foodsafety.record.defects.index') }}"
+                                    style="align-items: center;">
+                                    食安及5S紀錄
                                     <span class="badge badge-light-danger">食安</span>
                                 </a>
                             </li>
                         @endcan
                         @can('view-record-clear-defect')
                             <li
-                                class="{{ Request::routeIs('clear-defect-records') || Request::routeIs('clear-defect-chart') ? 'active' : '' }}">
-                                <a href="{{ route('clear-defect-records') }}" style="align-items: center;">
-                                    清檢缺失紀錄
+                                class="{{ Request::routeIs('v2.data.foodsafety.record.clear-defects.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.foodsafety.record.clear-defects.index') }}"
+                                    style="align-items: center;">
+                                    清潔檢查紀錄
                                     <span class="badge badge-light-danger">食安</span>
                                 </a>
                             </li>
                         @endcan
                     </ul>
                 </li>
+
+                {{-- 品保紀錄 --}}
+                <li class="menu {{ Request::is('*/data/quality/record/*') ? 'active' : '' }}">
+                    <a href="#quality-record" data-bs-toggle="collapse"
+                        aria-expanded="{{ Request::is('*/data/quality/record/*') ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-file-text">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span>品保紀錄</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+
+                    <ul class="collapse submenu list-unstyled {{ Request::is('*/data/quality/record/*') ? 'show' : '' }}"
+                        id="quality-record" data-bs-parent="#accordionExample">
+                        @can('view-record-meal')
+                            <li class="{{ Request::routeIs('v2.data.quality.record.meals.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.quality.record.meals.index') }}" style="align-items: center;">
+                                    食材/成品採樣紀錄
+                                    <span class="badge badge-light-success">品保</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('view-record-defect')
+                            <li class="{{ Request::routeIs('v2.data.quality.record.defects.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.quality.record.defects.index') }}" style="align-items: center;">
+                                    食安巡檢紀錄
+                                    <span class="badge badge-light-success">品保</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('view-record-clear-defect')
+                            <li class="{{ Request::routeIs('v2.data.quality.record.clear-defects.index') ? 'active' : '' }}">
+                                <a href="{{ route('v2.data.quality.record.clear-defects.index') }}"
+                                    style="align-items: center;">
+                                    清潔檢查紀錄
+                                    <span class="badge badge-light-success">品保</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endcan
+
+
             @can('view-rowdata')
                 {{-- RowData --}}
                 <li class="menu {{ Request::is('*/data/row-data/*') ? 'active' : '' }}">

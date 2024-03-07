@@ -162,13 +162,15 @@
                     <div class="row p-1">
                         <div class="col-3">描述</div>
                         <div class="col-9">
-                            {{-- pluck $taskHasClearDefect->description --}}
-                            @foreach ($taskHasClearDefect->description as $description)
-                                {{ $description }}
-                                @if (!$loop->last)
-                                    <br>
-                                @endif
-                            @endforeach
+                            @isset($taskHasClearDefect->clearDefect->description)
+                                @foreach ($taskHasClearDefect->description as $description)
+                                    {{ $description }}
+                                    @if (!$loop->last)
+                                        <br>
+                                    @endif
+                                @endforeach
+                            @endisset
+
                         </div>
                     </div>
                     <div class="row p-1">

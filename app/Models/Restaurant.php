@@ -63,6 +63,11 @@ class Restaurant extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function qualityTasks()
+    {
+        return $this->hasMany(QualityTask::class);
+    }
+
     public static function getDistinctBrands()
     {
         return self::select('brand')->distinct()->get();

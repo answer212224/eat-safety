@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Defect;
 use App\Models\Project;
+use App\Models\SysPerson;
 use App\Models\Restaurant;
 use App\Imports\TaskImport;
 use App\Models\ClearDefect;
@@ -16,20 +17,132 @@ use App\Models\QualityMeal;
 use App\Models\QualityTask;
 use App\Imports\MealsImport;
 use Illuminate\Http\Request;
+use App\Models\PosDepartment;
 use App\Models\QualityDefect;
 use App\Models\TaskHasDefect;
 use App\Imports\DefectsImport;
 use App\Imports\ClearDefectImport;
+use App\Imports\QualityTaskImport;
 use App\Models\QualityClearDefect;
 use App\Models\TaskHasClearDefect;
+use Spatie\Permission\Models\Role;
 use App\Imports\QualityMealsImport;
 use App\Models\RestaurantWorkspace;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\QualityDefectsImport;
 use App\Imports\QualityClearDefectsImport;
+use App\Models\QualityTaskHasQualityDefect;
+use App\Models\QualityTaskHasQualityClearDefect;
+
 
 class ApiController extends Controller
 {
+    // getUsers
+    public function getUsers()
+    {
+        $users = User::with('roles')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $users,
+        ]);
+    }
+
+    // getRoles
+    public function getRoles()
+    {
+        $roles = Role::all();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $roles,
+        ]);
+    }
+
+    // update user role
+    public function updateUserRoles(User $user, Request $request)
+    {
+        $user->syncRoles($request->input('roles'));
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $user,
+        ]);
+    }
+
+    // syncUsers
+    public function syncUsers()
+    {
+        // where department_id like 14%
+        $users = SysPerson::where('department_id', 'like', '14%')->get();
+
+        $users->transform(function ($user) {
+            return [
+                'uid' => $user->person_empid,
+                'name' => $user->person_name,
+                'email' => $user->email,
+                'department' => $user->department_name,
+                'department_serial' => $user->department_serial,
+                'password' => Hash::make($user->person_id_no, ['rounds' => 4]),
+                'status' => $user->person_status,
+            ];
+        });
+
+        // 在 upsert 之前獲取資料
+        $originalUsers = User::all();
+
+        User::upsert($users->toArray(), ['uid'], ['name', 'email', 'department', 'department_serial', 'password', 'status']);
+
+        // 在 upsert 之後獲取資料
+        $updatedUsers = User::all();
+
+        // 比較兩個集合的差異
+        $updatedData = $updatedUsers->diff($originalUsers);
+
+        // 顯示更新的數量
+        $message = $updatedData->count() . ' 筆同仁資料已更新';
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $message,
+        ]);
+    }
+
+    // syncRestaurants
+    public function syncRestaurants()
+    {
+        $restaurants = PosDepartment::where('pos_type', 0)->orWhere('pos_type', 1)->get();
+        $restaurants->transform(function ($restaurant) {
+            return [
+                'sid' => $restaurant->department_ch_id,
+                'brand' => $restaurant->department_type_name,
+                'brand_code' => $restaurant->department_type_code,
+                'shop' => $restaurant->survey_name,
+                'location' => $restaurant->area,
+                'status' => $restaurant->pos_status,
+            ];
+        });
+        // 在 upsert 之前獲取資料
+        $originalRestaurants = Restaurant::all();
+
+        Restaurant::upsert($restaurants->toArray(), ['sid'], ['brand', 'brand_code', 'shop', 'location', 'status']);
+
+        // 在 upsert 之後獲取資料
+        $updatedRestaurants = Restaurant::all();
+
+        // 比較兩個集合的差異
+        $updatedData = $updatedRestaurants->diff($originalRestaurants);
+
+        // 顯示更新的數量
+        $message = $updatedData->count() . ' 筆門市資料已更新';
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $message,
+        ]);
+    }
+
     // 取得有權限 execute-task 的使用者
     public function getExecuteTaskUsers()
     {
@@ -356,6 +469,9 @@ class ApiController extends Controller
         $task->meals()->detach();
         $task->delete();
 
+        $task->taskHasDefects()->delete();
+        $task->taskHasClearDefects()->delete();
+
         return response()->json([
             'status' => 'success',
             'data' => $task,
@@ -371,17 +487,37 @@ class ApiController extends Controller
         ]);
     }
 
+    // 匯入品保任務
+    public function importQualityTasks(Request $request)
+    {
+        Excel::import(new QualityTaskImport, $request->file('file'));
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
     // 取得該月未被指派到的餐廳
     public function getUnassignedRestaurants(Request $request)
     {
         $date = $request->input('date');
         $date = Carbon::create($date);
+        $is_quality = $request->input('is_quality');
 
-        $restaurants = Restaurant::where('status', true)->whereDoesntHave('tasks', function ($query) use ($date) {
-            $query->whereYear('task_date', $date->format('Y'))
-                ->whereMonth('task_date', $date->format('m'));
-        })->get();
-
+        $restaurants = Restaurant::where('status', true);
+        if ($is_quality) {
+            $restaurants = $restaurants->where('brand_code', 'like', 'CT%');
+            $restaurants->whereDoesntHave('qualityTasks', function ($query) use ($date) {
+                $query->whereYear('task_date', $date->format('Y'))
+                    ->whereMonth('task_date', $date->format('m'));
+            });
+        } else {
+            $restaurants = $restaurants->where('brand_code', 'not like', 'CT%');
+            $restaurants->whereDoesntHave('tasks', function ($query) use ($date) {
+                $query->whereYear('task_date', $date->format('Y'))
+                    ->whereMonth('task_date', $date->format('m'));
+            });
+        }
+        $restaurants = $restaurants->get();
         return response()->json([
             'status' => 'success',
             'data' => $restaurants,
@@ -468,6 +604,34 @@ class ApiController extends Controller
         ]);
     }
 
+    // 取得該使用者的品保任務列表
+    public function getUserQualityTasks(Request $request)
+    {
+        $status = $request->input('status');
+        $limit = $request->input('limit');
+        // status 有才要過濾
+        $tasks = auth()->user()->qualityTasks()->with(['restaurant', 'users', 'meals'])
+            ->when($status, function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->get();
+
+        $tasks = $tasks->sortBy(function ($task) {
+            return abs(Carbon::parse($task->task_date)->diffInMinutes(now()));
+        });
+        // 取得總數
+        $total = $tasks->count();
+
+        // 重新排序 分頁
+        $tasks = $tasks->values()->forPage(1, $limit);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $tasks,
+            'total' => $total,
+        ]);
+    }
+
     // 修改使用者的任務狀態
     public function updateUserTaskStatus(Task $task, Request $request)
     {
@@ -499,8 +663,50 @@ class ApiController extends Controller
         ]);
     }
 
+    // 修改使用者的品保任務狀態
+    public function updateUserQualityTaskStatus(QualityTask $task, Request $request)
+    {
+        $is_completed = $request->input('is_completed');
+
+        $task->users()->updateExistingPivot(auth()->user()->id, [
+            'is_completed' => $is_completed,
+        ]);
+
+        if ($task->users()->wherePivot('is_completed', 0)->count() === 0) {
+            $task->update([
+                'status' => 'pending_approval',
+            ]);
+        } else {
+            $task->update([
+                'status' => 'processing',
+            ]);
+        }
+
+        if ($task->category == '食材/成品採樣') {
+            $task->update([
+                'status' => 'completed',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
     // 確認此任務是否所有人員已完成
     public function isAllCompleted(Task $task)
+    {
+        $isAllCompleted = $task->users()->wherePivot('is_completed', 0)->count() === 0;
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $isAllCompleted,
+        ]);
+    }
+
+    // 確認此品保任務是否所有人員已完成
+    public function isQualityAllCompleted(QualityTask $task)
     {
         $isAllCompleted = $task->users()->wherePivot('is_completed', 0)->count() === 0;
 
@@ -545,6 +751,24 @@ class ApiController extends Controller
         ]);
     }
 
+    // 修改品保任務的多筆採樣是否帶回和備註
+    public function updateQualityTaskMealStatus(QualityTask $task, Request $request)
+    {
+        $meals = $request->input('meals');
+
+        foreach ($meals as $meal) {
+            $task->meals()->updateExistingPivot($meal['id'], [
+                'is_taken' => $meal['pivot']['is_taken'],
+                'memo' => $meal['pivot']['memo'],
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
     // 取得任務相關資料
     public function getTask(Task $task)
     {
@@ -554,6 +778,23 @@ class ApiController extends Controller
                 $query->where('status', 1);
             },
             'users', 'meals', 'projects'
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
+    // 取得品保相關資料
+    public function getQualityTask(QualityTask $task)
+    {
+        // restaurantWorkspaces只取啟用的
+        $task->load([
+            'restaurant.restaurantWorkspaces' => function ($query) {
+                $query->where('status', 1);
+            },
+            'users', 'meals'
         ]);
 
         return response()->json([
@@ -595,6 +836,26 @@ class ApiController extends Controller
         ]);
     }
 
+    // 取得該月啟用的品保缺失條文
+    public function getActiveQualityDefects()
+    {
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+
+        $activeDate = QualityDefect::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        $defects = QualityDefect::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->get();
+
+        // 分二層 從group -> title
+        $defects = $defects->groupBy('group')->map(function ($group) {
+            return $group->groupBy('title');
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
     // 取得該月啟用的清檢缺失條文
     public function getActiveClearDefects()
     {
@@ -603,6 +864,24 @@ class ApiController extends Controller
         $activeDate = ClearDefect::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
         $activeDate = Carbon::create($activeDate);
         $defects = ClearDefect::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->get();
+
+        // 分一層 從main_item
+        $defects = $defects->groupBy('main_item');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
+    // 取得該月啟用的品保清檢缺失條文
+    public function getActiveQualityClearDefects()
+    {
+        $thisMonth = Carbon::today()->firstOfMonth()->format('Y-m-d');
+
+        $activeDate = QualityClearDefect::where('effective_date', '<=', $thisMonth)->orderBy('effective_date', 'desc')->first()->effective_date;
+        $activeDate = Carbon::create($activeDate);
+        $defects = QualityClearDefect::whereYear('effective_date', $activeDate)->whereMonth('effective_date', $activeDate)->get();
 
         // 分一層 從main_item
         $defects = $defects->groupBy('main_item');
@@ -628,8 +907,38 @@ class ApiController extends Controller
         ]);
     }
 
+    // getQualityTaskDefects
+    public function getQualityTaskDefects(QualityTask $task)
+    {
+        $defects = $task->load('taskHasDefects.restaurantWorkspace', 'taskHasDefects.defect', 'taskHasDefects.user')->taskHasDefects
+            ->each(function ($defect) {
+                $defect->append('images_url');
+            })
+            ->groupBy('restaurantWorkspace.area');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
     // 取得該任務清檢缺失資料依照區站分類
     public function getTaskClearDefects(Task $task)
+    {
+        $defects = $task->load('taskHasClearDefects.restaurantWorkspace', 'taskHasClearDefects.clearDefect', 'taskHasClearDefects.user')->taskHasClearDefects
+            ->each(function ($defect) {
+                $defect->append('images_url');
+            })
+            ->groupBy('restaurantWorkspace.area');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defects,
+        ]);
+    }
+
+    // getQualityTaskClearDefects
+    public function getQualityTaskClearDefects(QualityTask $task)
     {
         $defects = $task->load('taskHasClearDefects.restaurantWorkspace', 'taskHasClearDefects.clearDefect', 'taskHasClearDefects.user')->taskHasClearDefects
             ->each(function ($defect) {
@@ -663,12 +972,53 @@ class ApiController extends Controller
         ]);
     }
 
-    // 更新任務的清檢缺失資料 /api/tasks/{{ $task->id }}/clear-defects/${this.editedItem.id}
+    // 更新品保任務的食安缺失資料 /api/quality-tasks/{{ $task->id }}/defects/${this.editedItem.id}
+    public function updateQualityTaskDefect(QualityTaskHasQualityDefect $taskHasDefect, Request $request)
+    {
+        $taskHasDefect->update([
+            'restaurant_workspace_id' => $request->input('restaurant_workspace_id'),
+            'quality_defect_id' => $request->input('quality_defect_id'),
+            'memo' => $request->input('memo'),
+            'is_ignore' => $request->input('is_ignore'),
+            'is_not_reach_deduct_standard' => $request->input('is_not_reach_deduct_standard'),
+            'is_suggestion' => $request->input('is_suggestion'),
+            'is_repeat' => $request->input('is_repeat'),
+        ]);
+
+        $taskHasDefect = $taskHasDefect->load('restaurantWorkspace');
+        return response()->json([
+            'status' => 'success',
+            'data' => $taskHasDefect,
+        ]);
+    }
+
+    // 更新任務的清檢缺失資料
     public function updateTaskClearDefect(TaskHasClearDefect $taskHasClearDefect, Request $request)
     {
         $taskHasClearDefect->update([
             'restaurant_workspace_id' => $request->input('restaurant_workspace_id'),
             'clear_defect_id' => $request->input('clear_defect_id'),
+            'memo' => $request->input('memo'),
+            'amount' => $request->input('amount'),
+            'description' => $request->input('description'),
+            'is_ignore' => $request->input('is_ignore'),
+            'is_not_reach_deduct_standard' => $request->input('is_not_reach_deduct_standard'),
+            'is_suggestion' => $request->input('is_suggestion'),
+        ]);
+
+        $taskHasClearDefect = $taskHasClearDefect->load('restaurantWorkspace');
+        return response()->json([
+            'status' => 'success',
+            'data' => $taskHasClearDefect,
+        ]);
+    }
+
+    // 更新品保任務的清檢缺失資料
+    public function updateQualityTaskClearDefect(QualityTaskHasQualityClearDefect $taskHasClearDefect, Request $request)
+    {
+        $taskHasClearDefect->update([
+            'restaurant_workspace_id' => $request->input('restaurant_workspace_id'),
+            'quality_clear_defect_id' => $request->input('quality_clear_defect_id'),
             'memo' => $request->input('memo'),
             'amount' => $request->input('amount'),
             'description' => $request->input('description'),
@@ -699,7 +1049,52 @@ class ApiController extends Controller
         ]);
     }
 
+    public function updateQualityTaskBoss(QualityTask $task, Request $request)
+    {
+        $task->update([
+            'inner_manager' => $request->input('inner_manager'),
+            'outer_manager' => $request->input('outer_manager'),
+            'status' => 'completed',
+            'end_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $task,
+        ]);
+    }
+
     public function getTaskScore(Task $task)
+    {
+        $task->load('taskHasDefects.defect');
+        // 計算內場分數 taskHasDefects.taskHasDefects where area not like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+        $totalInnerScore = 0;
+        foreach ($task->taskHasDefects as $defect) {
+            if ($defect->restaurantWorkspace->area != '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
+                $totalInnerScore += $defect->defect->deduct_point;
+            }
+        }
+
+        // 計算外場分數 taskHasDefects.taskHasDefects where area like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0, is_repeat=0
+        $totalOuterScore = 0;
+        foreach ($task->taskHasDefects as $defect) {
+            if ($defect->restaurantWorkspace->area == '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0 && $defect->is_repeat == 0) {
+                $totalOuterScore += $defect->defect->deduct_point;
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'inner_score' => 100 + $totalInnerScore,
+                'outer_score' => 100 + $totalOuterScore,
+            ],
+        ]);
+    }
+
+    public function getQualityTaskScore(QualityTask $task)
     {
         $task->load('taskHasDefects.defect');
         // 計算內場分數 taskHasDefects.taskHasDefects where area not like "%外場"
@@ -761,6 +1156,39 @@ class ApiController extends Controller
         ]);
     }
 
+    // getQualityTaskClearScore
+    public function getQualityTaskClearScore(QualityTask $task)
+    {
+
+        $task->load('taskHasClearDefects');
+
+        // 計算內場分數 taskHasDefects.taskHasDefects where area not like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+        $totalInnerScore = 0;
+        foreach ($task->taskHasClearDefects as $defect) {
+            if ($defect->restaurantWorkspace->area != '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
+                $totalInnerScore += $defect->clearDefect->deduct_point * $defect->amount;
+            }
+        }
+
+        // 計算外場分數 taskHasDefects.taskHasDefects where area like "%外場"
+        // is_ignore = 0 ,is_not_reach_deduct_standard=0, is_suggestion=0
+        $totalOuterScore = 0;
+        foreach ($task->taskHasClearDefects as $defect) {
+            if ($defect->restaurantWorkspace->area == '外場' && $defect->is_ignore == 0 && $defect->is_not_reach_deduct_standard == 0 && $defect->is_suggestion == 0) {
+                $totalOuterScore += $defect->clearDefect->deduct_point * $defect->amount;
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'inner_score' => 100 + $totalInnerScore,
+                'outer_score' => 100 + $totalOuterScore,
+            ],
+        ]);
+    }
+
     public function deleteTaskDefect(TaskHasDefect $taskHasDefect)
     {
         $taskHasDefect->delete();
@@ -771,7 +1199,29 @@ class ApiController extends Controller
         ]);
     }
 
+    // deleteQualityTaskDefect
+    public function deleteQualityTaskDefect(QualityTaskHasQualityDefect $taskHasDefect)
+    {
+        $taskHasDefect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $taskHasDefect,
+        ]);
+    }
+
     public function deleteTaskClearDefect(TaskHasClearDefect $taskHasClearDefect)
+    {
+        $taskHasClearDefect->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $taskHasClearDefect,
+        ]);
+    }
+
+    // deleteQualityTaskClearDefect
+    public function deleteQualityTaskClearDefect(QualityTaskHasQualityClearDefect $taskHasClearDefect)
     {
         $taskHasClearDefect->delete();
 
@@ -924,6 +1374,50 @@ class ApiController extends Controller
         $month = Carbon::create($month);
 
         $tasks = Task::whereHas('meals', function ($query) use ($month) {
+            $query->whereYear('effective_date', $month->format('Y'))
+                ->whereMonth('effective_date', $month->format('m'));
+        })->with(['restaurant', 'meals'])->get();
+
+        $mealRecords = [];
+
+        foreach ($tasks as $task) {
+            foreach ($task->meals as $meal) {
+                $mealRecords[] = [
+                    'task_id' => $task->id,
+                    'task_date' => $task->task_date,
+                    'restaurant_id' => $task->restaurant_id,
+                    'restaurant_brand' => $task->restaurant->brand,
+                    'restaurant_shop' => $task->restaurant->shop,
+                    'meal_id' => $meal->id,
+                    'meal_name' => $meal->name,
+                    'meal_sid' => $meal->sid,
+                    'meal_effective_month' => Carbon::create($meal->effective_date)->format('Y-m'),
+                    'meal_category' => $meal->category,
+                    'meal_chef' => $meal->chef,
+                    'meal_workspace' => $meal->workspace,
+                    'meal_qno' => $meal->qno,
+                    'meal_note' => $meal->note,
+                    'meal_item' => $meal->item,
+                    'meal_items' => $meal->items,
+                    'is_taken' => $meal->pivot->is_taken,
+                    'memo' => $meal->pivot->memo,
+                ];
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $mealRecords,
+        ]);
+    }
+
+    // getQualityMealRecords
+    public function getQualityMealRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+        $tasks = QualityTask::whereHas('meals', function ($query) use ($month) {
             $query->whereYear('effective_date', $month->format('Y'))
                 ->whereMonth('effective_date', $month->format('m'));
         })->with(['restaurant', 'meals'])->get();
@@ -1311,6 +1805,57 @@ class ApiController extends Controller
                 ->whereMonth('task_date', $month->format('m'));
         })->with(['task', 'defect', 'restaurantWorkspace', 'user', 'restaurantWorkspace.restaurant'])->get();
 
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defectRecords,
+        ]);
+    }
+
+    // getQualityDefectRecords
+    public function getQualityDefectRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+        $defectRecords = QualityTaskHasQualityDefect::whereHas('task', function ($query) use ($month) {
+            $query->whereYear('task_date', $month->format('Y'))
+                ->whereMonth('task_date', $month->format('m'));
+        })->with(['task', 'defect', 'restaurantWorkspace', 'user', 'restaurantWorkspace.restaurant'])->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defectRecords,
+        ]);
+    }
+
+    // getClearDefectRecords
+    public function getClearDefectRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+        $defectRecords = TaskHasClearDefect::whereHas('task', function ($query) use ($month) {
+            $query->whereYear('task_date', $month->format('Y'))
+                ->whereMonth('task_date', $month->format('m'));
+        })->with(['task', 'clearDefect', 'restaurantWorkspace', 'user', 'restaurantWorkspace.restaurant'])->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $defectRecords,
+        ]);
+    }
+
+    // getQualityClearDefectRecords
+    public function getQualityClearDefectRecords(Request $request)
+    {
+        $month = $request->input('month');
+        $month = Carbon::create($month);
+
+        $defectRecords = QualityTaskHasQualityClearDefect::whereHas('task', function ($query) use ($month) {
+            $query->whereYear('task_date', $month->format('Y'))
+                ->whereMonth('task_date', $month->format('m'));
+        })->with(['task', 'clearDefect', 'restaurantWorkspace', 'user', 'restaurantWorkspace.restaurant'])->get();
 
         return response()->json([
             'status' => 'success',

@@ -32,6 +32,7 @@
 
                 </nav>
             </div>
+
             @can('create-defect')
                 <div class="col-4 align-self-center text-end">
                     <button class="btn btn-sm btn-rounded btn-success" data-bs-toggle="modal"

@@ -1,30 +1,31 @@
 <?php
 
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\ClearDefectController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\MealController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DefectController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\PosDepartmentController;
-use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RowDataController;
 use App\Http\Controllers\TaskMealController;
-use App\Http\Controllers\V2\TaskController as V2TaskController;
-use App\Http\Controllers\V2\MealController as V2MealController;
-use App\Http\Controllers\V2\ProjectController as V2ProjectController;
-use App\Http\Controllers\V2\DefectController as V2DefectController;
-use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
-use App\Http\Controllers\V2\QualityClearDefectController;
-use App\Http\Controllers\V2\QualityDefectController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\ClearDefectController;
+use App\Http\Controllers\PosDepartmentController;
 use App\Http\Controllers\V2\QualityMealController;
+use App\Http\Controllers\V2\QualityTaskController;
+use App\Http\Controllers\V2\QualityDefectController;
+use App\Http\Controllers\V2\QualityClearDefectController;
+use App\Http\Controllers\V2\MealController as V2MealController;
+use App\Http\Controllers\V2\TaskController as V2TaskController;
+use App\Http\Controllers\V2\DefectController as V2DefectController;
+use App\Http\Controllers\V2\ProjectController as V2ProjectController;
 use App\Http\Controllers\V2\RestaurantController as V2RestaurantController;
+use App\Http\Controllers\V2\ClearDefectController as V2ClearDefectController;
 use App\Http\Controllers\V2\UserController as V2UserController;
-
+use App\Models\PosDepartment;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,6 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
         })->name('barebone');
     });
 
-    // 告知使用者有新版本
     Route::prefix('app')->group(function () {
         Route::prefix('task')->group(function () {
             // 指派稽核任務
@@ -76,8 +76,12 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/{task}/create', [TaskController::class, 'create'])->name('task-create');
             // 稽核員食安稽核儲存缺失
             Route::post('/{task}/defect', [DefectController::class, 'store'])->name('task-defect-store');
+            // 稽核員品保稽核儲存缺失
+            Route::post('/{task}/quality-defect', [QualityTaskController::class, 'storeDefect'])->name('task-quality-defect-store');
             // 稽核員清檢稽核儲存缺失
             Route::post('/{task}/clear-defect', [DefectController::class, 'clearStore'])->name('task-clear-defect-store');
+            // 稽核員品保清檢稽核儲存缺失
+            Route::post('/{task}/quality-clear-defect', [QualityTaskController::class, 'storeClearDefect'])->name('task-quality-clear-defect-store');
             // 稽核員食安編輯缺失
             Route::get('/{taskHasDefect}/defect/edit', [DefectController::class, 'edit'])->name('task-defect-edit');
             // 稽核員清檢編輯缺失
@@ -96,6 +100,8 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::post('{task}/meal/check', [TaskController::class, 'mealCheckSubmit'])->name('task-meal-submit');
             // 下載採樣單
             Route::get('{task}/meal/export', [MealController::class, 'export'])->name('task-meal-export');
+            // 下載品保採樣單
+            Route::get('{task}/quality-meal/export', [QualityMealController::class, 'export'])->name('task-quality-meal-export');
             // 開始專案
             Route::get('/{task}/project/check', [TaskController::class, 'projectCheck'])->name('task-project-check');
             // 開始專案
@@ -225,7 +231,15 @@ Route::prefix('v1')->middleware(['auth', 'log.user.activity'])->group(function (
             Route::get('/clear-defect-chart', [ClearDefectController::class, 'chart'])->name('clear-defect-chart');
             // 門市缺失紀錄
             Route::get('/restaurant-records', [RestaurantController::class, 'records'])->name('restaurant-records');
+            Route::prefix('quality')->group(function () {
+                // 品保統計圖表
+                Route::get('/defect-chart', [QualityDefectController::class, 'chart'])->name('quality-defect-chart');
+                // 品保清檢統計圖表
+                Route::get('/clear-defect-chart', [QualityClearDefectController::class, 'chart'])->name('quality-clear-defect-chart');
+            });
         });
+
+
 
         Route::prefix('row-data')->group(function () {
             Route::get('/defect', [RowDataController::class, 'rowDataDefect'])->name('row-data-defect');
@@ -247,16 +261,32 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
         Route::prefix('task')->group(function () {
             // 稽核任務v2
             Route::get('/index', [V2TaskController::class, 'index'])->name('v2.app.tasks.index');
-            // 新增食安缺失頁面v2
+            // 新增食安缺失頁面
             Route::get('/{task}/defect/create', [V2TaskController::class, 'createDefect'])->name('v2.app.tasks.defect.create');
-            // 新增清檢缺失頁面v2
+            // 新增清檢缺失頁面
             Route::get('/{task}/clear-defect/create', [V2TaskController::class, 'createClearDefect'])->name('v2.app.tasks.clear-defect.create');
-            // 食安稽核紀錄頁面v2
+            // 食安稽核紀錄頁面
             Route::get('/{task}/defect/edit', [V2TaskController::class, 'editDefect'])->name('v2.app.tasks.defect.edit');
-            // 清檢稽核紀錄頁面v2
+            // 清檢稽核紀錄頁面
             Route::get('/{task}/clear-defect/edit', [V2TaskController::class, 'editClearDefect'])->name('v2.app.tasks.clear-defect.edit');
-            // 任務行事曆 v2
+            // 食安巡檢月曆
             Route::get('/calendar', [V2TaskController::class, 'calendar'])->name('v2.app.tasks.calendar');
+        });
+        Route::prefix('quality-task')->group(function () {
+            // 品保任務v2
+            Route::get('/index', [QualityTaskController::class, 'index'])->name('v2.app.quality-tasks.index');
+            // 新增食安缺失頁面
+            Route::get('/{task}/defect/create', [QualityTaskController::class, 'createDefect'])->name('v2.app.quality-tasks.defect.create');
+            // 新增清檢缺失頁面
+            Route::get('/{task}/clear-defect/create', [QualityTaskController::class, 'createClearDefect'])->name('v2.app.quality-tasks.clear-defect.create');
+            // 食安稽核紀錄頁面
+            Route::get('/{task}/defect/edit', [QualityTaskController::class, 'editDefect'])->name('v2.app.quality-tasks.defect.edit');
+            // 清檢稽核紀錄頁面
+            Route::get('/{task}/clear-defect/edit', [QualityTaskController::class, 'editClearDefect'])->name('v2.app.quality-tasks.clear-defect.edit');
+            // 品保任務行事曆
+            Route::get('/calendar', [QualityTaskController::class, 'calendar'])->name('v2.app.quality-tasks.calendar');
+            // 品保稽核報告下載
+            Route::get('{task}/report', [QualityTaskController::class, 'qualityReport'])->name('task-quality-report');
         });
     });
     Route::prefix('data')->group(function () {
@@ -264,13 +294,7 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
             // 門市資料庫v2
             Route::get('/restaurants', [V2RestaurantController::class, 'table'])->name('v2.data.shared.restaurants.index');
             // 使用者資料庫
-            Route::prefix('users')->group(function () {
-                Route::get('/', [UserController::class, 'index'])->name('v2.data.shared.users.index');
-                Route::get('/{user}/edit', [UserController::class, 'edit']);
-                Route::put('/{user}', [UserController::class, 'update']);
-                Route::get('/{user}/show', [UserController::class, 'show']);
-                Route::get('/{user}/chart', [UserController::class, 'chart']);
-            });
+            Route::get('/users', [V2UserController::class, 'table'])->name('v2.data.shared.users.index');
         });
         // 食安
         Route::prefix('foodsafety')->group(function () {
@@ -284,6 +308,15 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
                 // 清檢條文資料庫v2
                 Route::get('/clear-defects', [V2ClearDefectController::class, 'table'])->name('v2.data.foodsafety.table.clear-defects.index');
             });
+
+            Route::prefix('record')->group(function () {
+                // 採樣紀錄
+                Route::get('/meals', [V2MealController::class, 'record'])->name('v2.data.foodsafety.record.meals.index');
+                // 食安缺失紀錄
+                Route::get('/defects', [V2DefectController::class, 'record'])->name('v2.data.foodsafety.record.defects.index');
+                // 清檢缺失紀錄
+                Route::get('/clear-defects', [V2ClearDefectController::class, 'record'])->name('v2.data.foodsafety.record.clear-defects.index');
+            });
         });
 
         //品保
@@ -296,82 +329,136 @@ Route::prefix('v2')->middleware(['auth', 'log.user.activity'])->group(function (
                 // 清檢條文資料庫
                 Route::get('/clear-defects', [QualityClearDefectController::class, 'table'])->name('v2.data.quality.table.clear-defects.index');
             });
-        });
 
-        Route::prefix('record')->group(function () {
-            // 採樣紀錄v2
-            Route::get('/meals', [V2MealController::class, 'record'])->name('v2.data.record.meals.index');
-            // 食安缺失紀錄v2
-            Route::get('/defects', [V2DefectController::class, 'record'])->name('v2.data.record.defects.index');
+            Route::prefix('record')->group(function () {
+                // 品保採樣紀錄
+                Route::get('/meals', [QualityMealController::class, 'record'])->name('v2.data.quality.record.meals.index');
+                // 品保缺失紀錄
+                Route::get('/defects', [QualityDefectController::class, 'record'])->name('v2.data.quality.record.defects.index');
+                // 品保清檢缺失紀錄
+                Route::get('/clear-defects', [QualityClearDefectController::class, 'record'])->name('v2.data.quality.record.clear-defects.index');
+            });
         });
     });
 });
 
 Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function () {
+    // 取得使用者
+    Route::get('/users', [ApiController::class, 'getUsers'])->name('api.users');
+    // 取得所有角色
+    Route::get('/roles', [ApiController::class, 'getRoles'])->name('api.roles');
+    // 修改使用者角色
+    Route::put('/users/{user}/roles', [ApiController::class, 'updateUserRoles'])->name('api.users.roles.update');
+    // 同步使用者
+    Route::post('/users/sync', [ApiController::class, 'syncUsers'])->name('api.users.sync');
     // 取得有權限 execute-task 的使用者
     Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
     // 取得餐廳
     Route::get('/restaurants', [ApiController::class, 'getRestaurants'])->name('api.restaurants');
     // 新增餐廳
     Route::post('/restaurants', [ApiController::class, 'storeRestaurant'])->name('api.restaurants.store');
-    // 從pos餐廳更新餐廳和工作區站
-    Route::put('/restaurants/upsert', [PosDepartmentController::class, 'ajaxUpsert']);
+    // 同步餐廳
+    Route::put('/restaurants/upsert', [ApiController::class, 'syncRestaurants'])->name('api.restaurants.upsert');
     // 新增單個工作區站
     Route::post('restaurant/{restaurant}/restaurant-workspaces', [ApiController::class, 'storeRestaurantWorkspace']);
     // 更新單個工作區站
     Route::put('restaurant-workspaces/{restaurantWorkspace}', [ApiController::class, 'updateRestaurantWorkspace']);
     // 取得該月份該餐聽的餐點
     Route::get('/restaurants/meals', [ApiController::class, 'getRestaurantMeals'])->name('api.restaurants.meals');
+    // 取得該月份該品保的餐點
+    Route::get('/restaurants/quality-meals', [ApiController::class, 'getRestaurantQualityMeals'])->name('api.restaurants.quality-meals');
     // 取得啟用的專案
     Route::get('/projects/active', [ApiController::class, 'getActiveProjects'])->name('api.projects.active');
     // 取得所有任務(根據使用者權限)
     Route::get('/tasks', [ApiController::class, 'getTasks'])->name('api.tasks');
+    // 取得品保所有任務(根據使用者權限)
+    Route::get('/quality-tasks', [ApiController::class, 'getQualityTasks'])->name('api.quality-tasks');
     // 儲存任務
     Route::post('/tasks', [ApiController::class, 'storeTask'])->name('api.tasks.store');
+    // 儲存品保任務
+    Route::post('/quality-tasks', [ApiController::class, 'storeQualityTask'])->name('api.quality-tasks.store');
     // 更新任務
     Route::put('/tasks/{task}', [ApiController::class, 'updateTask'])->name('api.tasks.update');
+    // 更新品保任務
+    Route::put('/quality-tasks/{task}', [ApiController::class, 'updateQualityTask'])->name('api.quality-tasks.update');
     // 刪除任務
     Route::delete('/tasks/{task}', [ApiController::class, 'deleteTask'])->name('api.tasks.delete');
+    // 刪除品保任務
+    Route::delete('/quality-tasks/{task}', [ApiController::class, 'deleteQualityTask'])->name('api.quality-tasks.delete');
     // 匯入任務
     Route::post('/tasks/import', [ApiController::class, 'importTasks'])->name('api.tasks.import');
+    // 匯入品保任務
+    Route::post('/quality-tasks/import', [ApiController::class, 'importQualityTasks'])->name('api.quality-tasks.import');
     // 取得該月未指派到的餐廳
     Route::get('/restaurants/unassigned', [ApiController::class, 'getUnassignedRestaurants'])->name('api.restaurants.unassigned');
     // 取得使用者的任務列表
     Route::get('/user/tasks', [ApiController::class, 'getUserTasks'])->name('api.user.tasks');
+    // 取得品保使用者的任務列表
+    Route::get('/user/quality-tasks', [ApiController::class, 'getUserQualityTasks'])->name('api.user.quality-tasks');
     // 修改使用者的任務狀態
     Route::put('/user/tasks/{task}', [ApiController::class, 'updateUserTaskStatus'])->name('api.user.tasks.update');
+    // 修改使用者的品保任務狀態
+    Route::put('/user/quality-tasks/{task}', [ApiController::class, 'updateUserQualityTaskStatus'])->name('api.user.quality-tasks.update');
     // 確認此任務是否有任何人員已完成 /api/tasks/${task.id}/is-all-completed
     Route::get('/tasks/{task}/is-all-completed', [ApiController::class, 'isAllCompleted'])->name('api.tasks.is-all-completed');
+    // 確認此品保任務是否有任何人員已完成 /api/quality-tasks/${task.id}/is-all-completed
+    Route::get('/quality-tasks/{task}/is-all-completed', [ApiController::class, 'isQualityAllCompleted'])->name('api.quality-tasks.is-all-completed');
     // 修改任務的多筆專案是否查核
     Route::put('/tasks/{task}/projects', [ApiController::class, 'updateTaskProjectStatus'])->name('api.user.tasks.projects.update');
     // 修改任務的多筆採樣是否帶回和備註
     Route::put('/tasks/{task}/meals', [ApiController::class, 'updateTaskMealStatus'])->name('api.user.tasks.meals.update');
+    // 修改品保任務的多筆採樣是否帶回和備註
+    Route::put('/quality-tasks/{task}/meals', [ApiController::class, 'updateQualityTaskMealStatus'])->name('api.user.quality-tasks.meals.update');
     // 取得任務相關的資料
     Route::get('/tasks/{task}', [ApiController::class, 'getTask'])->name('api.user.tasks.get');
+    // 取得品保任務相關的資料
+    Route::get('/quality-tasks/{task}', [ApiController::class, 'getQualityTask'])->name('api.user.quality-tasks.get');
     // 取得該任務的餐廳所有區站 getRestaurantsWorkSpaces
     Route::get('/restaurants/work-spaces', [ApiController::class, 'getRestaurantsWorkSpaces'])->name('api.restaurants-workspaces');
     // 取得該月啟用的食安缺失條文
     Route::get('/defects/active', [ApiController::class, 'getActiveDefects'])->name('api.defects.active');
+    // 取得品保該月啟用的食安缺失條文
+    Route::get('/quality-defects/active', [ApiController::class, 'getActiveQualityDefects'])->name('api.quality-defects.active');
     // 取得該月啟用的清檢缺失條文
     Route::get('/clear-defects/active', [ApiController::class, 'getActiveClearDefects'])->name('api.clear-defects.active');
+    // 取得品保該月啟用的清檢缺失條文
+    Route::get('/quality-clear-defects/active', [ApiController::class, 'getActiveQualityClearDefects'])->name('api.quality-clear-defects.active');
     // 取得該任務食安缺失資料依照區站分類
     Route::get('/tasks/{task}/defects', [ApiController::class, 'getTaskDefects'])->name('api.tasks.defects');
+    // 取得該品保任務食安缺失資料依照區站分類
+    Route::get('/quality-tasks/{task}/defects', [ApiController::class, 'getQualityTaskDefects'])->name('api.quality-tasks.defects');
     // 取得該任務清檢缺失資料依照區站分類
     Route::get('/tasks/{task}/clear-defects', [ApiController::class, 'getTaskClearDefects'])->name('api.tasks.clear-defects');
+    // 取得該任務的品保清檢缺失資料依照區站分類
+    Route::get('/quality-tasks/{task}/clear-defects', [ApiController::class, 'getQualityTaskClearDefects'])->name('api.quality-tasks.clear-defects');
     // 更新任務的食安缺失資料
     Route::put('/tasks/defects/{taskHasDefect}', [ApiController::class, 'updateTaskDefect'])->name('api.tasks.defects.update');
+    // 更新品保任務的食安缺失資料
+    Route::put('/quality-tasks/defects/{taskHasDefect}', [ApiController::class, 'updateQualityTaskDefect'])->name('api.quality-tasks.defects.update');
     // 更新任務的清檢缺失資料
     Route::put('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'updateTaskClearDefect'])->name('api.tasks.clear-defects.update');
-    // 主管核對簽名 /api/tasks/${this.taskItem.id}/boss
+    // 更新品保任務的清檢缺失資料
+    Route::put('/quality-tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'updateQualityTaskClearDefect'])->name('api.quality-tasks.clear-defects.update');
+    // 主管核對簽名
     Route::put('/tasks/{task}/boss', [ApiController::class, 'updateTaskBoss'])->name('api.tasks.boss.update');
+    // 主管核對簽名(品保)
+    Route::put('/quality-tasks/{task}/boss', [ApiController::class, 'updateQualityTaskBoss'])->name('api.quality-tasks.boss.update');
     // 取得食安內外場扣分
     Route::get('/tasks/{task}/defect/score', [ApiController::class, 'getTaskScore'])->name('api.tasks.defect.score');
+    // 取得品保內外場扣分
+    Route::get('/quality-tasks/{task}/defect/score', [ApiController::class, 'getQualityTaskScore'])->name('api.quality-tasks.defect.score');
     // 取得清檢內外場扣分
     Route::get('/tasks/{task}/clear-defect/score', [ApiController::class, 'getTaskClearScore'])->name('api.tasks.clear-defect.score');
+    // 取得品保清檢內外場扣分
+    Route::get('/quality-tasks/{task}/clear-defect/score', [ApiController::class, 'getQualityTaskClearScore'])->name('api.quality-tasks.clear-defect.score');
     // 刪除任務的食安缺失資料
     Route::delete('/tasks/defects/{taskHasDefect}', [ApiController::class, 'deleteTaskDefect'])->name('api.tasks.defects.delete');
+    // 刪除品保任務的食安缺失資料
+    Route::delete('/quality-tasks/defects/{taskHasDefect}', [ApiController::class, 'deleteQualityTaskDefect'])->name('api.quality-tasks.defects.delete');
     // 刪除任務的清檢缺失資料
     Route::delete('/tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'deleteTaskClearDefect'])->name('api.tasks.clear-defects.delete');
+    // 刪除品保任務的清檢缺失資料
+    Route::delete('/quality-tasks/clear-defects/{taskHasClearDefect}', [ApiController::class, 'deleteQualityTaskClearDefect'])->name('api.quality-tasks.clear-defects.delete');
     // 取得採樣資料庫資料
     Route::get('/meals', [ApiController::class, 'getMeals'])->name('api.meals');
     // 取得品保採樣資料庫資料
@@ -394,6 +481,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::post('/quality-meals/import', [ApiController::class, 'importQualityMeals'])->name('api.quality-meals.import');
     // 取得採樣紀錄資料
     Route::get('/meal-records', [ApiController::class, 'getMealRecords'])->name('api.meal-records');
+    // 取得品保採樣紀錄資料
+    Route::get('/quality-meal-records', [ApiController::class, 'getQualityMealRecords'])->name('api.quality-meal-records');
     // 取得專案資料庫資料
     Route::get('/projects', [ApiController::class, 'getProjects'])->name('api.projects');
     // 取得月份的專案缺失資料
@@ -442,8 +531,14 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::post('/clear-defects/import', [ApiController::class, 'importClearDefects'])->name('api.clear-defects.import');
     // 匯入品保清檢缺失資料庫資料
     Route::post('/quality-clear-defects/import', [ApiController::class, 'importQualityClearDefects'])->name('api.quality-clear-defects.import');
-    // 取得該月份食安缺失紀錄
+    // 取得該月份食安及5S紀錄
     Route::get('/defect-records', [ApiController::class, 'getDefectRecords'])->name('api.defect-records');
+    // 取得該月份品保及5S紀錄
+    Route::get('/quality-defect-records', [ApiController::class, 'getQualityDefectRecords'])->name('api.quality-defect-records');
+    // 取得該月食安清檢檢查紀錄
+    Route::get('/clear-defect-records', [ApiController::class, 'getClearDefectRecords'])->name('api.clear-defect-records');
+    // 取得該月品保清檢檢查紀錄
+    Route::get('/quality-clear-defect-records', [ApiController::class, 'getQualityClearDefectRecords'])->name('api.quality-clear-defect-records');
 });
 
 Route::prefix('pos')->group(function () {
@@ -453,4 +548,9 @@ Route::prefix('pos')->group(function () {
     Route::put('/restaurant/{restaurant}/workspace', [PosDepartmentController::class, 'update'])->name('pos-restaurant-workspace-update');
     // 同仁資料upsert
     Route::put('/user', [UserController::class, 'upsert'])->name('pos-user-upsert');
+});
+
+Route::get('/test', function () {
+    $pos = PosDepartment::get();
+    dd($pos);
 });

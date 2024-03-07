@@ -344,7 +344,7 @@
                         axios.put('/api/restaurants/upsert')
                             .then(response => {
                                 this.getRestaurants()
-                                alert('更新成功')
+                                alert(response.data.message);
                             })
                             .catch(error => {
                                 alert(error.response.data.message)
