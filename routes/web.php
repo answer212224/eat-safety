@@ -551,6 +551,8 @@ Route::prefix('pos')->group(function () {
 });
 
 Route::get('/test', function () {
-    $pos = PosDepartment::get();
-    dd($pos);
+    // mysql2連線資訊
+    // dd(config('database.connections.mysql2'));
+    // $pos = PosDepartment::get();
+    // dd($pos);
 });
