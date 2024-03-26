@@ -40,6 +40,7 @@ class QualityTaskController extends Controller
         if (!$task->start_at) {
             $task->update([
                 'start_at' => now(),
+                'status' => 'processing',
             ]);
         }
         return view('v2.app.quality.tasks.create-defect', [
@@ -55,6 +56,7 @@ class QualityTaskController extends Controller
         if (!$task->start_at) {
             $task->update([
                 'start_at' => now(),
+                'status' => 'processing',
             ]);
         }
         return view('v2.app.quality.tasks.create-clear-defect', [
@@ -132,10 +134,6 @@ class QualityTaskController extends Controller
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
-
-        $task->update([
-            'status' => 'processing',
-        ]);
 
         // 檢查是否為重複缺失
         $isRepeat = QualityTaskHasQualityDefect::where('quality_task_id', $task->id)
@@ -216,11 +214,6 @@ class QualityTaskController extends Controller
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
-
-        // 更新任務狀態
-        $task->update([
-            'status' => 'processing',
-        ]);
 
         // 新增清潔檢查缺失
         $task->taskHasClearDefects()->create([

@@ -22,6 +22,7 @@ class TaskController extends Controller
         if (!$task->start_at) {
             $task->update([
                 'start_at' => now(),
+                'status' => 'processing',
             ]);
         }
         return view('v2.app.tasks.create-defect', [
@@ -36,6 +37,7 @@ class TaskController extends Controller
         if (!$task->start_at) {
             $task->update([
                 'start_at' => now(),
+                'status' => 'processing',
             ]);
         }
         return view('v2.app.tasks.create-clear-defect', [

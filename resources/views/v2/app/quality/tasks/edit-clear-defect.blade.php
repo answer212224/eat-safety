@@ -20,16 +20,16 @@
                                 返回列表
                             </v-btn>
                         </v-col>
-                        @if (Carbon\Carbon::parse($task->task_date)->isToday())
-                            <v-col cols="6" class="text-right">
-                                {{-- 跳轉到新增缺失 --}}
-                                <v-btn color="primary" text
-                                    href="{{ route('v2.app.quality-tasks.clear-defect.create', $task->id) }}">
-                                    新增缺失
-                                    <v-icon right>mdi-arrow-right</v-icon>
-                                </v-btn>
-                            </v-col>
-                        @endif
+
+                        <v-col cols="6" class="text-right">
+                            {{-- 跳轉到新增缺失 --}}
+                            <v-btn color="primary" text
+                                href="{{ route('v2.app.quality-tasks.clear-defect.create', $task->id) }}">
+                                新增缺失
+                                <v-icon right>mdi-arrow-right</v-icon>
+                            </v-btn>
+                        </v-col>
+
                     </v-row>
 
                     <v-row>

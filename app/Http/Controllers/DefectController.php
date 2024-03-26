@@ -90,10 +90,6 @@ class DefectController extends Controller
             return back();
         }
 
-        $task->update([
-            'status' => 'processing',
-        ]);
-
         // 檢查是否為重複缺失
         $isRepeat = TaskHasDefect::where('task_id', $task->id)
             ->where('defect_id', $request->defect_id)
@@ -179,11 +175,6 @@ class DefectController extends Controller
             alert()->error('錯誤', $e->getMessage());
             return back();
         }
-
-        // 更新任務狀態
-        $task->update([
-            'status' => 'processing',
-        ]);
 
         // 新增清潔檢查缺失
         $task->taskHasClearDefects()->create([

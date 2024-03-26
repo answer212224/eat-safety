@@ -155,6 +155,16 @@
                                                 target="_blank">
                                                 外場報告
                                             </v-btn>
+                                            @can('update-task')
+                                                <v-btn v-show="selectedEvent.category=='食安巡檢'" text color="blue darken-1"
+                                                    :href="'/v2/app/quality-task/' + selectedEvent.id + '/defect/edit'">
+                                                    編輯缺失
+                                                </v-btn>
+                                                <v-btn v-show="selectedEvent.category=='清潔檢查'" text color="blue darken-1"
+                                                    :href="'/v2/app/quality-task/' + selectedEvent.id + '/clear-defect/edit'">
+                                                    編輯缺失
+                                                </v-btn>
+                                            @endcan
                                             <v-spacer></v-spacer>
                                             @can('delete-task')
                                                 <v-btn text color="red darken-1" @click="remove(selectedEvent.id)">
