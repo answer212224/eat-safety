@@ -154,6 +154,17 @@ class ApiController extends Controller
         ]);
     }
 
+    // getExecuteQualityTaskUsers
+    public function getExecuteQualityTaskUsers()
+    {
+        $users = User::permission('execute-quality-task')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $users,
+        ]);
+    }
+
     // getRestaurants
     public function getRestaurants(Request $request)
     {

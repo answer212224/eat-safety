@@ -353,6 +353,8 @@ Route::prefix('api')->middleware(['auth', 'log.user.activity'])->group(function 
     Route::post('/users/sync', [ApiController::class, 'syncUsers'])->name('api.users.sync');
     // 取得有權限 execute-task 的使用者
     Route::get('/users/execute-task', [ApiController::class, 'getExecuteTaskUsers'])->name('api.users.execute-task');
+    // 取得有權限 execute-quality-task 的使用者
+    Route::get('/users/execute-quality-task', [ApiController::class, 'getExecuteQualityTaskUsers'])->name('api.users.execute-quality-task');
     // 取得餐廳
     Route::get('/restaurants', [ApiController::class, 'getRestaurants'])->name('api.restaurants');
     // 新增餐廳

@@ -473,7 +473,7 @@
 
                     getExecuteTaskUsers() {
                         this.loading = true
-                        axios.get('/api/users/execute-task')
+                        axios.get('/api/users/execute-quality-task')
                             .then((res) => {
                                 this.users = res.data.data
                             })
