@@ -144,17 +144,12 @@
                                         <v-card-actions>
                                             <v-btn text color="blue darken-1"
                                                 v-show="selectedEvent.category!=='食材/成品採樣'"
-                                                :href="'/v1/app/task/' + selectedEvent.id + '/inner-report'"
+                                                :href="'/v2/app/quality-task/' + selectedEvent.id + '/report'"
                                                 target="_blank">
-                                                內場報告
+                                                報告
                                             </v-btn>
 
-                                            <v-btn text color="blue darken-1"
-                                                v-show="selectedEvent.category!=='食材/成品採樣'"
-                                                :href="'/v1/app/task/' + selectedEvent.id + '/outer-report'"
-                                                target="_blank">
-                                                外場報告
-                                            </v-btn>
+
                                             @can('update-task')
                                                 <v-btn v-show="selectedEvent.category=='食安巡檢'" text color="blue darken-1"
                                                     :href="'/v2/app/quality-task/' + selectedEvent.id + '/defect/edit'">
