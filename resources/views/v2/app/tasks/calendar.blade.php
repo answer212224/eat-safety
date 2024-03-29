@@ -164,7 +164,9 @@
                                                 外場報告
                                             </v-btn>
                                             @can('update-task')
-                                                <v-btn v-show="selectedEvent.category=='食安及5S'" text color="blue darken-1"
+                                                <v-btn
+                                                    v-show="selectedEvent.category=='食安及5S' || selectedEvent.category=='食安及5S複稽'"
+                                                    text color="blue darken-1"
                                                     :href="'/v2/app/task/' + selectedEvent.id + '/defect/edit'">
                                                     編輯缺失
                                                 </v-btn>
